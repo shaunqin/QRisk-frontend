@@ -75,6 +75,7 @@
 <script>
 import initData from "@/mixins/initData";
 import eform from "./form";
+import {safetyHazardControlList} from '@/dataSource'
 export default {
   components: { eform },
   mixins: [initData],
@@ -87,24 +88,7 @@ export default {
   },
   mounted() {
     this.loading = false;
-    for (let i = 0; i < 25; i++) {
-      this.data.push({
-        aa: "测试",
-        bb: "测试",
-        cc: "测试",
-        dd: "测试",
-        ee: "测试",
-        ff: "测试",
-        gg: "测试",
-        hh: "测试",
-        ii: "测试",
-        jj: "测试",
-        kk: "测试",
-        ll: "测试",
-        mm: "测试",
-        nn: "测试"
-      });
-    }
+    this.data=safetyHazardControlList;
   },
   methods: {
     toQuery(name) {

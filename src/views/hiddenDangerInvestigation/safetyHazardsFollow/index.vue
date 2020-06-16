@@ -31,11 +31,11 @@
     >
       <el-table-column type="index" width="50" />
       <el-table-column prop="aa" label="名称" />
-      <el-table-column prop="cc" label="隐患风险" />
-      <el-table-column prop="dd" label="隐患等级" />
-      <el-table-column prop="gg" label="发现时间" />
-      <el-table-column prop="hh" label="来源" />
-      <el-table-column prop="ii" label="整改进展" />
+      <el-table-column prop="bb" label="隐患风险" />
+      <el-table-column prop="cc" label="隐患等级" />
+      <el-table-column prop="dd" label="发现时间" />
+      <el-table-column prop="ee" label="来源" />
+      <el-table-column prop="ff" label="整改进展" />
       <el-table-column label="操作" width="130px" align="center" fixed="right">
         <template slot-scope="scope">
           <el-button
@@ -71,6 +71,7 @@
 <script>
 import initData from "@/mixins/initData";
 import eform from "./form";
+import {safetyHazardsFollow} from '@/dataSource';
 export default {
   components: { eform },
   mixins: [initData],
@@ -83,24 +84,7 @@ export default {
   },
   mounted() {
     this.loading = false;
-    for (let i = 0; i < 5; i++) {
-      this.data.push({
-        aa: "测试",
-        bb: "测试",
-        cc: "测试",
-        dd: "测试",
-        ee: "测试",
-        ff: "测试",
-        gg: "测试",
-        hh: "测试",
-        ii: "测试",
-        jj: "测试",
-        kk: "测试",
-        ll: "测试",
-        mm: "测试",
-        nn: "测试"
-      });
-    }
+    this.data=safetyHazardsFollow;
   },
   methods: {
     toQuery(name) {
