@@ -9,51 +9,19 @@
   >
     <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
       <el-row gutter="16">
-        <el-col :span="12">
-          <el-form-item label="份号" prop="aa">
-            <el-input v-model="form.aa" style="width: 100%;" />
+        <el-col :span="24">
+          <el-form-item label="选择风险" prop="aa">
+            <el-select v-model="form.aa" placeholder="选择风险" style="width: 100%;">
+              <el-option :label="'选择风险'" :value="'选择风险'"></el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="主送单位" prop="bb">
-            <el-input v-model="form.bb" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="抄送单位">
-            <el-input v-model="form.cc" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="通知标题">
-            <el-input v-model="form.dd" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="通知内容">
-            <el-input v-model="form.ee" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="经办机构">
-            <el-input v-model="form.ff" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="联系人">
-            <el-input v-model="form.gg" style="width: 100%;" />
-          </el-form-item>
+          
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="电话">
-            <el-input v-model="form.hh" style="width: 100%;" />
+        <el-col :span="24">
+          <el-form-item label="通知内容">
+            <el-input v-model="form.bb" style="width: 100%;" type="textarea" rows="4" />
           </el-form-item>
-          <el-form-item label="编号">
-            <el-input v-model="form.ii" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="主题">
-            <el-input v-model="form.jj" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="适用范围">
-            <el-input v-model="form.kk" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="背景">
-            <el-input v-model="form.ll" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="存在的安全风险">
-            <el-input v-model="form.mm" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="风险防范措施">
-            <el-input v-model="form.nn" style="width: 100%;" />
-          </el-form-item>
+          
         </el-col>
       </el-row>
     </el-form>

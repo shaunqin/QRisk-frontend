@@ -4,55 +4,51 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
-    :title="isAdd ? '新增数据来源' : '编辑数据来源'"
+    :title="isAdd ? '新增' : '编辑'"
     custom-class="big_dialog"
   >
     <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
-      <el-row gutter="16">
+      <el-row :gutter="16">
         <el-col :span="12">
-          <el-form-item label="份号" prop="aa">
+          <el-form-item label="主题" prop="aa">
             <el-input v-model="form.aa" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="主送单位" prop="bb">
-            <el-input v-model="form.bb" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="抄送单位">
-            <el-input v-model="form.cc" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="通知标题">
-            <el-input v-model="form.dd" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="通知内容">
-            <el-input v-model="form.ee" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="经办机构">
-            <el-input v-model="form.ff" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="联系人">
-            <el-input v-model="form.gg" style="width: 100%;" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="电话">
-            <el-input v-model="form.hh" style="width: 100%;" />
+          <el-form-item label="所属项目" prop="aa">
+            <el-input v-model="form.ff" style="width: 100%;" />
           </el-form-item>
-          <el-form-item label="编号">
-            <el-input v-model="form.ii" style="width: 100%;" />
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="背景" prop="bb">
+            <el-input v-model="form.bb" style="width: 100%;" type="textarea" rows="4" />
           </el-form-item>
-          <el-form-item label="主题">
-            <el-input v-model="form.jj" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="适用范围">
-            <el-input v-model="form.kk" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="背景">
-            <el-input v-model="form.ll" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="存在的安全风险">
-            <el-input v-model="form.mm" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="风险防范措施">
-            <el-input v-model="form.nn" style="width: 100%;" />
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="风险防范" prop="dd">
+            <el-row :gutter="16">
+              <el-col :span="6">
+                <el-select v-model="form.ee" placeholder="责任单位">
+                  <el-option label="责任单位" value="责任单位"></el-option>
+                </el-select>
+              </el-col>
+              <el-col :span="15">
+                <el-input v-model="form.dd" style="width: 100%;" />
+              </el-col>
+              <el-col :span="2">
+                <i class="el-icon-delete"></i>
+              </el-col>
+            </el-row>
+            <el-row :gutter="16" style="margin-top:10px">
+              <el-col :span="24">
+                <el-button plain icon="el-icon-plus" style="width: 100%;">添加</el-button>
+              </el-col>
+            </el-row>
+            
           </el-form-item>
         </el-col>
       </el-row>
@@ -78,6 +74,7 @@ export default {
         cc: "",
         dd: "",
         ee: "",
+        ff: ""
       },
       roleSelect: [],
       formRules: {

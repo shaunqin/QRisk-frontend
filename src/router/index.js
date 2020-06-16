@@ -163,6 +163,24 @@ export const asyncRoutes = [{
             title: 'other'
           }
         }]
+      },
+      {
+        path: 'otherStandard',
+        component: () => import('@/views/standard/otherStandard/index'),
+        meta: {
+          title: 'otherStandard',
+          icon: 'clipboard'
+        },
+        redirect: '/standard/otherStandard/index',
+        hidden: true,
+        children: [{
+          path: 'index',
+          component: () => import('@/views/standard/otherStandard/components/index'),
+          name: 'otherStandardIndex',
+          meta: {
+            title: 'otherStandardIndex'
+          }
+        }]
       }
     ]
   },
@@ -456,26 +474,25 @@ export const asyncRoutes = [{
       icon: 'star'
     },
     redirect: '/qualityEvaluation/q',
-    children: [
-      {
-        path: 'q',
-        component: () => import('@/views/qualityEvaluation/index'),
-        meta: { title: 'qualityEvaluation', icon: 'qualityEvaluation' },
+    children: [{
+      path: 'q',
+      component: () => import('@/views/qualityEvaluation/index'),
+      meta: {
+        title: 'qualityEvaluation',
+        icon: 'qualityEvaluation'
+      },
+      hidden: true,
+      redirect: '/qualityEvaluation/q/qualityEvaluate',
+      children: [{
+        path: 'qualityEvaluate',
+        component: () => import('@/views/qualityEvaluation/qualityEvaluate/index'),
+        name: 'qualityEvaluate',
         hidden: true,
-        redirect: '/qualityEvaluation/q/qualityEvaluate',
-        children:[
-          {
-            path: 'qualityEvaluate',
-            component: () => import('@/views/qualityEvaluation/qualityEvaluate/index'),
-            name: 'qualityEvaluate',
-            hidden: true,
-            meta: {
-              title: 'qualityEvaluate'
-            }
-          }
-        ]
-      }
-    ]
+        meta: {
+          title: 'qualityEvaluate'
+        }
+      }]
+    }]
   },
   /* {
     path: '/system',

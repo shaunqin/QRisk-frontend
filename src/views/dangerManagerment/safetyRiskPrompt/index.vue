@@ -1,6 +1,19 @@
 <template>
   <div class="app-container">
-    
+    <eform ref="form" :is-add="isAdd"></eform>
+    <div class="head-container">
+      <el-input
+        size="mini"
+        v-model="query"
+        clearable
+        placeholder="请输入你要搜索的内容"
+        style="width: 240px;"
+        class="filter-item"
+      >
+        <el-button slot="append" icon="el-icon-search" @click="toQuery(query)"></el-button>
+      </el-input>
+      <el-button class="filter-item" size="mini" type="primary" icon="el-icon-plus" @click="add">新增</el-button>
+    </div>
     <!--表格渲染-->
     <el-table
       v-loading="loading"
@@ -16,6 +29,11 @@
       <el-table-column prop="cc" label="安全风险" align="left" />
       <el-table-column prop="dd" label="风险防范" align="left" />
       <el-table-column prop="ee" label="责任单位" width="80" />
+      <el-table-column label="操作" width="100">
+        <template slot-scope="scope">
+          <el-button type="primary" size="mini" @click="edit(scope.row)">反馈</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -47,9 +65,11 @@ export default {
     for (let i = 0; i < 15; i++) {
       this.data.push({
         aa: "测试",
-        bb: "2020 年 6 月 5 日，A321/B-1833 飞机执行 CA1948 航班，成都起 飞后地面监控出现 AIR R WING LEAK 警告信息，飞机返航…",
+        bb:
+          "2020 年 6 月 5 日，A321/B-1833 飞机执行 CA1948 航班，成都起 飞后地面监控出现 AIR R WING LEAK 警告信息，飞机返航…",
         cc: "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降…",
-        dd: "1、认真做好重复性故障的管控工作。各单位要高度重视飞机出 现的重复性故障，加强对排故力量的组织;对于飞机运行中出现的 重复、疑难故障，工程技术人员要及时研究和制定排…",
+        dd:
+          "1、认真做好重复性故障的管控工作。各单位要高度重视飞机出 现的重复性故障，加强对排故力量的组织;对于飞机运行中出现的 重复、疑难故障，工程技术人员要及时研究和制定排…",
         ee: "测试"
       });
     }
@@ -72,10 +92,10 @@ export default {
       this.$refs.form.dialog = true;
     },
     edit(row) {
-      this.isAdd = false;
-      let _this = this.$refs.form;
-      _this.form = Object.assign({}, row);
-      _this.dialog = true;
+      // this.isAdd = false;
+      // let _this = this.$refs.form;
+      // _this.form = Object.assign({}, row);
+      // _this.dialog = true;
     },
     subDelete(id) {
       this.$confirm("确定删除嘛？")

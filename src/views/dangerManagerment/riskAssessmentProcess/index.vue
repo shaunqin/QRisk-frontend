@@ -1,6 +1,9 @@
 <template>
   <div class="app-container">
-    
+    <eform ref="form" :is-add="isAdd"></eform>
+    <div class="head-container">
+      <el-button class="filter-item" size="mini" type="primary" icon="el-icon-plus" @click="add">新增</el-button>
+    </div>
     <!--表格渲染-->
     <el-table
       v-loading="loading"
@@ -12,9 +15,12 @@
       <el-table-column type="index" width="50" />
       <el-table-column prop="aa" label="风险" width="100" />
       <el-table-column prop="bb" label="通知内容" />
-      <el-table-column label="操作" width="130">
+      <el-table-column label="操作" width="300">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="edit(scope.row)">下发</el-button>
+          <el-button type="primary" size="mini" @click="edit(scope.row)">填报</el-button>
+          <el-button type="primary" size="mini" @click="edit(scope.row)">审批</el-button>
+          <el-button type="primary" size="mini" @click="edit(scope.row)">反馈</el-button>
         </template>
       </el-table-column>
     </el-table>
