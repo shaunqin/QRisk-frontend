@@ -91,11 +91,6 @@ export default {
 .dashboard-editor-container {
   min-height: calc(100vh - 56px);
   padding: 20px 60px 0px;
-  background: linear-gradient(
-    90deg,
-    rgba(18, 5, 88, 1) 0%,
-    rgba(15, 3, 65, 1) 100%
-  );
   .pan-info-roles {
     font-size: 12px;
     font-weight: 700;

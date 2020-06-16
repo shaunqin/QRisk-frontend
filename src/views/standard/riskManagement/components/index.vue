@@ -169,7 +169,10 @@ export default {
           orient: "horizontal",
           left: "center",
           bottom: "15%",
-          show:false
+          show:false,
+          inRange:{
+            color:["#fff","#4C8D00","#F8E71C","#F5A623","#D0021B"]
+          }
         },
         series: [
           {
