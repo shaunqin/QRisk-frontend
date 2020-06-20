@@ -38,15 +38,7 @@
         </el-row>
       </el-form>
     </el-card>
-    <el-card header="审批记录" style="margin-top:20px">
-      <el-table :data="ApprovalData" size="mini">
-        <el-table-column type="index" />
-        <el-table-column label="审批人" prop="aa" />
-        <el-table-column label="审批结果" prop="bb" />
-        <el-table-column label="审批时间" prop="cc" />
-        <el-table-column label="备注" prop="dd" />
-      </el-table>
-    </el-card>
+
     <el-card header="风险措施" style="margin-top:20px">
       <el-table :data="data" size="mini">
         <el-table-column label="危险源" prop="aa" />
@@ -62,10 +54,31 @@
         <el-table-column label="完成期限" prop="kk" />
       </el-table>
     </el-card>
+    <el-card header="审批记录" style="margin-top:20px">
+      <el-table :data="ApprovalData" size="mini">
+        <el-table-column type="index" />
+        <el-table-column label="审批人" prop="aa" />
+        <el-table-column label="审批结果" prop="bb" />
+        <el-table-column label="审批时间" prop="cc" />
+        <el-table-column label="备注" prop="dd" />
+      </el-table>
+    </el-card>
+
+    <el-card header="审批操作" style="margin-top:20px">
+      <el-radio-group v-model="agree">
+        <el-radio label="1">同意</el-radio>
+        <el-radio label="0">不同意</el-radio>
+      </el-radio-group>
+      <el-form label-width="auto" v-if="agree=='0'" style="margin-top:20px">
+        <el-form-item label="原因">
+          <el-input v-model="resion" placeholder="不同意原因" type="textarea" rows="2"></el-input>
+        </el-form-item>
+      </el-form>
+    </el-card>
 
     <div slot="footer" class="dialog-footer">
-      <el-button type="text" @click="cancel">不同意</el-button>
-      <el-button :loading="loading" type="primary" @click="doSubmit">同意</el-button>
+      <el-button type="text" @click="cancel">取消</el-button>
+      <el-button :loading="loading" type="primary" @click="doSubmit">确定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -94,7 +107,8 @@ export default {
       dataString: "",
       bumen: "",
       data: [],
-      ApprovalData:[]
+      ApprovalData: [],
+      agree: "1"
     };
   },
   props: {
@@ -124,19 +138,19 @@ export default {
         aa: "admin",
         bb: "通过",
         cc: "2020-05-04",
-        dd: "审批原因",
+        dd: "审批原因"
       },
       {
         aa: "custom",
         bb: "不通过",
         cc: "2020-05-04",
-        dd: "审批原因",
+        dd: "审批原因"
       },
       {
         aa: "admin",
         bb: "通过",
         cc: "2020-05-04",
-        dd: "审批原因",
+        dd: "审批原因"
       }
     ];
   },
