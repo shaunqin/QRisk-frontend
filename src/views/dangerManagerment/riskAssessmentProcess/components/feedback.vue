@@ -89,7 +89,7 @@
         </el-row>
       </el-form>
       <el-button type="info" size="mini" style="margin-bottom:10px" @click="addTable">添加列</el-button>
-      <el-table :data="data" size="mini" height="400px">
+      <el-table :data="data" size="mini" max-height="400px">
         <el-table-column type="index" />
         <el-table-column label="控制措施">
           <template slot-scope="scope">

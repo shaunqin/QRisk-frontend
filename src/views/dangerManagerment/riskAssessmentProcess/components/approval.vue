@@ -38,6 +38,15 @@
         </el-row>
       </el-form>
     </el-card>
+    <el-card header="审批记录" style="margin-top:20px">
+      <el-table :data="ApprovalData" size="mini">
+        <el-table-column type="index" />
+        <el-table-column label="审批人" prop="aa" />
+        <el-table-column label="审批结果" prop="bb" />
+        <el-table-column label="审批时间" prop="cc" />
+        <el-table-column label="备注" prop="dd" />
+      </el-table>
+    </el-card>
     <el-card header="风险措施" style="margin-top:20px">
       <el-table :data="data" size="mini">
         <el-table-column label="危险源" prop="aa" />
@@ -84,7 +93,8 @@ export default {
       entArr: [],
       dataString: "",
       bumen: "",
-      data: []
+      data: [],
+      ApprovalData:[]
     };
   },
   props: {
@@ -107,6 +117,26 @@ export default {
         ii: "上海",
         jj: "在控",
         kk: "待完成"
+      }
+    ];
+    this.ApprovalData = [
+      {
+        aa: "admin",
+        bb: "通过",
+        cc: "2020-05-04",
+        dd: "审批原因",
+      },
+      {
+        aa: "custom",
+        bb: "不通过",
+        cc: "2020-05-04",
+        dd: "审批原因",
+      },
+      {
+        aa: "admin",
+        bb: "通过",
+        cc: "2020-05-04",
+        dd: "审批原因",
       }
     ];
   },
@@ -230,14 +260,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+/deep/ .big_dialog {
+  width: 1100px;
+}
 </style>
 
-<style lang="scss">
-.roleSelect {
-  width: 370px;
-}
-.el-select-dropdown {
-  z-index: 99999999999999 !important;
-}
-</style>
