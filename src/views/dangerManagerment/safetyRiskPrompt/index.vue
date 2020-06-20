@@ -24,7 +24,7 @@
       @selection-change="selectionChange"
     >
       <el-table-column type="index" width="50" />
-      <el-table-column prop="aa" label="主题" width="80" />
+      <el-table-column prop="aa" label="主题" />
       <el-table-column prop="bb" label="背景" align="left" />
       <el-table-column prop="cc" label="安全风险" align="left" />
       <el-table-column prop="dd" label="风险防范" align="left" />
@@ -64,13 +64,13 @@ export default {
     this.loading = false;
     for (let i = 0; i < 15; i++) {
       this.data.push({
-        aa: "测试",
+        aa: "重复故障影响飞机安全运行的风险提示",
         bb:
           "2020 年 6 月 5 日，A321/B-1833 飞机执行 CA1948 航班，成都起 飞后地面监控出现 AIR R WING LEAK 警告信息，飞机返航…",
         cc: "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降…",
         dd:
           "1、认真做好重复性故障的管控工作。各单位要高度重视飞机出 现的重复性故障，加强对排故力量的组织;对于飞机运行中出现的 重复、疑难故障，工程技术人员要及时研究和制定排…",
-        ee: "测试"
+        ee: "杭州、上海、武汉"
       });
     }
   },
@@ -92,10 +92,10 @@ export default {
       this.$refs.form.dialog = true;
     },
     edit(row) {
-      // this.isAdd = false;
-      // let _this = this.$refs.form;
-      // _this.form = Object.assign({}, row);
-      // _this.dialog = true;
+      this.isAdd = false;
+      let _this = this.$refs.form;
+      _this.form = Object.assign({}, row);
+      _this.dialog = true;
     },
     subDelete(id) {
       this.$confirm("确定删除嘛？")
