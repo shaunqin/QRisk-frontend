@@ -30,6 +30,7 @@
       @selection-change="selectionChange"
     >
       <el-table-column type="index" width="50" />
+      <el-table-column prop="jj" label="编号" />
       <el-table-column prop="aa" label="名称" />
       <el-table-column prop="bb" label="隐患风险" />
       <el-table-column prop="cc" label="隐患等级" />

@@ -4,74 +4,44 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
-    :title="type"
+    title="驳回"
     custom-class="big_dialog"
   >
     <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
-      <el-row :gutter="16">
+      <el-row>
         <el-col :span="12">
-          <el-form-item label="编号">
-            <el-input v-model="form.jj" style="width: 100%;" />
+          <el-form-item label="名称" prop="aa">
+            <el-input v-model="form.aa" style="width: 100%;" />
           </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="危险源" prop="bb">
-            <el-input v-model="form.bb" style="width: 100%;"  />
+          <el-form-item label="隐患风险" prop="bb">
+            <el-input v-model="form.bb" style="width: 100%;" />
           </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="可能性">
+          <el-form-item label="隐患等级">
             <el-input v-model="form.cc" style="width: 100%;" />
           </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="可能导致的风险">
+          <el-form-item label="风险描述">
             <el-input v-model="form.dd" style="width: 100%;" />
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+         <el-col :span="12">
           <el-form-item label="风险等级">
             <el-input v-model="form.ee" style="width: 100%;" />
           </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="根原因分析">
+          <el-form-item label="发现时间">
             <el-input v-model="form.ff" style="width: 100%;" />
           </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="控制措施">
+          <el-form-item label="来源">
             <el-input v-model="form.gg" style="width: 100%;" />
           </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="责任单位">
+          <el-form-item label="整改进展">
             <el-input v-model="form.hh" style="width: 100%;" />
           </el-form-item>
         </el-col>
-        <el-col :span="8">
-          <el-form-item label="控制状态">
-            <el-input v-model="form.ii" style="width: 100%;" />
+         <el-col :span="24">
+           <el-form-item label="驳回原因">
+            <el-input v-model="ression" type="textarea" rows="4" style="width: 100%;" />
           </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="完成期限">
-            <el-input v-model="form.jj" style="width: 100%;" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="选择部门">
-            <el-select v-model="bumen" placeholder="选择部门" style="width: 100%;">
-              <el-option :label="'选择部门'" :value="'选择部门'"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        
-        <el-col :span="24" v-if="type=='填报'">
-            <el-form-item label="">
-                <el-button type="success">上传附件</el-button>
-            </el-form-item>
-        </el-col>
+         </el-col>
       </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -94,7 +64,7 @@ export default {
         bb: "",
         cc: "",
         dd: "",
-        ee: ""
+        ee: "",
       },
       roleSelect: [],
       formRules: {
@@ -102,15 +72,10 @@ export default {
         bb: [{ required: true, message: "请填写名称", trigger: "blur" }]
       },
       entArr: [],
-      dataString: "",
-      bumen: ""
+      ression:''
     };
   },
   props: {
-    type: {
-      type: String,
-      required: ""
-    }
   },
   created() {},
   methods: {
@@ -191,8 +156,9 @@ export default {
         bb: "",
         cc: "",
         dd: "",
-        ee: ""
+        ee: "",
       };
+      this.ression="";
       this.roleSelect = [];
     },
     roleChange(e) {

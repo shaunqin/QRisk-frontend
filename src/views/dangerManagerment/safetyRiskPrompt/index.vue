@@ -24,6 +24,7 @@
       @selection-change="selectionChange"
     >
       <el-table-column type="index" width="50" />
+      <el-table-column prop="jj" label="编号" />
       <el-table-column prop="aa" label="主题" />
       <el-table-column prop="bb" label="背景" align="left" />
       <el-table-column prop="cc" label="安全风险" align="left" />
@@ -70,7 +71,8 @@ export default {
         cc: "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降…",
         dd:
           "1、认真做好重复性故障的管控工作。各单位要高度重视飞机出 现的重复性故障，加强对排故力量的组织;对于飞机运行中出现的 重复、疑难故障，工程技术人员要及时研究和制定排…",
-        ee: "杭州、上海、武汉"
+        ee: "杭州、上海、武汉",
+        jj:"SN202005050"+i
       });
     }
   },

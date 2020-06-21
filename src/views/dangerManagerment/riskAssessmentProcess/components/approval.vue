@@ -10,6 +10,11 @@
     <el-card header="详细信息">
       <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
         <el-row :gutter="16">
+          <el-col :span="12">
+          <el-form-item label="编号">
+            <el-input v-model="form.jj" style="width: 100%;" />
+          </el-form-item>
+        </el-col>
           <el-col :span="24">
             <el-form-item label="标题" prop="aa">
               <el-input v-model="form.aa" style="width: 100%;" />
@@ -39,7 +44,7 @@
       </el-form>
     </el-card>
 
-    <el-card header="风险措施" style="margin-top:20px">
+    <el-card header="危险源清单" style="margin-top:20px">
       <el-table :data="data" size="mini">
         <el-table-column label="危险源" prop="aa" />
         <el-table-column label="ID" prop="bb" />

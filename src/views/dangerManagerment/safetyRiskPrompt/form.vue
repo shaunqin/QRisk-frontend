@@ -9,6 +9,11 @@
   >
     <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
       <el-row :gutter="16">
+        <el-col :span="12">
+          <el-form-item label="编号">
+            <el-input v-model="form.jj" style="width: 100%;" />
+          </el-form-item>
+        </el-col>
         <el-col :span="24">
           <el-form-item label="主题" prop="aa">
             <el-input v-model="form.aa" style="width: 100%;" />

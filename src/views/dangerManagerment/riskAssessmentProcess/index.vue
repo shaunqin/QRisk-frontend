@@ -13,6 +13,7 @@
       @selection-change="selectionChange"
     >
       <el-table-column type="index" width="50" />
+      <el-table-column prop="jj" label="编号" width="150" />
       <el-table-column prop="aa" label="风险" width="100" />
       <el-table-column prop="bb" label="通知内容" />
       <el-table-column label="操作" width="300">
@@ -65,7 +66,8 @@ export default {
       this.data.push({
         aa: "安全风险",
         bb:
-          "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降、中断起飞的安全风险。"
+          "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降、中断起飞的安全风险。",
+        jj: "FP202005050" + i
       });
     }
   },
@@ -92,13 +94,29 @@ export default {
     hairdown(row) {
       this.type = "下发";
       let _this = this.$refs.hairdown;
-      _this.form = row;
+      _this.form = {
+        aa: "FP2020050500",
+        bb: "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存",
+        cc: "大",
+        dd: "出现大翼引气渗漏等",
+        ee: "3",
+        ff: "该机 5月 3 日曾出现相同的故障信息，并造成飞机返航",
+        gg:"出现相同的故障信息，并造成飞机返航",hh:"上海",ii:"在控",jj:"20200101"
+      };
       _this.dialog = true;
     },
     fillin(row) {
       this.type = "填报";
       let _this = this.$refs.hairdown;
-      _this.form = row;
+      _this.form = {
+        aa: "FP2020050500",
+        bb: "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存",
+        cc: "大",
+        dd: "出现大翼引气渗漏等",
+        ee: "3",
+        ff: "该机 5月 3 日曾出现相同的故障信息，并造成飞机返航",
+        gg:"出现相同的故障信息，并造成飞机返航",hh:"上海",ii:"在控",jj:"20200101"
+      };
       _this.dialog = true;
     },
     approval(row) {
@@ -109,7 +127,8 @@ export default {
         bb: "上海",
         cc: "admin",
         dd: "是",
-        ee: "2020-06-06"
+        ee: "2020-06-06",
+        jj: "FP2020050501"
       };
       _this.dialog = true;
     },
@@ -118,13 +137,14 @@ export default {
       _this.form = {
         aa:
           "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降、中断起飞的安全风险。",
-        bb: "20200601",
+        bb: "FP2020050501",
         cc: "批准",
         dd: "上海",
         ee: "2020-06-06",
         ff: "上海",
         gg: "杭州",
-        hh: `2020 年 6 月 5 日，A321/B-1833 飞机执行 CA1948 航班，成都起飞后地面监控出现 AIR R WING LEAK 警告信息，飞机返航，该机 5月 3 日曾出现相同的故障信息，并造成飞机返航`
+        hh: `2020 年 6 月 5 日，A321/B-1833 飞机执行 CA1948 航班，成都起飞后地面监控出现 AIR R WING LEAK 警告信息，飞机返航，该机 5月 3 日曾出现相同的故障信息，并造成飞机返航`,
+        jj: "FP2020050501"
       };
       _this.riskForm = {
         aa: "出现大翼引气渗漏等",
