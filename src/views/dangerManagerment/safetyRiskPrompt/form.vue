@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
-    :title="isAdd ? '新增' : '编辑'"
+    :title="isAdd ? '新增' : '反馈'"
     custom-class="big_dialog"
   >
     <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
@@ -27,7 +27,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row>
+      <el-row v-if="isAdd">
         <el-col :span="24">
           <el-form-item label="风险防范" prop="dd">
             <el-row :gutter="16">
@@ -43,12 +43,31 @@
                 <i class="el-icon-delete"></i>
               </el-col>
             </el-row>
-            <el-row :gutter="16" style="margin-top:10px">
+            <el-row style="margin-top:10px;padding: 0 8px;">
               <el-col :span="24">
                 <el-button plain icon="el-icon-plus" style="width: 100%;">添加</el-button>
               </el-col>
             </el-row>
-            
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row v-else>
+        <el-col :span="24">
+          <el-form-item label="风险防范">
+            <el-table :data="data" size="mini" style="width: 100%;">
+              <el-table-column prop="aa" label="责任单位" />
+              <el-table-column prop="bb" label="内容" />
+              <el-table-column label="反馈">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.cc" placeholder="反馈内容"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button type="text" @click="upload(scope.row)">上传</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
           </el-form-item>
         </el-col>
       </el-row>
@@ -62,8 +81,9 @@
 
 <script>
 import { add, modify } from "@/api/emplotee.js";
-
+import initData from "@/mixins/initData";
 export default {
+  mixins: [initData],
   data() {
     return {
       loading: false,
@@ -90,7 +110,11 @@ export default {
       required: true
     }
   },
-  created() {},
+  created() {
+    this.data=[{
+      aa:"杭州",bb:"飞行在运行过程中...",cc:""
+    }]
+  },
   methods: {
     cancel() {
       this.resetForm();
@@ -187,26 +211,11 @@ export default {
       }
       this.form.roleList = arr;
     },
-    roleRemove(e) {}
-    // delwithRoleList() {
-    //   const roleList = this.roleList
-    //   const checkList = this.form.roleList
-    //   let newList = []
-    //   let obj = {}
-    //   for (let i = 0; i < checkList.length; i++) {
-    //     for (let j = 0; j < roleList.length; j++) {
-    //       if (checkList[i] === roleList[j].id) {
-    //         obj.id = Number(checkList[i])
-    //         obj.code = roleList[j].code
-    //         obj.roleDesc = roleList[j].roleDesc
-    //         // obj.sn = roleList[j].sn
-    //         newList.push(obj)
-    //         obj = {}
-    //       }
-    //     }
-    //   }
-    //   this.form.roleList = newList
-    // }
+    roleRemove(e) {},
+    upload(row){
+
+    }
+    
   }
 };
 </script>

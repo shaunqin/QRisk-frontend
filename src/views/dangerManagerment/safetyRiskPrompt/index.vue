@@ -92,10 +92,10 @@ export default {
       this.$refs.form.dialog = true;
     },
     edit(row) {
-      // this.isAdd = false;
-      // let _this = this.$refs.form;
-      // _this.form = Object.assign({}, row);
-      // _this.dialog = true;
+      this.isAdd = false;
+      let _this = this.$refs.form;
+      _this.form = Object.assign({}, row);
+      _this.dialog = true;
     },
     subDelete(id) {
       this.$confirm("确定删除嘛？")

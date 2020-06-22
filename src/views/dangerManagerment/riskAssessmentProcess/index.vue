@@ -18,9 +18,9 @@
       <el-table-column label="操作" width="300">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="edit(scope.row)">下发</el-button>
-          <el-button type="primary" size="mini" @click="edit(scope.row)">填报</el-button>
+          <el-button type="primary" size="mini" @click="fillin(scope.row)">填报</el-button>
           <el-button type="primary" size="mini" @click="edit(scope.row)">审批</el-button>
-          <el-button type="primary" size="mini" @click="edit(scope.row)">反馈</el-button>
+          <el-button type="primary" size="mini" @click="feedback(scope.row)">反馈</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -33,14 +33,20 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
+    <!-- 填报 -->
+    <fillin-dialog ref="fillinDialog"></fillin-dialog>
+    <!-- 反馈 -->
+    <feedback-dialog ref="feedbackDialog"></feedback-dialog>
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
+import fillinDialog from "./components/fillinDialog";
+import feedbackDialog from "./components/feedbackDialog";
 import eform from "./form";
 export default {
-  components: { eform },
+  components: { eform, fillinDialog, feedbackDialog },
   mixins: [initData],
   data() {
     return {
@@ -54,7 +60,8 @@ export default {
     for (let i = 0; i < 5; i++) {
       this.data.push({
         aa: "安全风险",
-        bb: "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降、中断起飞的安全风险。",
+        bb:
+          "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降、中断起飞的安全风险。"
       });
     }
   },
@@ -76,22 +83,15 @@ export default {
       this.$refs.form.dialog = true;
     },
     edit(row) {
-      console.log(row)
+      console.log(row);
     },
-    subDelete(id) {
-      this.$confirm("确定删除嘛？")
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
+    fillin(row) {
+      let _this = this.$refs.fillinDialog;
+      _this.dialog = true;
+    },
+    feedback(row){
+      let _this = this.$refs.feedbackDialog;
+      _this.dialog = true;
     }
   }
 };
