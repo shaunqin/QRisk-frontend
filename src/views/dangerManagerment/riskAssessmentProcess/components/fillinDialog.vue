@@ -8,6 +8,7 @@
     custom-class="big_dialog"
   >
     <el-button type="primary" size="mini" @click="addTable" style="margin-bottom:10px">新增一行</el-button>
+    <el-button type="warning" size="mini" style="margin-bottom:10px">上传附件</el-button>
     <!--表格渲染-->
     <el-table v-loading="loading" :data="data" size="small" style="width: 100%;" height="50vh">
       <el-table-column type="index" width="50" />

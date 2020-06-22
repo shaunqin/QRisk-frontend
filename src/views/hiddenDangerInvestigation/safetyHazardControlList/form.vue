@@ -7,38 +7,88 @@
     :title="isAdd ? '新增清单' : '编辑清单'"
     custom-class="big_dialog"
   >
-    <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
-      <el-row>
-        <el-col :span="12">
-          <el-form-item label="名称" prop="aa">
-            <el-input v-model="form.aa" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="隐患风险" prop="bb">
-            <el-input v-model="form.bb" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="隐患等级">
-            <el-input v-model="form.cc" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="风险描述">
-            <el-input v-model="form.dd" style="width: 100%;" />
-          </el-form-item>
-        </el-col>
-         <el-col :span="12">
-          <el-form-item label="风险等级">
-            <el-input v-model="form.ee" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="发现时间">
-            <el-input v-model="form.ff" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="来源">
-            <el-input v-model="form.gg" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="整改进展">
-            <el-input v-model="form.hh" style="width: 100%;" />
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
+    <el-card header="基本信息">
+      <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="任务名称" prop="aa">
+              <el-input v-model="form.aa" style="width: 100%;" />
+            </el-form-item>
+            <el-form-item label="年度">
+              <el-input v-model="form.dd" style="width: 100%;" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="编号" prop="bb">
+              <el-input v-model="form.bb" style="width: 100%;" />
+            </el-form-item>
+            <el-form-item label="反馈日期">
+              <el-input v-model="form.ee" style="width: 100%;" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="时间">
+              <el-input v-model="form.cc" style="width: 100%;" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-card>
+    <el-card header="危险源信息" style="margin-top:20px">
+      <el-form :model="form2" size="small" label-width="auto" inline>
+        <el-form-item label="隐患名称">
+          <el-input v-model="form2.aa" placeholder></el-input>
+        </el-form-item>
+         <el-form-item label="发现时间">
+          <el-input v-model="form2.bb" placeholder></el-input>
+        </el-form-item>
+         <el-form-item label="来源">
+          <el-input v-model="form2.cc" placeholder></el-input>
+        </el-form-item>
+         <el-form-item label="等级">
+          <el-input v-model="form2.dd" placeholder></el-input>
+        </el-form-item>
+         <el-form-item label="主体单位">
+          <el-input v-model="form2.ee" placeholder></el-input>
+        </el-form-item>
+         <el-form-item label="涉及业务">
+          <el-input v-model="form2.ff" placeholder></el-input>
+        </el-form-item>
+         <el-form-item label="涉及流程">
+          <el-input v-model="form2.gg" placeholder></el-input>
+        </el-form-item>
+         <el-form-item label="监管单位">
+          <el-input v-model="form2.hh" placeholder></el-input>
+        </el-form-item>
+         <el-form-item label="原因分析">
+          <el-input v-model="form2.ii" placeholder></el-input>
+        </el-form-item>
+         <el-form-item label="等效措施">
+          <el-input v-model="form2.jj" placeholder></el-input>
+        </el-form-item>
+         <el-form-item label="责任人">
+          <el-input v-model="form2.kk" placeholder></el-input>
+        </el-form-item>
+         <el-form-item label="整改时限">
+          <el-input v-model="form2.ll" placeholder></el-input>
+        </el-form-item>
+         <el-form-item label="验证标准">
+          <el-input v-model="form2.mm" placeholder></el-input>
+        </el-form-item>
+         <el-form-item label="措施实施情况跟踪">
+          <el-input v-model="form2.nn" placeholder></el-input>
+        </el-form-item>
+         <el-form-item label="治理结果情况跟踪">
+          <el-input v-model="form2.oo" placeholder></el-input>
+        </el-form-item>
+         <el-form-item label="整改进展">
+          <el-input v-model="form2.pp" placeholder></el-input>
+        </el-form-item>
+         <el-form-item label="备注">
+          <el-input v-model="form2.qq" placeholder></el-input>
+        </el-form-item>
+      </el-form>
+    </el-card>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
@@ -59,14 +109,15 @@ export default {
         bb: "",
         cc: "",
         dd: "",
-        ee: "",
+        ee: ""
       },
       roleSelect: [],
       formRules: {
         aa: [{ required: true, message: "请填写名称", trigger: "blur" }],
         bb: [{ required: true, message: "请填写名称", trigger: "blur" }]
       },
-      entArr: []
+      entArr: [],
+      form2: {}
     };
   },
   props: {
@@ -154,7 +205,7 @@ export default {
         bb: "",
         cc: "",
         dd: "",
-        ee: "",
+        ee: ""
       };
       this.roleSelect = [];
     },
@@ -196,10 +247,11 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
 
-<style lang="scss">
+<style lang="scss" scoped>
+/deep/ .big_dialog{
+  width: 1100px;
+}
 .roleSelect {
   width: 370px;
 }

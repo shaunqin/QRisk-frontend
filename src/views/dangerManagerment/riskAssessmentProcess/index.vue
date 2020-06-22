@@ -34,8 +34,10 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-    <!-- 下发/填报 -->
+    <!-- 下发 -->
     <hairdown ref="hairdown" :type="type"></hairdown>
+    <!-- 填报 -->
+    <fillin-dialog ref="fillinDialog"></fillin-dialog>
     <!-- 审批 -->
     <approval ref="approval"></approval>
     <!-- 反馈 -->
@@ -52,7 +54,7 @@ import hairdown from "./components/hairdown";
 import approval from "./components/approval";
 import feedback from "./components/feedback";
 export default {
-  components: { eform, hairdown, approval, feedback },
+  components: { eform, hairdown, approval, feedback ,fillinDialog},
   mixins: [initData],
   data() {
     return {
@@ -96,20 +98,20 @@ export default {
     hairdown(row) {
       this.type = "下发";
       let _this = this.$refs.hairdown;
-      _this.form = {
-        aa: "FP2020050500",
-        bb: "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存",
-        cc: "大",
-        dd: "出现大翼引气渗漏等",
-        ee: "3",
-        ff: "该机 5月 3 日曾出现相同的故障信息，并造成飞机返航",
-        gg:"出现相同的故障信息，并造成飞机返航",hh:"上海",ii:"在控",jj:"20200101"
-      };
+      // _this.form = {
+      //   aa: "FP2020050500",
+      //   bb: "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存",
+      //   cc: "大",
+      //   dd: "出现大翼引气渗漏等",
+      //   ee: "3",
+      //   ff: "该机 5月 3 日曾出现相同的故障信息，并造成飞机返航",
+      //   gg:"出现相同的故障信息，并造成飞机返航",hh:"上海",ii:"在控",jj:"20200101"
+      // };
       _this.dialog = true;
     },
     fillin(row) {
       this.type = "填报";
-      let _this = this.$refs.hairdown;
+      let _this = this.$refs.fillinDialog;
       _this.form = {
         aa: "FP2020050500",
         bb: "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存",

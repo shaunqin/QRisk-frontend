@@ -448,12 +448,6 @@ export const asyncRoutes = [{
             title: 'safetyHazardControlList'
           }
         },
-        // {
-        //   path: 'safetyHazardsStatistics',
-        //   component: () => import('@/views/hiddenDangerInvestigation/safetyHazardsStatistics/index'),
-        //   name: 'safetyHazardsStatistics',
-        //   meta: { title: 'safetyHazardsStatistics' }
-        // },
         {
           path: 'safetyHazardsFollow',
           component: () => import('@/views/hiddenDangerInvestigation/safetyHazardsFollow/index'),
@@ -463,6 +457,14 @@ export const asyncRoutes = [{
             title: 'safetyHazardsFollow'
           }
         },
+        {
+          path: 'safetyHazardsStatistics',
+          component: () => import('@/views/hiddenDangerInvestigation/safetyHazardsStatistics/index'),
+          name: 'safetyHazardsStatistics',
+          meta: {
+            title: 'safetyHazardsStatistics'
+          }
+        }
       ]
     }]
   },

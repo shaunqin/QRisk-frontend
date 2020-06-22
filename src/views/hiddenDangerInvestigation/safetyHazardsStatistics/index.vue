@@ -1,22 +1,44 @@
 <template>
   <div class="app-container">
-    <div class="head-container"></div>
-    <el-row>
-      <el-col :span="12">
-        <echarts :chartData="chartData" width="100%" />
-      </el-col>
-      <el-col :span="12">
-        <echarts :chartData="chartData" width="100%" />
-      </el-col>
-    </el-row>
+    <div class="head-container">
+      <el-button type="success" icon="el-icon-s-data" size="mini" @click="tongji">统计</el-button>
+    </div>
+    <!--表格渲染-->
+    <el-table
+      v-loading="loading"
+      :data="data"
+      size="small"
+      :stripe="true"
+      :highlight-current-row="true"
+      style="width: 100%;"
+      @selection-change="selectionChange"
+    >
+      <el-table-column type="index" width="50" />
+      <el-table-column prop="aa" label="任务名称" />
+      <el-table-column prop="bb" label="编号" />
+      <el-table-column prop="cc" label="时间" />
+      <el-table-column prop="dd" label="年度" />
+      <el-table-column prop="ee" label="反馈日期" />
+    </el-table>
+    <!--分页组件-->
+    <el-pagination
+      :total="total"
+      :current-page="page"
+      style="margin-top: 8px;text-align: right"
+      layout="total, prev, pager, next, sizes"
+      @size-change="sizeChange"
+      @current-change="pageChange"
+    />
+    <!-- 统计 -->
+    <charts ref="charts"></charts>
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
-import echarts from "@/components/Charts/index";
+import charts from "./charts";
 export default {
-  components: { echarts },
+  components: { charts },
   mixins: [initData],
   data() {
     return {
@@ -25,29 +47,11 @@ export default {
       selections: []
     };
   },
-  computed: {
-    chartData() {
-      return {
-        series: [
-          {
-            name: "访问来源",
-            type: "pie", // 设置图表类型为饼图
-            radius: "55%", // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
-            data: [
-              // 数据数组，name 为数据项名称，value 为数据项值
-              { value: 235, name: "视频广告" },
-              { value: 274, name: "联盟广告" },
-              { value: 310, name: "邮件营销" },
-              { value: 335, name: "直接访问" },
-              { value: 400, name: "搜索引擎" }
-            ]
-          }
-        ]
-      };
-    }
-  },
   mounted() {
     this.loading = false;
+    this.data=[
+      {aa:"方案制定存在缺陷",bb:"YP2020050501",cc:"2020-05-06",dd:"2020",ee:"2020-05-06"}
+    ]
   },
   methods: {
     toQuery(name) {
@@ -62,7 +66,10 @@ export default {
       this.selections = selections;
       this.$emit("selectionChange", { selections: selections });
     },
-    add() {},
+    tongji() {
+      let _this = this.$refs.charts;
+      _this.dialog = true;
+    },
     edit() {},
     subDelete() {}
   }

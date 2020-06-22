@@ -17,7 +17,8 @@
         icon="el-icon-search"
         @click="toQuery(query)"
       >搜索</el-button>
-      <el-button class="filter-item" size="mini" type="success" icon="el-icon-plus" @click="add">新增</el-button>
+      <el-button class="filter-item" size="mini" type="success">导出</el-button>
+      <el-button class="filter-item" size="mini" type="success" @click="report">上报</el-button>
     </div>
     <!--表格渲染-->
     <el-table
@@ -37,24 +38,9 @@
       <el-table-column prop="dd" label="发现时间" />
       <el-table-column prop="ee" label="来源" />
       <el-table-column prop="ff" label="整改进展" />
-      <el-table-column label="操作" width="130px" align="center" fixed="right">
-        <template slot-scope="scope">
-          <el-button
-            :disabled="scope.row.userName !== userInfo.userName"
-            size="mini"
-            type="primary"
-            icon="el-icon-edit"
-            @click="edit(scope.row)"
-          />
-          <el-button
-            slot="reference"
-            type="danger"
-            icon="el-icon-delete"
-            size="mini"
-            @click="subDelete(scope.row.id)"
-          />
-        </template>
-      </el-table-column>
+      <el-table-column prop="gg" label="上报单位" />
+      <el-table-column prop="hh" label="上报日期" />
+      <el-table-column prop="ii" label="明细" />
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -65,16 +51,18 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-
+    <!-- 上报 -->
+    <report ref="report"></report>
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
 import eform from "./form";
-import {safetyHazardsFollow} from '@/dataSource';
+import { safetyHazardsFollow } from "@/dataSource";
+import report from "./components/report";
 export default {
-  components: { eform },
+  components: { eform, report },
   mixins: [initData],
   data() {
     return {
@@ -85,7 +73,7 @@ export default {
   },
   mounted() {
     this.loading = false;
-    this.data=safetyHazardsFollow;
+    this.data = safetyHazardsFollow;
   },
   methods: {
     toQuery(name) {
@@ -124,6 +112,17 @@ export default {
             message: "已取消删除"
           });
         });
+    },
+    report() {
+      let _this = this.$refs.report;
+      _this.form = {
+        aa: "方案制定存在缺陷",
+        bb: "YP2020050501",
+        cc: "2020-05-06",
+        dd: "2020",
+        ee: "2020-05-06"
+      };
+      _this.dialog = true;
     }
   }
 };
