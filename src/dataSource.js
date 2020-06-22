@@ -255,7 +255,8 @@ export const safetyHazardControlList = [{
   ff: "2",
   gg: "2020-06-16",
   hh: "维修实施",
-  ii: "完成"
+  ii: "完成",
+  jj:"YP2020050501"
 },{
   aa: "航安任务",
   bb: "2020-06-16",
@@ -265,7 +266,8 @@ export const safetyHazardControlList = [{
   ff: "2",
   gg: "2020-06-16",
   hh: "维修实施",
-  ii: "完成"
+  ii: "完成",
+  jj:"YP2020050502"
 },{
   aa: "航安任务",
   bb: "2020-06-16",
@@ -275,7 +277,8 @@ export const safetyHazardControlList = [{
   ff: "2",
   gg: "2020-06-16",
   hh: "维修实施",
-  ii: "完成"
+  ii: "完成",
+  jj:"YP2020050503"
 },{
   aa: "航安任务",
   bb: "2020-06-16",
@@ -285,7 +288,8 @@ export const safetyHazardControlList = [{
   ff: "2",
   gg: "2020-06-16",
   hh: "维修实施",
-  ii: "完成"
+  ii: "完成",
+  jj:"YP2020050504"
 },{
   aa: "航安任务",
   bb: "2020-06-16",
@@ -295,7 +299,8 @@ export const safetyHazardControlList = [{
   ff: "2",
   gg: "2020-06-16",
   hh: "维修实施",
-  ii: "完成"
+  ii: "完成",
+  jj:"YP2020050505"
 }]
 
 //安全隐患管控输出
@@ -306,6 +311,7 @@ export const safetyHazardsFollow=[{
   dd: "2020-06-16",
   ee: "维修实施",
   ff: "完成",
+  jj:"YP2020050501"
 },{
   aa: "方案制定存在缺陷",
   bb: "程序编写存在缺陷",
@@ -313,6 +319,7 @@ export const safetyHazardsFollow=[{
   dd: "2020-06-16",
   ee: "维修实施",
   ff: "完成",
+  jj:"YP2020050502"
 },{
   aa: "方案制定存在缺陷",
   bb: "程序编写存在缺陷",
@@ -320,6 +327,7 @@ export const safetyHazardsFollow=[{
   dd: "2020-06-16",
   ee: "维修实施",
   ff: "完成",
+  jj:"YP2020050503"
 },{
   aa: "方案制定存在缺陷",
   bb: "程序编写存在缺陷",
@@ -327,6 +335,7 @@ export const safetyHazardsFollow=[{
   dd: "2020-06-16",
   ee: "维修实施",
   ff: "完成",
+  jj:"YP2020050504"
 },{
   aa: "方案制定存在缺陷",
   bb: "程序编写存在缺陷",
@@ -334,4 +343,5 @@ export const safetyHazardsFollow=[{
   dd: "2020-06-16",
   ee: "维修实施",
   ff: "完成",
+  jj:"YP2020050505"
 }]

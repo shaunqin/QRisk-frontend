@@ -13,13 +13,14 @@
       @selection-change="selectionChange"
     >
       <el-table-column type="index" width="50" />
+      <el-table-column prop="jj" label="编号" width="150" />
       <el-table-column prop="aa" label="风险" width="100" />
       <el-table-column prop="bb" label="通知内容" />
       <el-table-column label="操作" width="300">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="edit(scope.row)">下发</el-button>
+          <el-button type="primary" size="mini" @click="hairdown(scope.row)">下发</el-button>
           <el-button type="primary" size="mini" @click="fillin(scope.row)">填报</el-button>
-          <el-button type="primary" size="mini" @click="edit(scope.row)">审批</el-button>
+          <el-button type="primary" size="mini" @click="approval(scope.row)">审批</el-button>
           <el-button type="primary" size="mini" @click="feedback(scope.row)">反馈</el-button>
         </template>
       </el-table-column>
@@ -33,10 +34,12 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-    <!-- 填报 -->
-    <fillin-dialog ref="fillinDialog"></fillin-dialog>
+    <!-- 下发/填报 -->
+    <hairdown ref="hairdown" :type="type"></hairdown>
+    <!-- 审批 -->
+    <approval ref="approval"></approval>
     <!-- 反馈 -->
-    <feedback-dialog ref="feedbackDialog"></feedback-dialog>
+    <feedback ref="feedback"></feedback>
   </div>
 </template>
 
@@ -45,14 +48,18 @@ import initData from "@/mixins/initData";
 import fillinDialog from "./components/fillinDialog";
 import feedbackDialog from "./components/feedbackDialog";
 import eform from "./form";
+import hairdown from "./components/hairdown";
+import approval from "./components/approval";
+import feedback from "./components/feedback";
 export default {
-  components: { eform, fillinDialog, feedbackDialog },
+  components: { eform, hairdown, approval, feedback },
   mixins: [initData],
   data() {
     return {
       isSuperAdmin: false,
       userInfo: {},
-      selections: []
+      selections: [],
+      type: ""
     };
   },
   mounted() {
@@ -61,7 +68,8 @@ export default {
       this.data.push({
         aa: "安全风险",
         bb:
-          "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降、中断起飞的安全风险。"
+          "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降、中断起飞的安全风险。",
+        jj: "FP202005050" + i
       });
     }
   },
@@ -85,12 +93,70 @@ export default {
     edit(row) {
       console.log(row);
     },
-    fillin(row) {
-      let _this = this.$refs.fillinDialog;
+    hairdown(row) {
+      this.type = "下发";
+      let _this = this.$refs.hairdown;
+      _this.form = {
+        aa: "FP2020050500",
+        bb: "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存",
+        cc: "大",
+        dd: "出现大翼引气渗漏等",
+        ee: "3",
+        ff: "该机 5月 3 日曾出现相同的故障信息，并造成飞机返航",
+        gg:"出现相同的故障信息，并造成飞机返航",hh:"上海",ii:"在控",jj:"20200101"
+      };
       _this.dialog = true;
     },
-    feedback(row){
-      let _this = this.$refs.feedbackDialog;
+    fillin(row) {
+      this.type = "填报";
+      let _this = this.$refs.hairdown;
+      _this.form = {
+        aa: "FP2020050500",
+        bb: "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存",
+        cc: "大",
+        dd: "出现大翼引气渗漏等",
+        ee: "3",
+        ff: "该机 5月 3 日曾出现相同的故障信息，并造成飞机返航",
+        gg:"出现相同的故障信息，并造成飞机返航",hh:"上海",ii:"在控",jj:"20200101"
+      };
+      _this.dialog = true;
+    },
+    approval(row) {
+      let _this = this.$refs.approval;
+      _this.form = {
+        aa:
+          "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降、中断起飞的安全风险。",
+        bb: "上海",
+        cc: "admin",
+        dd: "是",
+        ee: "2020-06-06",
+        jj: "FP2020050501"
+      };
+      _this.dialog = true;
+    },
+    feedback(row) {
+      let _this = this.$refs.feedback;
+      _this.form = {
+        aa:
+          "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降、中断起飞的安全风险。",
+        bb: "FP2020050501",
+        cc: "批准",
+        dd: "上海",
+        ee: "2020-06-06",
+        ff: "上海",
+        gg: "杭州",
+        hh: `2020 年 6 月 5 日，A321/B-1833 飞机执行 CA1948 航班，成都起飞后地面监控出现 AIR R WING LEAK 警告信息，飞机返航，该机 5月 3 日曾出现相同的故障信息，并造成飞机返航`,
+        jj: "FP2020050501"
+      };
+      _this.riskForm = {
+        aa: "出现大翼引气渗漏等",
+        bb:
+          "A321/B-1833 飞机执行 CA1948 航班，成都起飞后地面监控出现 AIR R WING LEAK 警告信息",
+        cc: "出现相同的故障信息，并造成飞机返航",
+        dd: "高",
+        ee: "高",
+        ff: "3"
+      };
       _this.dialog = true;
     }
   }

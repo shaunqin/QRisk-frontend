@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
-    :title="isAdd ? '新增' : '反馈'"
+    :title="type"
     custom-class="big_dialog"
   >
     <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
@@ -15,65 +15,62 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="主题" prop="aa">
-            <el-input v-model="form.aa" style="width: 100%;" />
+          <el-form-item label="危险源" prop="bb">
+            <el-input v-model="form.bb" style="width: 100%;"  />
           </el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-form-item label="安全风险" prop="aa">
+        <el-col :span="8">
+          <el-form-item label="可能性">
             <el-input v-model="form.cc" style="width: 100%;" />
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="24">
-          <el-form-item label="背景" prop="bb">
-            <el-input v-model="form.bb" style="width: 100%;" type="textarea" rows="4" />
+        <el-col :span="8">
+          <el-form-item label="可能导致的风险">
+            <el-input v-model="form.dd" style="width: 100%;" />
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row v-if="isAdd">
-        <el-col :span="24">
-          <el-form-item label="风险防范" prop="dd">
-            <el-row v-for="(item,index) in riskList" :key="index" style="margin-bottom: 10px;">
-              <el-col :span="6" style="padding-right:10px">
-                <el-select v-model="item.aa" placeholder="责任单位">
-                  <el-option label="责任单位" value="责任单位"></el-option>
-                </el-select>
-              </el-col>
-              <el-col :span="15" style="padding-right:10px">
-                <el-input v-model="item.bb" style="width: 100%;" />
-              </el-col>
-              <el-col :span="2" :offset="1">
-                <i class="el-icon-delete"></i>
-              </el-col>
-            </el-row>
-            <el-row style="margin-top:10px">
-              <el-col :span="24">
-                <el-button plain icon="el-icon-plus" style="width: 100%;border-style: dashed;" @click="addRisk">添加</el-button>
-              </el-col>
-            </el-row>
+        <el-col :span="8">
+          <el-form-item label="风险等级">
+            <el-input v-model="form.ee" style="width: 100%;" />
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row v-else>
-        <el-col :span="24">
-          <el-form-item label="风险防范">
-            <el-table :data="data" size="mini" style="width: 100%;">
-              <el-table-column label="责任单位" prop="aa" width="100px" />
-              <el-table-column label="风险措施" prop="bb" align="left" />
-              <el-table-column label="反馈">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.cc" placeholder="请输入反馈内容"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" width="80px">
-                <template slot-scope="scope">
-                  <el-button type="text" @click="upload(scope.row)">上传</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
+        <el-col :span="8">
+          <el-form-item label="根原因分析">
+            <el-input v-model="form.ff" style="width: 100%;" />
           </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="控制措施">
+            <el-input v-model="form.gg" style="width: 100%;" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="责任单位">
+            <el-input v-model="form.hh" style="width: 100%;" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="控制状态">
+            <el-input v-model="form.ii" style="width: 100%;" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="完成期限">
+            <el-input v-model="form.jj" style="width: 100%;" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="选择部门">
+            <el-select v-model="bumen" placeholder="选择部门" style="width: 100%;">
+              <el-option :label="'选择部门'" :value="'选择部门'"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        
+        <el-col :span="24" v-if="type=='填报'">
+            <el-form-item label="">
+                <el-button type="success">上传附件</el-button>
+            </el-form-item>
         </el-col>
       </el-row>
     </el-form>
@@ -86,6 +83,7 @@
 
 <script>
 import { add, modify } from "@/api/emplotee.js";
+
 export default {
   data() {
     return {
@@ -96,31 +94,25 @@ export default {
         bb: "",
         cc: "",
         dd: "",
-        ee: "",
-        ff: ""
+        ee: ""
       },
       roleSelect: [],
       formRules: {
         aa: [{ required: true, message: "请填写名称", trigger: "blur" }],
         bb: [{ required: true, message: "请填写名称", trigger: "blur" }]
       },
-      data: [],
-      riskList:[{aa:"",bb:""}]
+      entArr: [],
+      dataString: "",
+      bumen: ""
     };
   },
   props: {
-    isAdd: {
-      type: Boolean,
-      required: true
+    type: {
+      type: String,
+      required: ""
     }
   },
-  created() {
-    this.data=[
-      {aa:"杭州",bb:`认真做好重复性故障的管控工作。各单位要高度重视飞机出现的重复性故障，加强对排故力量的组织；对于飞机运行中出现的重复、疑难故障，工程技术人员要及时研究和制定排故方案，彻底排除故障，确保飞行安全。 `},
-      {aa:"上海",bb:`严格飞机航后和飞机定检维修质量。维修人员要严格按工作单卡执行飞机航后检查工作，及时发现并处理飞机故障，严把飞机放行关；飞机执行定检工作中，应切实提高飞机定检质量，确保飞机投入运行后安全可靠。  `},
-      {aa:"武汉",bb:`A320S 飞行机组操作手册（FCOM）的操作程序中提出，高温天气可能导致飞机机翼气源管道周围过热被探测，容易触发左/右机翼气源渗漏警告（AIR L/R WING LEAK） `},
-    ]
-  },
+  created() {},
   methods: {
     cancel() {
       this.resetForm();
@@ -201,7 +193,7 @@ export default {
         dd: "",
         ee: ""
       };
-      this.riskList = [];
+      this.roleSelect = [];
     },
     roleChange(e) {
       if (e.length <= 1) {
@@ -217,19 +209,38 @@ export default {
       }
       this.form.roleList = arr;
     },
-    upload(row) {},
-    addRisk(){
-      this.riskList.push({
-        aa:"",bb:""
-      })
-    }
+    roleRemove(e) {}
+    // delwithRoleList() {
+    //   const roleList = this.roleList
+    //   const checkList = this.form.roleList
+    //   let newList = []
+    //   let obj = {}
+    //   for (let i = 0; i < checkList.length; i++) {
+    //     for (let j = 0; j < roleList.length; j++) {
+    //       if (checkList[i] === roleList[j].id) {
+    //         obj.id = Number(checkList[i])
+    //         obj.code = roleList[j].code
+    //         obj.roleDesc = roleList[j].roleDesc
+    //         // obj.sn = roleList[j].sn
+    //         newList.push(obj)
+    //         obj = {}
+    //       }
+    //     }
+    //   }
+    //   this.form.roleList = newList
+    // }
   }
 };
 </script>
 
-<style lang="scss" scoped>
-/deep/ .big_dialog{
-  width: 1100px;
-}
+<style scoped>
 </style>
 
+<style lang="scss">
+.roleSelect {
+  width: 370px;
+}
+.el-select-dropdown {
+  z-index: 99999999999999 !important;
+}
+</style>

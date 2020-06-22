@@ -30,6 +30,7 @@
       @selection-change="selectionChange"
     >
       <el-table-column type="index" width="50" />
+      <el-table-column prop="jj" label="编号" />
       <el-table-column prop="aa" label="名称" />
       <el-table-column prop="bb" label="发生时间" />
       <el-table-column prop="cc" label="隐患风险" />
@@ -39,23 +40,14 @@
       <el-table-column prop="gg" label="发现时间" />
       <el-table-column prop="hh" label="来源" />
       <el-table-column prop="ii" label="整改进展" />
-      <el-table-column label="操作" width="200px" align="center" fixed="right">
+      <el-table-column label="操作" width="230px" align="center" fixed="right">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary">详细</el-button>
-          <el-button
-            :disabled="scope.row.userName !== userInfo.userName"
-            size="mini"
-            type="primary"
-            icon="el-icon-edit"
-            @click="edit(scope.row)"
-          />
-          <el-button
-            slot="reference"
-            type="danger"
-            icon="el-icon-delete"
-            size="mini"
-            @click="subDelete(scope.row.id)"
-          />
+          <el-button-group>
+            <el-button size="mini" @click="hairdown(scope.row)">下发</el-button>
+            <el-button size="mini" @click="approval(scope.row)">审批</el-button>
+            <el-button size="mini" icon="el-icon-edit" @click="edit(scope.row)"></el-button>
+            <el-button size="mini" icon="el-icon-delete" @click="subDelete(scope.row.id)"></el-button>
+          </el-button-group>
         </template>
       </el-table-column>
     </el-table>
@@ -68,16 +60,21 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-
+    <!-- 下发 -->
+    <hairdown-dialog ref="hairdownDialog"></hairdown-dialog>
+    <!-- 审批 -->
+    <approval-dialog ref="approvalDialog"></approval-dialog>
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
 import eform from "./form";
-import {safetyHazardControlList} from '@/dataSource'
+import { safetyHazardControlList } from "@/dataSource";
+import hairdownDialog from "./components/hairdownDialog";
+import approvalDialog from "./components/approvalDialog";
 export default {
-  components: { eform },
+  components: { eform ,hairdownDialog,approvalDialog},
   mixins: [initData],
   data() {
     return {
@@ -88,7 +85,7 @@ export default {
   },
   mounted() {
     this.loading = false;
-    this.data=safetyHazardControlList;
+    this.data = safetyHazardControlList;
   },
   methods: {
     toQuery(name) {
@@ -127,6 +124,16 @@ export default {
             message: "已取消删除"
           });
         });
+    },
+    hairdown(row){
+      let _this = this.$refs.hairdownDialog;
+       _this.form = Object.assign({}, row);
+      _this.dialog = true;
+    },
+    approval(row){
+       let _this = this.$refs.approvalDialog;
+        _this.form = Object.assign({}, row);
+      _this.dialog = true;
     }
   }
 };
