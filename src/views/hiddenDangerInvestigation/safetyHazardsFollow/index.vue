@@ -33,11 +33,11 @@
       <el-table-column type="index" width="50" />
       <el-table-column prop="jj" label="编号" />
       <el-table-column prop="aa" label="名称" />
-      <el-table-column prop="bb" label="隐患风险" />
-      <el-table-column prop="cc" label="隐患等级" />
-      <el-table-column prop="dd" label="发现时间" />
-      <el-table-column prop="ee" label="来源" />
-      <el-table-column prop="ff" label="整改进展" />
+      <el-table-column prop="bb" label="发现时间" />
+     <el-table-column prop="cc" label="创建时间" />
+      <el-table-column prop="dd" label="修改时间" />
+      <el-table-column prop="ee" label="创建人" />
+      <!-- <el-table-column prop="ff" label="整改进展" /> -->
       <el-table-column prop="gg" label="上报单位" />
       <el-table-column prop="hh" label="上报日期" />
       <el-table-column prop="ii" label="明细" />

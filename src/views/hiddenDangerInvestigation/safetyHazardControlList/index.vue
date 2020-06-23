@@ -33,13 +33,13 @@
       <el-table-column prop="jj" label="编号" />
       <el-table-column prop="aa" label="名称" />
       <el-table-column prop="bb" label="发生时间" />
-      <el-table-column prop="cc" label="隐患风险" />
-      <el-table-column prop="dd" label="隐患等级" />
-      <el-table-column prop="ee" label="风险描述" />
-      <el-table-column prop="ff" label="风险等级" />
+      <el-table-column prop="cc" label="创建时间" />
+      <el-table-column prop="dd" label="修改时间" />
+      <el-table-column prop="ee" label="创建人" />
+      <!-- <el-table-column prop="ff" label="风险等级" />
       <el-table-column prop="gg" label="发现时间" />
       <el-table-column prop="hh" label="来源" />
-      <el-table-column prop="ii" label="整改进展" />
+      <el-table-column prop="ii" label="整改进展" /> -->
       <el-table-column label="操作" width="230px" align="center" fixed="right">
         <template slot-scope="scope">
           <el-button-group>

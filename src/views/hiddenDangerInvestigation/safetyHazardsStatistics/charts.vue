@@ -57,6 +57,9 @@ export default {
     this.loading = false;
   },
   methods: {
+    cancel() {
+      this.dialog = false;
+    },
     toQuery(name) {
       if (!name) {
         this.page = 1;

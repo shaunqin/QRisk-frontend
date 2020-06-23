@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
-    :title="isAdd ? '新增清单' : '编辑清单'"
+    :title="isAdd ? '新增' : '编辑'"
     custom-class="big_dialog"
   >
     <el-card header="基本信息">

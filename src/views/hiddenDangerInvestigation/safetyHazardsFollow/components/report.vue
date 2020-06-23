@@ -34,27 +34,96 @@
         </el-row>
       </el-form>
     </el-card>
-    <el-card header="危险源信息" style="margin-top:20px">
+    <el-card header="隐患清单" style="margin-top:20px">
+      <el-button type="info" size="mini" style="margin-bottom:10px" @click="addRow">新增一行</el-button>
       <!--表格渲染-->
-      <el-table :data="data" size="small" style="width: 100%;">
+      <el-table :data="data" size="small" style="width: 100%;" max-height="400px">
         <el-table-column type="index" width="50" />
-        <el-table-column prop="aa" label="隐患名称" />
-        <el-table-column prop="bb" label="发现时间" />
-        <el-table-column prop="cc" label="来源" />
-        <el-table-column prop="dd" label="等级" />
-        <el-table-column prop="ee" label="主体单位" />
-        <el-table-column prop="ff" label="涉及业务" />
-        <el-table-column prop="gg" label="涉及流程" />
-        <el-table-column prop="hh" label="监管单位" />
-        <el-table-column prop="ii" label="原因分析" />
-        <el-table-column prop="jj" label="等效措施" />
-        <el-table-column prop="kk" label="责任人" />
-        <el-table-column prop="ll" label="整改时限" />
-        <el-table-column prop="mm" label="验证标准" />
-        <el-table-column prop="nn" label="措施实施情况跟踪" />
-        <el-table-column prop="oo" label="治理结果情况跟踪" />
-        <el-table-column prop="pp" label="整改进展" />
-        <el-table-column prop="qq" label="备注" />
+        <el-table-column prop="aa" label="隐患名称" width="120px">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.aa" size="mini" placeholder></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="bb" label="发现时间" width="120px">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.bb" size="mini" placeholder></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="cc" label="来源" width="120px">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.cc" size="mini" placeholder></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="dd" label="等级" width="120px">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.dd" size="mini" placeholder></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="ee" label="主体单位" width="120px">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.ee" size="mini" placeholder></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="ff" label="涉及业务" width="120px">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.ff" size="mini" placeholder></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="gg" label="涉及流程" width="120px">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.gg" size="mini" placeholder></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="hh" label="监管单位" width="120px">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.hh" size="mini" placeholder></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="ii" label="原因分析" width="120px">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.aiia" size="mini" placeholder></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="jj" label="等效措施" width="120px">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.jj" size="mini" placeholder></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="kk" label="责任人" width="120px">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.kk" size="mini" placeholder></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="ll" label="整改时限" width="120px">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.ll" size="mini" placeholder></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="mm" label="验证标准" width="120px">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.mm" size="mini" placeholder></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="nn" label="措施实施情况跟踪" width="120px">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.nn" size="mini" placeholder></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="oo" label="治理结果情况跟踪" width="120px">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.oo" size="mini" placeholder></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="pp" label="整改进展" width="120px">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.pp" size="mini" placeholder></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="qq" label="备注" width="120px">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row. qq" size="mini" placeholder></el-input>
+          </template>
+        </el-table-column>
       </el-table>
     </el-card>
     <div slot="footer" class="dialog-footer">
@@ -104,7 +173,11 @@ export default {
         jj: "重新制定",
         kk: "admin",
         ll: "3",
-        mm: "符合规范",nn:"跟踪状态",oo:"跟踪状态",pp:"待完成",qq:"备注信息"
+        mm: "符合规范",
+        nn: "跟踪状态",
+        oo: "跟踪状态",
+        pp: "待完成",
+        qq: "备注信息"
       }
     ];
   },
@@ -204,26 +277,27 @@ export default {
       }
       this.form.roleList = arr;
     },
-    roleRemove(e) {}
-    // delwithRoleList() {
-    //   const roleList = this.roleList
-    //   const checkList = this.form.roleList
-    //   let newList = []
-    //   let obj = {}
-    //   for (let i = 0; i < checkList.length; i++) {
-    //     for (let j = 0; j < roleList.length; j++) {
-    //       if (checkList[i] === roleList[j].id) {
-    //         obj.id = Number(checkList[i])
-    //         obj.code = roleList[j].code
-    //         obj.roleDesc = roleList[j].roleDesc
-    //         // obj.sn = roleList[j].sn
-    //         newList.push(obj)
-    //         obj = {}
-    //       }
-    //     }
-    //   }
-    //   this.form.roleList = newList
-    // }
+    addRow(e) {
+      this.data.push({
+        aa: "",
+        bb: "",
+        cc: "",
+        dd: "",
+        ee: "",
+        ff: "",
+        gg: "",
+        hh: "",
+        ii: "",
+        jj: "",
+        kk: "",
+        ll: "",
+        mm: "",
+        nn: "",
+        oo: "",
+        pp: "",
+        qq: ""
+      });
+    }
   }
 };
 </script>
