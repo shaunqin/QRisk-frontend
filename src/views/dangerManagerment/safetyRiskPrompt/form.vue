@@ -21,7 +21,7 @@
         </el-col>
         <el-col :span="24">
           <el-form-item label="安全风险" prop="aa">
-            <el-input v-model="form.cc" style="width: 100%;" />
+            <el-input v-model="form.cc" style="width: 100%;" type="textarea" rows="4" />
           </el-form-item>
         </el-col>
       </el-row>

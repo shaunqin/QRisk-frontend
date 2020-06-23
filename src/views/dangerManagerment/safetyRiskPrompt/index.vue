@@ -12,7 +12,7 @@
       >
         <el-button slot="append" icon="el-icon-search" @click="toQuery(query)"></el-button>
       </el-input>
-      <el-button class="filter-item" size="mini" type="primary" icon="el-icon-plus" @click="add">新增</el-button>
+      <el-button class="filter-item" size="mini" type="success" icon="el-icon-plus" @click="add">新增</el-button>
     </div>
     <!--表格渲染-->
     <el-table
@@ -30,9 +30,12 @@
       <el-table-column prop="cc" label="安全风险" align="left" />
       <el-table-column prop="dd" label="风险防范" align="left" />
       <el-table-column prop="ee" label="责任单位" width="80" />
-      <el-table-column label="操作" width="100">
+      <el-table-column label="操作" width="150">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="edit(scope.row)">反馈</el-button>
+          <el-button-group>
+            <el-button size="mini" @click="edit(scope.row)">反馈</el-button>
+            <el-button size="mini">验证</el-button>
+          </el-button-group>
         </template>
       </el-table-column>
     </el-table>
@@ -72,7 +75,7 @@ export default {
         dd:
           "1、认真做好重复性故障的管控工作。各单位要高度重视飞机出 现的重复性故障，加强对排故力量的组织;对于飞机运行中出现的 重复、疑难故障，工程技术人员要及时研究和制定排…",
         ee: "杭州、上海、武汉",
-        jj:"SN202005050"+i
+        jj: "SN202005050" + i
       });
     }
   },

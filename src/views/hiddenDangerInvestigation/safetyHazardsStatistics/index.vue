@@ -1,7 +1,8 @@
 <template>
   <div class="app-container">
     <div class="head-container">
-      <el-button type="success" icon="el-icon-s-data" size="mini" @click="tongji">统计</el-button>
+      <el-button type="success" icon="el-icon-s-data" size="mini" >生成国航报表</el-button>
+      <el-button type="success" icon="el-icon-s-data" size="mini" >生成民航报表</el-button>
     </div>
     <!--表格渲染-->
     <el-table
@@ -19,6 +20,11 @@
       <el-table-column prop="cc" label="时间" />
       <el-table-column prop="dd" label="年度" />
       <el-table-column prop="ee" label="反馈日期" />
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button type=""  size="mini" @click="detail(scope.row)">详情</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -30,15 +36,15 @@
       @current-change="pageChange"
     />
     <!-- 统计 -->
-    <charts ref="charts"></charts>
+    <detail ref="detail"></detail>
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
-import charts from "./charts";
+import detail from "./components/detail";
 export default {
-  components: { charts },
+  components: { detail },
   mixins: [initData],
   data() {
     return {
@@ -50,6 +56,9 @@ export default {
   mounted() {
     this.loading = false;
     this.data=[
+      {aa:"方案制定存在缺陷",bb:"YP2020050501",cc:"2020-05-06",dd:"2020",ee:"2020-05-06"},
+      {aa:"方案制定存在缺陷",bb:"YP2020050501",cc:"2020-05-06",dd:"2020",ee:"2020-05-06"},
+      {aa:"方案制定存在缺陷",bb:"YP2020050501",cc:"2020-05-06",dd:"2020",ee:"2020-05-06"},
       {aa:"方案制定存在缺陷",bb:"YP2020050501",cc:"2020-05-06",dd:"2020",ee:"2020-05-06"}
     ]
   },
@@ -66,8 +75,15 @@ export default {
       this.selections = selections;
       this.$emit("selectionChange", { selections: selections });
     },
-    tongji() {
-      let _this = this.$refs.charts;
+    detail() {
+      let _this = this.$refs.detail;
+       _this.form = {
+        aa: "方案制定存在缺陷",
+        bb: "YP2020050501",
+        cc: "2020-05-06",
+        dd: "2020",
+        ee: "2020-05-06"
+      };
       _this.dialog = true;
     },
     edit() {},

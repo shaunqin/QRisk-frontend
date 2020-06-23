@@ -9,13 +9,17 @@
   >
     <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
       <el-row gutter="16">
-        <el-col :span="24">
+        <el-col :span="12">
           <el-form-item label="选择风险" prop="aa">
             <el-select v-model="form.aa" placeholder="选择风险" style="width: 100%;">
               <el-option :label="'选择风险'" :value="'选择风险'"></el-option>
             </el-select>
           </el-form-item>
-          
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="截至日期">
+            <el-date-picker v-model="form.cc" placeholder=""></el-date-picker>
+          </el-form-item>
         </el-col>
         <el-col :span="24">
           <el-form-item label="通知内容">

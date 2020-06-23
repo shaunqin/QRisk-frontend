@@ -38,7 +38,7 @@ export default {
     customerComplaints: '客户投诉',
     riskAssessment: '风险评估',
     dangerManagerment: '风险管理',
-    riskControl: '在控风险管控',
+    riskControl: '安全风险管控',
     riskAssessmentDataExport: '风险评价报告',
     safetyRiskPrompt: '安全风险提示',
     riskAssessmentProcess: '专项风险评估',

@@ -4,86 +4,56 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
-    :title="isAdd ? '新增' : '编辑'"
+    title="详情"
     custom-class="big_dialog"
   >
     <el-card header="基本信息">
       <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="任务名称" prop="aa">
-              <el-input v-model="form.aa" style="width: 100%;" />
-            </el-form-item>
+            <el-form-item label="任务名称" prop="aa">{{form.aa}}</el-form-item>
             <el-form-item label="年度">
-              <el-input v-model="form.dd" style="width: 100%;" />
+              {{form.dd}}
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="编号" prop="bb">
-              <el-input v-model="form.bb" style="width: 100%;" />
+              {{form.bb}}
             </el-form-item>
             <el-form-item label="反馈日期">
-              <el-input v-model="form.ee" style="width: 100%;" />
+              {{form.ee}}
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="时间">
-              <el-input v-model="form.cc" style="width: 100%;" />
+              {{form.cc}}
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
     </el-card>
-    <el-card header="月度反馈日期设置" style="margin-top:20px">
-      <el-form :model="form2" size="small" label-width="auto">
-        <el-row :gutter="16">
-          <el-col :span="6">
-            <el-form-item label="一月">
-              <el-date-picker v-model="form2.dd1" placeholder="" style="width:100%"></el-date-picker>
-            </el-form-item>
-             <el-form-item label="五月">
-              <el-date-picker v-model="form2.dd1" placeholder="" style="width:100%"></el-date-picker>
-            </el-form-item>
-             <el-form-item label="九月">
-              <el-date-picker v-model="form2.dd1" placeholder="" style="width:100%"></el-date-picker>
-            </el-form-item>
-          </el-col>
-           <el-col :span="6">
-            <el-form-item label="二月">
-              <el-date-picker v-model="form2.dd1" placeholder="" style="width:100%"></el-date-picker>
-            </el-form-item>
-             <el-form-item label="六月">
-              <el-date-picker v-model="form2.dd1" placeholder="" style="width:100%"></el-date-picker>
-            </el-form-item>
-             <el-form-item label="十月">
-              <el-date-picker v-model="form2.dd1" placeholder="" style="width:100%"></el-date-picker>
-            </el-form-item>
-          </el-col>
-           <el-col :span="6">
-            <el-form-item label="三月">
-              <el-date-picker v-model="form2.dd1" placeholder="" style="width:100%"></el-date-picker>
-            </el-form-item>
-             <el-form-item label="七月">
-              <el-date-picker v-model="form2.dd1" placeholder="" style="width:100%"></el-date-picker>
-            </el-form-item>
-             <el-form-item label="十一月">
-              <el-date-picker v-model="form2.dd1" placeholder="" style="width:100%"></el-date-picker>
-            </el-form-item>
-          </el-col>
-           <el-col :span="6">
-            <el-form-item label="四月">
-              <el-date-picker v-model="form2.dd1" placeholder="" style="width:100%"></el-date-picker>
-            </el-form-item>
-             <el-form-item label="八月">
-              <el-date-picker v-model="form2.dd1" placeholder="" style="width:100%"></el-date-picker>
-            </el-form-item>
-             <el-form-item label="十二月">
-              <el-date-picker v-model="form2.dd1" placeholder="" style="width:100%"></el-date-picker>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        
-      </el-form>
+    <el-card header="隐患清单" style="margin-top:20px">
+      <!--表格渲染-->
+      <el-table :data="data" size="small" style="width: 100%;" max-height="400px">
+        <el-table-column type="index" width="50" />
+        <el-table-column prop="aa" label="隐患名称" />
+        <el-table-column prop="bb" label="发现时间"  />
+        <el-table-column prop="cc" label="来源"  />
+        <el-table-column prop="dd" label="等级" />
+        <el-table-column prop="ee" label="主体单位" />
+        <el-table-column prop="ff" label="涉及业务" />
+        <el-table-column prop="gg" label="涉及流程"/>
+        <el-table-column prop="hh" label="监管单位"/>
+        <el-table-column prop="ii" label="原因分析" />
+        <el-table-column prop="jj" label="等效措施" />
+        <el-table-column prop="kk" label="责任人" />
+        <el-table-column prop="ll" label="整改时限"/>
+        <el-table-column prop="mm" label="验证标准" />
+        <el-table-column prop="nn" label="措施实施情况跟踪" />
+        <el-table-column prop="oo" label="治理结果情况跟踪" />
+        <el-table-column prop="pp" label="整改进展" />
+        <el-table-column prop="qq" label="备注" />
+      </el-table>
     </el-card>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
@@ -112,17 +82,34 @@ export default {
         aa: [{ required: true, message: "请填写名称", trigger: "blur" }],
         bb: [{ required: true, message: "请填写名称", trigger: "blur" }]
       },
-      entArr: [],
+      data: [],
       form2: {}
     };
   },
-  props: {
-    isAdd: {
-      type: Boolean,
-      required: true
-    }
+  props: {},
+  created() {
+    this.data = [
+      {
+        aa: "方案制定存在缺陷",
+        bb: "2020-02-22",
+        cc: "数据分析",
+        dd: "3",
+        ee: "上海",
+        ff: "维修",
+        gg: "开发",
+        hh: "上海",
+        ii: "方案制定",
+        jj: "重新制定",
+        kk: "admin",
+        ll: "3",
+        mm: "符合规范",
+        nn: "跟踪状态",
+        oo: "跟踪状态",
+        pp: "待完成",
+        qq: "备注信息"
+      }
+    ];
   },
-  created() {},
   methods: {
     cancel() {
       this.resetForm();
@@ -219,33 +206,34 @@ export default {
       }
       this.form.roleList = arr;
     },
-    roleRemove(e) {}
-    // delwithRoleList() {
-    //   const roleList = this.roleList
-    //   const checkList = this.form.roleList
-    //   let newList = []
-    //   let obj = {}
-    //   for (let i = 0; i < checkList.length; i++) {
-    //     for (let j = 0; j < roleList.length; j++) {
-    //       if (checkList[i] === roleList[j].id) {
-    //         obj.id = Number(checkList[i])
-    //         obj.code = roleList[j].code
-    //         obj.roleDesc = roleList[j].roleDesc
-    //         // obj.sn = roleList[j].sn
-    //         newList.push(obj)
-    //         obj = {}
-    //       }
-    //     }
-    //   }
-    //   this.form.roleList = newList
-    // }
+    addRow(e) {
+      this.data.push({
+        aa: "",
+        bb: "",
+        cc: "",
+        dd: "",
+        ee: "",
+        ff: "",
+        gg: "",
+        hh: "",
+        ii: "",
+        jj: "",
+        kk: "",
+        ll: "",
+        mm: "",
+        nn: "",
+        oo: "",
+        pp: "",
+        qq: ""
+      });
+    }
   }
 };
 </script>
 
 
 <style lang="scss" scoped>
-/deep/ .big_dialog{
+/deep/ .big_dialog {
   width: 1100px;
 }
 .roleSelect {

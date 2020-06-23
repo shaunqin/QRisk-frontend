@@ -66,6 +66,17 @@
           </div>
         </router-link>
       </el-col>
+      <el-col :span="6">
+        <router-link to="/qualityEvaluation" class="bottom">
+          <div class="img">
+            <img src="@/assets/images/home-05.png" />
+          </div>
+          <div class="b">
+            <span class="b-t">质量评价</span>
+            <span class="b-desc">安全隐患管控清单、安全隐患统计输出和重大安全隐患跟踪。</span>
+          </div>
+        </router-link>
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -149,6 +160,7 @@ export default {
   }
   .r2 {
     margin-top: 20px;
+    display: flex;
     .bottom {
       display: flex;
       color: #fff;

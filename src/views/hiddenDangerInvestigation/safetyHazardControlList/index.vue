@@ -43,8 +43,6 @@
       <el-table-column label="操作" width="230px" align="center" fixed="right">
         <template slot-scope="scope">
           <el-button-group>
-            <el-button size="mini" @click="hairdown(scope.row)">下发</el-button>
-            <el-button size="mini" @click="approval(scope.row)">审批</el-button>
             <el-button size="mini" icon="el-icon-edit" @click="edit(scope.row)"></el-button>
             <el-button size="mini" icon="el-icon-delete" @click="subDelete(scope.row.id)"></el-button>
           </el-button-group>

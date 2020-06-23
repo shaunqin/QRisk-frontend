@@ -1,7 +1,17 @@
 <template>
   <div class="app-container">
     <div class="head-container">
-      <el-button type="success" size="mini" @click="riskControl">生成在控风险</el-button>
+      <el-form :model="form" label-width="auto" size="mini" inline>
+        <el-form-item label="名称">
+          <el-input v-model="form.aa" placeholder=""></el-input>
+        </el-form-item>
+         <el-form-item label="日期">
+           <el-date-picker v-model="form.bb" placeholder=""></el-date-picker>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="success">搜索</el-button>
+        </el-form-item>
+      </el-form>
     </div>
     <!--表格渲染-->
     <el-table
@@ -16,13 +26,9 @@
       <el-table-column prop="aa" label="编号" />
       <el-table-column prop="bb" label="名称" />
       <el-table-column prop="cc" label="备注" />
-      <el-table-column label="操作" width="230px" align="center" fixed="right">
+      <el-table-column label="操作" width="100px" align="center" fixed="right">
         <template slot-scope="scope">
-          <el-button-group>
-            <el-button size="mini" @click="hairdown(scope.row)">下发</el-button>
-            <el-button size="mini" @click="approval(scope.row)">审批</el-button>
-            <el-button size="mini" @click="feedback(scope.row)">反馈</el-button>
-          </el-button-group>
+          <el-button size="mini" @click="detail(scope.row)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -35,23 +41,24 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-    <risk-control ref="riskControl" :type="dialogType"></risk-control>
+    <detail ref="detail" :type="dialogType"></detail>
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
 import eform from "./form";
-import riskControl from "./components/index";
+import detail from "./components/detail";
 export default {
-  components: { eform, riskControl },
+  components: { eform, detail },
   mixins: [initData],
   data() {
     return {
       isSuperAdmin: false,
       userInfo: {},
       selections: [],
-      dialogType: ""
+      dialogType: "",
+      form:{aa:"",bb:""}
     };
   },
   mounted() {
@@ -89,9 +96,29 @@ export default {
       let _this = this.$refs.riskControl;
       _this.dialog = true;
     },
-    hairdown(row) {
-      this.dialogType = "下发";
-      let _this = this.$refs.riskControl;
+    detail(row) {
+      let _this = this.$refs.detail;
+      _this.form = {
+        aa:
+          "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降、中断起飞的安全风险。",
+        bb: "FP2020050501",
+        cc: "批准",
+        dd: "上海",
+        ee: "2020-06-06",
+        ff: "上海",
+        gg: "杭州",
+        hh: `2020 年 6 月 5 日，A321/B-1833 飞机执行 CA1948 航班，成都起飞后地面监控出现 AIR R WING LEAK 警告信息，飞机返航，该机 5月 3 日曾出现相同的故障信息，并造成飞机返航`,
+        jj: "FP2020050501"
+      };
+      _this.riskForm = {
+        aa: "出现大翼引气渗漏等",
+        bb:
+          "A321/B-1833 飞机执行 CA1948 航班，成都起飞后地面监控出现 AIR R WING LEAK 警告信息",
+        cc: "出现相同的故障信息，并造成飞机返航",
+        dd: "高",
+        ee: "高",
+        ff: "3"
+      };
       _this.dialog = true;
     },
     approval(row) {

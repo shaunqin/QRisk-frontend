@@ -1,36 +1,43 @@
 <template>
-  <div class="dataSource">
-    <el-row :gutter="16">
-      <el-col :span="12">
-        <table-l></table-l>
-      </el-col>
-      <el-col :span="12">
-        <table-r></table-r>
-      </el-col>
-    </el-row>
+  <div class="orher-standard">
+    <!--表格渲染-->
+    <el-table
+      v-loading="loading"
+      :data="data"
+      size="small"
+      :highlight-current-row="true"
+      style="width: 100%;"
+    >
+      <el-table-column type="index" width="50" />
+      <el-table-column prop="aa" label="名称">
+        <template slot-scope="scope">
+          <el-button type="text">{{scope.row.aa}}</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column prop="bb" label="创建时间" />
+    </el-table>
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
-import { riskOtherStandard } from "@/dataSource";
-import tableL from "./tableL";
-import tableR from "./tableR";
-import charts from "@/components/Charts";
 export default {
-  components: { tableL, tableR, charts },
   mixins: [initData],
   data() {
     return {
       isSuperAdmin: false,
       userInfo: {},
       selections: [],
-      department: "",
+      department: ""
     };
   },
   mounted() {
     this.loading = false;
-    this.data = riskOtherStandard;
+    this.data = [
+      { aa: "漏取销子/管套", bb: "2020-04-05" },
+      { aa: "漏取销子/管套", bb: "2020-04-05" },
+      { aa: "漏取销子/管套", bb: "2020-04-05" }
+    ];
   },
   methods: {
     toQuery(name) {
@@ -40,7 +47,7 @@ export default {
       //   this.init();
       //   return;
       // }
-    },
+    }
   }
 };
 </script>

@@ -30,6 +30,7 @@
       style="width: 100%;"
       @selection-change="selectionChange"
     >
+      <el-table-column type="selection" width="50" />
       <el-table-column type="index" width="50" />
       <el-table-column prop="jj" label="编号" />
       <el-table-column prop="aa" label="名称" />

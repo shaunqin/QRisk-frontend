@@ -4,51 +4,35 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
-    :title="'审批'"
+    :title="'详情'"
     custom-class="big_dialog"
   >
     <el-card header="详细信息">
       <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
         <el-row :gutter="16">
           <el-col :span="24">
-            <el-form-item label="标题" prop="aa">
-              <el-input v-model="form.aa" style="width: 100%;" readonly />
-            </el-form-item>
+            <el-form-item label="标题" prop="aa">{{form.aa}}</el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="编号">
-              <el-input v-model="form.bb" style="width: 100%;" readonly />
-            </el-form-item>
+            <el-form-item label="编号">{{form.bb}}</el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="批准">
-              <el-input v-model="form.cc" style="width: 100%;" readonly />
-            </el-form-item>
+            <el-form-item label="批准">{{form.cc}}</el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="评价单位">
-              <el-input v-model="form.dd" style="width: 100%;" readonly />
-            </el-form-item>
+            <el-form-item label="评价单位">{{form.dd}}</el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="日期">
-              <el-input v-model="form.ee" style="width: 100%;" readonly />
-            </el-form-item>
+            <el-form-item label="日期">{{form.ee}}</el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="主送单位">
-              <el-input v-model="form.ff" style="width: 100%;" readonly />
-            </el-form-item>
+            <el-form-item label="主送单位">{{form.ff}}</el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="抄送单位">
-              <el-input v-model="form.gg" style="width: 100%;" readonly />
-            </el-form-item>
+            <el-form-item label="抄送单位">{{form.gg}}</el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="背景描述">
-              <el-input v-model="form.hh" style="width: 100%;" type="textarea" rows="3" readonly />
-            </el-form-item>
+            <el-form-item label="背景描述">{{form.hh}}</el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -56,54 +40,32 @@
     <el-card header="风险措施" style="margin-top:20px">
       <el-form ref="riskForm" :model="riskForm" size="mini" label-width="auto">
         <el-row :gutter="16">
-          <el-col :span="8">
-            <el-form-item label="危险源">
-              <el-input v-model="riskForm.aa" placeholder readonly></el-input>
-            </el-form-item>
+          <el-col :span="6">
+            <el-form-item label="危险源">{{riskForm.aa}}</el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="根原因分析">
-              <el-input v-model="riskForm.bb" placeholder readonly></el-input>
-            </el-form-item>
+          <el-col :span="6">
+            <el-form-item label="严重性等级">{{riskForm.dd}}</el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="可能导致的风险">
-              <el-input v-model="riskForm.cc" placeholder readonly></el-input>
-            </el-form-item>
+          <el-col :span="6">
+            <el-form-item label="可能性等级">{{riskForm.ee}}</el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="严重性等级">
-              <el-input v-model="riskForm.dd" placeholder readonly></el-input>
-            </el-form-item>
+          <el-col :span="6">
+            <el-form-item label="风险等级">{{riskForm.ff}}</el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="可能性等级">
-              <el-input v-model="riskForm.ee" placeholder readonly></el-input>
-            </el-form-item>
+          <el-col :span="24">
+            <el-form-item label="根原因分析">{{riskForm.bb}}</el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="风险等级">
-              <el-input v-model="riskForm.ff" placeholder readonly></el-input>
-            </el-form-item>
+          <el-col :span="24">
+            <el-form-item label="可能导致的风险">{{riskForm.cc}}</el-form-item>
           </el-col>
         </el-row>
       </el-form>
-      <el-button type="info" size="mini" style="margin-bottom:10px" @click="addTable">添加列</el-button>
       <el-table :data="data" size="mini" max-height="400px">
         <el-table-column type="index" />
         <el-table-column label="控制措施" prop="aa" />
         <el-table-column label="责任单位" prop="bb" />
-         <el-table-column label="完成情况">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.dd" placeholder="请输入完成情况"></el-input>
-          </template>
-        </el-table-column>
+        <el-table-column label="完成情况" prop="dd" />
         <el-table-column label="完成期限" prop="cc" />
-        <el-table-column label width="80px">
-          <template slot-scope="scope">
-            <el-button type="text" icon="el-icon-delete" @click="deleteRow(scope.row)"></el-button>
-          </template>
-        </el-table-column>
       </el-table>
     </el-card>
 
@@ -144,7 +106,10 @@ export default {
       entArr: [],
       dataString: "",
       bumen: "",
-      data: [{ aa: "出现大翼引气渗漏等", bb: "上海", cc: "2020-08-07" }]
+      data: [
+        { aa: "出现大翼引气渗漏等", bb: "上海", cc: "2020-08-07", dd: "完成" },
+        { aa: "出现大翼引气渗漏等", bb: "上海", cc: "2020-08-07", dd: "完成" }
+      ]
     };
   },
   props: {
@@ -252,7 +217,9 @@ export default {
     },
     addTable() {
       this.data.push({
-        aa: "出现大翼引气渗漏等", bb: "上海", cc: "2020-08-07"
+        aa: "出现大翼引气渗漏等",
+        bb: "上海",
+        cc: "2020-08-07"
       });
     },
     deleteRow(row) {}

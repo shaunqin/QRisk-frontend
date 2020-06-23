@@ -2,7 +2,7 @@
   <div class="app-container">
     <eform ref="form" :is-add="isAdd"></eform>
     <div class="head-container">
-      <el-button class="filter-item" size="mini" type="primary" icon="el-icon-plus" @click="add">新增</el-button>
+      <el-button class="filter-item" size="mini" type="success" icon="el-icon-plus" @click="add">新增</el-button>
     </div>
     <!--表格渲染-->
     <el-table
@@ -13,15 +13,19 @@
       @selection-change="selectionChange"
     >
       <el-table-column type="index" width="50" />
-      <el-table-column prop="jj" label="编号" width="150" />
-      <el-table-column prop="aa" label="风险" width="100" />
-      <el-table-column prop="bb" label="通知内容" />
-      <el-table-column label="操作" width="300">
+      <el-table-column prop="jj" label="编号" />
+      <el-table-column prop="aa" label="风险"  />
+      <el-table-column prop="bb" label="通知内容" width="300" />
+      <el-table-column prop="cc" label="创建人" />
+      <el-table-column prop="dd" label="创建时间" />
+      <el-table-column label="操作" width="260">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="hairdown(scope.row)">下发</el-button>
-          <el-button type="primary" size="mini" @click="fillin(scope.row)">填报</el-button>
-          <el-button type="primary" size="mini" @click="approval(scope.row)">审批</el-button>
-          <el-button type="primary" size="mini" @click="feedback(scope.row)">反馈</el-button>
+          <el-button-group>
+            <el-button size="mini" @click="hairdown(scope.row)">下发</el-button>
+            <el-button size="mini" @click="fillin(scope.row)">填报</el-button>
+            <el-button size="mini" @click="approval(scope.row)">审批</el-button>
+            <el-button size="mini" @click="feedback(scope.row)">反馈</el-button>
+          </el-button-group>
         </template>
       </el-table-column>
     </el-table>
@@ -48,13 +52,12 @@
 <script>
 import initData from "@/mixins/initData";
 import fillinDialog from "./components/fillinDialog";
-import feedbackDialog from "./components/feedbackDialog";
 import eform from "./form";
 import hairdown from "./components/hairdown";
 import approval from "./components/approval";
 import feedback from "./components/feedback";
 export default {
-  components: { eform, hairdown, approval, feedback ,fillinDialog},
+  components: { eform, hairdown, approval, feedback, fillinDialog },
   mixins: [initData],
   data() {
     return {
@@ -71,7 +74,8 @@ export default {
         aa: "安全风险",
         bb:
           "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降、中断起飞的安全风险。",
-        jj: "FP202005050" + i
+        jj: "FP202005050" + i,
+        cc:"admin",dd:"2020-04-22"
       });
     }
   },
@@ -113,13 +117,13 @@ export default {
       this.type = "填报";
       let _this = this.$refs.fillinDialog;
       _this.form = {
-        aa: "FP2020050500",
-        bb: "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存",
-        cc: "大",
-        dd: "出现大翼引气渗漏等",
-        ee: "3",
-        ff: "该机 5月 3 日曾出现相同的故障信息，并造成飞机返航",
-        gg:"出现相同的故障信息，并造成飞机返航",hh:"上海",ii:"在控",jj:"20200101"
+        aa:
+          "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降、中断起飞的安全风险。",
+        bb: "上海",
+        cc: "admin",
+        dd: "是",
+        ee: "2020-06-06",
+        jj: "FP2020050501"
       };
       _this.dialog = true;
     },
