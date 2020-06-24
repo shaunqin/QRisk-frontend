@@ -13,14 +13,14 @@
         </div>
       </el-col>
       <el-col :span="3">
-        <diV class="next-menu">
+        <div class="next-menu">
           <router-link
             :to="'/standard/infoCategory/'+item.path"
             class="next-menu-item pan-btn blue-btn"
             v-for="item in routes.find(a=>a.path=='infoCategory').children"
             :key="item.path"
           >{{generateTitle(item.meta.title)}}</router-link>
-        </diV>
+        </div>
       </el-col>
       <el-col :span="18" class="r-main">
         <el-scrollbar wrap-class="scrollbar-wrapper">

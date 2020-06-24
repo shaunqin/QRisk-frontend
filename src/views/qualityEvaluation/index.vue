@@ -1,8 +1,9 @@
 <template>
   <div class="qualityEvaluate-container">
-    <el-scrollbar wrap-class="scrollbar-wrapper">
+    <!-- <el-scrollbar wrap-class="scrollbar-wrapper">
       <router-view></router-view>
-    </el-scrollbar>
+    </el-scrollbar> -->
+    <router-view></router-view>
   </div>
 </template>
 
@@ -27,9 +28,5 @@ export default {
 .qualityEvaluate-container {
   min-height: calc(100vh - 56px);
   padding: 20px 0 0 0;
-
-  /deep/ .scrollbar-wrapper{
-    height: calc(100vh - 60px);
-  }
 }
 </style>
