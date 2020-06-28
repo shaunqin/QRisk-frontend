@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
-    :title="'反馈'"
+    :title="'审批'"
     custom-class="big_dialog"
   >
     <el-card header="详细信息">
@@ -53,16 +53,8 @@
         </el-row>
       </el-form>
     </el-card>
-    <el-card header="危险源清单" style="margin-top:20px">
-      <!--表格渲染-->
-      <el-table
-        v-loading="loading"
-        :data="data2"
-        size="small"
-        style="width: 100%;"
-        max-height="400px"
-      >
-        <el-table-column type="index" width="50" />
+     <el-card header="危险源清单" style="margin-top:20px">
+      <el-table :data="data2" size="mini">
         <el-table-column label="危险源" prop="aa" />
         <el-table-column label="ID" prop="bb" />
         <el-table-column label="可能性" prop="cc" />
@@ -77,20 +69,25 @@
       </el-table>
     </el-card>
     <el-card header="风险措施" style="margin-top:20px">
-      <el-button type="info" size="mini" style="margin-bottom:10px" @click="addTable">添加列</el-button>
+      
+      <!-- <el-button type="info" size="mini" style="margin-bottom:10px" @click="addTable">添加列</el-button> -->
       <el-table :data="data" size="mini" max-height="400px">
         <el-table-column type="index" />
         <el-table-column label="控制措施" prop="aa" />
         <el-table-column label="责任单位" prop="bb" />
-        <el-table-column label="完成情况">
+        <el-table-column label="完成情况" prop="dd" />
+        <el-table-column label="完成期限" prop="cc" />
+        <el-table-column label="备注">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.dd" placeholder="请输入完成情况"></el-input>
+            <el-input v-model="scope.row.ee" placeholder="请输入备注"></el-input>
           </template>
         </el-table-column>
-        <el-table-column label="完成期限" prop="cc" />
-        <el-table-column label width="80px">
+        <el-table-column label width="170px">
           <template slot-scope="scope">
-            <el-button type="text" icon="el-icon-delete" @click="deleteRow(scope.row)"></el-button>
+            <el-radio-group v-model="scope.row.ff">
+              <el-radio label="1">通过</el-radio>
+              <el-radio label="0">不通过</el-radio>
+            </el-radio-group>
           </template>
         </el-table-column>
       </el-table>
@@ -133,21 +130,9 @@ export default {
       entArr: [],
       dataString: "",
       bumen: "",
-      data: [{ aa: "出现大翼引气渗漏等", bb: "上海", cc: "2020-08-07" }],
-      data2: [
-        {
-          aa: "飞机在运行过程中出现大翼引",
-          bb: "20200201",
-          cc: "大",
-          dd: "高",
-          ee: "飞机在运行过程中出现",
-          ff: "3",
-          gg: "飞机在运行过程中出现",
-          hh: "飞机在运行过程中出现",
-          ii: "上海",
-          jj: "在控",
-          kk: "待完成"
-        }
+      data: [
+        { aa: "出现大翼引气渗漏等", bb: "上海", cc: "2020-08-07" },
+        { aa: "出现大翼引气渗漏等", bb: "杭州", cc: "2020-08-07" }
       ]
     };
   },
@@ -157,7 +142,23 @@ export default {
       required: ""
     }
   },
-  created() {},
+  created() {
+    this.data2 = [
+      {
+        aa: "飞机在运行过程中出现大翼引",
+        bb: "20200201",
+        cc: "大",
+        dd: "高",
+        ee: "飞机在运行过程中出现",
+        ff: "3",
+        gg: "飞机在运行过程中出现",
+        hh: "飞机在运行过程中出现",
+        ii: "上海",
+        jj: "在控",
+        kk: "待完成"
+      }
+    ];
+  },
   methods: {
     cancel() {
       this.resetForm();
@@ -259,22 +260,6 @@ export default {
         aa: "出现大翼引气渗漏等",
         bb: "上海",
         cc: "2020-08-07"
-      });
-    },
-    addTable2() {
-      this.data2.push({
-        aa: "",
-        bb: "",
-        cc: "",
-        dd: "",
-        ee: "",
-        ff: "",
-        gg: "",
-        hh: "",
-        ii: "",
-        jj: "",
-        kk: "",
-        ll: ""
       });
     },
     deleteRow(row) {}

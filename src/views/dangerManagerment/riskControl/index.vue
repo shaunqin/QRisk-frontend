@@ -3,10 +3,10 @@
     <div class="head-container">
       <el-form :model="form" label-width="auto" size="mini" inline>
         <el-form-item label="名称">
-          <el-input v-model="form.aa" placeholder=""></el-input>
+          <el-input v-model="form.aa" placeholder></el-input>
         </el-form-item>
-         <el-form-item label="日期">
-           <el-date-picker v-model="form.bb" placeholder=""></el-date-picker>
+        <el-form-item label="日期">
+          <el-date-picker v-model="form.bb" placeholder></el-date-picker>
         </el-form-item>
         <el-form-item>
           <el-button type="success">搜索</el-button>
@@ -18,15 +18,34 @@
       v-loading="loading"
       :data="data"
       size="small"
-      :highlight-current-row="true"
       style="width: 100%;"
+      stripe
       @selection-change="selectionChange"
     >
+      <el-table-column type="expand" width="50">
+        <template slot-scope="scope">
+          <!-- 危险源列表 -->
+          <el-table :data="scope.row.children" size="mini">
+            <el-table-column label="危险源" prop="aa" />
+            <el-table-column label="ID" prop="bb" />
+            <el-table-column label="可能性" prop="cc" />
+            <el-table-column label="严重性" prop="dd" />
+            <el-table-column label="可能导致的风险" prop="ee" />
+            <el-table-column label="风险等级" prop="ff" />
+            <el-table-column label="根原因分析" prop="gg" />
+            <el-table-column label="控制措施" prop="hh" />
+            <el-table-column label="责任单位" prop="ii" />
+            <el-table-column label="控制状态" prop="jj" />
+            <el-table-column label="完成期限" prop="kk" />
+          </el-table>
+        </template>
+      </el-table-column>
       <el-table-column type="index" width="50" />
-      <el-table-column prop="aa" label="编号" />
+      <el-table-column prop="aa" label="编号" width="120" />
       <el-table-column prop="bb" label="名称" />
       <el-table-column prop="cc" label="备注" />
-      <el-table-column label="操作" width="100px" align="center" fixed="right">
+      <el-table-column prop="dd" label="状态" width="80px" />
+      <el-table-column label="操作" width="100px" >
         <template slot-scope="scope">
           <el-button size="mini" @click="detail(scope.row)">详情</el-button>
         </template>
@@ -58,23 +77,39 @@ export default {
       userInfo: {},
       selections: [],
       dialogType: "",
-      form:{aa:"",bb:""}
+      form: { aa: "", bb: "" }
     };
   },
   mounted() {
     this.loading = false;
     for (let i = 0; i < 5; i++) {
       this.data.push({
-        aa: "FP202005050"+i,
+        aa: "FP202005050" + i,
         bb: "飞机在运行过程中出现大翼引气渗漏等重复性故障",
-        cc: "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降、中断起飞的安全风险。",
+        cc:
+          "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降、中断起飞的安全风险。",
         dd: "测试",
         ee: "测试",
         ff: "测试",
         gg: "测试",
         hh: "测试",
         ii: "测试",
-        jj: "测试"
+        jj: "测试",
+        children: [
+          {
+            aa: "飞机在运行过程中出现大翼引",
+            bb: "20200201",
+            cc: "大",
+            dd: "高",
+            ee: "飞机在运行过程中出现",
+            ff: "3",
+            gg: "飞机在运行过程中出现",
+            hh: "飞机在运行过程中出现",
+            ii: "上海",
+            jj: "在控",
+            kk: "待完成"
+          }
+        ]
       });
     }
   },
@@ -141,7 +176,7 @@ export default {
     height: 32px !important;
   }
 }
-.head-container {
-  margin-bottom: 20px;
-}
+// .head-container {
+//   margin-bottom: 20px;
+// }
 </style>
