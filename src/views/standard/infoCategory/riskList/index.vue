@@ -16,8 +16,6 @@
           <el-tooltip :content="scope.row.bb" placement="right"><span>{{scope.row.aa}}</span></el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column prop="cc" label="等级(概率法）" />
-      <el-table-column prop="dd" label="等级（最低标准）" />
       <el-table-column prop="ee" label="事件等级标准" />
       
     </el-table>

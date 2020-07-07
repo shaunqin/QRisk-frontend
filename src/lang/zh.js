@@ -60,7 +60,9 @@ export default {
     safetyHazardsStatistics: '安全隐患统计上报',
     safetyHazardsFollow: '安全隐患上报',
     qualityEvaluation: '质量评价',
-    qualityEvaluate: '质量评价',
+    qualityEvaluate: '质量评价查询',
+    taskHairdown: '任务单下发',
+    qualityReport: '质量数据上报',
     notice: '通知',
     agencyMatters: '代办事项',
     workDone: '已办事项'

@@ -22,30 +22,23 @@
       stripe
       @selection-change="selectionChange"
     >
-      <el-table-column type="expand" width="50">
-        <template slot-scope="scope">
-          <!-- 危险源列表 -->
-          <el-table :data="scope.row.children" size="mini">
-            <el-table-column label="危险源" prop="aa" />
-            <el-table-column label="ID" prop="bb" />
-            <el-table-column label="可能性" prop="cc" />
-            <el-table-column label="严重性" prop="dd" />
-            <el-table-column label="可能导致的风险" prop="ee" />
-            <el-table-column label="风险等级" prop="ff" />
-            <el-table-column label="根原因分析" prop="gg" />
-            <el-table-column label="控制措施" prop="hh" />
-            <el-table-column label="责任单位" prop="ii" />
-            <el-table-column label="控制状态" prop="jj" />
-            <el-table-column label="完成期限" prop="kk" />
-          </el-table>
-        </template>
-      </el-table-column>
       <el-table-column type="index" width="50" />
-      <el-table-column prop="aa" label="编号" width="120" />
-      <el-table-column prop="bb" label="名称" />
-      <el-table-column prop="cc" label="备注" />
-      <el-table-column prop="dd" label="状态" width="80px" />
-      <el-table-column label="操作" width="100px" >
+
+      <el-table-column prop="xx" label="编号" width="120" />
+      <el-table-column prop="yy" label="名称" width="200" />
+      <el-table-column prop="zz" label="生成日期" width="100" />
+      <el-table-column label="危险源" prop="aa" width="200" />
+      <el-table-column label="ID" prop="bb" />
+      <el-table-column label="可能性" prop="cc" />
+      <el-table-column label="严重性" prop="dd" />
+      <el-table-column label="可能导致的风险" prop="ee" width="200" />
+      <el-table-column label="风险等级" prop="ff" />
+      <el-table-column label="根原因分析" prop="gg" width="120" />
+      <el-table-column label="控制措施" prop="hh" />
+      <el-table-column label="责任单位" prop="ii" />
+      <el-table-column label="控制状态" prop="jj" />
+      <el-table-column label="完成期限" prop="kk" />
+      <el-table-column label="操作" width="100px" fixed="right">
         <template slot-scope="scope">
           <el-button size="mini" @click="detail(scope.row)">详情</el-button>
         </template>
@@ -84,32 +77,20 @@ export default {
     this.loading = false;
     for (let i = 0; i < 5; i++) {
       this.data.push({
-        aa: "FP202005050" + i,
-        bb: "飞机在运行过程中出现大翼引气渗漏等重复性故障",
-        cc:
-          "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降、中断起飞的安全风险。",
-        dd: "测试",
-        ee: "测试",
-        ff: "测试",
-        gg: "测试",
-        hh: "测试",
-        ii: "测试",
-        jj: "测试",
-        children: [
-          {
-            aa: "飞机在运行过程中出现大翼引",
-            bb: "20200201",
-            cc: "大",
-            dd: "高",
-            ee: "飞机在运行过程中出现",
-            ff: "3",
-            gg: "飞机在运行过程中出现",
-            hh: "飞机在运行过程中出现",
-            ii: "上海",
-            jj: "在控",
-            kk: "待完成"
-          }
-        ]
+        xx: "FP2020050500",
+        yy: "飞机在运行过程中出现大翼引气渗漏等重复性故障",
+        zz: "2020-05-06",
+        aa: "飞机在运行过程中出现大翼引",
+        bb: "20200201",
+        cc: "大",
+        dd: "高",
+        ee: "飞机在运行过程中出现",
+        ff: "3",
+        gg: "飞机在运行过程中出现",
+        hh: "飞机在运行过程中出现",
+        ii: "上海",
+        jj: "在控",
+        kk: "待完成"
       });
     }
   },

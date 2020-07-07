@@ -1,6 +1,5 @@
 <template>
   <div class="dataSource">
-    
     <!--表格渲染-->
     <el-table
       v-loading="loading"
@@ -9,10 +8,12 @@
       :highlight-current-row="true"
       style="width: 100%;"
       @selection-change="selectionChange"
+      :span-method="arraySpanMethod"
+      border
     >
       <el-table-column type="index" width="50" />
       <el-table-column prop="aa" label="类别" width="200" />
-      <el-table-column prop="bb" label="危险源" />
+      <el-table-column prop="bb" label="诱因" />
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -28,7 +29,7 @@
 
 <script>
 import initData from "@/mixins/initData";
-import {incentiveList} from '@/dataSource'
+import { incentiveList } from "@/dataSource";
 export default {
   mixins: [initData],
   data() {
@@ -40,7 +41,7 @@ export default {
   },
   mounted() {
     this.loading = false;
-    this.data = [...incentiveList,...incentiveList,...incentiveList];
+    this.data = [...incentiveList];
   },
   methods: {
     toQuery(name) {
@@ -80,6 +81,15 @@ export default {
             message: "已取消删除"
           });
         });
+    },
+    arraySpanMethod({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex == 1) {
+        if (row.span) {
+          return [row.span, 1];
+        } else {
+          return [0, 0];
+        }
+      }
     }
   }
 };

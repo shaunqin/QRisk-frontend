@@ -7,7 +7,7 @@ export const hazardClassification = [{
     ee: "",
     ff: "A1",
     gg: "管理手册",
-    hh: "A1-01"
+    hh: "A1-01",span:2
   },
   {
     aa: "程序编写存在缺陷",
@@ -16,7 +16,7 @@ export const hazardClassification = [{
     dd: "H2-01 H2-02 H3-01 R1-01 R2-01",
     ee: "A02/C02/C09/D07/D09/D10",
     ff: "A2",
-    gg: "修理/排故方案",
+    gg: "工作程序",
     hh: "A2-01"
   },
   {
@@ -27,7 +27,17 @@ export const hazardClassification = [{
     ee: "A01/A02/B01/B04/C01/C03/C05/C15/C16",
     ff: "B1",
     gg: "修理/排故方案",
-    hh: "B1-01"
+    hh: "B1-01",span:2
+  },
+  {
+    aa: "维修方案制定存在缺陷",
+    bb: "步骤缺失、依据错误、拼写错误、逻辑性差、方案错误、适用性评估错误、翻译不准确、配合工作内容缺失、器材信息不准确或不全面、分类判定不准确、技术评估不全面、批准方式错误",
+    cc: "技术文件",
+    dd: "B5-01 H2-01 H2-02 H2-03 H3-01 R1-01 R2-01",
+    ee: "A01/A02/B01/B04/C01/C03/C05/C15/C16",
+    ff: "B3",
+    gg: "维修方案",
+    hh: "B3-01"
   },
   {
     aa: "未按规定分发文件",
@@ -37,7 +47,17 @@ export const hazardClassification = [{
     ee: "",
     ff: "C1",
     gg: "分发",
-    hh: "C1-01"
+    hh: "C1-01",span:2
+  },
+  {
+    aa: "未按规定备份文件",
+    bb: "未按规定备份文件",
+    cc: "文件控制",
+    dd: "F1-04 H2-02 H3-01 R1-01 R2-01 R2-02",
+    ee: "",
+    ff: "C2",
+    gg: "备份",
+    hh: "C2-01"
   },
   {
     aa: "未按规定粘贴设备操作规程",
@@ -47,7 +67,7 @@ export const hazardClassification = [{
     ee: "C09/C16",
     ff: "D1",
     gg: "管理",
-    hh: "D1-05"
+    hh: "D1-05",span:1
   }
 ]
 
@@ -87,7 +107,8 @@ export const riskList = [{
 //诱因清单
 export const incentiveList = [{
   aa: "法",
-  bb: "程序编写存在缺陷"
+  bb: "程序编写存在缺陷",
+  span:3
 }, {
   aa: "法",
   bb: "规定编写存在缺陷"
@@ -96,7 +117,8 @@ export const incentiveList = [{
   bb: "厂家源文件存在缺陷"
 }, {
   aa: "人",
-  bb: "未按规定分发文件"
+  bb: "未按规定分发文件",
+  span:2
 }, {
   aa: "人",
   bb: "未按规定控制文件有效性"

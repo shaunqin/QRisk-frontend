@@ -7,11 +7,16 @@
         v-model="query"
         clearable
         placeholder="请输入你要搜索的内容"
-        style="width: 240px;"
+        style="width: 200px;"
         class="filter-item"
-      >
-        <el-button slot="append" icon="el-icon-search" @click="toQuery(query)"></el-button>
-      </el-input>
+      />
+      <el-button
+        class="filter-item"
+        size="mini"
+        type="success"
+        icon="el-icon-search"
+        @click="toQuery(query)"
+      >搜索</el-button>
       <el-button class="filter-item" size="mini" type="success" icon="el-icon-plus" @click="add">新增</el-button>
     </div>
     <!--表格渲染-->
@@ -19,25 +24,27 @@
       v-loading="loading"
       :data="data"
       size="small"
+      :stripe="true"
       :highlight-current-row="true"
       style="width: 100%;"
       @selection-change="selectionChange"
     >
       <el-table-column type="index" width="50" />
       <el-table-column prop="jj" label="编号" />
-      <el-table-column prop="aa" label="主题" min-width="200" />
-      <el-table-column prop="bb" label="背景" min-width="300" align="left" />
-      <el-table-column prop="cc" label="安全风险" min-width="300" align="left" />
-      <el-table-column prop="dd" label="风险防范" min-width="400" align="left" />
-      <el-table-column prop="ee" label="责任单位" width="80" />
-      <el-table-column prop="ff" label="拟制人" width="100" />
-      <el-table-column prop="gg" label="截至时间" width="100" />
-      <el-table-column prop="hh" label="修改时间" width="100" />
-      <el-table-column label="操作" width="150" fixed="right">
+      <el-table-column prop="aa" label="名称" />
+      <el-table-column prop="bb" label="发生时间" />
+      <el-table-column prop="cc" label="创建时间" />
+      <el-table-column prop="dd" label="修改时间" />
+      <el-table-column prop="ee" label="创建人" />
+      <!-- <el-table-column prop="ff" label="风险等级" />
+      <el-table-column prop="gg" label="发现时间" />
+      <el-table-column prop="hh" label="来源" />
+      <el-table-column prop="ii" label="整改进展" /> -->
+      <el-table-column label="操作" width="230px" align="center" fixed="right">
         <template slot-scope="scope">
           <el-button-group>
-            <el-button size="mini" @click="edit(scope.row)">反馈</el-button>
-            <el-button size="mini" @click="check(scope.row)">验证</el-button>
+            <el-button size="mini" icon="el-icon-edit" @click="edit(scope.row)"></el-button>
+            <el-button size="mini" icon="el-icon-delete" @click="subDelete(scope.row.id)"></el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -51,16 +58,15 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-    <echeck ref="check"></echeck>
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
 import eform from "./form";
-import echeck from "./components/check";
+import { safetyHazardControlList } from "@/dataSource";
 export default {
-  components: { eform,echeck },
+  components: { eform },
   mixins: [initData],
   data() {
     return {
@@ -71,21 +77,7 @@ export default {
   },
   mounted() {
     this.loading = false;
-    for (let i = 0; i < 5; i++) {
-      this.data.push({
-        aa: "重复故障影响飞机安全运行的风险提示",
-        bb:
-          "2020 年 6 月 5 日，A321/B-1833 飞机执行 CA1948 航班，成都起 飞后地面监控出现 AIR R WING LEAK 警告信息，飞机返航…",
-        cc: "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降…",
-        dd:
-          "1、认真做好重复性故障的管控工作。各单位要高度重视飞机出 现的重复性故障，加强对排故力量的组织;对于飞机运行中出现的 重复、疑难故障，工程技术人员要及时研究和制定排…",
-        ee: "杭州、上海、武汉",
-        jj: "SN202005050" + i,
-        ff: "admin",
-        gg: "2020-06-04",
-        hh: "2020-06-04"
-      });
-    }
+    this.data = safetyHazardControlList;
   },
   methods: {
     toQuery(name) {
@@ -110,12 +102,6 @@ export default {
       _this.form = Object.assign({}, row);
       _this.dialog = true;
     },
-    check(row) {
-      this.isAdd = false;
-      let _this = this.$refs.check;
-      _this.form = Object.assign({}, row);
-      _this.dialog = true;
-    },
     subDelete(id) {
       this.$confirm("确定删除嘛？")
         .then(() => {
@@ -130,6 +116,16 @@ export default {
             message: "已取消删除"
           });
         });
+    },
+    hairdown(row){
+      let _this = this.$refs.hairdownDialog;
+       _this.form = Object.assign({}, row);
+      _this.dialog = true;
+    },
+    approval(row){
+       let _this = this.$refs.approvalDialog;
+        _this.form = Object.assign({}, row);
+      _this.dialog = true;
     }
   }
 };

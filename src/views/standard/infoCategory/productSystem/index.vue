@@ -11,9 +11,9 @@
       @selection-change="selectionChange"
     >
       <el-table-column type="index" width="50" />
-      <el-table-column prop="name" label="系统名称" />
-      <el-table-column prop="remark" label="备注" />
-      <el-table-column prop="belong" label="所属产品" />
+      <el-table-column prop="belong" label="所属产品" width="150" />
+      <el-table-column prop="name" label="系统名称" width="150" />
+      <el-table-column prop="remark" label="备注" show-overflow-tooltip />
      
     </el-table>
     <!--分页组件-->
