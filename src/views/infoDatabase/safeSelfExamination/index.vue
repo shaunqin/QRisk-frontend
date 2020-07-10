@@ -11,7 +11,7 @@
       @selection-change="selectionChange"
     >
       <el-table-column type="index" width="50" />
-      <el-table-column prop="aa" label="参考号" />
+      <el-table-column prop="aa" label="编号" />
       <el-table-column prop="bb" label="发生时间" width="100" />
       <el-table-column prop="cc" label="责任单位一" width="120" />
       <el-table-column prop="dd" label="责任单位二" width="120" />

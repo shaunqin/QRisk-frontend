@@ -50,6 +50,27 @@
       <!--表格渲染-->
       <el-table v-loading="loading" :data="data" size="small" style="width: 100%;" height="50vh">
         <el-table-column type="index" width="50" />
+        <el-table-column label="编号" width="200">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.ww" placeholder></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="产品" width="200">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.xx" placeholder></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="系统" width="200">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.yy" placeholder></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="发生时间" width="200">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.zz" placeholder></el-input>
+          </template>
+        </el-table-column>
+
         <el-table-column prop="aa" label="危险源" width="200">
           <template slot-scope="scope">
             <el-input v-model="scope.row.aa" placeholder></el-input>
@@ -238,7 +259,11 @@ export default {
         ii: "",
         jj: "",
         kk: "",
-        ll: ""
+        ll: "",
+        ww: "",
+        xx: "",
+        yy: "",
+        zz: ""
       });
     }
   }

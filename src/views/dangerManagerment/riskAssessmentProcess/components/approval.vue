@@ -46,6 +46,11 @@
 
     <el-card header="危险源清单" style="margin-top:20px">
       <el-table :data="data" size="mini">
+        <el-table-column type="index" width="50" />
+        <el-table-column label="编号" prop="ww" />
+        <el-table-column label="产品" prop="xx" />
+        <el-table-column label="系统" prop="yy" />
+        <el-table-column label="发生时间" prop="zz" />
         <el-table-column label="危险源" prop="aa" />
         <el-table-column label="ID" prop="bb" />
         <el-table-column label="可能性" prop="cc" />
@@ -139,7 +144,8 @@ export default {
         hh: "飞机在运行过程中出现",
         ii: "上海",
         jj: "在控",
-        kk: "待完成"
+        kk: "待完成",
+        ww:"FP2020050501",xx:"附件/起落架",yy:"生产保障",zz:"2020-04-03"
       }
     ];
     this.ApprovalData = [
