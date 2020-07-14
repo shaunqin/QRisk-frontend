@@ -14,6 +14,7 @@
         <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu>
     </el-scrollbar>
+    <navbar></navbar>
   </div>
 </template>
 
@@ -22,9 +23,10 @@ import { mapGetters } from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import variables from '@/styles/variables.scss'
+import {Navbar} from '../../components'
 
 export default {
-  components: { SidebarItem, Logo },
+  components: { SidebarItem, Logo , Navbar},
   computed: {
     ...mapGetters([
       'permission_routes',

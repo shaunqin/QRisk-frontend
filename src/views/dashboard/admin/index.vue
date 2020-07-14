@@ -191,4 +191,15 @@ export default {
     }
   }
 }
+@media screen and (max-width: 1400px) {
+  .r2 {
+    margin-left: -50px !important;
+    margin-right: -50px !important;
+    margin-top: 15px !important;
+    .bottom {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+  }
+}
 </style>

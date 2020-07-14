@@ -1,8 +1,8 @@
 <template>
   <div class="navbar">
-    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <!-- <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" /> -->
 
-    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
+    <!-- <breadcrumb id="breadcrumb-container" class="breadcrumb-container" /> -->
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
@@ -18,9 +18,10 @@
 
       </template>
 
-      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click" placement="bottom">
         <div class="avatar-wrapper">
-          <img :src="userImgUrl" class="user-avatar">
+          <img :src="userImgUrl" class="user-avatar" />
+          <span class="user-name">{{userInfo.userName||'admin@123'}}</span>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -62,7 +63,8 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'device'
+      'device',
+      "userInfo"
     ])
   },
   methods: {
@@ -82,7 +84,7 @@ export default {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background: #fff;
+  background: transparent;
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
   .hamburger-container {
@@ -138,22 +140,29 @@ export default {
       margin-right: 30px;
 
       .avatar-wrapper {
-        margin-top: 5px;
+        //margin-top: 5px;
         position: relative;
+        display: flex;
+        align-items: center;
 
         .user-avatar {
           cursor: pointer;
           width: 40px;
           height: 40px;
-          border-radius: 10px;
+          border-radius: 50%;
+        }
+        .user-name{
+          margin: 0 8px;
+          color: #fff;
         }
 
         .el-icon-caret-bottom {
           cursor: pointer;
-          position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
+          // position: absolute;
+          // right: -20px;
+          // top: 10px;
+          color: #fff;
+          //font-size: 12px;
         }
       }
     }

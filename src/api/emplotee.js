@@ -44,3 +44,10 @@ export const queryLikeList = (userName) => {
     method: 'get'
   })
 }
+// 查询当前用户个人信息
+export const findCurrentUser = () => {
+  return request({
+    url: `/sys_mgr/currentUser`,
+    method: 'get'
+  })
+}

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import store from '@/store'
-// import { getToken } from '@/utils/auth'
+import { getToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
@@ -18,7 +18,7 @@ service.interceptors.request.use(
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      // config.headers.Authorization = `xytoken_${getToken('Token')}`
+      config.headers.Authorization = `xytoken_${getToken('Token')}`
     }
     return config
   },
@@ -32,6 +32,11 @@ service.interceptors.request.use(
 // response interceptor
 service.interceptors.response.use(
   response => {
+    // token 快过期时 response header值为xy-refresh-token={ token },替换本地token
+    let newToken = response.headers['xy-refresh-token'];
+    if (newToken) {
+      store.dispatch('user/changeToken', newToken)
+    }
     const res = response.data
     if (response.status !== 200) {
       if (response.status === 201 || response.status === 202) {
@@ -40,10 +45,19 @@ service.interceptors.response.use(
         return Promise.reject(res)
       }
     }
+    if (res.code == '401') {
+      store.dispatch('user/logout').then(() => {
+        location.reload();
+      })
+      return Promise.reject(res)
+    }
     return res
   }, (error) => {
     if (error.response) {
-      if (error.response.status === 401) {
+      if (error.response.data.code == '401') {
+        store.dispatch('user/logout').then(() => {
+          location.reload();
+        })
         return false
       }
       return Promise.reject(error)
