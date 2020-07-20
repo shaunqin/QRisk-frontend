@@ -1,5 +1,22 @@
 <template>
   <div class="app-container">
+    <div class="head-container">
+      <el-input
+        size="mini"
+        v-model="query"
+        clearable
+        placeholder="请输入你要搜索的内容"
+        style="width: 200px;"
+        class="filter-item"
+      />
+      <el-button
+        class="filter-item"
+        size="mini"
+        type="success"
+        icon="el-icon-search"
+        @click="toQuery(query)"
+      >搜索</el-button>
+    </div>
     <!--表格渲染-->
     <el-table
       v-loading="loading"
@@ -14,7 +31,9 @@
       <el-table-column prop="bb" label="发生日期" width="100" />
       <el-table-column prop="ee" label="事件概述" />
       <el-table-column prop="ff" label="原因分析" width="120" />
-      <el-table-column prop="gg" label="责任单位" />
+      <el-table-column prop="gg" label="责任单位层级一" />
+      <el-table-column prop="gg2" label="责任单位层级二" />
+      <el-table-column prop="gg3" label="责任单位层级三" />
       <el-table-column prop="hh" label="产品" />
       <el-table-column prop="ii" label="系统" width="110" />
       <el-table-column prop="jj" label="危险源层级一" width="110" />
@@ -38,10 +57,8 @@
 
 <script>
 import initData from "@/mixins/initData";
-import eform from "./form";
 import { infoDatabase } from "@/dataSource";
 export default {
-  components: { eform },
   mixins: [initData],
   data() {
     return {
@@ -61,6 +78,8 @@ export default {
         ee: "",
         ff: "具体原因描述",
         gg: "运管部",
+        gg2: "分公司",
+        gg3: "中队",
         hh: "动机/APU",
         ii: "外部检查",
         jj: "管理文件",
@@ -78,6 +97,8 @@ export default {
         ee: "",
         ff: "具体原因描述",
         gg: "运管部",
+        gg2: "分公司",
+        gg3: "中队",
         hh: "动机/APU",
         ii: "外部检查",
         jj: "管理文件",
@@ -101,31 +122,6 @@ export default {
     selectionChange: function(selections) {
       this.selections = selections;
       this.$emit("selectionChange", { selections: selections });
-    },
-    add() {
-      this.isAdd = true;
-      this.$refs.form.dialog = true;
-    },
-    edit(row) {
-      this.isAdd = false;
-      let _this = this.$refs.form;
-      _this.form = Object.assign({}, row);
-      _this.dialog = true;
-    },
-    subDelete(id) {
-      this.$confirm("确定删除嘛？")
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
     }
   }
 };

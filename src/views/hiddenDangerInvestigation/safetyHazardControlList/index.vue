@@ -32,7 +32,7 @@
       <el-table-column type="index" width="50" />
       <el-table-column prop="jj" label="编号" />
       <el-table-column prop="aa" label="名称" />
-      <el-table-column prop="bb" label="发生时间" />
+      <el-table-column prop="bb" label="发生日期" />
       <el-table-column prop="cc" label="创建时间" />
       <el-table-column prop="dd" label="修改时间" />
       <el-table-column prop="ee" label="创建人" />

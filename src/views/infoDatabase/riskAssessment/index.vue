@@ -41,13 +41,17 @@
       @selection-change="selectionChange"
     >
       <el-table-column type="index" width="50" />
+      <el-table-column prop="no" label="编号" />
       <el-table-column prop="aa" label="标题" />
-      <el-table-column prop="bb" label="发生时间" width="100" />
-      <el-table-column prop="cc" label="责任单位" />
+      <el-table-column prop="bb" label="发生日期" width="100" />
+      <el-table-column prop="nn" label="背景描述" />
+      <el-table-column prop="cc" label="责任单位层级一" />
+      <el-table-column prop="cc2" label="责任单位层级二" />
+      <el-table-column prop="cc3" label="责任单位层级三" />
       <el-table-column prop="ff" label="产品" />
       <el-table-column prop="gg" label="系统" />
-      <el-table-column prop="ii" label="危险源分类一" width="110" />
-      <el-table-column prop="jj" label="危险源分类二" width="110" />
+      <el-table-column prop="ii" label="危险源层级一" width="110" />
+      <el-table-column prop="jj" label="危险源层级二" width="110" />
       <el-table-column prop="kk" label="危险源" />
       <el-table-column prop="ll" label="风险" />
       <el-table-column prop="mm" label="诱因" />
@@ -87,18 +91,21 @@ export default {
     this.loading = false;
     this.data = [
       {
+        no:"SN2020050500",
         aa: "航安任务",
         bb: "2019/06/09",
-        cc: "上海浦东",
-        ff: "具体原因描述",
-        gg: "运管部",
+        cc: "运管部",
+        cc2: "分公司",
+        cc3: "中队",
+        ff: "动机/APU",
+        gg: "外部检查",
         hh: "动机/APU",
-        ii: "外部检查",
-        jj: "管理文件",
-        kk: "工作程序",
+        ii: "管理文件",
+        jj: "工作程序",
+        kk: "程序编写存在缺陷",
         ll: "程序编写存在缺陷",
         mm: "程序编写存在缺陷",
-        nn: "未构成差错不安全事件",
+        nn: "",
         oo: ""
       }
     ];

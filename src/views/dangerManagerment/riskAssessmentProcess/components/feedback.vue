@@ -66,7 +66,7 @@
         <el-table-column label="编号" prop="ww" />
         <el-table-column label="产品" prop="xx" />
         <el-table-column label="系统" prop="yy" />
-        <el-table-column label="发生时间" prop="zz" />
+        <el-table-column label="发生日期" prop="zz" />
         <el-table-column label="危险源" prop="aa" />
         <el-table-column label="ID" prop="bb" />
         <el-table-column label="可能性" prop="cc" />

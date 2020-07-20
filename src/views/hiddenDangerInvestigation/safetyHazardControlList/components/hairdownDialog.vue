@@ -26,7 +26,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="发生时间">
+            <el-form-item label="发生日期">
               <el-input v-model="form.bb" style="width: 100%;" />
             </el-form-item>
             <el-form-item label="创建人">

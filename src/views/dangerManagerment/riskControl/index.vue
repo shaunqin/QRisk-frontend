@@ -27,7 +27,7 @@
       <el-table-column prop="xx" label="编号" width="120" />
       <el-table-column prop="oo" label="产品" width="120" />
       <el-table-column prop="pp" label="系统" />
-      <el-table-column prop="qq" label="发生时间" width="100" />
+      <el-table-column prop="qq" label="发生日期" width="100" />
       <el-table-column prop="yy" label="名称" width="200" />
       <el-table-column prop="zz" label="生成日期" width="100" />
       <el-table-column label="危险源" prop="aa" width="200" />

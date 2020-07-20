@@ -39,8 +39,6 @@ export default {
         this.routes = route.children[0].children;
       }
     });
-    console.log(this.routes);
-    console.log(this.$route);
   },
   methods: {
     generateTitle
