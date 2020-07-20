@@ -51,3 +51,10 @@ export const findCurrentUser = () => {
     method: 'get'
   })
 }
+// 查询部门
+export const queryDepartmentTree = () => {
+  return request({
+    url: `/sys_mgr/department_mgr/query/tree`,
+    method: 'get'
+  })
+}

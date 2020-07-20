@@ -7,13 +7,11 @@
       size="small"
       :highlight-current-row="true"
       style="width: 100%;"
-      @selection-change="selectionChange"
-      :span-method="arraySpanMethod"
+      :span-method="objectSpanMethod"
       border
     >
-      <el-table-column type="index" width="50" />
-      <el-table-column prop="aa" label="类别" width="200" />
-      <el-table-column prop="bb" label="诱因" />
+      <el-table-column prop="cate" label="类别" width="200" />
+      <el-table-column prop="diskName" label="诱因" />
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -29,7 +27,6 @@
 
 <script>
 import initData from "@/mixins/initData";
-import { incentiveList } from "@/dataSource";
 export default {
   mixins: [initData],
   data() {
@@ -39,58 +36,34 @@ export default {
       selections: []
     };
   },
-  mounted() {
-    this.loading = false;
-    this.data = [...incentiveList];
+   created() {
+    this.init();
+  },
+  watch: {
+    data(val) {
+      this.spanArr = [];
+      this.position = 0;
+      val.forEach((item, index) => {
+        if (index === 0) {
+          this.spanArr.push(1);
+          this.position = 0;
+        } else {
+          if (val[index].cate === val[index - 1].cate) {
+            this.spanArr[this.position] += 1;
+            this.spanArr.push(0);
+          } else {
+            this.spanArr.push(1);
+            this.position = index;
+          }
+        }
+      });
+    }
   },
   methods: {
-    toQuery(name) {
-      this.$message("功能正在创建中");
-      // if (!name) {
-      //   this.page = 1;
-      //   this.init();
-      //   return;
-      // }
+     beforeInit() {
+      this.url = `/info_mgr/incentive_mgr/query/pageList/${this.page}/${this.size}`;
+      return true;
     },
-    // 选择切换
-    selectionChange: function(selections) {
-      this.selections = selections;
-      this.$emit("selectionChange", { selections: selections });
-    },
-    add() {
-      this.isAdd = true;
-      this.$refs.form.dialog = true;
-    },
-    edit(row) {
-      this.isAdd = false;
-      let _this = this.$refs.form;
-      _this.form = Object.assign({}, row);
-      _this.dialog = true;
-    },
-    subDelete(id) {
-      this.$confirm("确定删除嘛？")
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
-    },
-    arraySpanMethod({ row, column, rowIndex, columnIndex }) {
-      if (columnIndex == 1) {
-        if (row.span) {
-          return [row.span, 1];
-        } else {
-          return [0, 0];
-        }
-      }
-    }
   }
 };
 </script>

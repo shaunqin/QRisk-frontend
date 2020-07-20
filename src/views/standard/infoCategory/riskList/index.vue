@@ -13,21 +13,22 @@
       <el-table-column type="index" width="50" />
       <el-table-column label="风险清单">
         <template slot-scope="scope">
-          <el-tooltip :content="scope.row.bb" placement="right"><span>{{scope.row.aa}}</span></el-tooltip>
+          <el-tooltip v-if="!!scope.row.riskDesc" :content="scope.row.riskDesc" placement="right"><span>{{scope.row.riskName}}</span></el-tooltip>
+          <span v-else>{{scope.row.riskName}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="ee" label="事件等级标准" />
+      <el-table-column prop="levelDesc" label="事件等级标准" />
       
     </el-table>
     <!--分页组件-->
-    <el-pagination
+    <!-- <el-pagination
       :total="total"
       :current-page="page"
       style="margin-top: 8px;text-align: right"
       layout="total, prev, pager, next, sizes"
       @size-change="sizeChange"
       @current-change="pageChange"
-    />
+    /> -->
   </div>
 </template>
 
@@ -45,11 +46,14 @@ export default {
       selections: []
     };
   },
-  mounted() {
-    this.loading = false;
-    this.data = riskList;
+   created() {
+    this.init();
   },
   methods: {
+    beforeInit() {
+      this.url = `/info_mgr/riskList_mgr/query/list`;
+      return true;
+    },
     toQuery(name) {
       this.$message("功能正在创建中");
       // if (!name) {

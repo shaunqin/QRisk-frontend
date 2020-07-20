@@ -1,6 +1,5 @@
 <template>
-  <div class="dataSource">
-    
+  <div>
     <!--表格渲染-->
     <el-table
       v-loading="loading"
@@ -8,13 +7,13 @@
       size="small"
       :highlight-current-row="true"
       style="width: 100%;"
-      @selection-change="selectionChange"
+      border
+      :span-method="objectSpanMethod"
     >
-      <el-table-column type="index" width="50" />
-      <el-table-column prop="belong" label="所属产品" width="150" />
-      <el-table-column prop="name" label="系统名称" width="150" />
-      <el-table-column prop="remark" label="备注" show-overflow-tooltip />
-     
+      <!-- <el-table-column type="index" width="50" /> -->
+      <el-table-column prop="product" label="所属产品" width="150" />
+      <el-table-column prop="system" label="系统名称" width="150" />
+      <el-table-column prop="diskSystemDesc" label="备注" show-overflow-tooltip />
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -30,70 +29,51 @@
 
 <script>
 import initData from "@/mixins/initData";
-import eform from "./form";
 export default {
-  components: { eform },
   mixins: [initData],
   data() {
     return {
-      isSuperAdmin: false,
-      userInfo: {},
-      selections: [],
-      options: [
-        { value: "航线维护", label: "航线维护" },
-        { value: "飞机定检/大修", label: "飞机定检/大修" },
-        { value: "附件/起落架", label: "附件/起落架" },
-        { value: "发动机/APU", label: "发动机/APU" },
-        { value: "飞机客舱", label: "飞机客舱" }
-      ]
+      
     };
   },
-  mounted() {
-    this.loading = false;
-    this.data = [
-      { name: "维修实施", remark: "生产调度、航线维护、航线勤务、故障处理、机体维修、工具设备使用、器材使用", belong: "航线维护" },
-      { name: "生产控制", remark: "工卡编写、维修计划、指令控制、生产支援与协调、运行控制、数据管理", belong: "航线维护" },
-      { name: "工程技术", remark: "排故、飞机状态监控、AO下发、技术资料管理", belong: "航线维护" },
-    ];
+  created() {
+    this.init();
+  },
+  watch: {
+    data(val) {
+      this.spanArr = [];
+      this.position = 0;
+      val.forEach((item, index) => {
+        if (index === 0) {
+          this.spanArr.push(1);
+          this.position = 0;
+        } else {
+          if (val[index].product === val[index - 1].product) {
+            this.spanArr[this.position] += 1;
+            this.spanArr.push(0);
+          } else {
+            this.spanArr.push(1);
+            this.position = index;
+          }
+        }
+      });
+    }
   },
   methods: {
-    toQuery(name) {
-      this.$message("功能正在创建中");
-      // if (!name) {
-      //   this.page = 1;
-      //   this.init();
-      //   return;
-      // }
+    beforeInit() {
+      this.url = `/info_mgr/prod_mgr/query/pageList/${this.page}/${this.size}`;
+      return true;
     },
-    // 选择切换
-    selectionChange: function(selections) {
-      this.selections = selections;
-      this.$emit("selectionChange", { selections: selections });
-    },
-    add() {
-      this.isAdd = true;
-      this.$refs.form.dialog = true;
-    },
-    edit(row) {
-      this.isAdd = false;
-      let _this = this.$refs.form;
-      _this.form = Object.assign({}, row);
-      _this.dialog = true;
-    },
-    subDelete(id) {
-      this.$confirm("确定删除嘛？")
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      //表格合并行
+      if (columnIndex === 0) {
+        const _row = this.spanArr[rowIndex];
+        const _col = _row > 0 ? 1 : 0;
+        return {
+          rowspan: _row,
+          colspan: _col
+        };
+      }
     }
   }
 };
