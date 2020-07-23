@@ -16,7 +16,7 @@
           <el-form-item label="拟制人">{{form.ff}}</el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="截至时间">{{form.gg}}</el-form-item>
+          <el-form-item label="截止时间">{{form.gg}}</el-form-item>
         </el-col>
         <el-col :span="24">
           <el-form-item label="主题" prop="aa">{{form.aa}}</el-form-item>

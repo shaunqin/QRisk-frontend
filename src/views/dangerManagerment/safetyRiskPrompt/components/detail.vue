@@ -4,29 +4,40 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
-    :title="isAdd ? '新增通知' : '编辑通知'"
+    :title="'详情'"
     custom-class="big_dialog"
   >
     <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
-      <el-row gutter="16">
-        <el-col :span="12">
-          <el-form-item label="标题" prop="aa">
-            <el-input v-model="form.aa" placeholder=""></el-input>
-          </el-form-item>
+      <el-row :gutter="16">
+        <el-col :span="8">
+          <el-form-item label="编号">{{form.jj}}</el-form-item>
         </el-col>
-        <el-col :span="6">
-          <el-form-item label="截止日期">
-            <el-date-picker v-model="form.cc" placeholder></el-date-picker>
-          </el-form-item>
+        <el-col :span="8">
+          <el-form-item label="拟制人">{{form.ff}}</el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-form-item label="通知内容">
-            <el-input v-model="form.bb" style="width: 100%;" type="textarea" rows="4" />
-          </el-form-item>
+        <el-col :span="8">
+          <el-form-item label="截止时间">{{form.gg}}</el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="下发部门">
-            <department-tree></department-tree>
+          <el-form-item label="主题" prop="aa">{{form.aa}}</el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="安全风险" prop="aa">{{form.cc}}</el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="背景" prop="bb">{{form.bb}}</el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="风险防范">
+            <el-table :data="data" size="mini" style="width: 100%;">
+              <el-table-column label="责任单位" prop="aa" width="100px" />
+              <el-table-column label="风险措施" prop="bb" align="left" />
+              <el-table-column label="反馈" prop="cc" />
+            </el-table>
           </el-form-item>
         </el-col>
       </el-row>
@@ -40,10 +51,7 @@
 
 <script>
 import { add, modify } from "@/api/emplotee.js";
-import departmentTree from "@/components/DepartmentTree";
-
 export default {
-  components: { departmentTree },
   data() {
     return {
       loading: false,
@@ -53,23 +61,38 @@ export default {
         bb: "",
         cc: "",
         dd: "",
-        ee: ""
+        ee: "",
+        ff: ""
       },
       roleSelect: [],
       formRules: {
         aa: [{ required: true, message: "请填写名称", trigger: "blur" }],
         bb: [{ required: true, message: "请填写名称", trigger: "blur" }]
       },
-      entArr: []
+      data: [],
+      riskList: [{ aa: "", bb: "" }]
     };
   },
-  props: {
-    isAdd: {
-      type: Boolean,
-      required: true
-    }
+  props: {},
+  created() {
+    this.data = [
+      {
+        aa: "杭州",
+        bb: `认真做好重复性故障的管控工作。各单位要高度重视飞机出现的重复性故障，加强对排故力量的组织；对于飞机运行中出现的重复、疑难故障，工程技术人员要及时研究和制定排故方案，彻底排除故障，确保飞行安全。 `,
+        cc: "反馈措施111"
+      },
+      {
+        aa: "上海",
+        bb: `严格飞机航=后和飞机定检维修质量。维修人员要严格按工作单卡执行飞机航后检查工作，及时发现并处理飞机故障，严把飞机放行关；飞机执行定检工作中，应切实提高飞机定检质量，确保飞机投入运行后安全可靠。  `,
+        cc: "反馈措施111"
+      },
+      {
+        aa: "武汉",
+        bb: `A320S 飞行机组操作手册（FCOM）的操作程序中提出，高温天气可能导致飞机机翼气源管道周围过热被探测，容易触发左/右机翼气源渗漏警告（AIR L/R WING LEAK） `,
+        cc: "反馈措施111"
+      }
+    ];
   },
-  created() {},
   methods: {
     cancel() {
       this.resetForm();
@@ -150,7 +173,7 @@ export default {
         dd: "",
         ee: ""
       };
-      this.roleSelect = [];
+      this.riskList = [];
     },
     roleChange(e) {
       if (e.length <= 1) {
@@ -166,38 +189,20 @@ export default {
       }
       this.form.roleList = arr;
     },
-    roleRemove(e) {}
-    // delwithRoleList() {
-    //   const roleList = this.roleList
-    //   const checkList = this.form.roleList
-    //   let newList = []
-    //   let obj = {}
-    //   for (let i = 0; i < checkList.length; i++) {
-    //     for (let j = 0; j < roleList.length; j++) {
-    //       if (checkList[i] === roleList[j].id) {
-    //         obj.id = Number(checkList[i])
-    //         obj.code = roleList[j].code
-    //         obj.roleDesc = roleList[j].roleDesc
-    //         // obj.sn = roleList[j].sn
-    //         newList.push(obj)
-    //         obj = {}
-    //       }
-    //     }
-    //   }
-    //   this.form.roleList = newList
-    // }
+    upload(row) {},
+    addRisk() {
+      this.riskList.push({
+        aa: "",
+        bb: ""
+      });
+    }
   }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+/deep/ .big_dialog {
+  width: 1100px;
+}
 </style>
 
-<style lang="scss">
-.roleSelect {
-  width: 370px;
-}
-.el-select-dropdown {
-  z-index: 99999999999999 !important;
-}
-</style>

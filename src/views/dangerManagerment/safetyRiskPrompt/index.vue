@@ -2,17 +2,30 @@
   <div class="app-container">
     <eform ref="form" :is-add="isAdd"></eform>
     <div class="head-container">
-      <el-input
-        size="mini"
-        v-model="query"
-        clearable
-        placeholder="请输入你要搜索的内容"
-        style="width: 240px;"
-        class="filter-item"
-      >
-        <el-button slot="append" icon="el-icon-search" @click="toQuery(query)"></el-button>
-      </el-input>
-      <el-button class="filter-item" size="mini" type="success" icon="el-icon-plus" @click="add">新增</el-button>
+      <el-form :model="form" size="mini" inline>
+        <el-form-item label="编号">
+          <el-input v-model="form.aa" placeholder="请输入编号" style="width:120px"></el-input>
+        </el-form-item>
+        <el-form-item label="主题">
+          <el-input v-model="form.bb" placeholder="请输入主题" style="width:120px"></el-input>
+        </el-form-item>
+        <el-form-item label="责任单位">
+          <el-input v-model="form.cc" placeholder="请输入责任单位" style="width:120px"></el-input>
+        </el-form-item>
+        <el-form-item label="发布时间">
+          <el-input v-model="form.dd" placeholder="请输入发布时间" style="width:120px"></el-input>
+        </el-form-item>
+        <el-form-item label>
+          <el-button type="success" icon="el-icon-search" @click="toQuery(query)">查询</el-button>
+          <el-button
+            class="filter-item"
+            size="mini"
+            type="success"
+            icon="el-icon-plus"
+            @click="add"
+          >新建</el-button>
+        </el-form-item>
+      </el-form>
     </div>
     <!--表格渲染-->
     <el-table
@@ -24,20 +37,20 @@
       @selection-change="selectionChange"
     >
       <el-table-column type="index" width="50" />
-      <el-table-column prop="jj" label="编号" />
+      <el-table-column prop="jj" label="编号" width="110" />
+      <el-table-column prop="gg" label="发布时间" width="100" />
       <el-table-column prop="aa" label="主题" min-width="200" />
       <el-table-column prop="bb" label="背景" min-width="300" align="left" />
       <el-table-column prop="cc" label="安全风险" min-width="300" align="left" />
       <el-table-column prop="dd" label="风险防范" min-width="400" align="left" />
       <el-table-column prop="ee" label="责任单位" width="80" />
-      <el-table-column prop="ff" label="拟制人" width="100" />
-      <el-table-column prop="gg" label="截至时间" width="100" />
-      <el-table-column prop="hh" label="修改时间" width="100" />
-      <el-table-column label="操作" width="150" fixed="right">
+      <el-table-column label="操作" width="300" fixed="right">
         <template slot-scope="scope">
           <el-button-group>
-            <el-button size="mini" @click="edit(scope.row)">反馈</el-button>
-            <el-button size="mini" @click="check(scope.row)">验证</el-button>
+            <el-button size="mini" @click="copy(scope.row)">复制</el-button>
+            <el-button size="mini" @click="edit(scope.row)">措施反馈</el-button>
+            <el-button size="mini" @click="check(scope.row)">措施验证</el-button>
+            <el-button size="mini" @click="detail(scope.row)">查看</el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -52,6 +65,7 @@
       @current-change="pageChange"
     />
     <echeck ref="check"></echeck>
+    <edetail ref="detail"></edetail>
   </div>
 </template>
 
@@ -59,14 +73,18 @@
 import initData from "@/mixins/initData";
 import eform from "./form";
 import echeck from "./components/check";
+import edetail from "./components/detail";
 export default {
-  components: { eform,echeck },
+  components: { eform, echeck, edetail },
   mixins: [initData],
   data() {
     return {
       isSuperAdmin: false,
       userInfo: {},
-      selections: []
+      selections: [],
+      form: {
+        aa: ""
+      }
     };
   },
   mounted() {
@@ -104,6 +122,12 @@ export default {
       this.isAdd = true;
       this.$refs.form.dialog = true;
     },
+    copy(row) {
+      this.isAdd = true;
+      let _this = this.$refs.form;
+      _this.form = Object.assign({}, row);
+      _this.dialog = true;
+    },
     edit(row) {
       this.isAdd = false;
       let _this = this.$refs.form;
@@ -111,8 +135,12 @@ export default {
       _this.dialog = true;
     },
     check(row) {
-      this.isAdd = false;
       let _this = this.$refs.check;
+      _this.form = Object.assign({}, row);
+      _this.dialog = true;
+    },
+    detail(row) {
+      let _this = this.$refs.detail;
       _this.form = Object.assign({}, row);
       _this.dialog = true;
     },
@@ -141,7 +169,7 @@ export default {
     height: 32px !important;
   }
 }
-.head-container {
-  margin-bottom: 20px;
-}
+// .head-container {
+//   margin-bottom: 20px;
+// }
 </style>

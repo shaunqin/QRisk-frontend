@@ -14,14 +14,13 @@
     >
       <el-table-column type="index" width="50" />
       <el-table-column prop="jj" label="编号" />
-      <el-table-column prop="aa" label="风险"  />
-      <el-table-column prop="bb" label="通知内容" width="300" />
-      <el-table-column prop="cc" label="创建人" />
-      <el-table-column prop="dd" label="创建时间" />
+      <el-table-column prop="aa" label="风险" />
+      <el-table-column prop="bb" label="标题" width="300" />
+      <el-table-column prop="dd" label="发布时间" />
       <el-table-column label="操作" width="300">
         <template slot-scope="scope">
           <el-button-group>
-            <el-button size="mini" @click="hairdown(scope.row)">下发</el-button>
+            <el-button size="mini" @click="hairdown(scope.row)">查看</el-button>
             <el-button size="mini" @click="fillin(scope.row)">填报</el-button>
             <el-button size="mini" @click="approval(scope.row)">审批</el-button>
             <el-button size="mini" @click="feedback(scope.row)">反馈</el-button>
@@ -61,7 +60,7 @@ import approval from "./components/approval";
 import feedback from "./components/feedback";
 import check from "./components/check";
 export default {
-  components: { eform, hairdown, approval, feedback, fillinDialog,check },
+  components: { eform, hairdown, approval, feedback, fillinDialog, check },
   mixins: [initData],
   data() {
     return {
@@ -76,10 +75,10 @@ export default {
     for (let i = 0; i < 5; i++) {
       this.data.push({
         aa: "安全风险",
-        bb:
-          "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降、中断起飞的安全风险。",
+        bb: "飞机在运行过程中出现大翼引气渗漏等重复性故障",
         jj: "FP202005050" + i,
-        cc:"admin",dd:"2020-04-22"
+        cc: "admin",
+        dd: "2020-04-22"
       });
     }
   },
