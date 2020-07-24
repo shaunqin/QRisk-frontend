@@ -14,14 +14,14 @@
       <el-table-column prop="diskName" label="诱因" />
     </el-table>
     <!--分页组件-->
-    <el-pagination
+    <!-- <el-pagination
       :total="total"
       :current-page="page"
       style="margin-top: 8px;text-align: right"
       layout="total, prev, pager, next, sizes"
       @size-change="sizeChange"
       @current-change="pageChange"
-    />
+    /> -->
   </div>
 </template>
 
@@ -61,7 +61,7 @@ export default {
   },
   methods: {
      beforeInit() {
-      this.url = `/info_mgr/incentive_mgr/query/pageList/${this.page}/${this.size}`;
+      this.url = `/info_mgr/incentive_mgr/query/all`;
       return true;
     },
   }

@@ -16,14 +16,14 @@
       <el-table-column prop="diskSystemDesc" label="备注" show-overflow-tooltip />
     </el-table>
     <!--分页组件-->
-    <el-pagination
+    <!-- <el-pagination
       :total="total"
       :current-page="page"
       style="margin-top: 8px;text-align: right"
       layout="total, prev, pager, next, sizes"
       @size-change="sizeChange"
       @current-change="pageChange"
-    />
+    /> -->
   </div>
 </template>
 
@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     beforeInit() {
-      this.url = `/info_mgr/prod_mgr/query/pageList/${this.page}/${this.size}`;
+      this.url = `/info_mgr/prod_mgr/query/all`;
       return true;
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
