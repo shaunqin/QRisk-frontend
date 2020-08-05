@@ -24,22 +24,23 @@
       size="small"
       :highlight-current-row="true"
       style="width: 100%;"
-      @selection-change="selectionChange"
     >
-      <el-table-column type="index" width="50" />
-      <el-table-column prop="aa" label="编号" />
-      <el-table-column prop="bb" label="发生日期" width="100" />
-      <el-table-column prop="hh" label="问题描述" />
+      <el-table-column type="index" width="50" :index="getIndex" />
+      <el-table-column prop="id" label="编号" />
+      <el-table-column label="发生日期" width="120">
+        <template slot-scope="{row}">{{row.dateTime.substring(0,10)}}</template>
+      </el-table-column>
+      <el-table-column prop="problemDescription" label="问题描述" width="200" show-overflow-tooltip />
       <el-table-column prop="cc" label="责任单位层级一" width="120" />
       <el-table-column prop="dd" label="责任单位层级二" width="120" />
-      <el-table-column prop="ee" label="责任部门" />
-      <el-table-column prop="ff" label="产品" width="120" />
-      <el-table-column prop="gg" label="系统" />
-      <el-table-column prop="ii" label="危险源层级一" width="110" />
-      <el-table-column prop="jj" label="危险源层级二" width="110" />
-      <el-table-column prop="kk" label="危险源" />
-      <el-table-column prop="ll" label="风险" />
-      <el-table-column prop="mm" label="诱因" />
+      <el-table-column prop="departmentNameCn" label="责任部门" width="120" show-overflow-tooltip />
+      <el-table-column prop="productName" label="产品" width="120" />
+      <el-table-column prop="systemName" label="系统" />
+      <el-table-column prop="riskLevelName1" label="危险源层级一" width="110" />
+      <el-table-column prop="riskLevelName2" label="危险源层级二" width="110" />
+      <el-table-column prop="sourceOfRiskName" label="危险源" width="200" show-overflow-tooltip />
+      <el-table-column prop="risk" label="风险" width="150" show-overflow-tooltip />
+      <el-table-column prop="incentive" label="诱因" width="150" show-overflow-tooltip />
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -55,21 +56,23 @@
 
 <script>
 import initData from "@/mixins/initData";
-import { infoDatabase } from "@/dataSource";
 export default {
   mixins: [initData],
   data() {
     return {
       isSuperAdmin: false,
       userInfo: {},
-      selections: []
+      selections: [],
     };
   },
   mounted() {
-    this.loading = false;
-    this.data = infoDatabase;
+    this.init();
   },
   methods: {
+    beforeInit() {
+      this.url = `/info_mgr/infoAudit_mgr/query/pageList/${this.page}/${this.size}`;
+      return true;
+    },
     toQuery(name) {
       if (!name) {
         this.page = 1;
@@ -77,12 +80,7 @@ export default {
         return;
       }
     },
-    // 选择切换
-    selectionChange: function(selections) {
-      this.selections = selections;
-      this.$emit("selectionChange", { selections: selections });
-    }
-  }
+  },
 };
 </script>
 

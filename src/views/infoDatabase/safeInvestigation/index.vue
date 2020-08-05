@@ -24,26 +24,26 @@
       size="small"
       :highlight-current-row="true"
       style="width: 100%;"
-      @selection-change="selectionChange"
     >
-      <el-table-column type="index" width="50" />
-      <el-table-column prop="aa" label="信息来源" />
-      <el-table-column prop="bb" label="发生日期" width="100" />
-      <el-table-column prop="cc" label="地点" />
-      <el-table-column prop="dd" label="机型" />
-      <el-table-column prop="ee" label="事件概述" />
-      <el-table-column prop="ff" label="原因分析" width="120" />
-      <el-table-column prop="gg" label="责任单位层级一" />
-      <el-table-column prop="gg2" label="责任单位层级二" />
-      <el-table-column prop="gg3" label="责任单位层级三" />
-      <el-table-column prop="hh" label="产品" />
-      <el-table-column prop="ii" label="系统" width="110" />
-      <el-table-column prop="jj" label="危险源层级一" width="110" />
-      <el-table-column prop="kk" label="危险源层级二" width="110" />
-      <el-table-column prop="ll" label="危险源" />
-      <el-table-column prop="mm" label="风险" />
-      <el-table-column prop="nn" label="诱因" />
-      <el-table-column prop="oo" label="附件报告" />
+      <el-table-column type="index" width="50" :index="getIndex" />
+      <el-table-column prop="infoSourceText" label="信息来源" width="100" />
+      <el-table-column label="发生日期" width="100">
+        <template slot-scope="{row}">
+          <span v-if="row.happenDate!=null">{{row.happenDate.substring(0,10)}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="place" label="地点" />
+      <el-table-column prop="aircraftTypeText" label="机型" />
+      <el-table-column prop="eventOverview" label="事件概述" />
+      <el-table-column prop="causeAnalysis" label="原因分析" width="120" show-overflow-tooltip />
+      <el-table-column prop="departmentNameCn" label="责任单位" width="120" show-overflow-tooltip />
+      <el-table-column prop="productText" label="产品" width="120" />
+      <el-table-column prop="systemText" label="系统" width="110" />
+      <el-table-column prop="riskLevelText1" label="危险源层级一" width="110" />
+      <el-table-column prop="riskLevelText2" label="危险源层级二" width="110" />
+      <el-table-column prop="sourceOfRiskText" label="危险源" width="120" show-overflow-tooltip />
+      <el-table-column prop="risk" label="风险" width="120" />
+      <el-table-column prop="incentive" label="诱因" width="120" />
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -66,53 +66,18 @@ export default {
     return {
       isSuperAdmin: false,
       userInfo: {},
-      selections: []
+      selections: [],
     };
   },
   mounted() {
-    this.loading = false;
-    this.data = [
-      {
-        aa: "航安任务",
-        bb: "2019/06/09",
-        cc: "上海浦东",
-        dd: "B737",
-        ee: "",
-        ff: "具体原因描述",
-        gg: "运管部",
-        gg2: "分公司",
-        gg3: "中队",
-        hh: "动机/APU",
-        ii: "外部检查",
-        jj: "管理文件",
-        kk: "工作程序",
-        ll: "程序编写存在缺陷",
-        mm: "程序编写存在缺陷",
-        nn: "未构成差错不安全事件",
-        oo: ""
-      },
-      {
-        aa: "自愿报告",
-        bb: "2019/06/09",
-        cc: "北京大兴",
-        dd: "B787",
-        ee: "",
-        ff: "具体原因描述",
-        gg: "运管部",
-        gg2: "分公司",
-        gg3: "中队",
-        hh: "动机/APU",
-        ii: "外部检查",
-        jj: "管理文件",
-        kk: "工作程序",
-        ll: "程序编写存在缺陷",
-        mm: "程序编写存在缺陷",
-        nn: "未构成差错不安全事件",
-        oo: ""
-      }
-    ];
+    this.init();
   },
   methods: {
+    beforeInit() {
+      this.url = `/infoDatabase_mgr/infoDatabase_mgr/query/pageList/${this.page}/${this.size}`;
+      this.params = { type: 1, ...this.params };
+      return true;
+    },
     toQuery(name) {
       if (!name) {
         this.page = 1;
@@ -120,12 +85,7 @@ export default {
         return;
       }
     },
-    // 选择切换
-    selectionChange: function(selections) {
-      this.selections = selections;
-      this.$emit("selectionChange", { selections: selections });
-    }
-  }
+  },
 };
 </script>
 

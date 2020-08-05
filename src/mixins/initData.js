@@ -26,7 +26,7 @@ export default {
       }
       return new Promise((resolve, reject) => {
         this.loading = true
-        initData(this.url,this.params).then(res => {
+        initData(this.url, this.params).then(res => {
           if (res.code === '200') {
             this.data = res.obj
             this.nodeData = res.obj
@@ -82,6 +82,9 @@ export default {
           colspan: _col
         };
       }
+    },
+    getIndex(index) {
+      return (this.page - 1) * this.size + index + 1;
     }
   }
 }

@@ -264,15 +264,15 @@ export const asyncRoutes = [{
             title: 'customerComplaints'
           }
         },
-        {
-          path: 'riskAssessment',
-          component: () => import('@/views/infoDatabase/riskAssessment/index'),
-          name: 'riskAssessment',
-          hidden: true,
-          meta: {
-            title: 'riskAssessment'
-          }
-        }
+        // {
+        //   path: 'riskAssessment',
+        //   component: () => import('@/views/infoDatabase/riskAssessment/index'),
+        //   name: 'riskAssessment',
+        //   hidden: true,
+        //   meta: {
+        //     title: 'riskAssessment'
+        //   }
+        // }
       ]
     }]
   },
@@ -333,95 +333,6 @@ export const asyncRoutes = [{
       ]
     }]
   },
-  // {
-  //   path: '/dangerEvaluate',
-  //   component: Layout,
-  //   meta: { title: 'dangerEvaluate', icon: 'risk-valuate' },
-  //   redirect: 'noRedirect',
-  //   children: [
-  //     {
-  //       path: 'riskListManager',
-  //       component: () => import('@/views/dangerEvaluate/riskListManager/index'),
-  //       meta: { title: 'riskListManager', icon: 'risk-list' },
-  //       redirect: 'noRedirect',
-  //       hidden: true,
-  //       children: [
-  //         {
-  //           path: 'riskListDown',
-  //           component: () => import('@/views/dangerEvaluate/riskListManager/riskListDown/index'),
-  //           name: 'riskListDown',
-  //           meta: { title: 'riskListDown' }
-  //         },
-  //         {
-  //           path: 'riskListAccept',
-  //           component: () => import('@/views/dangerEvaluate/riskListManager/riskListAccept/index'),
-  //           name: 'riskListAccept',
-  //           meta: { title: 'riskListAccept' }
-  //         },
-  //         {
-  //           path: 'riskListSearch',
-  //           component: () => import('@/views/dangerEvaluate/riskListManager/riskListSearch/index'),
-  //           name: 'riskListSearch',
-  //           meta: { title: 'riskListSearch' }
-  //         },
-  //       ]
-  //     },
-  //     {
-  //       path: 'riskMeasureReport',
-  //       component: () => import('@/views/dangerEvaluate/riskMeasureReport/index'),
-  //       meta: { title: 'riskMeasureReport', icon: 'risk-measure' },
-  //       redirect: 'noRedirect',
-  //       hidden: true,
-  //       children: [
-  //         {
-  //           path: 'riskMeasureInput',
-  //           component: () => import('@/views/dangerEvaluate/riskMeasureReport/riskMeasureInput/index'),
-  //           name: 'riskMeasureInput',
-  //           meta: { title: 'riskMeasureInput' }
-  //         },
-  //         {
-  //           path: 'riskMeasureConfirm',
-  //           component: () => import('@/views/dangerEvaluate/riskMeasureReport/riskMeasureConfirm/index'),
-  //           name: 'riskMeasureConfirm',
-  //           meta: { title: 'riskMeasureConfirm' }
-  //         },
-  //         {
-  //           path: 'riskMeasureSearch',
-  //           component: () => import('@/views/dangerEvaluate/riskMeasureReport/riskMeasureSearch/index'),
-  //           name: 'riskMeasureSearch',
-  //           meta: { title: 'riskMeasureSearch' }
-  //         },
-  //       ]
-  //     },
-  //     {
-  //       path: 'implementationResultsReport',
-  //       component: () => import('@/views/dangerEvaluate/implementationResultsReport/index'),
-  //       meta: { title: 'implementationResultsReport', icon: 'skill' },
-  //       redirect: 'noRedirect',
-  //       hidden: true,
-  //       children: [
-  //         {
-  //           path: 'riskImplementationInput',
-  //           component: () => import('@/views/dangerEvaluate/implementationResultsReport/riskImplementationInput/index'),
-  //           name: 'riskImplementationInput',
-  //           meta: { title: 'riskImplementationInput' }
-  //         },
-  //         {
-  //           path: 'riskImplementationConfirm',
-  //           component: () => import('@/views/dangerEvaluate/implementationResultsReport/riskImplementationConfirm/index'),
-  //           name: 'riskImplementationConfirm',
-  //           meta: { title: 'riskImplementationConfirm' }
-  //         },
-  //         {
-  //           path: 'riskImplementationSearch',
-  //           component: () => import('@/views/dangerEvaluate/implementationResultsReport/riskImplementationSearch/index'),
-  //           name: 'riskImplementationSearch',
-  //           meta: { title: 'riskImplementationSearch' }
-  //         },
-  //       ]
-  //     },
-  //   ]
-  // },
   {
     path: '/hiddenDangerInvestigation',
     component: Layout,

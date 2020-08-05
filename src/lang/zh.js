@@ -41,7 +41,7 @@ export default {
     riskControl: '安全风险管控',
     riskAssessmentDataExport: '风险评价报告',
     safetyRiskPrompt: '安全风险提示',
-    riskAssessmentProcess: '专项风险评估',
+    riskAssessmentProcess: '安全风险评估',
     dangerEvaluate: '风险评价',
     riskListManager: '风险清单管理',
     riskListDown: '风险清单下发',
