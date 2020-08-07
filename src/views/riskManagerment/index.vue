@@ -4,7 +4,7 @@
       <el-col :span="3">
         <div class="index-menu" ref="indexMenu">
           <router-link
-            :to="'/dangerManagerment/d/'+item.path"
+            :to="'/riskManagerment/page/'+item.path"
             class="index-menu-item pan-btn blue-btn"
             v-for="item in routes"
             :key="item.path"
@@ -40,7 +40,7 @@ export default {
   },
   created() {
     this.permission_routes.map(route => {
-      if (route.path === "/dangerManagerment") {
+      if (route.path === "/riskManagerment") {
         this.routes = route.children[0].children;
       }
     });

@@ -147,20 +147,20 @@ export const asyncRoutes = [{
         ]
       },
       {
-        path: 'riskManagement',
-        component: () => import('@/views/standard/riskManagement/index'),
+        path: 'riskEvaluateStandard',
+        component: () => import('@/views/standard/riskEvaluateStandard/index'),
         meta: {
-          title: 'riskManagement',
+          title: 'riskEvaluateStandard',
           icon: 'clipboard'
         },
-        redirect: '/standard/riskManagement/other',
+        redirect: '/standard/riskEvaluateStandard/index',
         hidden: true,
         children: [{
-          path: 'other',
-          component: () => import('@/views/standard/riskManagement/components/index'),
-          name: 'other',
+          path: 'index',
+          component: () => import('@/views/standard/riskEvaluateStandard/components/index'),
+          name: 'index',
           meta: {
-            title: 'other'
+            title: 'index'
           }
         }]
       },
@@ -277,34 +277,34 @@ export const asyncRoutes = [{
     }]
   },
   {
-    path: '/dangerManagerment',
+    path: '/riskManagerment',
     component: Layout,
     meta: {
-      title: 'dangerManagerment',
+      title: 'riskManagerment',
       icon: 'riskManagerment'
     },
-    redirect: '/dangerManagerment/d',
+    redirect: '/riskManagerment/page',
     children: [{
-      path: 'd',
-      component: () => import('@/views/dangerManagerment/index'),
+      path: 'page',
+      component: () => import('@/views/riskManagerment/index'),
       meta: {
-        title: 'dangerManagerment',
+        title: 'riskManagerment',
         icon: 'dangerManagerment'
       },
       hidden: true,
-      redirect: '/dangerManagerment/d/riskAssessmentDataExport',
+      redirect: '/riskManagerment/page/riskEvaluateReport',
       children: [{
-          path: 'riskAssessmentDataExport',
-          component: () => import('@/views/dangerManagerment/riskAssessmentDataExport/index'),
-          name: 'riskAssessmentDataExport',
+          path: 'riskEvaluateReport',
+          component: () => import('@/views/riskManagerment/riskEvaluateReport/index'),
+          name: 'riskEvaluateReport',
           hidden: true,
           meta: {
-            title: 'riskAssessmentDataExport'
+            title: 'riskEvaluateReport'
           }
         },
         {
           path: 'safetyRiskPrompt',
-          component: () => import('@/views/dangerManagerment/safetyRiskPrompt/index'),
+          component: () => import('@/views/riskManagerment/safetyRiskPrompt/index'),
           name: 'safetyRiskPrompt',
           hidden: true,
           meta: {
@@ -313,17 +313,17 @@ export const asyncRoutes = [{
           }
         },
         {
-          path: 'riskAssessmentProcess',
-          component: () => import('@/views/dangerManagerment/riskAssessmentProcess/index'),
-          name: 'riskAssessmentProcess',
+          path: 'riskAssessment',
+          component: () => import('@/views/riskManagerment/riskAssessment/index'),
+          name: 'riskAssessment',
           hidden: true,
           meta: {
-            title: 'riskAssessmentProcess'
+            title: 'riskAssessment'
           }
         },
         {
           path: 'riskControl',
-          component: () => import('@/views/dangerManagerment/riskControl/index'),
+          component: () => import('@/views/riskManagerment/riskControl/index'),
           name: 'riskControl',
           hidden: true,
           meta: {

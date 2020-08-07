@@ -23,24 +23,19 @@
       @selection-change="selectionChange"
     >
       <el-table-column type="index" width="50" />
-
+      <el-table-column prop="nn" label="评估类型" />
+      <el-table-column prop="qq" label="发布日期" width="100" />
       <el-table-column prop="xx" label="编号" width="120" />
-      <el-table-column prop="oo" label="产品" width="120" />
-      <el-table-column prop="pp" label="系统" />
-      <el-table-column prop="qq" label="发生日期" width="100" />
-      <el-table-column prop="yy" label="名称" width="200" />
-      <el-table-column prop="zz" label="生成日期" width="100" />
+      <el-table-column prop="xx" label="标题" width="120" />
       <el-table-column label="危险源" prop="aa" width="200" />
-      <el-table-column label="ID" prop="bb" />
-      <el-table-column label="可能性" prop="cc" />
-      <el-table-column label="严重性" prop="dd" />
-      <el-table-column label="可能导致的风险" prop="ee" width="200" />
-      <el-table-column label="风险等级" prop="ff" />
       <el-table-column label="根原因分析" prop="gg" width="120" />
+      <el-table-column label="风险等级" prop="ff" />
+      <el-table-column label="可能导致的风险" prop="ee" width="200" />
       <el-table-column label="控制措施" prop="hh" />
       <el-table-column label="责任单位" prop="ii" />
-      <el-table-column label="控制状态" prop="jj" />
       <el-table-column label="完成期限" prop="kk" />
+      <el-table-column label="措施落实验证情况" prop="mm"  width="200" />
+      <el-table-column label="状态" prop="jj" />
       <el-table-column label="操作" width="100px" fixed="right">
         <template slot-scope="scope">
           <el-button size="mini" @click="detail(scope.row)">详情</el-button>

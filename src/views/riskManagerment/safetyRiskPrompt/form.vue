@@ -19,11 +19,6 @@
             <el-input v-model="form.ff" style="width: 100%;" />
           </el-form-item>
         </el-col>
-        <el-col :span="8">
-          <el-form-item label="截止时间">
-            <el-input v-model="form.gg" style="width: 100%;" />
-          </el-form-item>
-        </el-col>
         <el-col :span="24">
           <el-form-item label="适用单位">
             <el-input v-model="form.ee" style="width: 400px" />
@@ -40,35 +35,39 @@
         </el-col>
       </el-row>
 
-      <el-row v-if="isAdd">
-        <el-col :span="24">
-          <el-form-item label="风险防范措施" prop="dd">
-            <el-row v-for="(item,index) in riskList" :key="index" style="margin-bottom: 10px;">
-              <el-col :span="6" style="padding-right:10px">
-                <el-select v-model="item.aa" placeholder="责任单位">
-                  <el-option label="责任单位" value="责任单位"></el-option>
-                </el-select>
-              </el-col>
-              <el-col :span="15" style="padding-right:10px">
-                <el-input v-model="item.bb" style="width: 100%;" />
-              </el-col>
-              <el-col :span="2" :offset="1">
-                <i class="el-icon-delete"></i>
-              </el-col>
-            </el-row>
-            <el-row style="margin-top:10px">
-              <el-col :span="24">
-                <el-button
-                  plain
-                  icon="el-icon-plus"
-                  style="width: 100%;border-style: dashed;"
-                  @click="addRisk"
-                >添加</el-button>
-              </el-col>
-            </el-row>
-          </el-form-item>
-        </el-col>
-      </el-row>
+      <el-form-item label="风险防范措施" prop="dd" v-if="isAdd">
+        <el-row
+          v-for="(item,index) in riskList"
+          :key="index"
+          style="margin-bottom: 10px;display:flex"
+          :gutter="8"
+        >
+          <el-col :span="6">
+            <el-select v-model="item.aa" placeholder="责任单位" style="width:100%">
+              <el-option label="责任单位" value="责任单位"></el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="4">
+            <el-date-picker v-model="item.cc" placeholder="为空则是长期选项" style="width:100%"></el-date-picker>
+          </el-col>
+          <el-col :span="12">
+            <el-input v-model="item.bb" style="width: 100%;" placeholder="措施内容" />
+          </el-col>
+          <el-col :span="2">
+            <el-button type="text" icon="el-icon-delete" size="mini"></el-button>
+          </el-col>
+        </el-row>
+        <el-row style="margin-top:10px">
+          <el-col :span="24">
+            <el-button
+              plain
+              icon="el-icon-plus"
+              style="width: 100%;border-style: dashed;"
+              @click="addRisk"
+            >添加</el-button>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <el-row v-else>
         <el-col :span="24">
           <el-form-item label="风险防范建议">
@@ -113,6 +112,8 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
+      <el-button :loading="loading" type="info" @click="doSubmit">打印</el-button>
+      <el-button :loading="loading" type="success" @click="doSubmit">保存</el-button>
       <el-button :loading="loading" type="primary" @click="doSubmit">提交</el-button>
     </div>
   </el-dialog>
@@ -131,37 +132,37 @@ export default {
         cc: "",
         dd: "",
         ee: "",
-        ff: ""
+        ff: "",
       },
       roleSelect: [],
       formRules: {
         aa: [{ required: true, message: "请填写名称", trigger: "blur" }],
-        bb: [{ required: true, message: "请填写名称", trigger: "blur" }]
+        bb: [{ required: true, message: "请填写名称", trigger: "blur" }],
       },
       data: [],
-      riskList: [{ aa: "", bb: "" }]
+      riskList: [{ aa: "", bb: "" }],
     };
   },
   props: {
     isAdd: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   created() {
     this.data = [
       {
         aa: "杭州",
-        bb: `认真做好重复性故障的管控工作。各单位要高度重视飞机出现的重复性故障，加强对排故力量的组织；对于飞机运行中出现的重复、疑难故障，工程技术人员要及时研究和制定排故方案，彻底排除故障，确保飞行安全。 `
+        bb: `认真做好重复性故障的管控工作。各单位要高度重视飞机出现的重复性故障，加强对排故力量的组织；对于飞机运行中出现的重复、疑难故障，工程技术人员要及时研究和制定排故方案，彻底排除故障，确保飞行安全。 `,
       },
       {
         aa: "上海",
-        bb: `严格飞机航后和飞机定检维修质量。维修人员要严格按工作单卡执行飞机航后检查工作，及时发现并处理飞机故障，严把飞机放行关；飞机执行定检工作中，应切实提高飞机定检质量，确保飞机投入运行后安全可靠。  `
+        bb: `严格飞机航后和飞机定检维修质量。维修人员要严格按工作单卡执行飞机航后检查工作，及时发现并处理飞机故障，严把飞机放行关；飞机执行定检工作中，应切实提高飞机定检质量，确保飞机投入运行后安全可靠。  `,
       },
       {
         aa: "武汉",
-        bb: `A320S 飞行机组操作手册（FCOM）的操作程序中提出，高温天气可能导致飞机机翼气源管道周围过热被探测，容易触发左/右机翼气源渗漏警告（AIR L/R WING LEAK） `
-      }
+        bb: `A320S 飞行机组操作手册（FCOM）的操作程序中提出，高温天气可能导致飞机机翼气源管道周围过热被探测，容易触发左/右机翼气源渗漏警告（AIR L/R WING LEAK） `,
+      },
     ];
   },
   methods: {
@@ -169,7 +170,7 @@ export default {
       this.resetForm();
     },
     doSubmit() {
-      this.$refs["form"].validate(valid => {
+      this.$refs["form"].validate((valid) => {
         if (valid) {
           // this.loading = true;
           // if (this.isAdd) {
@@ -179,7 +180,7 @@ export default {
           this.dialog = false;
           this.$message({
             message: "添加成功",
-            type: "success"
+            type: "success",
           });
           this.resetForm();
         }
@@ -191,18 +192,18 @@ export default {
       let arr = [];
       for (let i = 0; i < data.length; i++) {
         let obj = {
-          id: ""
+          id: "",
         };
         obj.id = data[i];
         arr.push(obj);
       }
       this.form.roleList = arr;
       add(this.form)
-        .then(res => {
+        .then((res) => {
           if (res.code === "200") {
             this.$message({
               message: "添加成功",
-              type: "success"
+              type: "success",
             });
           } else {
             this.$message.error(res.msg);
@@ -211,17 +212,17 @@ export default {
           this.loading = false;
           this.$parent.init();
         })
-        .catch(err => {
+        .catch((err) => {
           this.loading = false;
         });
     },
     doModify() {
       modify(this.form)
-        .then(res => {
+        .then((res) => {
           if (res.code === "200") {
             this.$message({
               message: "修改成功",
-              type: "success"
+              type: "success",
             });
           } else {
             this.$message.error(res.msg);
@@ -230,7 +231,7 @@ export default {
           this.loading = false;
           this.$parent.init();
         })
-        .catch(err => {
+        .catch((err) => {
           this.loading = false;
         });
     },
@@ -244,7 +245,7 @@ export default {
         dd: "",
         ee: "",
         ff: "",
-        gg: ""
+        gg: "",
       };
       this.riskList = [];
     },
@@ -255,7 +256,7 @@ export default {
       let arr = [];
       for (let i = 0; i < e.length; i++) {
         let obj = {
-          id: ""
+          id: "",
         };
         obj.id = e[i];
         arr.push(obj);
@@ -266,10 +267,10 @@ export default {
     addRisk() {
       this.riskList.push({
         aa: "",
-        bb: ""
+        bb: "",
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

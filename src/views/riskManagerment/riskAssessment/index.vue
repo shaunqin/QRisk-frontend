@@ -1,8 +1,10 @@
 <template>
   <div class="app-container">
     <eform ref="form" :is-add="isAdd"></eform>
+    <assessment ref="assessment"></assessment>
     <div class="head-container">
-      <el-button class="filter-item" size="mini" type="success" icon="el-icon-plus" @click="add">新增</el-button>
+      <el-button class="filter-item" size="mini" type="success" icon="el-icon-plus" @click="add">新建通知</el-button>
+      <el-button class="filter-item" size="mini" type="success" icon="el-icon-plus" @click="addAssessment">新建评估</el-button>
     </div>
     <!--表格渲染-->
     <el-table
@@ -55,12 +57,13 @@
 import initData from "@/mixins/initData";
 import fillinDialog from "./components/fillinDialog";
 import eform from "./form";
+import assessment from "./formAssessment";
 import hairdown from "./components/hairdown";
 import approval from "./components/approval";
 import feedback from "./components/feedback";
 import check from "./components/check";
 export default {
-  components: { eform, hairdown, approval, feedback, fillinDialog, check },
+  components: { eform, hairdown, approval, feedback, fillinDialog, check,assessment },
   mixins: [initData],
   data() {
     return {
@@ -98,6 +101,9 @@ export default {
     add() {
       this.isAdd = true;
       this.$refs.form.dialog = true;
+    },
+    addAssessment() {
+      this.$refs.assessment.dialog = true;
     },
     edit(row) {
       console.log(row);

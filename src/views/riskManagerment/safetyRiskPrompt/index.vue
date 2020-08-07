@@ -12,6 +12,9 @@
         <el-form-item label="责任单位">
           <el-input v-model="form.cc" placeholder="请输入责任单位" style="width:120px"></el-input>
         </el-form-item>
+        <el-form-item label="下发单位">
+          <el-input v-model="form.ee" placeholder="请输入责任单位" style="width:120px"></el-input>
+        </el-form-item>
         <el-form-item label="发布时间">
           <el-input v-model="form.dd" placeholder="请输入发布时间" style="width:120px"></el-input>
         </el-form-item>
@@ -24,6 +27,8 @@
             icon="el-icon-plus"
             @click="add"
           >新建</el-button>
+           <el-button type="info" icon="el-icon-document-copy" @click="copy(selections[0])" :disabled="selections.length!=1">复制</el-button>
+           <el-button type="info" >输出报告</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -36,21 +41,25 @@
       style="width: 100%;"
       @selection-change="selectionChange"
     >
-      <el-table-column type="index" width="50" />
+      <el-table-column type="selection" width="45" />
       <el-table-column prop="jj" label="编号" width="110" />
       <el-table-column prop="gg" label="发布时间" width="100" />
-      <el-table-column prop="aa" label="主题" min-width="200" />
-      <el-table-column prop="bb" label="背景" min-width="300" align="left" />
-      <el-table-column prop="cc" label="安全风险" min-width="300" align="left" />
-      <el-table-column prop="dd" label="风险防范" min-width="400" align="left" />
-      <el-table-column prop="ee" label="责任单位" width="80" />
-      <el-table-column label="操作" width="300" fixed="right">
+      <el-table-column label="主题" min-width="150" show-overflow-tooltip>
+        <template slot-scope="{row}">
+          <a class="title" @click="detail(row)">{{row.aa}}</a>
+        </template>
+      </el-table-column>
+      <el-table-column prop="bb" label="背景" min-width="180" align="left" show-overflow-tooltip />
+      <el-table-column prop="cc" label="安全风险" min-width="180" align="left" show-overflow-tooltip />
+      <el-table-column prop="dd" label="风险防范" min-width="180" align="left" show-overflow-tooltip />
+      <el-table-column prop="ee" label="责任单位" show-overflow-tooltip />
+      <el-table-column label="操作" width="130">
         <template slot-scope="scope">
           <el-button-group>
-            <el-button size="mini" @click="copy(scope.row)">复制</el-button>
-            <el-button size="mini" @click="edit(scope.row)">措施反馈</el-button>
-            <el-button size="mini" @click="check(scope.row)">措施验证</el-button>
-            <el-button size="mini" @click="detail(scope.row)">查看</el-button>
+           
+            <el-button size="mini" @click="edit(scope.row)">落实验证反馈</el-button>
+            <!-- <el-button size="mini" @click="check(scope.row)">措施验证</el-button> -->
+            <!-- <el-button size="mini" @click="detail(scope.row)">查看</el-button> -->
           </el-button-group>
         </template>
       </el-table-column>
@@ -83,8 +92,8 @@ export default {
       userInfo: {},
       selections: [],
       form: {
-        aa: ""
-      }
+        aa: "",
+      },
     };
   },
   mounted() {
@@ -101,7 +110,7 @@ export default {
         jj: "SN202005050" + i,
         ff: "admin",
         gg: "2020-06-04",
-        hh: "2020-06-04"
+        hh: "2020-06-04",
       });
     }
   },
@@ -114,7 +123,7 @@ export default {
       }
     },
     // 选择切换
-    selectionChange: function(selections) {
+    selectionChange: function (selections) {
       this.selections = selections;
       this.$emit("selectionChange", { selections: selections });
     },
@@ -149,17 +158,17 @@ export default {
         .then(() => {
           this.$message({
             type: "success",
-            message: "删除成功!"
+            message: "删除成功!",
           });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
           });
         });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -172,4 +181,7 @@ export default {
 // .head-container {
 //   margin-bottom: 20px;
 // }
+.title{
+  color: #1890ff;
+}
 </style>
