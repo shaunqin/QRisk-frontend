@@ -30,3 +30,36 @@ export function formatWithSeperator(datetime, dateSeprator, timeSeprator) {
     return timeFormat
   }
 }
+
+/**
+ * 将日期返回成周格式:2020-22
+ * @param {日期} date 
+ */
+export function formatDateToWeek(date) {
+  if (date != null) {
+    let firstDay = new Date(date.getFullYear(), 0, 1)
+    let dayOfWeek = firstDay.getDay()
+    let spendDay = 1
+    if (dayOfWeek != 0) {
+      spendDay = 7 - dayOfWeek + 1
+    }
+    firstDay = new Date(date.getFullYear(), 0, 1 + spendDay)
+    let d = Math.ceil((date.valueOf() - firstDay.valueOf()) / 86400000)
+    let result = Math.ceil(d / 7)
+    let year = date.getFullYear()
+    let week = result + 2 //如果使用的是默认为加2（如果将自然周设置为周一到周日则是加1）
+    return year + '-' + week;
+  }
+}
+
+export function formatShortDate(datetime) {
+  let dateSeprator = "-";
+  if (datetime != null) {
+    const dateMat = new Date(datetime)
+    const year = dateMat.getFullYear()
+    const month = dateMat.getMonth() + 1
+    const day = dateMat.getDate()
+    const timeFormat = year + dateSeprator + month + dateSeprator + day;
+    return timeFormat
+  }
+}

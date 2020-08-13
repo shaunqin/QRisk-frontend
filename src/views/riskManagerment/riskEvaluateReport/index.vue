@@ -2,125 +2,36 @@
   <div class="app-container">
     <div class="head-container">
       <h3>数据筛选</h3>
-      <el-form :model="form" :inline="true">
-        <el-form-item label="责任单位:">
-          <el-select size="mini" style="width:120px" v-model="form.aa" placeholder="请选择责任单位">
-            <el-option label="北京基地" value="北京基地"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="选择产品:">
-          <el-select size="mini" style="width:120px" v-model="form.bb" placeholder="请选择产品">
-            <el-option label="发送机/APU" value="发送机/APU"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="选择系统:">
-          <el-select size="mini" style="width:120px" v-model="form.cc" placeholder="请选择系统">
-            <el-option label="计量检测" value="计量检测"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="危险源分类:">
-          <el-select size="mini" style="width:120px" v-model="form.dd" placeholder="请选择危险源分类">
-            <el-option label="管理文件" value="管理文件"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="危险源:">
-          <el-select size="mini" style="width:150px" v-model="form.ee" placeholder="请选择危险源">
-            <el-option label="程序编写存在缺陷" value="程序编写存在缺陷"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
+      <search @createCharts="createCharts" />
     </div>
-    <h3 class="mt-0">分析数据</h3>
-    <!--表格渲染-->
-    <el-table
-      v-loading="loading"
-      :data="data"
-      size="small"
-      :highlight-current-row="true"
-      style="width: 100%;"
-      @selection-change="selectionChange"
-    >
-      <el-table-column type="index" width="50" />
-      <el-table-column prop="no" label="编号" />
-      <el-table-column prop="aa" label="标题" />
-      <el-table-column prop="bb" label="发生日期" width="100" />
-      <el-table-column prop="nn" label="背景描述" />
-      <el-table-column prop="cc" label="责任单位层级一" />
-      <el-table-column prop="cc2" label="责任单位层级二" />
-      <el-table-column prop="cc3" label="责任单位层级三" />
-      <el-table-column prop="ff" label="产品" />
-      <el-table-column prop="gg" label="系统" />
-      <el-table-column prop="ii" label="危险源层级一" width="110" />
-      <el-table-column prop="jj" label="危险源层级二" width="110" />
-      <el-table-column prop="kk" label="危险源" />
-      <el-table-column prop="ll" label="风险" />
-      <el-table-column prop="mm" label="诱因" />
-    </el-table>
-    <!--分页组件-->
-    <el-pagination
-      :total="total"
-      :current-page="page"
-      style="margin-top: 8px;text-align: right"
-      layout="total, prev, pager, next, sizes"
-      @size-change="sizeChange"
-      @current-change="pageChange"
-    />
+    <h3 class="mt-01">数据分析</h3>
+    <el-tabs>
+      <el-tab-pane label="报表">
+        <reporttb />
+      </el-tab-pane>
+      <el-tab-pane label="图表" lazy>
+        <charttb />
+      </el-tab-pane>
+      <el-tab-pane label="月度风险评价报告" lazy>
+        <monthreport />
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
 <script>
-import initData from "@/mixins/initData";
 import { infoDatabase } from "@/dataSource";
+import search from "./search";
+import reporttb from "./components/reportTb";
+import charttb from "./components/chartTb";
+import monthreport from "./components/monthReport";
 export default {
-  mixins: [initData],
+  components: { search, reporttb, charttb, monthreport },
   data() {
-    return {
-      isSuperAdmin: false,
-      userInfo: {},
-      selections: [],
-      form: {
-        aa: "",
-        bb: "",
-        cc: "",
-        dd: "",
-        ee: ""
-      }
-    };
+    return {};
   },
-  mounted() {
-    this.loading = false;
-    this.data = [
-      {
-        no:"SN2020050500",
-        aa: "航安任务",
-        bb: "2019/06/09",
-        cc: "运管部",
-        cc2: "分公司",
-        cc3: "中队",
-        ff: "动机/APU",
-        gg: "外部检查",
-        hh: "动机/APU",
-        ii: "管理文件",
-        jj: "工作程序",
-        kk: "程序编写存在缺陷",
-        ll: "程序编写存在缺陷",
-        mm: "程序编写存在缺陷",
-        nn: "",
-        oo: ""
-      }
-    ];
-  },
-  watch: {
-    form: {
-      deep: true, //  对象深度验证
-      handler: val => {
-        console.log(val);
-      }
-    },
-    "form.aa"(val){
-      console.log(val);
-    }
-  },
+  mounted() {},
+
   methods: {
     toQuery(name) {
       if (!name) {
@@ -129,37 +40,10 @@ export default {
         return;
       }
     },
-    // 选择切换
-    selectionChange: function(selections) {
-      this.selections = selections;
-      this.$emit("selectionChange", { selections: selections });
+    createCharts(command) {
+      this.$message(command);
     },
-    add() {
-      this.isAdd = true;
-      this.$refs.form.dialog = true;
-    },
-    edit(row) {
-      this.isAdd = false;
-      let _this = this.$refs.form;
-      _this.form = Object.assign({}, row);
-      _this.dialog = true;
-    },
-    subDelete(id) {
-      this.$confirm("确定删除嘛？")
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
-    }
-  }
+  },
 };
 </script>
 

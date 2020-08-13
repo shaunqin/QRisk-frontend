@@ -19,7 +19,7 @@
       </el-col>
       <el-col :span="21">
         <el-scrollbar wrap-class="scrollbar-wrapper">
-          <router-view></router-view>
+            <router-view></router-view>
         </el-scrollbar>
       </el-col>
     </el-row>

@@ -70,7 +70,8 @@ export default {
   },
   methods: {
     beforeInit() {
-      this.url = `/info_mgr/supervise_mgr/query/pageListSa/${this.page}/${this.size}`;
+      this.url = `/info_mgr/supervise_mgr/query/pageList/${this.page}/${this.size}`;
+      this.params.dataType = "4";
       return true;
     },
     toQuery(name) {
