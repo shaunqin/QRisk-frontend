@@ -5,6 +5,8 @@
     :normalizer="normalizer"
     :default-expand-level="1"
     :disabled="disabled"
+    :multiple="multiple"
+    :limit="3"
   />
 </template>
 
@@ -32,10 +34,14 @@ export default {
   },
   props: {
     value: {
-      type: String,
+      type: String | Array,
       default: null
     },
     disabled: {
+      type: Boolean,
+      default: false
+    },
+    multiple: {
       type: Boolean,
       default: false
     }

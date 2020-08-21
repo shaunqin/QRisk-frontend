@@ -40,7 +40,7 @@
 
 <script>
 import { add, modify } from "@/api/emplotee.js";
-import departmentTree from "@/components/DepartmentTree";
+import departmentTree from "@/components/Department";
 
 export default {
   components: { departmentTree },

@@ -1,8 +1,17 @@
 <template>
-  <el-form :model="form" :inline="true" label-width="80" class="query-form" size="mini" label-position="left">
+  <el-form
+    :model="form"
+    :inline="true"
+    label-width="80"
+    class="query-form"
+    size="medium"
+    label-position="left"
+  >
+        <el-form-item label="责任单位">
+          <department :value="form.dept" :multiple="true" @change="deptChange" style="width:500px" />
+        </el-form-item>
     <el-form-item label="时间:">
       <el-select
-        size="mini"
         style="width:120px"
         v-model="form.dateType"
         placeholder="请选择时间"
@@ -138,7 +147,6 @@
       <el-select
         :disabled="riskDisabled"
         filterable
-        size="mini"
         style="width:160px"
         v-model="form.risk"
         placeholder="请选择风险"
@@ -153,7 +161,7 @@
       <el-checkbox v-model="form.isKeyRisk" border true-label="1" false-label="0">是否关键风险</el-checkbox>
     </el-form-item>
     <el-form-item label="风险计算:">
-      <el-select size="mini" style="width:120px" v-model="form.js1" placeholder="请选择风险等级">
+      <el-select style="width:120px" v-model="form.js1" placeholder="请选择风险等级">
         <el-option
           v-for="item in ['#fff','#ffba00','#74bcff','#13ce66','#e64242']"
           :key="item"
@@ -185,7 +193,7 @@
       ></dict-select>
     </el-form-item>
     <el-form-item label>
-      <el-button type="primary" icon="el-icon-search" size="mini">搜索</el-button>
+      <el-button type="primary" icon="el-icon-search">搜索</el-button>
       <el-button type="primary" icon="el-icon-refresh">重置</el-button>
     </el-form-item>
     <el-form-item label>
@@ -208,8 +216,9 @@ import { formatDateToWeek, formatShortDate } from "@/utils/datetime";
 import dictSelect from "@/components/common/dictSelect";
 import { queryRiskList, queryHazardList } from "@/api/standard";
 import { queryDictByName } from "@/api/dict";
+import department from "@/components/Department";
 export default {
-  components: { dictSelect },
+  components: { dictSelect, department },
   data() {
     let _data = [];
     let year = new Date().getFullYear();
@@ -239,6 +248,7 @@ export default {
     }
     return {
       form: {
+        dept: [],
         dateType: "",
         dateValue: "",
         dataSource: "",
@@ -382,6 +392,10 @@ export default {
         });
       }
       return obj;
+    },
+    deptChange(val) {
+      console.log(val);
+      this.form.dept = val;
     },
   },
 };

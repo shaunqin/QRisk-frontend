@@ -20,13 +20,12 @@
 
 <script>
 import { add, modify } from "@/api/emplotee.js";
-import departmentTree from "@/components/DepartmentTree";
 import step1 from "./components/step1";
 import step2 from "./components/step2";
 import step3 from "./components/step3";
 
 export default {
-  components: { departmentTree, step1, step2, step3 },
+  components: { step1, step2, step3 },
   data() {
     return {
       loading: false,
@@ -39,7 +38,7 @@ export default {
         ee: "",
         table: [],
         table2: [],
-        report:{}
+        report: {},
       },
       roleSelect: [],
       formRules: {
@@ -118,7 +117,7 @@ export default {
         ee: "",
         table: [],
         table2: [],
-        report:{}
+        report: {},
       };
       this.roleSelect = [];
       this.step = 1;
