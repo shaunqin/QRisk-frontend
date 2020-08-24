@@ -7,16 +7,16 @@
     size="medium"
     label-position="left"
   >
-        <el-form-item label="责任单位">
-          <department :value="form.dept" :multiple="true" @change="deptChange" style="width:500px" />
-        </el-form-item>
+    <el-form-item label="责任单位">
+      <department
+        :value="form.responsibleUnitList"
+        :multiple="true"
+        @change="deptChange"
+        style="width:500px;line-height: 18px;"
+      />
+    </el-form-item>
     <el-form-item label="时间:">
-      <el-select
-        style="width:120px"
-        v-model="form.dateType"
-        placeholder="请选择时间"
-        clearable
-      >
+      <el-select style="width:120px" v-model="form.dateType" placeholder="请选择时间" clearable>
         <el-option
           v-for="item in ['周','月度','季度','年度','时间段','时间对比']"
           :key="item"
@@ -31,7 +31,7 @@
         type="week"
         format="yyyy 第 WW 周"
         @change="dateOfWeekChange"
-        style="width:140px"
+        style="width:160px"
       ></el-date-picker>
       <el-date-picker
         v-if="form.dateType=='月度'"
@@ -62,7 +62,7 @@
         :key="new Date().getTime()"
         v-model="date"
         type="daterange"
-        style="width:210px"
+        style="width:230px"
         unlink-panels
         :picker-options="{onPick:dateOfRangeChange}"
         value-format="yyyy-MM-dd"
@@ -72,32 +72,32 @@
         v-model="date"
         placeholder="请选择两个时间"
         type="dates"
-        style="width:210px"
+        style="width:230px"
         @change="dateOfCompareChange"
         value-format="yyyy-MM-dd"
       ></el-date-picker>
     </el-form-item>
     <el-form-item label="数据来源:">
       <dict-select
-        :value="form.dataSource"
+        :value="form.infoSource"
         type="data_source"
-        @change="dictChange($event,'dataSource')"
+        @change="dictChange($event,'infoSource')"
         style="width:120px"
       ></dict-select>
     </el-form-item>
     <el-form-item label="产品:">
       <dict-select
-        :value="form.product"
+        :value="form.productValue"
         type="product"
-        @change="dictChange($event,'product')"
+        @change="dictChange($event,'productValue')"
         style="width:140px"
       ></dict-select>
     </el-form-item>
     <el-form-item label="系统:">
       <dict-select
-        :value="form.system"
+        :value="form.systemValue"
         type="system"
-        @change="dictChange($event,'system')"
+        @change="dictChange($event,'systemValue')"
         style="width:120px"
       ></dict-select>
     </el-form-item>
@@ -193,7 +193,7 @@
       ></dict-select>
     </el-form-item>
     <el-form-item label>
-      <el-button type="primary" icon="el-icon-search">搜索</el-button>
+      <el-button type="primary" icon="el-icon-search" @click="toQuery">搜索</el-button>
       <el-button type="primary" icon="el-icon-refresh">重置</el-button>
     </el-form-item>
     <el-form-item label>
@@ -248,18 +248,20 @@ export default {
     }
     return {
       form: {
-        dept: [],
-        dateType: "",
-        dateValue: "",
-        dataSource: "",
-        product: "",
-        system: "",
-        sourceOfRisk: "",
-        riskLevel1: "",
-        riskLevel2: "",
-        risk: "",
-        isKeyRisk: "",
-        incentive: "",
+        responsibleUnitList: [], //责任单位
+        dateType: "", //日期类型
+        dateValue1: "", //日期值1
+        dateValue2: "", //日期值2
+        infoSource: "", //数据来源
+        productValue: "", //产品
+        systemValue: "", //系统
+        sourceOfRisk: "", //危险源
+        riskLevel1: "", //危险源层级1
+        riskLevel2: "", //危险源层级2
+        risk: "", //风险
+        isKeyRisk: "", //关键风险
+        incentive: "", //诱因
+        riskCalculate: "", //风险计算
       },
       date: "",
       cascaderOption: _data,
@@ -292,19 +294,26 @@ export default {
     });
   },
   watch: {
-    form: {
-      deep: true, //  对象深度验证
-      handler(val) {
-        console.log(val);
-      },
-    },
+    // form: {
+    //   deep: true, //  对象深度验证
+    //   handler(val) {
+    //     console.log(val);
+    //   },
+    // },
     "form.dateType"(val) {
-      this.form.dateValue = "";
+      this.form.dateValue1 = "";
+      this.form.dateValue2 = "";
       this.date = "";
       this.seasonValue = "";
     },
     seasonValue(val) {
-      this.form.dateValue = val.join("-");
+      if (val.length > 0) {
+        this.form.dateValue1 = val[0];
+        this.form.dateValue2 = val[1];
+      } else {
+        this.form.dateValue1 = "";
+        this.form.dateValue2 = "";
+      }
     },
     date(val) {
       if (this.form.dateType == "时间对比") {
@@ -345,37 +354,48 @@ export default {
     formatShortDate,
     dateOfWeekChange(date) {
       let str = formatDateToWeek(date);
-      this.form.dateValue = str || "";
+      if (str) {
+        this.form.dateValue1 = str.split("-")[0];
+        this.form.dateValue2 = str.split("-")[1];
+      } else {
+        this.form.dateValue1 = "";
+        this.form.dateValue2 = "";
+      }
     },
     dateOfMonthChange(date) {
       if (date != null) {
-        this.form.dateValue = date.getFullYear() + "-" + (date.getMonth() + 1);
+        this.form.dateValue1 = date.getFullYear();
+        this.form.dateValue2 = date.getMonth() + 1;
       } else {
-        this.form.dateValue = "";
+        this.form.dateValue1 = "";
+        this.form.dateValue2 = "";
       }
     },
     dateOfYearChange(date) {
       if (date != null) {
-        this.form.dateValue = date.getFullYear();
+        this.form.dateValue1 = date.getFullYear();
+        this.form.dateValue2 = "";
       } else {
-        this.form.dateValue = "";
+        this.form.dateValue1 = "";
+        this.form.dateValue2 = "";
       }
     },
     dateOfRangeChange({ maxDate, minDate }) {
       if (maxDate && minDate) {
-        this.form.dateValue = [
-          formatShortDate(minDate),
-          formatShortDate(maxDate),
-        ].join(",");
+        this.form.dateValue1 = formatShortDate(minDate);
+        this.form.dateValue2 = formatShortDate(maxDate);
       } else {
-        this.form.dateValue = "";
+        this.form.dateValue1 = "";
+        this.form.dateValue2 = "";
       }
     },
     dateOfCompareChange(date) {
       if (date != null) {
-        this.form.dateValue = date.join(",");
+        this.form.dateValue1 = date[0];
+        this.form.dateValue2 = date[1];
       } else {
-        this.form.dateValue = "";
+        this.form.dateValue1 = "";
+        this.form.dateValue2 = "";
       }
     },
     dictChange(val, key) {
@@ -394,9 +414,11 @@ export default {
       return obj;
     },
     deptChange(val) {
-      console.log(val);
-      this.form.dept = val;
+      this.form.responsibleUnitList = val;
     },
+    toQuery(){
+      this.$emit("toQuery",this.form)
+    }
   },
 };
 </script>

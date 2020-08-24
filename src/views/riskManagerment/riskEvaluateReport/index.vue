@@ -2,12 +2,12 @@
   <div class="app-container">
     <div class="head-container">
       <h3>数据筛选</h3>
-      <search @createCharts="createCharts" />
+      <search @createCharts="createCharts" @toQuery="toQuery" />
     </div>
     <h3 class="mt-01">数据分析</h3>
     <el-tabs>
       <el-tab-pane label="报表">
-        <reporttb />
+        <reporttb :form="queryForm" />
       </el-tab-pane>
       <el-tab-pane label="图表" lazy>
         <charttb />
@@ -28,17 +28,17 @@ import monthreport from "./components/monthReport";
 export default {
   components: { search, reporttb, charttb, monthreport },
   data() {
-    return {};
+    return {
+      queryForm: {},
+    };
   },
   mounted() {},
 
   methods: {
-    toQuery(name) {
-      if (!name) {
-        this.page = 1;
-        this.init();
-        return;
-      }
+    toQuery(form) {
+      // 防止重复按搜索键没有响应
+      let _f = Object.assign({}, form);
+      this.queryForm = _f;
     },
     createCharts(command) {
       this.$message(command);
