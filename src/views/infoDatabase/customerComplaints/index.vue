@@ -73,7 +73,7 @@ export default {
   methods: {
     beforeInit() {
       this.url = `/infoDatabase_mgr/infoDatabase_mgr/query/pageList/${this.page}/${this.size}`;
-      this.params = { type: 3 };
+      this.params = { type: 8 };
       return true;
     },
     toQuery(name) {

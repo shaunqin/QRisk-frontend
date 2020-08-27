@@ -6,7 +6,7 @@
           <el-form-item label="评估类别">
             <el-select v-model="form.aa" placeholder="请选择评估类别">
               <el-option
-                v-for="item in ['手册程序','变革管理','维修能力','航站审定','其他评估']"
+                v-for="item in ['流程/标准','变革管理','维修能力','航站审定','其他评估']"
                 :key="item"
                 :label="item"
                 :value="item"
@@ -16,7 +16,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-card header="系统和工作分析记录表" v-if="form.aa=='手册程序'||form.aa=='变革管理'">
+    <el-card header="系统和工作分析记录表" v-if="form.aa=='流程/标准'||form.aa=='变革管理'">
       <el-form ref="form2" :model="form" size="small" label-width="auto">
         <el-row :gutter="8">
           <el-col :span="8">

@@ -9,7 +9,7 @@
       style="width: 100%;"
     >
       <!-- <el-table-column type="index" width="50" /> -->
-      <el-table-column prop="no" label="编号" width="110" />
+      <el-table-column prop="no" label="编号" width="120" />
       <el-table-column label="发生日期" width="100">
         <template slot-scope="{row}">{{formatShortDate(row.happenDate)}}</template>
       </el-table-column>
@@ -63,7 +63,7 @@ export default {
     formatShortDate,
     beforeInit() {
       this.url = `/dangerManagerment/riskAssessment/query/pageList/${this.page}/${this.size}`;
-      this.params = this.form;
+      this.params =this.form;
       return true;
     },
   },

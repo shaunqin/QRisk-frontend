@@ -4,34 +4,22 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
-    :title="isAdd ? '新增通知' : '编辑通知'"
+    :title="isAdd ? '新增计算公式' : '编辑计算公式'"
     custom-class="big_dialog"
   >
     <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
-      <el-row gutter="16">
-        <el-col :span="12">
-          <el-form-item label="标题" prop="aa">
-            <el-input v-model="form.aa" placeholder=""></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="截止日期">
-            <el-date-picker v-model="form.cc" placeholder></el-date-picker>
-          </el-form-item>
-        </el-col>
+      <el-row>
         <el-col :span="24">
-          <el-form-item label="通知内容">
-            <el-input v-model="form.bb" style="width: 100%;" type="textarea" rows="4" />
+          <el-form-item label="公式说明">
+            <el-input type="textarea" :rows="10" readonly :value="designDesc" style="width: 100%;" />
+          </el-form-item>
+          <el-form-item label="公式" prop="bb">
+            <el-input type="textarea" :rows="4" v-model="form.bb" style="width: 100%;" />
           </el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-form-item label="下发部门">
-            <department-tree></department-tree>
-          </el-form-item>
-        </el-col>
+         
       </el-row>
     </el-form>
-     <step1  :form="form" :formRules="formRules"></step1>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
@@ -41,11 +29,8 @@
 
 <script>
 import { add, modify } from "@/api/emplotee.js";
-import departmentTree from "@/components/Department";
-import step1 from "./components/step1";
 
 export default {
-  components: { departmentTree,step1 },
   data() {
     return {
       loading: false,
@@ -56,16 +41,21 @@ export default {
         cc: "",
         dd: "",
         ee: "",
-        table: [],
-        table2: [],
-        report: {},
       },
       roleSelect: [],
       formRules: {
-        aa: [{ required: true, message: "请填写名称", trigger: "blur" }],
-        bb: [{ required: true, message: "请填写名称", trigger: "blur" }]
+        bb: [{ required: true, message: "请填写公式", trigger: "blur" }]
       },
-      entArr: []
+      entArr: [],
+      designDesc:`1.风险发生的可能性（y）=危险源关联的次数（a）×条件概率（x）;
+2.条件概率（x）=危险源关联事件次数/危险源关联安全信息次数;
+3.举例：计算“未按工作步骤逐项工作” 的可能性:
+  ①	安全信息关联了“未按工作步骤逐项工作”危险源 10 次，a=10
+  ②	选择时间段 2015-2018，根据历史数据，“危险源关联事件次数”6 次，“危险源关联安全信息次数”150 次，x=6/150=0.04
+  ③	风险发生的可能性 y=a×x=10×0.04=0.4 次/月
+  ④	风险发生的可能性对应可能性等级为 3，分值为 6
+4.风险发生的严重性采用赋值法，风险清单中的每个风险对应一个严重性等级和一个严重性量化分值;
+5.风险值=严重性 X 可能性.`
     };
   },
   props: {
@@ -153,7 +143,7 @@ export default {
         bb: "",
         cc: "",
         dd: "",
-        ee: ""
+        ee: "",
       };
       this.roleSelect = [];
     },

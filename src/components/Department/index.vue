@@ -7,6 +7,7 @@
     :disabled="disabled"
     :multiple="multiple"
     :limit="3"
+    placeholder="请选择..."
   />
 </template>
 

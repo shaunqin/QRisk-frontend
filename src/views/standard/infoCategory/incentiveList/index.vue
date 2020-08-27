@@ -10,8 +10,8 @@
       :span-method="objectSpanMethod"
       border
     >
-      <el-table-column prop="cate" label="类别" width="200" />
-      <el-table-column prop="diskName" label="诱因" />
+      <el-table-column prop="cateName" label="类别" width="200" />
+      <el-table-column prop="name" label="诱因" />
     </el-table>
     <!--分页组件-->
     <!-- <el-pagination
@@ -48,7 +48,7 @@ export default {
           this.spanArr.push(1);
           this.position = 0;
         } else {
-          if (val[index].cate === val[index - 1].cate) {
+          if (val[index].cateName === val[index - 1].cateName) {
             this.spanArr[this.position] += 1;
             this.spanArr.push(0);
           } else {

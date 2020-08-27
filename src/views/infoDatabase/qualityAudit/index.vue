@@ -71,7 +71,7 @@ export default {
   methods: {
     beforeInit() {
       this.url = `/info_mgr/supervise_mgr/query/pageList/${this.page}/${this.size}`;
-      this.params.dataType = "1";
+      this.params.dataType = "7";
       return true;
     },
     toQuery(name) {
