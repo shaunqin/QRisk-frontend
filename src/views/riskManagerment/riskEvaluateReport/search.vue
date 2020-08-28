@@ -1,231 +1,228 @@
 <template>
-  <el-form
-    :model="form"
-    :inline="true"
-    label-width="80"
-    class="query-form"
-    size="medium"
-    label-position="left"
-    ref="form"
-  >
-    <el-form-item label="责任单位">
-      <department
-        :value="responsibleUnitList"
-        :multiple="true"
-        @change="deptChange"
-        style="width:500px;line-height: 18px;"
-      />
-    </el-form-item>
-    <el-form-item label="时间:">
-      <el-select style="width:120px" v-model="form.dateType" placeholder="请选择时间" clearable>
-        <el-option
-          v-for="item in dataTypeArray"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      <el-date-picker
-        v-if="form.dateType=='1'"
-        v-model="date"
-        placeholder="请选择周"
-        type="week"
-        format="yyyy 第 WW 周"
-        @change="dateOfWeekChange"
-        style="width:160px"
-      ></el-date-picker>
-      <el-date-picker
-        v-if="form.dateType=='2'"
-        v-model="date"
-        placeholder="请选择月度"
-        type="month"
-        @change="dateOfMonthChange"
-        style="width:140px"
-      ></el-date-picker>
-      <el-cascader
-        v-if="form.dateType=='3'"
-        :options="cascaderOption"
-        v-model="seasonValue"
-        :props="{ expandTrigger: 'hover' }"
-        style="width:200px"
-        clearable
-      ></el-cascader>
-      <el-date-picker
-        v-if="form.dateType=='4'"
-        v-model="date"
-        placeholder="请选择年度"
-        type="year"
-        @change="dateOfYearChange"
-        style="width:140px"
-      ></el-date-picker>
-      <el-date-picker
-        v-if="form.dateType=='5'"
-        :key="createUniqueString()"
-        v-model="date"
-        type="daterange"
-        style="width:230px"
-        unlink-panels
-        :picker-options="{onPick:dateOfRangeChange}"
-        value-format="yyyy-MM-dd"
-      ></el-date-picker>
-      <el-date-picker
-        v-if="form.dateType=='5'"
-        :key="createUniqueString()"
-        v-model="date2"
-        type="daterange"
-        style="width:230px"
-        unlink-panels
-        :picker-options="{onPick:dateOfRangeChange2}"
-        value-format="yyyy-MM-dd"
-      ></el-date-picker>
-      <el-date-picker
-        v-if="form.dateType=='6'"
-        v-model="date"
-        placeholder="请选择两个时间"
-        type="dates"
-        style="width:230px"
-        @change="dateOfCompareChange"
-        value-format="yyyy-MM-dd"
-      ></el-date-picker>
-    </el-form-item>
-    <el-form-item label="数据来源:">
-      <dict-select
-        :value="form.infoSource"
-        type="data_source"
-        @change="dictChange($event,'infoSource')"
-        style="width:150px"
-        placeholder="请选择数据来源"
-      ></dict-select>
-    </el-form-item>
-    <el-form-item label="产品:">
-      <dict-select
-        :value="form.productValue"
-        type="product"
-        @change="dictChange($event,'productValue')"
-        style="width:140px"
-        placeholder="请选择产品"
-      ></dict-select>
-    </el-form-item>
-    <el-form-item label="系统:">
-      <dict-select
-        :value="form.systemValue"
-        type="system"
-        @change="dictChange($event,'systemValue')"
-        style="width:140px"
-        placeholder="请选择系统"
-      ></dict-select>
-    </el-form-item>
-    <el-form-item label="危险源层级一">
-      <el-select
-        clearable
-        v-model="form.riskLevel1"
-        placeholder="请选择层级一"
-        style="width: 130px"
-        @change="form.riskLevel2 = form.sourceOfRisk =''"
-      >
-        <el-option
-          v-for="item in riskLevel1List"
-          :key="item.key"
-          :label="item.name"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-    </el-form-item>
-    <el-form-item label="危险源层级二">
-      <el-select
-        clearable
-        v-model="form.riskLevel2"
-        placeholder="请选择层级二"
-        style="width: 130px;"
-        @change="form.sourceOfRisk = ''"
-      >
-        <el-option
-          v-for="item in riskLevel2List"
-          :key="item.key"
-          :label="item.name"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-    </el-form-item>
-    <el-form-item label="危险源:">
-      <el-select clearable v-model="form.sourceOfRisk" placeholder="请选择危险源" style="width: 130px;">
-        <el-option
-          v-for="item in hazardList"
-          :key="item.diskId"
-          :label="item.diskName"
-          :value="item.diskNo"
-        ></el-option>
-      </el-select>
-    </el-form-item>
-    <el-form-item label="风险:">
-      <el-select
-        :disabled="riskDisabled"
-        filterable
-        style="width:160px"
-        v-model="form.risk"
-        placeholder="请选择风险"
-      >
-        <el-option
-          v-for="item in riskList"
-          :key="item.riskNo"
-          :label="item.riskName"
-          :value="item.riskNo"
-        ></el-option>
-      </el-select>
-      <el-checkbox v-model="form.isKeyRisk" border true-label="1" false-label="0">是否关键风险</el-checkbox>
-    </el-form-item>
-    <el-form-item label="风险计算:">
-      <el-select style="width:120px" v-model="form.js1" placeholder="风险等级" clearable>
-        <el-option
-          v-for="item in ['#fff','#ffba00','#74bcff','#13ce66','#e64242']"
-          :key="item"
-          :value="item"
+  <div>
+    <el-form
+      :model="form"
+      :inline="true"
+      label-width="80"
+      class="query-form"
+      size="medium"
+      label-position="left"
+      ref="form"
+    >
+      <el-form-item label="责任单位">
+        <department
+          :value="responsibleUnitList"
+          :multiple="true"
+          @change="deptChange"
+          style="width:500px;line-height: 18px;"
+        />
+      </el-form-item>
+      <el-form-item label="时间:">
+        <el-select style="width:120px" v-model="form.dateType" placeholder="请选择时间" clearable>
+          <el-option
+            v-for="item in dataTypeArray"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+        <el-date-picker
+          v-if="form.dateType=='1'"
+          v-model="date"
+          placeholder="请选择周"
+          type="week"
+          format="yyyy 第 WW 周"
+          @change="dateOfWeekChange"
+          style="width:160px"
+        ></el-date-picker>
+        <el-date-picker
+          v-if="form.dateType=='2'"
+          v-model="date"
+          placeholder="请选择月度"
+          type="month"
+          @change="dateOfMonthChange"
+          style="width:140px"
+        ></el-date-picker>
+        <el-cascader
+          v-if="form.dateType=='3'"
+          :options="cascaderOption"
+          v-model="seasonValue"
+          :props="{ expandTrigger: 'hover' }"
+          style="width:200px"
+          clearable
+        ></el-cascader>
+        <el-date-picker
+          v-if="form.dateType=='4'"
+          v-model="date"
+          placeholder="请选择年度"
+          type="year"
+          @change="dateOfYearChange"
+          style="width:140px"
+        ></el-date-picker>
+        <el-date-picker
+          v-if="form.dateType=='5'"
+          :key="createUniqueString()"
+          v-model="date"
+          type="daterange"
+          style="width:230px"
+          unlink-panels
+          :picker-options="{onPick:dateOfRangeChange}"
+          value-format="yyyy-MM-dd"
+        ></el-date-picker>
+        <el-date-picker
+          v-if="form.dateType=='5'"
+          :key="createUniqueString()"
+          v-model="date2"
+          type="daterange"
+          style="width:230px"
+          unlink-panels
+          :picker-options="{onPick:dateOfRangeChange2}"
+          value-format="yyyy-MM-dd"
+        ></el-date-picker>
+        <el-date-picker
+          v-if="form.dateType=='6'"
+          v-model="date"
+          placeholder="请选择两个时间"
+          type="dates"
+          style="width:230px"
+          @change="dateOfCompareChange"
+          value-format="yyyy-MM-dd"
+        ></el-date-picker>
+      </el-form-item>
+      <el-form-item label="数据来源:">
+        <dict-select
+          :value="form.infoSource"
+          type="data_source"
+          @change="dictChange($event,'infoSource')"
+          style="width:150px"
+          placeholder="请选择数据来源"
+        ></dict-select>
+      </el-form-item>
+      <el-form-item label="产品:">
+        <dict-select
+          :value="form.productValue"
+          type="product"
+          @change="dictChange($event,'productValue')"
+          style="width:140px"
+          placeholder="请选择产品"
+        ></dict-select>
+      </el-form-item>
+      <el-form-item label="系统:">
+        <dict-select
+          :value="form.systemValue"
+          type="system"
+          @change="dictChange($event,'systemValue')"
+          style="width:140px"
+          placeholder="请选择系统"
+        ></dict-select>
+      </el-form-item>
+      <el-form-item label="危险源层级一">
+        <el-select
+          clearable
+          v-model="form.riskLevel1"
+          placeholder="请选择层级一"
+          style="width: 130px"
+          @change="form.riskLevel2 = form.sourceOfRisk =''"
         >
-          <span
-            :style="'background-color:'+item"
-            style="display: block;width: 80px;height: 25px;border: 1px solid #ccc;"
-          ></span>
-        </el-option>
-      </el-select>
-      <el-input v-model="form.js2" placeholder="风险值左区间" style="width:80px"></el-input>
-      <el-input v-model="form.js2_2" placeholder="风险值右区间" style="width:80px"></el-input>
-      <el-radio-group v-model="form.js3">
-        <el-radio-button label="asc">asc</el-radio-button>
-        <el-radio-button label="desc">desc</el-radio-button>
-      </el-radio-group>
-      <el-input v-model="form.js4" placeholder="危险源风险值左区间" style="width:80px"></el-input>
-      <el-input v-model="form.js4_2" placeholder="危险源风险值右区间" style="width:80px"></el-input>
-      <el-radio-group v-model="form.js5">
-        <el-radio-button label="asc">asc</el-radio-button>
-        <el-radio-button label="desc">desc</el-radio-button>
-      </el-radio-group>
-    </el-form-item>
-    <el-form-item label="诱因:">
-      <dict-select
-        :value="form.incentive"
-        type="incentive_category"
-        @change="dictChange($event,'incentive')"
-        style="width:120px"
-        placeholder="请选择诱因"
-      ></dict-select>
-    </el-form-item>
-    <el-form-item label>
-      <el-button type="primary" icon="el-icon-search" @click="toQuery">搜索</el-button>
-      <el-button type="primary" icon="el-icon-refresh" @click="reset">重置</el-button>
-    </el-form-item>
-    <el-form-item label>
-      <el-button type="success" icon="el-icon-menu">生成报表</el-button>
-      <el-dropdown @command="handlerCommand">
-        <el-button type="success">生成图表</el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="line" icon="el-icon-s-marketing">折线图</el-dropdown-item>
-          <el-dropdown-item command="bar" icon="el-icon-s-data">柱状图</el-dropdown-item>
-          <el-dropdown-item command="pie" icon="el-icon-s-help">扇图</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-      <el-button type="success" icon="el-icon-tickets">月度风险评价报告</el-button>
-    </el-form-item>
-  </el-form>
+          <el-option
+            v-for="item in riskLevel1List"
+            :key="item.key"
+            :label="item.name"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="危险源层级二">
+        <el-select
+          clearable
+          v-model="form.riskLevel2"
+          placeholder="请选择层级二"
+          style="width: 130px;"
+          @change="form.sourceOfRisk = ''"
+        >
+          <el-option
+            v-for="item in riskLevel2List"
+            :key="item.key"
+            :label="item.name"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="危险源:">
+        <el-select clearable v-model="form.sourceOfRisk" placeholder="请选择危险源" style="width: 130px;">
+          <el-option
+            v-for="item in hazardList"
+            :key="item.diskId"
+            :label="item.diskName"
+            :value="item.diskNo"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="风险:">
+        <el-select
+          :disabled="riskDisabled"
+          filterable
+          style="width:160px"
+          v-model="form.risk"
+          placeholder="请选择风险"
+        >
+          <el-option
+            v-for="item in riskList"
+            :key="item.riskNo"
+            :label="item.riskName"
+            :value="item.riskNo"
+          ></el-option>
+        </el-select>
+        <el-checkbox v-model="form.isKeyRisk" border true-label="1" false-label="0">是否关键风险</el-checkbox>
+      </el-form-item>
+      <el-form-item label="风险计算:">
+        <el-select style="width:120px" v-model="form.js1" placeholder="风险等级" clearable>
+          <el-option
+            v-for="item in ['#fff','#ffba00','#74bcff','#13ce66','#e64242']"
+            :key="item"
+            :value="item"
+          >
+            <span
+              :style="'background-color:'+item"
+              style="display: block;width: 80px;height: 25px;border: 1px solid #ccc;"
+            ></span>
+          </el-option>
+        </el-select>
+        <el-input v-model="form.js2" placeholder="风险值左区间" style="width:80px"></el-input>
+        <el-input v-model="form.js2_2" placeholder="风险值右区间" style="width:80px"></el-input>
+        <el-radio-group v-model="form.js3">
+          <el-radio-button label="asc">asc</el-radio-button>
+          <el-radio-button label="desc">desc</el-radio-button>
+        </el-radio-group>
+        <el-input v-model="form.js4" placeholder="危险源风险值左区间" style="width:80px"></el-input>
+        <el-input v-model="form.js4_2" placeholder="危险源风险值右区间" style="width:80px"></el-input>
+        <el-radio-group v-model="form.js5">
+          <el-radio-button label="asc">asc</el-radio-button>
+          <el-radio-button label="desc">desc</el-radio-button>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="诱因:">
+        <dict-select
+          :value="form.incentive"
+          type="incentive_category"
+          @change="dictChange($event,'incentive')"
+          style="width:120px"
+          placeholder="请选择诱因"
+        ></dict-select>
+      </el-form-item>
+      <el-form-item label>
+        <el-button type="primary" icon="el-icon-search" @click="toQuery">搜索</el-button>
+        <el-button type="primary" icon="el-icon-refresh" @click="reset">重置</el-button>
+      </el-form-item>
+      <el-form-item label>
+        <el-button type="success" icon="el-icon-menu">生成报表</el-button>
+        <el-button type="success" icon="el-icon-s-data" @click="handlerChart">生成图表</el-button>
+        <el-button type="success" icon="el-icon-tickets">月度风险评价报告</el-button>
+      </el-form-item>
+    </el-form>
+    <!-- 生成图表 -->
+    <chartpup ref="chartpup" @change="createCharts"></chartpup>
+  </div>
 </template>
 
 <script>
@@ -235,8 +232,10 @@ import dictSelect from "@/components/common/dictSelect";
 import { queryRiskList, queryHazardList } from "@/api/standard";
 import { queryDictByName } from "@/api/dict";
 import department from "@/components/Department";
+import chartpup from "./components/chartpup";
+import { eventBus } from "@/utils/eventBus";
 export default {
-  components: { dictSelect, department },
+  components: { dictSelect, department, chartpup },
   data() {
     let _data = [];
     let year = new Date().getFullYear();
@@ -322,12 +321,6 @@ export default {
     });
   },
   watch: {
-    // form: {
-    //   deep: true, //  对象深度验证
-    //   handler(val) {
-    //     console.log(val);
-    //   },
-    // },
     "form.dateType"(val) {
       this.form.dateValue1 = "";
       this.form.dateValue2 = "";
@@ -444,9 +437,6 @@ export default {
     dictChange(val, key) {
       this.form[key] = val;
     },
-    handlerCommand(command) {
-      this.$emit("createCharts", command);
-    },
     getHazardList(data) {
       let obj = { label: data.name, value: data.externMap.dicCode };
       if (data.children && data.children.length > 0) {
@@ -480,6 +470,15 @@ export default {
         incentive: "", //诱因
         riskCalculate: "", //风险计算
       };
+    },
+    handlerChart() {
+      let _this = this.$refs.chartpup;
+      _this.dialog = true;
+      // eventBus.$emit("tab-change", "2");
+    },
+    createCharts(form) {
+      let _form = { ...this.form, ...form };
+      this.$emit("create-charts", _form);
     },
   },
 };

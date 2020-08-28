@@ -22,8 +22,8 @@
       <el-table-column prop="riskLevelText1" label="危险源层级一" width="110" />
       <el-table-column prop="riskLevelText2" label="危险源层级二" width="110" />
       <el-table-column prop="sourceOfRiskText" label="危险源" width="150" show-overflow-tooltip />
-      <el-table-column prop="riskText" label="风险" width="150" show-overflow-tooltip/>
-      <el-table-column prop="incentiveText" label="诱因" width="150" show-overflow-tooltip/>
+      <el-table-column prop="riskText" label="风险" width="150" show-overflow-tooltip />
+      <el-table-column prop="incentiveText" label="诱因" width="150" show-overflow-tooltip />
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -40,6 +40,7 @@
 <script>
 import initData from "@/mixins/initData";
 import { formatShortDate } from "@/utils/datetime";
+import { eventBus } from "@/utils/eventBus";
 export default {
   mixins: [initData],
   props: {
@@ -53,6 +54,7 @@ export default {
       deep: true,
       handler(val) {
         this.init();
+        eventBus.$emit("tab-change", "1");
       },
     },
   },
@@ -63,7 +65,7 @@ export default {
     formatShortDate,
     beforeInit() {
       this.url = `/dangerManagerment/riskAssessment/query/pageList/${this.page}/${this.size}`;
-      this.params =this.form;
+      this.params = this.form;
       return true;
     },
   },

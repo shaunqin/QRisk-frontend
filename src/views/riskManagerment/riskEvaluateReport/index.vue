@@ -2,17 +2,17 @@
   <div class="app-container">
     <div class="head-container">
       <h3>数据筛选</h3>
-      <search @createCharts="createCharts" @toQuery="toQuery" />
+      <search ref="search" @create-charts="createCharts" @toQuery="toQuery" />
     </div>
     <h3 class="mt-01">数据分析</h3>
-    <el-tabs>
-      <el-tab-pane label="报表">
-        <reporttb :form="queryForm" />
+    <el-tabs :value="tabIndex">
+      <el-tab-pane label="报表" name="1">
+        <reporttb :form="queryForm1" />
       </el-tab-pane>
-      <el-tab-pane label="图表" lazy>
-        <charttb />
+      <el-tab-pane label="图表" name="2">
+        <charttb :form="queryForm2" />
       </el-tab-pane>
-      <el-tab-pane label="月度风险评价报告" lazy>
+      <el-tab-pane label="月度风险评价报告" lazy name="3">
         <monthreport />
       </el-tab-pane>
     </el-tabs>
@@ -25,23 +25,31 @@ import search from "./search";
 import reporttb from "./components/reportTb";
 import charttb from "./components/chartTb";
 import monthreport from "./components/monthReport";
+import { eventBus } from "@/utils/eventBus";
 export default {
   components: { search, reporttb, charttb, monthreport },
   data() {
     return {
-      queryForm: {},
+      tabIndex: "1",
+      queryForm1: {},
+      queryForm2: {},
     };
   },
-  mounted() {},
+  mounted() {
+    eventBus.$on("tab-change", (name) => {
+      this.tabIndex = name;
+    });
+  },
 
   methods: {
     toQuery(form) {
       // 防止重复按搜索键没有响应
       let _f = Object.assign({}, form);
-      this.queryForm = _f;
+      this.queryForm1 = _f;
     },
-    createCharts(command) {
-      this.$message(command);
+    createCharts(form) {
+      let _f = Object.assign({}, form);
+      this.queryForm2 = _f;
     },
   },
 };

@@ -9,3 +9,11 @@ export function getRiskAssessmentChartData(number) {
     })
 }
 
+// 风险评估：生成图表
+export function quertChartOfType(params) {
+    return request({
+        url: `/dangerManagerment/riskAssessment/query/chart/${params.x}`,
+        method: 'get',
+        params
+    })
+}
