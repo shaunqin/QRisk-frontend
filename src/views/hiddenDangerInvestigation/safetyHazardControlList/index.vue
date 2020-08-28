@@ -17,7 +17,20 @@
         icon="el-icon-search"
         @click="toQuery(query)"
       >搜索</el-button>
-      <el-button class="filter-item" size="mini" type="success" icon="el-icon-plus" @click="add">新增</el-button>
+      <el-button
+        class="filter-item"
+        size="mini"
+        type="success"
+        icon="el-icon-plus"
+        @click="add"
+      >新建任务</el-button>
+      <el-button
+        class="filter-item"
+        size="mini"
+        type="success"
+        icon="el-icon-plus"
+        @click="addSingle"
+      >新建单次任务</el-button>
     </div>
     <!--表格渲染-->
     <el-table
@@ -39,7 +52,7 @@
       <!-- <el-table-column prop="ff" label="风险等级" />
       <el-table-column prop="gg" label="发现时间" />
       <el-table-column prop="hh" label="来源" />
-      <el-table-column prop="ii" label="整改进展" /> -->
+      <el-table-column prop="ii" label="整改进展" />-->
       <el-table-column label="操作" width="230px" align="center" fixed="right">
         <template slot-scope="scope">
           <el-button-group>
@@ -62,6 +75,8 @@
     <hairdown-dialog ref="hairdownDialog"></hairdown-dialog>
     <!-- 审批 -->
     <approval-dialog ref="approvalDialog"></approval-dialog>
+    <!-- 单次任务 -->
+    <singleTask ref="singleTask" />
   </div>
 </template>
 
@@ -71,14 +86,15 @@ import eform from "./form";
 import { safetyHazardControlList } from "@/dataSource";
 import hairdownDialog from "./components/hairdownDialog";
 import approvalDialog from "./components/approvalDialog";
+import singleTask from "./components/singleTask";
 export default {
-  components: { eform ,hairdownDialog,approvalDialog},
+  components: { eform, hairdownDialog, approvalDialog, singleTask },
   mixins: [initData],
   data() {
     return {
       isSuperAdmin: false,
       userInfo: {},
-      selections: []
+      selections: [],
     };
   },
   mounted() {
@@ -94,13 +110,16 @@ export default {
       }
     },
     // 选择切换
-    selectionChange: function(selections) {
+    selectionChange: function (selections) {
       this.selections = selections;
       this.$emit("selectionChange", { selections: selections });
     },
     add() {
       this.isAdd = true;
       this.$refs.form.dialog = true;
+    },
+    addSingle() {
+      this.$refs.singleTask.dialog = true;
     },
     edit(row) {
       this.isAdd = false;
@@ -113,27 +132,27 @@ export default {
         .then(() => {
           this.$message({
             type: "success",
-            message: "删除成功!"
+            message: "删除成功!",
           });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
           });
         });
     },
-    hairdown(row){
+    hairdown(row) {
       let _this = this.$refs.hairdownDialog;
-       _this.form = Object.assign({}, row);
+      _this.form = Object.assign({}, row);
       _this.dialog = true;
     },
-    approval(row){
-       let _this = this.$refs.approvalDialog;
-        _this.form = Object.assign({}, row);
+    approval(row) {
+      let _this = this.$refs.approvalDialog;
+      _this.form = Object.assign({}, row);
       _this.dialog = true;
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -33,49 +33,49 @@ import Layout from '@/layout'
  * all roles can be accessed
  */
 export const constantRoutes = [{
-    path: '/redirect',
-    component: Layout,
-    hidden: true,
-    children: [{
-      path: '/redirect/:path*',
-      component: () => import('@/views/redirect/index')
-    }]
-  },
-  {
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
-  },
-  {
-    path: '/auth-redirect',
-    component: () => import('@/views/login/auth-redirect'),
-    hidden: true
-  },
-  {
-    path: '/404',
-    component: () => import('@/views/error-page/404'),
-    hidden: true
-  },
-  {
-    path: '/401',
-    component: () => import('@/views/error-page/401'),
-    hidden: true
-  },
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [{
-      path: 'dashboard',
-      component: () => import('@/views/dashboard/index'),
-      name: 'Dashboard',
-      meta: {
-        title: 'dashboard',
-        icon: 'dashboard',
-        affix: true
-      }
-    }]
-  }
+  path: '/redirect',
+  component: Layout,
+  hidden: true,
+  children: [{
+    path: '/redirect/:path*',
+    component: () => import('@/views/redirect/index')
+  }]
+},
+{
+  path: '/login',
+  component: () => import('@/views/login/index'),
+  hidden: true
+},
+{
+  path: '/auth-redirect',
+  component: () => import('@/views/login/auth-redirect'),
+  hidden: true
+},
+{
+  path: '/404',
+  component: () => import('@/views/error-page/404'),
+  hidden: true
+},
+{
+  path: '/401',
+  component: () => import('@/views/error-page/401'),
+  hidden: true
+},
+{
+  path: '/',
+  component: Layout,
+  redirect: '/dashboard',
+  children: [{
+    path: 'dashboard',
+    component: () => import('@/views/dashboard/index'),
+    name: 'Dashboard',
+    meta: {
+      title: 'dashboard',
+      icon: 'dashboard',
+      affix: true
+    }
+  }]
+}
 ]
 
 /**
@@ -83,399 +83,400 @@ export const constantRoutes = [{
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [{
-    path: '/standard',
-    component: Layout,
+  path: '/standard',
+  component: Layout,
+  meta: {
+    title: 'standard',
+    icon: 'standard'
+  },
+  redirect: '/standard/infoCategory',
+  children: [{
+    path: 'infoCategory',
+    component: () => import('@/views/standard/infoCategory/index'),
     meta: {
-      title: 'standard',
-      icon: 'standard'
+      title: 'infoCategory',
+      icon: 'skill'
     },
-    redirect: '/standard/infoCategory',
-    children: [{
-        path: 'infoCategory',
-        component: () => import('@/views/standard/infoCategory/index'),
+    redirect: '/standard/infoCategory/productSystem',
+    hidden: true,
+    children: [
+      // {
+      //   path: 'dataSources',
+      //   component: () => import('@/views/standard/infoCategory/dataSources/index'),
+      //   name: 'dataSources',
+      //   meta: { title: 'dataSources' }
+      // },
+      // {
+      //   path: 'responsibleUnit',
+      //   component: () => import('@/views/standard/infoCategory/responsibleUnit/index'),
+      //   name: 'responsibleUnit',
+      //   meta: { title: 'responsibleUnit' }
+      // },
+      {
+        path: 'productSystem',
+        component: () => import('@/views/standard/infoCategory/productSystem/index'),
+        name: 'productSystem',
         meta: {
-          title: 'infoCategory',
-          icon: 'skill'
-        },
-        redirect: '/standard/infoCategory/productSystem',
-        hidden: true,
-        children: [
-          // {
-          //   path: 'dataSources',
-          //   component: () => import('@/views/standard/infoCategory/dataSources/index'),
-          //   name: 'dataSources',
-          //   meta: { title: 'dataSources' }
-          // },
-          // {
-          //   path: 'responsibleUnit',
-          //   component: () => import('@/views/standard/infoCategory/responsibleUnit/index'),
-          //   name: 'responsibleUnit',
-          //   meta: { title: 'responsibleUnit' }
-          // },
-          {
-            path: 'productSystem',
-            component: () => import('@/views/standard/infoCategory/productSystem/index'),
-            name: 'productSystem',
-            meta: {
-              title: 'productSystem'
-            }
-          },
-          {
-            path: 'hazardClassification',
-            component: () => import('@/views/standard/infoCategory/hazardClassification/index'),
-            name: 'hazardClassification',
-            meta: {
-              title: 'hazardClassification'
-            }
-          },
-          {
-            path: 'riskList',
-            component: () => import('@/views/standard/infoCategory/riskList/index'),
-            name: 'riskList',
-            meta: {
-              title: 'riskList'
-            }
-          },
-          {
-            path: 'incentiveList',
-            component: () => import('@/views/standard/infoCategory/incentiveList/index'),
-            name: 'incentiveList',
-            meta: {
-              title: 'incentiveList'
-            }
-          }
-        ]
+          title: 'productSystem'
+        }
       },
       {
-        path: 'riskEvaluateStandard',
-        component: () => import('@/views/standard/riskEvaluateStandard/index'),
+        path: 'hazardClassification',
+        component: () => import('@/views/standard/infoCategory/hazardClassification/index'),
+        name: 'hazardClassification',
         meta: {
-          title: 'riskEvaluateStandard',
-          icon: 'clipboard'
-        },
-        redirect: '/standard/riskEvaluateStandard/index',
-        hidden: true,
-        children: [{
-          path: 'index',
-          component: () => import('@/views/standard/riskEvaluateStandard/components/index'),
-          name: 'index',
-          meta: {
-            title: 'index'
-          }
-        }]
+          title: 'hazardClassification'
+        }
       },
       {
-        path: 'otherStandard',
-        component: () => import('@/views/standard/otherStandard/index'),
+        path: 'riskList',
+        component: () => import('@/views/standard/infoCategory/riskList/index'),
+        name: 'riskList',
         meta: {
-          title: 'otherStandard',
-          icon: 'clipboard'
-        },
-        redirect: '/standard/otherStandard/index',
-        hidden: true,
-        children: [{
-          path: 'index',
-          component: () => import('@/views/standard/otherStandard/components/index'),
-          name: 'otherStandardIndex',
-          meta: {
-            title: 'otherStandardIndex'
-          }
-        }]
+          title: 'riskList'
+        }
+      },
+      {
+        path: 'incentiveList',
+        component: () => import('@/views/standard/infoCategory/incentiveList/index'),
+        name: 'incentiveList',
+        meta: {
+          title: 'incentiveList'
+        }
       }
     ]
   },
   {
-    path: '/infoDatabase',
-    component: Layout,
+    path: 'riskEvaluateStandard',
+    component: () => import('@/views/standard/riskEvaluateStandard/index'),
     meta: {
-      title: 'infoDatabase',
-      icon: 'tree'
+      title: 'riskEvaluateStandard',
+      icon: 'clipboard'
     },
-    redirect: '/infoDatabase/p',
-    children: [{
-      path: 'p',
-      component: () => import('@/views/infoDatabase/index'),
-      meta: {
-        title: 'infoDatabase',
-        icon: 'infoDatabase'
-      },
-      hidden: true,
-      redirect: '/infoDatabase/p/supervision',
-      children: [{
-          path: 'supervision',
-          component: () => import('@/views/infoDatabase/supervision/index'),
-          name: 'supervision',
-          hidden: true,
-          meta: {
-            title: 'supervision'
-          }
-        },
-        {
-          path: 'safeSelfExamination',
-          component: () => import('@/views/infoDatabase/safeSelfExamination/index'),
-          name: 'safeSelfExamination',
-          hidden: true,
-          meta: {
-            title: 'safeSelfExamination'
-          }
-        },
-        {
-          path: 'qualityAudit',
-          component: () => import('@/views/infoDatabase/qualityAudit/index'),
-          name: 'qualityAudit',
-          hidden: true,
-          meta: {
-            title: 'qualityAudit'
-          }
-        },
-        {
-          path: 'externalInspection',
-          component: () => import('@/views/infoDatabase/externalInspection/index'),
-          name: 'externalInspection',
-          hidden: true,
-          meta: {
-            title: 'externalInspection'
-          }
-        },
-        {
-          path: 'safeInvestigation',
-          component: () => import('@/views/infoDatabase/safeInvestigation/index'),
-          name: 'safeInvestigation',
-          hidden: true,
-          meta: {
-            title: 'safeInvestigation'
-          }
-        },
-        {
-          path: 'qualityInvestigation',
-          component: () => import('@/views/infoDatabase/qualityInvestigation/index'),
-          name: 'qualityInvestigation',
-          hidden: true,
-          meta: {
-            title: 'qualityInvestigation'
-          }
-        },
-        {
-          path: 'customerComplaints',
-          component: () => import('@/views/infoDatabase/customerComplaints/index'),
-          name: 'customerComplaints',
-          hidden: true,
-          meta: {
-            title: 'customerComplaints'
-          }
-        },
-        // {
-        //   path: 'riskAssessment',
-        //   component: () => import('@/views/infoDatabase/riskAssessment/index'),
-        //   name: 'riskAssessment',
-        //   hidden: true,
-        //   meta: {
-        //     title: 'riskAssessment'
-        //   }
-        // }
-      ]
-    }]
-  },
-  {
-    path: '/riskManagerment',
-    component: Layout,
-    meta: {
-      title: 'riskManagerment',
-      icon: 'riskManagerment'
-    },
-    redirect: '/riskManagerment/page',
-    children: [{
-      path: 'page',
-      component: () => import('@/views/riskManagerment/index'),
-      meta: {
-        title: 'riskManagerment',
-        icon: 'dangerManagerment'
-      },
-      hidden: true,
-      redirect: '/riskManagerment/page/riskEvaluateReport',
-      children: [{
-          path: 'riskEvaluateReport',
-          component: () => import('@/views/riskManagerment/riskEvaluateReport/index'),
-          name: 'riskEvaluateReport',
-          hidden: true,
-          meta: {
-            title: 'riskEvaluateReport'
-          }
-        },
-        {
-          path: 'riskControlofMon',
-          component: () => import('@/views/riskManagerment/riskControlofMon/index'),
-          name: 'riskControlofMon',
-          hidden: true,
-          meta: {
-            title: 'riskControlofMon'
-          }
-        },
-        {
-          path: 'safetyRiskPrompt',
-          component: () => import('@/views/riskManagerment/safetyRiskPrompt/index'),
-          name: 'safetyRiskPrompt',
-          hidden: true,
-          meta: {
-            title: 'safetyRiskPrompt',
-            badge: true
-          }
-        },
-        {
-          path: 'riskAssessment',
-          component: () => import('@/views/riskManagerment/riskAssessment/index'),
-          name: 'riskAssessment',
-          hidden: true,
-          meta: {
-            title: 'riskAssessment'
-          }
-        },
-        {
-          path: 'riskControl',
-          component: () => import('@/views/riskManagerment/riskControl/index'),
-          name: 'riskControl',
-          hidden: true,
-          meta: {
-            title: 'riskControl'
-          }
-        }
-      ]
-    }]
-  },
-  {
-    path: '/hiddenDangerInvestigation',
-    component: Layout,
-    meta: {
-      title: 'hiddenDangerInvestigation',
-      icon: 'bug'
-    },
-    redirect: '/hiddenDangerInvestigation/index',
+    redirect: '/standard/riskEvaluateStandard/index',
+    hidden: true,
     children: [{
       path: 'index',
-      component: () => import('@/views/hiddenDangerInvestigation/index'),
+      component: () => import('@/views/standard/riskEvaluateStandard/components/index'),
+      name: 'index',
       meta: {
-        title: 'hiddenDangerInvestigation',
-        icon: 'hiddenDangerInvestigation'
-      },
-      hidden: true,
-      redirect: '/hiddenDangerInvestigation/index/safetyHazardControlList',
-      children: [{
-          path: 'safetyHazardControlList',
-          component: () => import('@/views/hiddenDangerInvestigation/safetyHazardControlList/index'),
-          name: 'safetyHazardControlList',
-          hidden: true,
-          meta: {
-            title: 'safetyHazardControlList'
-          }
-        },
-        {
-          path: 'safetyHazardsFollow',
-          component: () => import('@/views/hiddenDangerInvestigation/safetyHazardsFollow/index'),
-          name: 'safetyHazardsFollow',
-          hidden: true,
-          meta: {
-            title: 'safetyHazardsFollow'
-          }
-        },
-        {
-          path: 'safetyHazardsStatistics',
-          component: () => import('@/views/hiddenDangerInvestigation/safetyHazardsStatistics/index'),
-          name: 'safetyHazardsStatistics',
-          meta: {
-            title: 'safetyHazardsStatistics'
-          }
-        }
-      ]
+        title: 'index'
+      }
     }]
   },
   {
-    path: '/qualityEvaluation',
-    component: Layout,
+    path: 'otherStandard',
+    component: () => import('@/views/standard/otherStandard/index'),
     meta: {
-      title: 'qualityEvaluation',
-      icon: 'star'
+      title: 'otherStandard',
+      icon: 'clipboard'
     },
-    redirect: '/qualityEvaluation/q',
+    redirect: '/standard/otherStandard/index',
+    hidden: true,
     children: [{
-      path: 'q',
-      component: () => import('@/views/qualityEvaluation/index'),
+      path: 'index',
+      component: () => import('@/views/standard/otherStandard/components/index'),
+      name: 'otherStandardIndex',
       meta: {
-        title: 'qualityEvaluation',
-        icon: 'qualityEvaluation'
-      },
-      hidden: true,
-      redirect: '/qualityEvaluation/q/qualityEvaluate',
-      children: [{
-        path: 'qualityEvaluate',
-        component: () => import('@/views/qualityEvaluation/qualityEvaluate/index'),
-        name: 'qualityEvaluate',
-        hidden: true,
-        meta: {
-          title: 'qualityEvaluate'
-        }
-      },
-      {
-        path: 'taskHairdown',
-        component: () => import('@/views/qualityEvaluation/taskHairdown/index'),
-        name: 'taskHairdown',
-        hidden: true,
-        meta: {
-          title: 'taskHairdown'
-        }
-      },{
-        path: 'qualityReport',
-        component: () => import('@/views/qualityEvaluation/qualityReport/index'),
-        name: 'qualityReport',
-        hidden: true,
-        meta: {
-          title: 'qualityReport'
-        }
-      }]
+        title: 'otherStandardIndex'
+      }
     }]
+  }
+  ]
+},
+{
+  path: '/infoDatabase',
+  component: Layout,
+  meta: {
+    title: 'infoDatabase',
+    icon: 'tree'
   },
-  /* {
-    path: '/system',
-    component: Layout,
-    redirect: '/system/user',
-    name: 'SystemManage',
+  redirect: '/infoDatabase/p',
+  children: [{
+    path: 'p',
+    component: () => import('@/views/infoDatabase/index'),
     meta: {
-      title: 'systemManage',
-      icon: 'component'
+      title: 'infoDatabase',
+      icon: 'infoDatabase'
     },
+    hidden: true,
+    redirect: '/infoDatabase/p/supervision',
+    children: [{
+      path: 'supervision',
+      component: () => import('@/views/infoDatabase/supervision/index'),
+      name: 'supervision',
+      hidden: true,
+      meta: {
+        title: 'supervision'
+      }
+    },
+    {
+      path: 'safeSelfExamination',
+      component: () => import('@/views/infoDatabase/safeSelfExamination/index'),
+      name: 'safeSelfExamination',
+      hidden: true,
+      meta: {
+        title: 'safeSelfExamination'
+      }
+    },
+    {
+      path: 'qualityAudit',
+      component: () => import('@/views/infoDatabase/qualityAudit/index'),
+      name: 'qualityAudit',
+      hidden: true,
+      meta: {
+        title: 'qualityAudit'
+      }
+    },
+    {
+      path: 'externalInspection',
+      component: () => import('@/views/infoDatabase/externalInspection/index'),
+      name: 'externalInspection',
+      hidden: true,
+      meta: {
+        title: 'externalInspection'
+      }
+    },
+    {
+      path: 'safeInvestigation',
+      component: () => import('@/views/infoDatabase/safeInvestigation/index'),
+      name: 'safeInvestigation',
+      hidden: true,
+      meta: {
+        title: 'safeInvestigation'
+      }
+    },
+    {
+      path: 'qualityInvestigation',
+      component: () => import('@/views/infoDatabase/qualityInvestigation/index'),
+      name: 'qualityInvestigation',
+      hidden: true,
+      meta: {
+        title: 'qualityInvestigation'
+      }
+    },
+    {
+      path: 'customerComplaints',
+      component: () => import('@/views/infoDatabase/customerComplaints/index'),
+      name: 'customerComplaints',
+      hidden: true,
+      meta: {
+        title: 'customerComplaints'
+      }
+    },
+      // {
+      //   path: 'riskAssessment',
+      //   component: () => import('@/views/infoDatabase/riskAssessment/index'),
+      //   name: 'riskAssessment',
+      //   hidden: true,
+      //   meta: {
+      //     title: 'riskAssessment'
+      //   }
+      // }
+    ]
+  }]
+},
+{
+  path: '/riskManagerment',
+  component: Layout,
+  meta: {
+    title: 'riskManagerment',
+    icon: 'riskManagerment'
+  },
+  redirect: '/riskManagerment/page',
+  children: [{
+    path: 'page',
+    component: () => import('@/views/riskManagerment/index'),
+    meta: {
+      title: 'riskManagerment',
+      icon: 'dangerManagerment'
+    },
+    hidden: true,
+    redirect: '/riskManagerment/page/riskEvaluateReport',
+    children: [{
+      path: 'riskEvaluateReport',
+      component: () => import('@/views/riskManagerment/riskEvaluateReport/index'),
+      name: 'riskEvaluateReport',
+      hidden: true,
+      meta: {
+        title: 'riskEvaluateReport'
+      }
+    },
+    {
+      path: 'riskControlofMon',
+      component: () => import('@/views/riskManagerment/riskControlofMon/index'),
+      name: 'riskControlofMon',
+      hidden: true,
+      meta: {
+        title: 'riskControlofMon'
+      }
+    },
+    {
+      path: 'safetyRiskPrompt',
+      component: () => import('@/views/riskManagerment/safetyRiskPrompt/index'),
+      name: 'safetyRiskPrompt',
+      hidden: true,
+      meta: {
+        title: 'safetyRiskPrompt',
+        badge: true
+      }
+    },
+    {
+      path: 'riskAssessment',
+      component: () => import('@/views/riskManagerment/riskAssessment/index'),
+      name: 'riskAssessment',
+      hidden: true,
+      meta: {
+        title: 'riskAssessment'
+      }
+    },
+    {
+      path: 'riskControl',
+      component: () => import('@/views/riskManagerment/riskControl/index'),
+      name: 'riskControl',
+      hidden: true,
+      meta: {
+        title: 'riskControl'
+      }
+    }
+    ]
+  }]
+},
+{
+  path: '/hiddenDangerInvestigation',
+  component: Layout,
+  meta: {
+    title: 'hiddenDangerInvestigation',
+    icon: 'bug'
+  },
+  redirect: '/hiddenDangerInvestigation/index',
+  children: [{
+    path: 'index',
+    component: () => import('@/views/hiddenDangerInvestigation/index'),
+    meta: {
+      title: 'hiddenDangerInvestigation',
+      icon: 'hiddenDangerInvestigation'
+    },
+    hidden: true,
+    redirect: '/hiddenDangerInvestigation/index/safetyHazardsReport',
     children: [
+      // {
+      //   path: 'safetyHazardControlList',
+      //   component: () => import('@/views/hiddenDangerInvestigation/safetyHazardControlList/index'),
+      //   name: 'safetyHazardControlList',
+      //   hidden: true,
+      //   meta: {
+      //     title: 'safetyHazardControlList'
+      //   }
+      // },
       {
-        path: 'user',
-        component: () => import('@/views/system/Employee/index.vue'),
-        name: 'UserManage',
-        meta: { title: 'userManage' }
+        path: 'safetyHazardsReport',
+        component: () => import('@/views/hiddenDangerInvestigation/safetyHazardsReport/index'),
+        name: 'safetyHazardsReport',
+        hidden: true,
+        meta: {
+          title: 'safetyHazardsReport'
+        }
       },
       {
-        path: 'role',
-        component: () => import('@/views/system/role/index.vue'),
-        name: 'RolesManage',
-        meta: { title: 'rolesManage' }
-      },
-      {
-        path: 'auth',
-        component: () => import('@/views/system/auth/index.vue'),
-        name: 'AuthorityManage',
-        meta: { title: 'authorityManage' }
-      },
-      {
-        path: 'dict',
-        component: () => import('@/views/system/dict/index.vue'),
-        name: 'DataDictionary',
-        meta: { title: 'dataDictionary' }
+        path: 'safetyHazardsControl',
+        component: () => import('@/views/hiddenDangerInvestigation/safetyHazardsControl/index'),
+        name: 'safetyHazardsControl',
+        meta: {
+          title: 'safetyHazardsControl'
+        }
       }
     ]
-  }, */
+  }]
+},
+{
+  path: '/qualityEvaluation',
+  component: Layout,
+  meta: {
+    title: 'qualityEvaluation',
+    icon: 'star'
+  },
+  redirect: '/qualityEvaluation/q',
+  children: [{
+    path: 'q',
+    component: () => import('@/views/qualityEvaluation/index'),
+    meta: {
+      title: 'qualityEvaluation',
+      icon: 'qualityEvaluation'
+    },
+    hidden: true,
+    redirect: '/qualityEvaluation/q/qualityEvaluate',
+    children: [{
+      path: 'qualityEvaluate',
+      component: () => import('@/views/qualityEvaluation/qualityEvaluate/index'),
+      name: 'qualityEvaluate',
+      hidden: true,
+      meta: {
+        title: 'qualityEvaluate'
+      }
+    },
+    {
+      path: 'taskHairdown',
+      component: () => import('@/views/qualityEvaluation/taskHairdown/index'),
+      name: 'taskHairdown',
+      hidden: true,
+      meta: {
+        title: 'taskHairdown'
+      }
+    }, {
+      path: 'qualityReport',
+      component: () => import('@/views/qualityEvaluation/qualityReport/index'),
+      name: 'qualityReport',
+      hidden: true,
+      meta: {
+        title: 'qualityReport'
+      }
+    }]
+  }]
+},
+/* {
+  path: '/system',
+  component: Layout,
+  redirect: '/system/user',
+  name: 'SystemManage',
+  meta: {
+    title: 'systemManage',
+    icon: 'component'
+  },
+  children: [
+    {
+      path: 'user',
+      component: () => import('@/views/system/Employee/index.vue'),
+      name: 'UserManage',
+      meta: { title: 'userManage' }
+    },
+    {
+      path: 'role',
+      component: () => import('@/views/system/role/index.vue'),
+      name: 'RolesManage',
+      meta: { title: 'rolesManage' }
+    },
+    {
+      path: 'auth',
+      component: () => import('@/views/system/auth/index.vue'),
+      name: 'AuthorityManage',
+      meta: { title: 'authorityManage' }
+    },
+    {
+      path: 'dict',
+      component: () => import('@/views/system/dict/index.vue'),
+      name: 'DataDictionary',
+      meta: { title: 'dataDictionary' }
+    }
+  ]
+}, */
 
-  // 404 page must be placed at the end !!!
-  {
-    path: '*',
-    redirect: '/404',
-    hidden: true
-  }
+// 404 page must be placed at the end !!!
+{
+  path: '*',
+  redirect: '/404',
+  hidden: true
+}
 ]
 
 const createRouter = () => new Router({

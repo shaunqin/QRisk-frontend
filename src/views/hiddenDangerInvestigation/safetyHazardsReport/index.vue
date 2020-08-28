@@ -1,6 +1,5 @@
 <template>
   <div class="app-container">
-    <eform ref="form" :is-add="isAdd"></eform>
     <div class="head-container">
       <el-input
         size="mini"
@@ -18,7 +17,20 @@
         @click="toQuery(query)"
       >搜索</el-button>
       <el-button class="filter-item" size="mini" type="success">导出</el-button>
-      <el-button class="filter-item" size="mini" type="success" @click="report">上报</el-button>
+      <el-button
+        class="filter-item"
+        size="mini"
+        type="success"
+        icon="el-icon-plus"
+        @click="add"
+      >新建任务</el-button>
+      <el-button
+        class="filter-item"
+        size="mini"
+        type="success"
+        icon="el-icon-plus"
+        @click="addSingle"
+      >新建单次任务</el-button>
     </div>
     <!--表格渲染-->
     <el-table
@@ -26,22 +38,26 @@
       :data="data"
       size="small"
       :stripe="true"
-      :highlight-current-row="true"
       style="width: 100%;"
       @selection-change="selectionChange"
     >
-      <el-table-column type="selection" width="50" />
       <el-table-column type="index" width="50" />
-      <el-table-column prop="jj" label="编号" />
-      <el-table-column prop="aa" label="名称" />
-      <el-table-column prop="bb" label="发现时间" />
-     <el-table-column prop="cc" label="创建时间" />
-      <el-table-column prop="dd" label="修改时间" />
-      <el-table-column prop="ee" label="创建人" />
-      <!-- <el-table-column prop="ff" label="整改进展" /> -->
-      <el-table-column prop="gg" label="上报单位" />
-      <el-table-column prop="hh" label="上报日期" />
-      <el-table-column prop="ii" label="明细" />
+      <el-table-column prop="aa" label="日期" />
+      <el-table-column prop="bb" label="任务类型" />
+      <el-table-column prop="cc" label="任务通知" />
+      <el-table-column prop="dd" label="反馈时间" />
+      <el-table-column prop="ee" label="安全隐患管控清单" />
+      <el-table-column prop="ff" label="安全隐患统计表" />
+      <el-table-column label="操作" width="255px" align="center" fixed="right">
+        <template slot-scope="scope">
+          <el-button-group>
+            <el-button size="mini">上报</el-button>
+            <el-button size="mini" icon="el-icon-edit" @click="edit(scope.row)"></el-button>
+            <el-button size="mini" icon="el-icon-delete" @click="subDelete(scope.row.id)"></el-button>
+            <el-button size="mini">取消任务</el-button>
+          </el-button-group>
+        </template>
+      </el-table-column>
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -54,6 +70,10 @@
     />
     <!-- 上报 -->
     <report ref="report"></report>
+    <!-- 任务 -->
+    <task ref="task" :is-add="isAdd" />
+    <!-- 单次任务 -->
+    <singleTask ref="singleTask" />
   </div>
 </template>
 
@@ -62,19 +82,30 @@ import initData from "@/mixins/initData";
 import eform from "./form";
 import { safetyHazardsFollow } from "@/dataSource";
 import report from "./components/report";
+import task from "./components/task";
+import singleTask from "./components/singleTask";
 export default {
-  components: { eform, report },
+  components: { eform, report, task, singleTask },
   mixins: [initData],
   data() {
     return {
       isSuperAdmin: false,
       userInfo: {},
-      selections: []
+      selections: [],
     };
   },
   mounted() {
     this.loading = false;
-    this.data = safetyHazardsFollow;
+    for (let i = 0; i < 5; i++) {
+      this.data.push({
+        aa: "2020-04-05",
+        bb: "年度任务",
+        cc: "方案制定存在缺陷",
+        dd: "2020-06-16",
+        ee: "方案制定存在缺陷",
+        ff: "方案制定存在缺陷",
+      });
+    }
   },
   methods: {
     toQuery(name) {
@@ -85,17 +116,20 @@ export default {
       }
     },
     // 选择切换
-    selectionChange: function(selections) {
+    selectionChange: function (selections) {
       this.selections = selections;
       this.$emit("selectionChange", { selections: selections });
     },
     add() {
       this.isAdd = true;
-      this.$refs.form.dialog = true;
+      this.$refs.task.dialog = true;
+    },
+    addSingle() {
+      this.$refs.singleTask.dialog = true;
     },
     edit(row) {
       this.isAdd = false;
-      let _this = this.$refs.form;
+      let _this = this.$refs.task;
       _this.form = Object.assign({}, row);
       _this.dialog = true;
     },
@@ -104,13 +138,13 @@ export default {
         .then(() => {
           this.$message({
             type: "success",
-            message: "删除成功!"
+            message: "删除成功!",
           });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
           });
         });
     },
@@ -121,11 +155,11 @@ export default {
         bb: "YP2020050501",
         cc: "2020-05-06",
         dd: "2020",
-        ee: "2020-05-06"
+        ee: "2020-05-06",
       };
       _this.dialog = true;
-    }
-  }
+    },
+  },
 };
 </script>
 
