@@ -25,7 +25,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="系列">
-        <el-select v-model="form.series" placeholder="请选择系列">
+        <el-select v-model="form.series" placeholder="请选择系列" :disabled="form.type=='pie'">
           <el-option
             v-for="item in option.filter(r=>r.value!=form.x)"
             :key="item.value"
@@ -71,6 +71,13 @@ export default {
         // series: [{ required: true, message: "系列不能为空", trigger: "blur" }],
       },
     };
+  },
+  watch: {
+    "form.type"(val) {
+      if (val == "pie") {
+        this.form.series = "";
+      }
+    },
   },
   mounted() {
     eventBus.$on("close-dialog", () => {

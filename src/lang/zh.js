@@ -39,8 +39,6 @@ export default {
     // riskAssessment: '风险评估',
     riskManagerment: '风险管理',
     riskControl: '风险措施管控',
-    riskEvaluateReport: '月度风险评价',
-    riskControlofMon:'在控风险管理',
     safetyRiskPrompt: '安全风险提示',
     riskAssessment: '安全风险评估',
     dangerEvaluate: '风险评价',
@@ -66,7 +64,10 @@ export default {
     qualityReport: '质量数据上报',
     notice: '通知',
     agencyMatters: '代办事项',
-    workDone: '已办事项'
+    workDone: '已办事项',
+    dataAnalysis:'数据分析',
+    riskEvaluateMonthly:'月度风险评价',
+    riskManageControl:'在控风险管理'
   },
   navbar: {
     dashboard: '首页',

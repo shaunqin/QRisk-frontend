@@ -176,7 +176,7 @@
         <el-checkbox v-model="form.isKeyRisk" border true-label="1" false-label="0">是否关键风险</el-checkbox>
       </el-form-item>
       <el-form-item label="风险计算:">
-        <el-select style="width:120px" v-model="form.js1" placeholder="风险等级" clearable>
+        <el-select style="width:120px" v-model="form.riskLevel	" placeholder="风险等级" clearable>
           <el-option
             v-for="item in ['#fff','#ffba00','#74bcff','#13ce66','#e64242']"
             :key="item"
@@ -188,15 +188,11 @@
             ></span>
           </el-option>
         </el-select>
-        <el-input v-model="form.js2" placeholder="风险值左区间" style="width:80px"></el-input>
-        <el-input v-model="form.js2_2" placeholder="风险值右区间" style="width:80px"></el-input>
-        <el-radio-group v-model="form.js3">
-          <el-radio-button label="asc">asc</el-radio-button>
-          <el-radio-button label="desc">desc</el-radio-button>
-        </el-radio-group>
-        <el-input v-model="form.js4" placeholder="危险源风险值左区间" style="width:80px"></el-input>
-        <el-input v-model="form.js4_2" placeholder="危险源风险值右区间" style="width:80px"></el-input>
-        <el-radio-group v-model="form.js5">
+        <el-select v-model="jisuanType" placeholder="请选择计算类型" style="width: 150px;" clearable>
+          <el-option label="风险值" value="1"></el-option>
+          <el-option label="危险源风险值" value="2"></el-option>
+        </el-select>
+        <el-radio-group v-model="sort" :disabled="!jisuanType">
           <el-radio-button label="asc">asc</el-radio-button>
           <el-radio-button label="desc">desc</el-radio-button>
         </el-radio-group>
@@ -278,7 +274,9 @@ export default {
         risk: "", //风险
         isKeyRisk: "", //关键风险
         incentive: "", //诱因
-        riskCalculate: "", //风险计算
+        riskLevel: "", //风险等级
+        riskValueSort: "",
+        hazardRiskValueSort: "",
       },
       date: "",
       date2: "",
@@ -300,6 +298,8 @@ export default {
         { label: "时间段", value: "5" },
         { label: "时间对比", value: "6" },
       ],
+      jisuanType: "",
+      sort: "",
     };
   },
   created() {
@@ -371,6 +371,20 @@ export default {
     },
     responsibleUnitList(val) {
       this.form.responsibleUnitList = val.join(",");
+    },
+    jisuanType(val) {
+      if (!val) {
+        this.sort = "";
+      }
+    },
+    sort(val) {
+      if (this.jisuanType == "1") {
+        this.form.riskValueSort = val;
+        this.form.hazardRiskValueSort = "";
+      } else {
+        this.form.riskValueSort = "";
+        this.form.hazardRiskValueSort = val;
+      }
     },
   },
   methods: {
@@ -468,7 +482,9 @@ export default {
         risk: "", //风险
         isKeyRisk: "", //关键风险
         incentive: "", //诱因
-        riskCalculate: "", //风险计算
+        riskLevel: "", //风险等级
+        riskValueSort: "",
+        hazardRiskValueSort: "",
       };
     },
     handlerChart() {

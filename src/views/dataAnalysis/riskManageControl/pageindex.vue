@@ -1,28 +1,25 @@
 <template>
-  <div class="dangerManagerment-container">
+  <div class="riskManagement-container">
     <el-row :gutter="8">
       <el-col :span="3">
-        <div class="index-menu" ref="indexMenu">
+        <div class="index-menu">
           <router-link
-            :to="'/riskManagerment/page/'+item.path"
+            :to="'/dataAnalysis/'+item.path"
             class="index-menu-item pan-btn blue-btn"
+            :class="$route.meta.title==item.meta.title?'is-active':''"
             v-for="item in routes"
             :key="item.path"
-          >
-            {{generateTitle(item.meta.title)}}
-          </router-link>
+          >{{generateTitle(item.meta.title)}}</router-link>
         </div>
       </el-col>
-      <el-col :span="21">
-        <el-scrollbar class="page-scrollbar" wrap-class="scrollbar-wrapper">
-            <router-view></router-view>
+      <el-col :span="21" class="r-main">
+        <el-scrollbar wrap-class="scrollbar-wrapper">
+        <router-view></router-view>
         </el-scrollbar>
       </el-col>
     </el-row>
-    <el-backtop target=".page-scrollbar .el-scrollbar__wrap"></el-backtop>
   </div>
 </template>
-
 <script>
 import { mapGetters } from "vuex";
 import { generateTitle } from "@/utils/i18n";
@@ -37,8 +34,8 @@ export default {
   },
   created() {
     this.permission_routes.map(route => {
-      if (route.path === "/riskManagerment") {
-        this.routes = route.children[0].children;
+      if (route.path === "/dataAnalysis") {
+        this.routes = route.children;
       }
     });
   },
@@ -49,8 +46,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dangerManagerment-container {
-  min-height: calc(100vh - 56px);
+.riskManagement-container {
   padding: 20px 0 0 20px;
   .index-menu {
     min-height: calc(100vh - 90px);
@@ -68,13 +64,20 @@ export default {
       }
     }
   }
-  .blue-btn {
+  .r-main {
+    padding: 0 10px;
+  }
+   .blue-btn{
     background: transparent;
     color: #000;
     border-radius: 0;
+    // &:hover::before, &:hover:after{
+    //   background: #0062ff;
+    // }
   }
-  /deep/ .scrollbar-wrapper {
+  /deep/ .scrollbar-wrapper{
     height: calc(100vh - 60px);
+    padding-right: 10px;
   }
 }
 </style>
