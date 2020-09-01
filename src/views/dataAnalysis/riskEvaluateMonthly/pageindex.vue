@@ -13,11 +13,13 @@
         </div>
       </el-col>
       <el-col :span="21" class="r-main">
-        <el-scrollbar wrap-class="scrollbar-wrapper">
+        <el-scrollbar class="page-scrollbar" wrap-class="scrollbar-wrapper">
         <router-view></router-view>
         </el-scrollbar>
       </el-col>
     </el-row>
+    
+    <el-backtop target=".page-scrollbar .el-scrollbar__wrap"></el-backtop>
   </div>
 </template>
 <script>
