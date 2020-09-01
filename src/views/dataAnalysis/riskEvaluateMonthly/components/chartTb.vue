@@ -1,5 +1,13 @@
 <template>
   <div v-if="show">
+    <div class="export">
+      <el-button
+        size="mini"
+        type="success"
+        icon="el-icon-download"
+        @click="download"
+      >导出</el-button>
+    </div>
     <el-row>
       <el-col :span="24">
         <echart :chartData="chartData" />
@@ -126,9 +134,21 @@ export default {
         };
       }
     },
+    download() {
+      const { stringify } = require("qs");
+      let url = `${
+        process.env.VUE_APP_BASE_API
+      }/dangerManagerment/riskAssessment/downloadToExcelImage${stringify(
+        this.form
+      )}`;
+      window.open(url);
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.export {
+  text-align: right;
+}
 </style>

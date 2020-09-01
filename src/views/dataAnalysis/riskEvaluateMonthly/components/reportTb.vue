@@ -1,5 +1,12 @@
 <template>
   <div>
+    <el-button
+      class="export-btn"
+      size="mini"
+      type="success"
+      icon="el-icon-download"
+      @click="download"
+    >导出</el-button>
     <!--表格渲染-->
     <el-table
       v-loading="loading"
@@ -68,9 +75,18 @@ export default {
       this.params = this.form;
       return true;
     },
+    download() {
+      const { stringify } = require("qs");
+      let url=`${process.env.VUE_APP_BASE_API}/dangerManagerment/riskAssessment/query/downloadToExcel${stringify(this.form)}`;
+      window.open(url)
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.export-btn {
+  float: right;
+  margin-bottom: 10px;
+}
 </style>
