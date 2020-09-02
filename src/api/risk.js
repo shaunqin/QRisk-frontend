@@ -18,3 +18,21 @@ export function quertChartOfType(params) {
         params
     })
 }
+
+// 报表导出
+export function downloadToExcel(params) {
+    return request({
+        url: `/dangerManagerment/riskAssessment/query/downloadToExcel`,
+        method: 'get',
+        params
+    })
+}
+
+// 图表导出
+export function downloadToExcelImage(params) {
+    return request({
+        url: `/dangerManagerment/riskAssessment/downloadToExcelImage`,
+        method: 'get',
+        params
+    })
+}

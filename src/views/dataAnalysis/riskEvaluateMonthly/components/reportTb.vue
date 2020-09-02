@@ -6,6 +6,7 @@
       type="success"
       icon="el-icon-download"
       @click="download"
+      :loading="exportLoading"
     >导出</el-button>
     <!--表格渲染-->
     <el-table
@@ -48,8 +49,14 @@
 import initData from "@/mixins/initData";
 import { formatShortDate } from "@/utils/datetime";
 import { eventBus } from "@/utils/eventBus";
+import { downloadToExcel } from "@/api/risk";
 export default {
   mixins: [initData],
+  data() {
+    return {
+      exportLoading: false,
+    };
+  },
   props: {
     form: {
       type: Object,
@@ -76,9 +83,16 @@ export default {
       return true;
     },
     download() {
-      const { stringify } = require("qs");
-      let url=`${process.env.VUE_APP_BASE_API}/dangerManagerment/riskAssessment/query/downloadToExcel${stringify(this.form)}`;
-      window.open(url)
+      this.exportLoading = true;
+      downloadToExcel(this.form).then((res) => {
+        this.exportLoading = false;
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          let url = process.env.VUE_APP_BASE_API + res.obj;
+          window.open(url);
+        }
+      });
     },
   },
 };

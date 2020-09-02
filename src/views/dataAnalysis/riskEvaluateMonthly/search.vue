@@ -207,11 +207,11 @@
         ></dict-select>
       </el-form-item>
       <el-form-item label>
-        <el-button type="primary" icon="el-icon-search" @click="toQuery">搜索</el-button>
+        <!-- <el-button type="primary" icon="el-icon-search" @click="toQuery">搜索</el-button> -->
         <el-button type="primary" icon="el-icon-refresh" @click="reset">重置</el-button>
       </el-form-item>
       <el-form-item label>
-        <el-button type="success" icon="el-icon-menu">生成报表</el-button>
+        <el-button type="success" icon="el-icon-menu"  @click="toQuery">生成报表</el-button>
         <el-button type="success" icon="el-icon-s-data" @click="handlerChart">生成图表</el-button>
         <el-button type="success" icon="el-icon-tickets">月度风险评价报告</el-button>
       </el-form-item>

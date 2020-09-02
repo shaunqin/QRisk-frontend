@@ -930,7 +930,7 @@ export default {
             pdf.addImage(imgData, "JPEG", 0, 10, imgWidth, imgHeight);
           }
           if (_index == dom.length) {
-            pdf.save("test.pdf");
+            pdf.save("月度风险评价报告.pdf");
             this.loading = false;
           }
         });

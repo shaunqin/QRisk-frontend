@@ -22,7 +22,8 @@ const state = {
     sub: '', // 用户名
     iat: '', // 开始时间
     exp: '' // 超时时间
-  }
+  },
+  resetChart: '' // 监听是否需要重新加载图表
 }
 
 const mutations = {
@@ -41,6 +42,9 @@ const mutations = {
   },
   SET_CHECKTOKEN: (state, checkToken) => {
     state.checkToken = checkToken
+  },
+  SET_RESETCHART(state, resetChart) {
+    state.resetChart = resetChart;
   }
 }
 

@@ -5,7 +5,7 @@
       <search ref="search" @create-charts="createCharts" @toQuery="toQuery" />
     </div>
     <h3 class="mt-01">数据分析</h3>
-    <el-tabs :value="tabIndex">
+    <el-tabs :value="tabIndex" @tab-click="change">
       <el-tab-pane label="报表" name="1">
         <reporttb :form="queryForm1" />
       </el-tab-pane>
@@ -26,6 +26,7 @@ import reporttb from "./components/reportTb";
 import charttb from "./components/chartTb";
 import monthreport from "./components/monthReport";
 import { eventBus } from "@/utils/eventBus";
+import { mapMutations } from "vuex";
 export default {
   components: { search, reporttb, charttb, monthreport },
   data() {
@@ -42,6 +43,9 @@ export default {
   },
 
   methods: {
+    ...mapMutations({
+      SET_RESETCHART:'user/SET_RESETCHART'
+    }),
     toQuery(form) {
       // 防止重复按搜索键没有响应
       let _f = Object.assign({}, form);
@@ -50,6 +54,10 @@ export default {
     createCharts(form) {
       let _f = Object.assign({}, form);
       this.queryForm2 = _f;
+    },
+    change(tab) {
+      this.tabIndex = tab.name;
+      this.SET_RESETCHART(tab.name);
     },
   },
 };

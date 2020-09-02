@@ -6,11 +6,12 @@
         type="success"
         icon="el-icon-download"
         @click="download"
+        :loading="exportLoading"
       >导出</el-button>
     </div>
     <el-row>
       <el-col :span="24">
-        <echart :chartData="chartData" />
+        <echart ref="chart" :chartData="chartData" />
       </el-col>
     </el-row>
   </div>
@@ -20,12 +21,15 @@
 import echart from "@/components/Charts";
 import { quertChartOfType } from "@/api/risk";
 import { eventBus } from "@/utils/eventBus";
+import { downloadToExcelImage } from "@/api/risk";
+import { mapGetters } from "vuex";
 export default {
   components: { echart },
   data() {
     return {
       chartData: {},
       show: true,
+      exportLoading: false,
     };
   },
   props: {
@@ -57,8 +61,14 @@ export default {
         });
       },
     },
+    resetChart(val) {
+      if (val == 2) {
+        this.$refs["chart"].resizeHandler();
+      }
+    },
   },
   computed: {
+    ...mapGetters(["resetChart"]),
     chartType() {
       if (this.form.type) {
         return this.form.type;
@@ -135,13 +145,22 @@ export default {
       }
     },
     download() {
-      const { stringify } = require("qs");
-      let url = `${
-        process.env.VUE_APP_BASE_API
-      }/dangerManagerment/riskAssessment/downloadToExcelImage${stringify(
-        this.form
-      )}`;
-      window.open(url);
+      this.exportLoading = true;
+      let chart = this.$refs["chart"].chart;
+      let base64 = "";
+      if (chart) {
+        base64 = chart.getDataURL();
+        console.log(base64);
+      }
+      downloadToExcelImage(this.form).then((res) => {
+        this.exportLoading = false;
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          let url = process.env.VUE_APP_BASE_API + res.obj;
+          window.open(url);
+        }
+      });
     },
   },
 };
