@@ -29,10 +29,10 @@ export function downloadToExcel(params) {
 }
 
 // 图表导出
-export function downloadToExcelImage(params) {
+export function downloadToExcelImage(data) {
     return request({
         url: `/dangerManagerment/riskAssessment/downloadToExcelImage`,
         method: 'get',
-        params
+        data
     })
 }

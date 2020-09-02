@@ -152,7 +152,8 @@ export default {
         base64 = chart.getDataURL();
         console.log(base64);
       }
-      downloadToExcelImage(this.form).then((res) => {
+      let data = { image: base64, ...this.form };
+      downloadToExcelImage(data).then((res) => {
         this.exportLoading = false;
         if (res.code != "200") {
           this.$message.error(res.msg);
