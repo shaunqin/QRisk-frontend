@@ -162,7 +162,7 @@ export default {
           this.$message.error(res.msg);
         } else {
           let url = process.env.VUE_APP_BASE_API + res.obj;
-          window.open(url);
+          location.href = url;
         }
       });
     },
