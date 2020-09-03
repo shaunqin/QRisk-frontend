@@ -32,7 +32,7 @@ export function downloadToExcel(params) {
 export function downloadToExcelImage(data) {
     return request({
         url: `/dangerManagerment/riskAssessment/downloadToExcelImage`,
-        method: 'get',
+        method: 'post',
         data
     })
 }

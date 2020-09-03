@@ -100,7 +100,9 @@ export default {
     },
     resetForm() {
       this.dialog = false;
-      this.$refs["form"].resetFields();
+      if (this.$refs["form"]) {
+        this.$refs["form"].resetFields();
+      }
       this.form = {
         type: "",
         x: "",

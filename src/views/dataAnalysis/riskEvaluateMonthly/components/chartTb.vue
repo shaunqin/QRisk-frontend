@@ -149,8 +149,11 @@ export default {
       let chart = this.$refs["chart"].chart;
       let base64 = "";
       if (chart) {
-        base64 = chart.getDataURL();
-        console.log(base64);
+        base64 = chart.getDataURL({
+          type: "png",
+          pixelRatio: 1,
+          backgroundColor: "#fff",
+        });
       }
       let data = { image: base64, ...this.form };
       downloadToExcelImage(data).then((res) => {
