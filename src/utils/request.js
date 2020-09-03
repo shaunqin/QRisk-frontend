@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
+import { Message } from 'element-ui'
 
 // create an axios instance
 const service = axios.create({
@@ -62,6 +63,10 @@ service.interceptors.response.use(
       }
       return Promise.reject(error)
     } else {
+      // 超时
+      if (error.toString().indexOf("timeout") > -1) {
+        Message.error("接口请求超时！")
+      }
       return Promise.reject(error)
     }
   }
