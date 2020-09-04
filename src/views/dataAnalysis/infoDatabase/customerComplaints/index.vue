@@ -32,8 +32,8 @@
           <span>{{row.happenDate.substring(0,10)}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="eventOverview" label="事件概述" />
-      <el-table-column prop="causeAnalysis" label="原因分析" width="120" show-overflow-tooltip />
+      <el-table-column prop="eventOverview" label="事件概述" min-width="150" show-overflow-tooltip/>
+      <el-table-column prop="causeAnalysis" label="原因分析" min-width="150" show-overflow-tooltip />
       <el-table-column prop="departmentNameCn" label="责任单位" width="120" show-overflow-tooltip />
       <el-table-column prop="productText" label="产品" width="120" />
       <el-table-column prop="systemText" label="系统" width="110" />
