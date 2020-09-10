@@ -185,9 +185,7 @@ export default {
 .el-button {
   margin-bottom: 10px;
 }
-/deep/ .big_dialog {
-  width: 1100px;
-}
+
 .el-select-dropdown {
   z-index: 99999999999999 !important;
 }

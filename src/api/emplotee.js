@@ -58,3 +58,10 @@ export const queryDepartmentTree = () => {
     method: 'get'
   })
 }
+// 查询部门 根据角色
+export const queryDepartmentTreeByRole = () => {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/deptTree`,
+    method: 'post'
+  })
+}

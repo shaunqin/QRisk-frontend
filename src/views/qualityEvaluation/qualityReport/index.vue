@@ -1,93 +1,88 @@
 <template>
   <div class="app-container">
+    <eform ref="form" :isAdd="isAdd" />
     <div class="head-container">
-      <el-select size="mini" v-model="prod" placeholder="请选择产品">
-        <el-option v-for="item in menu1" :key="item" :label="item" :value="item"></el-option>
-      </el-select>
-
-      <el-button class="filter-item" size="mini" type="success" icon="el-icon-upload">上报</el-button>
+      <el-input
+        size="mini"
+        v-model="query"
+        clearable
+        placeholder="请输入你要搜索的内容"
+        style="width: 200px;"
+        class="filter-item"
+      />
+      <el-button
+        class="filter-item"
+        size="mini"
+        type="success"
+        icon="el-icon-search"
+        @click="toQuery(query)"
+      >搜索</el-button>
+      <el-button class="filter-item" size="mini" type="success" icon="el-icon-plus" @click="add">新增</el-button>
     </div>
-    <el-card :header="prod+'上报'">
-      <el-form :model="form" label-width="auto" inline>
-        <el-form-item label="上报部门">
-          <el-input v-model="form.aa" placeholder style="width:100%"></el-input>
-        </el-form-item>
-        <el-form-item label="上报人">
-          <el-input v-model="form.bb" placeholder style="width:100%"></el-input>
-        </el-form-item>
-        <el-form-item label="日期">
-          <el-date-picker v-model="form.cc" placeholder style="width:100%"></el-date-picker>
-        </el-form-item>
-      </el-form>
-      <el-form :model="form2" label-width="auto">
-        <el-form-item v-for="(val,key) in reportFiled" :key="key" :label="val">
-          <el-input v-model="form2[key]" placeholder></el-input>
-        </el-form-item>
-      </el-form>
-    </el-card>
+    <!--表格渲染-->
+    <el-table
+      v-loading="loading"
+      :data="data"
+      size="small"
+      :stripe="true"
+      :highlight-current-row="true"
+      style="width: 100%;"
+    >
+      <el-table-column type="index" width="50" />
+      <el-table-column prop="taskNo" label="编号" />
+      <el-table-column prop="taskName" label="名称" min-width="130" />
+      <el-table-column prop="departmentName" label="部门" />
+      <el-table-column prop="year" label="年度" />
+      <el-table-column prop="month" label="月度" />
+      <el-table-column label="截止日期">
+        <template slot-scope="{row}">{{formatShortDate(row.dueDate)}}</template>
+      </el-table-column>
+      <el-table-column prop="productValue" label="产品" />
+      <el-table-column label="操作" width="130px" align="center" fixed="right">
+        <template slot-scope="scope">
+          <el-button-group>
+            <el-button size="mini" icon="el-icon-edit" @click="edit(scope.row)"></el-button>
+            <el-button size="mini" icon="el-icon-delete" @click="subDelete(scope.row.id)"></el-button>
+          </el-button-group>
+        </template>
+      </el-table-column>
+    </el-table>
+    <!--分页组件-->
+    <el-pagination
+      :total="total"
+      :current-page="page"
+      style="margin-top: 8px;text-align: right"
+      layout="total, prev, pager, next, sizes"
+      @size-change="sizeChange"
+      @current-change="pageChange"
+    />
   </div>
 </template>
 
 <script>
+import initData from "@/mixins/initData";
+import { formatShortDate } from "@/utils/datetime";
+import eform from "./form";
 export default {
+  components: { eform },
+  mixins: [initData],
   data() {
-    return {
-      prod: "定检产品",
-      menu1: ["定检产品", "发动机APU产品", "附件产品", "航线产品"],
-      form: {
-        aa: "",
-        bb: "",
-        cc: ""
-      },
-      form2: {}
-    };
+    return {};
   },
-
-  computed: {
-    reportFiled() {
-      let reportFiled = {};
-      switch (this.prod) {
-        case "定检产品":
-          reportFiled = {
-            aa: "国航机队/客户机队:出港基地机械原因航班不正常数量全月之和",
-            bb: "客户机队:出厂首班机械原因不正常航班数量",
-            cc: "国航机队/客户机队:维修差错及质量调查数量",
-            dd: "客户机队:客户质量投诉数量",
-            ee: "客户机队:客户满意度调查全月份数",
-            ff: "客户机队:客户满意度调查全月份数总分数之和"
-          };
-          break;
-        case "发动机APU产品":
-          reportFiled = {
-            aa: "全月出厂发动机/APU车台重复试车次数",
-            bb: "全月出厂发动机/APU总台数",
-            cc: "发动机/APU在保修期全月返厂台数",
-            dd: "维修差错及质量调查数量",
-            ee: "客户质量投诉数量"
-          };
-          break;
-        case "附件产品":
-          reportFiled = {
-            aa: "装机时间50小时以下非计划拆换的附件数量",
-            bb: "全月出厂附件总数量",
-            cc: "全月装机时间低于1000小时返厂修理/索赔的附件数量",
-            dd: "维修差错及质量调查数量",
-            ee: "出厂检发现问题数量",
-            ff: "客户质量投诉数量"
-          };
-          break;
-        case "航线产品":
-          reportFiled = {
-            aa: "客户机队:出港基地机械原因航班不正常数量全月之和",
-            bb: "客户机队:出港基地航班数量全月之和",
-            cc: "客户机队:维修差错及质量调查数量",
-            dd: "客户机队:客户质量投诉数量"
-          };
-          break;
-      }
-      return reportFiled;
-    }
-  }
+  created() {
+    this.init();
+  },
+  methods: {
+    formatShortDate,
+    beforeInit() {
+      this.url = `/task_mgr/query/monthTask/pageList/${this.page}/${this.size}`;
+      return true;
+    },
+    add() {
+      this.isAdd = true;
+      this.$refs.form.dialog = true;
+    },
+  },
 };
 </script>
 

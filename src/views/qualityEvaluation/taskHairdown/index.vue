@@ -27,20 +27,13 @@
       :stripe="true"
       :highlight-current-row="true"
       style="width: 100%;"
-      @selection-change="selectionChange"
     >
       <el-table-column type="index" width="50" />
-      <el-table-column prop="jj" label="编号" />
-      <el-table-column prop="aa" label="名称" />
-      <el-table-column prop="bb" label="发生日期" />
-      <el-table-column prop="cc" label="创建时间" />
-      <el-table-column prop="dd" label="修改时间" />
-      <el-table-column prop="ee" label="创建人" />
-      <!-- <el-table-column prop="ff" label="风险等级" />
-      <el-table-column prop="gg" label="发现时间" />
-      <el-table-column prop="hh" label="来源" />
-      <el-table-column prop="ii" label="整改进展" /> -->
-      <el-table-column label="操作" width="230px" align="center" fixed="right">
+      <el-table-column prop="taskNo" label="编号" />
+      <el-table-column prop="taskName" label="名称" />
+      <el-table-column prop="year" label="年度" />
+      <el-table-column prop="productValue" label="产品" />
+      <el-table-column label="操作" width="130px" align="center" fixed="right">
         <template slot-scope="scope">
           <el-button-group>
             <el-button size="mini" icon="el-icon-edit" @click="edit(scope.row)"></el-button>
@@ -64,7 +57,6 @@
 <script>
 import initData from "@/mixins/initData";
 import eform from "./form";
-import { safetyHazardControlList } from "@/dataSource";
 export default {
   components: { eform },
   mixins: [initData],
@@ -72,25 +64,23 @@ export default {
     return {
       isSuperAdmin: false,
       userInfo: {},
-      selections: []
+      selections: [],
     };
   },
-  mounted() {
-    this.loading = false;
-    this.data = safetyHazardControlList;
+  created() {
+    this.init();
   },
   methods: {
+    beforeInit() {
+      this.url = `/task_mgr/query/yearTask/pageList/${this.page}/${this.size}`;
+      return true;
+    },
     toQuery(name) {
       if (!name) {
         this.page = 1;
         this.init();
         return;
       }
-    },
-    // 选择切换
-    selectionChange: function(selections) {
-      this.selections = selections;
-      this.$emit("selectionChange", { selections: selections });
     },
     add() {
       this.isAdd = true;
@@ -107,27 +97,27 @@ export default {
         .then(() => {
           this.$message({
             type: "success",
-            message: "删除成功!"
+            message: "删除成功!",
           });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
           });
         });
     },
-    hairdown(row){
+    hairdown(row) {
       let _this = this.$refs.hairdownDialog;
-       _this.form = Object.assign({}, row);
+      _this.form = Object.assign({}, row);
       _this.dialog = true;
     },
-    approval(row){
-       let _this = this.$refs.approvalDialog;
-        _this.form = Object.assign({}, row);
+    approval(row) {
+      let _this = this.$refs.approvalDialog;
+      _this.form = Object.assign({}, row);
       _this.dialog = true;
-    }
-  }
+    },
+  },
 };
 </script>
 

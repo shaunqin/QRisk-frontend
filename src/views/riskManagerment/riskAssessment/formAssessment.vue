@@ -131,7 +131,5 @@ export default {
 
 
 <style lang="scss" scope>
-.big_dialog {
-  width: 1100px;
-}
+
 </style>

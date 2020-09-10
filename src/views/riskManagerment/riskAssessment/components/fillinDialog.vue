@@ -278,7 +278,5 @@ export default {
 .el-select-dropdown {
   z-index: 99999999999999 !important;
 }
-/deep/ .big_dialog {
-  width: 1100px;
-}
+
 </style>

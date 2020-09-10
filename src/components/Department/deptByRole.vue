@@ -15,7 +15,7 @@
 <script>
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
-import { queryDepartmentTree } from "@/api/emplotee";
+import { queryDepartmentTreeByRole } from "@/api/emplotee";
 export default {
   components: { Treeselect },
   data() {
@@ -57,12 +57,15 @@ export default {
     },
   },
   created() {
-    queryDepartmentTree().then((res) => {
+    queryDepartmentTreeByRole().then((res) => {
       this.options = res.obj;
     });
   },
   methods: {
     normalizer(node) {
+      if (node.children == null) {
+        delete node.children;
+      }
       if (node.children && !node.children.length) {
         delete node.children;
       }

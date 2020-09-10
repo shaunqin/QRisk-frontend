@@ -304,9 +304,7 @@ export default {
 
 
 <style lang="scss" scoped>
-/deep/ .big_dialog {
-  width: 1100px;
-}
+
 .roleSelect {
   width: 370px;
 }

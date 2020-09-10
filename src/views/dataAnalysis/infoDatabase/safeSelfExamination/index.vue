@@ -1,21 +1,7 @@
 <template>
   <div class="app-container">
     <div class="head-container">
-      <el-input
-        size="mini"
-        v-model="query"
-        clearable
-        placeholder="请输入你要搜索的内容"
-        style="width: 200px;"
-        class="filter-item"
-      />
-      <el-button
-        class="filter-item"
-        size="mini"
-        type="success"
-        icon="el-icon-search"
-        @click="toQuery(query)"
-      >搜索</el-button>
+      <search />
     </div>
     <!--表格渲染-->
     <el-table
@@ -26,7 +12,7 @@
       style="width: 100%;"
     >
       <el-table-column type="index" width="50" :index="getIndex" />
-      <el-table-column prop="id" label="编号" />
+      <el-table-column prop="no" label="编号" width="120" />
       <el-table-column label="发生日期" width="120">
         <template slot-scope="{row}">{{row.dateTime.substring(0,10)}}</template>
       </el-table-column>
@@ -56,7 +42,9 @@
 
 <script>
 import initData from "@/mixins/initData";
+import search from "../components/search";
 export default {
+  components: { search },
   mixins: [initData],
   data() {
     return {
@@ -74,13 +62,6 @@ export default {
       this.params.dataType = "4";
       return true;
     },
-    toQuery(name) {
-      if (!name) {
-        this.page = 1;
-        this.init();
-        return;
-      }
-    },
   },
 };
 </script>
@@ -90,8 +71,5 @@ export default {
   > .el-input__inner {
     height: 32px !important;
   }
-}
-.head-container {
-  margin-bottom: 20px;
 }
 </style>

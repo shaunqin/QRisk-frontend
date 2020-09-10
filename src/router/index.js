@@ -423,16 +423,16 @@ export const asyncRoutes = [{
     title: 'qualityEvaluation',
     icon: 'star'
   },
-  redirect: '/qualityEvaluation/q',
+  redirect: '/qualityEvaluation/page',
   children: [{
-    path: 'q',
+    path: 'page',
     component: () => import('@/views/qualityEvaluation/index'),
     meta: {
       title: 'qualityEvaluation',
       icon: 'qualityEvaluation'
     },
     hidden: true,
-    redirect: '/qualityEvaluation/q/qualityEvaluate',
+    redirect: '/qualityEvaluation/page/qualityEvaluate',
     children: [{
       path: 'qualityEvaluate',
       component: () => import('@/views/qualityEvaluation/qualityEvaluate/index'),

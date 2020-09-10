@@ -36,3 +36,43 @@ export function downloadToExcelImage(data) {
         data
     })
 }
+
+// =========  风险提示  ==============
+// 风险提示 详情
+export function riskNoticeDetail(id) {
+    return request({
+        url: `/riskmgr_mgr/safety_risk_notice_mgr/query/detail/${id}`,
+        method: 'get',
+    })
+}
+// 添加风险提示
+export function riskNoticeAdd(data) {
+    return request({
+        url: `/riskmgr_mgr/safety_risk_notice_mgr/add`,
+        method: 'post',
+        data
+    })
+}
+// 修改风险提示
+export function riskNoticeModify(data) {
+    return request({
+        url: `/riskmgr_mgr/safety_risk_notice_mgr/modify`,
+        method: 'put',
+        data
+    })
+}
+// 删除风险提示
+export function riskNoticeDelete(id) {
+    return request({
+        url: `/riskmgr_mgr/safety_risk_notice_mgr/delete/${id}`,
+        method: 'delete'
+    })
+}
+// 提交风险提示
+export function riskNoticeSubmit(id) {
+    return request({
+        url: `/riskmgr_mgr/safety_risk_notice_mgr/submit/${id}`,
+        method: 'put'
+    })
+}
+// =========  风险提示 end ==============

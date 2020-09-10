@@ -19,8 +19,8 @@ import './permission' // permission control
 import './utils/error-log' // error log
 
 // 全局水波纹效果
-// import waves from './directive/waves/waves'
-// Vue.directive('waves', waves)
+import waves from './directive/waves/waves'
+Vue.directive('waves', waves)
 
 import * as filters from './filters' // global filters
 

@@ -215,8 +215,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/deep/ .big_dialog {
-  width: 1100px;
-}
+
 </style>
 

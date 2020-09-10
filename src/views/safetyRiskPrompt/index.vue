@@ -27,93 +27,60 @@
             icon="el-icon-plus"
             @click="add"
           >新建</el-button>
-           <el-button type="info" icon="el-icon-document-copy" @click="copy(selections[0])" :disabled="selections.length!=1">复制</el-button>
-           <el-button type="info" >输出报告</el-button>
+          <el-button
+            type="info"
+            icon="el-icon-document-copy"
+            @click="copy(selections[0])"
+            :disabled="selections.length!=1"
+          >复制</el-button>
+          <el-button type="info">输出报告</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <!--表格渲染-->
-    <el-table
-      v-loading="loading"
-      :data="data"
-      size="small"
-      :highlight-current-row="true"
-      style="width: 100%;"
-      @selection-change="selectionChange"
-    >
-      <el-table-column type="selection" width="45" />
-      <el-table-column prop="jj" label="编号" width="110" />
-      <el-table-column prop="gg" label="发布时间" width="100" />
-      <el-table-column label="主题" min-width="150" show-overflow-tooltip>
-        <template slot-scope="{row}">
-          <a class="title" @click="detail(row)">{{row.aa}}</a>
-        </template>
-      </el-table-column>
-      <el-table-column prop="bb" label="背景" min-width="180" align="left" show-overflow-tooltip />
-      <el-table-column prop="cc" label="安全风险" min-width="180" align="left" show-overflow-tooltip />
-      <el-table-column prop="dd" label="风险防范" min-width="180" align="left" show-overflow-tooltip />
-      <el-table-column prop="ee" label="责任单位" show-overflow-tooltip />
-      <el-table-column label="操作" width="130">
-        <template slot-scope="scope">
-          <el-button-group>
-           
-            <el-button size="mini" @click="edit(scope.row)">落实验证反馈</el-button>
-            <!-- <el-button size="mini" @click="check(scope.row)">措施验证</el-button> -->
-            <!-- <el-button size="mini" @click="detail(scope.row)">查看</el-button> -->
-          </el-button-group>
-        </template>
-      </el-table-column>
-    </el-table>
-    <!--分页组件-->
-    <el-pagination
-      :total="total"
-      :current-page="page"
-      style="margin-top: 8px;text-align: right"
-      layout="total, prev, pager, next, sizes"
-      @size-change="sizeChange"
-      @current-change="pageChange"
-    />
+    <el-tabs v-model="tabIndex">
+      <el-tab-pane label="已下发" name="1">
+        <tab1 v-if="tabIndex==1" />
+      </el-tab-pane>
+      <el-tab-pane label="草稿" name="2">
+        <tab2 v-if="tabIndex==2" />
+      </el-tab-pane>
+      <el-tab-pane label="我提交的" name="3">
+        <tab3 v-if="tabIndex==3" />
+      </el-tab-pane>
+      <el-tab-pane label="待办" name="4">
+        <tab4 v-if="tabIndex==4" />
+      </el-tab-pane>
+      <el-tab-pane label="已办" name="5">
+        <tab5 v-if="tabIndex==5" />
+      </el-tab-pane>
+    </el-tabs>
     <echeck ref="check"></echeck>
     <edetail ref="detail"></edetail>
   </div>
 </template>
 
 <script>
-import initData from "@/mixins/initData";
 import eform from "./form";
 import echeck from "./components/check";
 import edetail from "./components/detail";
+import tab1 from "./components/tab1";
+import tab2 from "./components/tab2";
+import tab3 from "./components/tab3";
+import tab4 from "./components/tab4";
+import tab5 from "./components/tab5";
 export default {
-  components: { eform, echeck, edetail },
-  mixins: [initData],
+  components: { eform, echeck, edetail, tab1, tab2, tab3, tab4, tab5 },
   data() {
     return {
-      isSuperAdmin: false,
-      userInfo: {},
+      isAdd: false,
       selections: [],
       form: {
         aa: "",
       },
+      tabIndex: "1",
     };
   },
-  mounted() {
-    this.loading = false;
-    for (let i = 0; i < 5; i++) {
-      this.data.push({
-        aa: "重复故障影响飞机安全运行的风险提示",
-        bb:
-          "2020 年 6 月 5 日，A321/B-1833 飞机执行 CA1948 航班，成都起 飞后地面监控出现 AIR R WING LEAK 警告信息，飞机返航…",
-        cc: "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降…",
-        dd:
-          "1、认真做好重复性故障的管控工作。各单位要高度重视飞机出 现的重复性故障，加强对排故力量的组织;对于飞机运行中出现的 重复、疑难故障，工程技术人员要及时研究和制定排…",
-        ee: "杭州、上海、武汉",
-        jj: "SN202005050" + i,
-        ff: "admin",
-        gg: "2020-06-04",
-        hh: "2020-06-04",
-      });
-    }
-  },
+  mounted() {},
   methods: {
     toQuery(name) {
       if (!name) {
@@ -181,10 +148,10 @@ export default {
 // .head-container {
 //   margin-bottom: 20px;
 // }
-.title{
+.title {
   color: #1890ff;
 }
-.app-container{
+.app-container {
   padding: 20px 10px 0 10px;
 }
 </style>
