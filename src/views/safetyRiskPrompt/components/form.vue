@@ -172,6 +172,7 @@ export default {
         } else {
           this.$message.success("提交成功");
           this.resetForm();
+           this.$parent.init();
         }
         this.loading = false;
       });

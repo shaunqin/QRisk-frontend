@@ -100,6 +100,7 @@ export default {
             existingRisk: obj.existingRisk,
             measures: obj.measuresVos,
           };
+          _this.id = obj.id;
           _this.dialog = true;
         }
       });

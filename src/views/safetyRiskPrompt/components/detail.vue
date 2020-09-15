@@ -17,8 +17,12 @@
       </el-row>
       <el-form-item label="适用范围">{{form.applyScope}}</el-form-item>
       <el-form-item label="主题">{{form.title}}</el-form-item>
-      <el-form-item label="安全风险">{{form.existingRisk}}</el-form-item>
-      <el-form-item label="背景">{{form.background}}</el-form-item>
+      <el-form-item label="安全风险">
+        <span style="white-space: pre-wrap;">{{form.existingRisk}}</span>
+      </el-form-item>
+      <el-form-item label="背景">
+        <span style="white-space: pre-wrap;">{{form.background}}</span>
+      </el-form-item>
       <el-form-item label="风险防范">
         <ul class="measuresVos">
           <li v-for="(item,index) in data" :key="index">{{item.content}}</li>
@@ -78,7 +82,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .measuresVos {
   margin: 0;
   list-style-type: decimal;

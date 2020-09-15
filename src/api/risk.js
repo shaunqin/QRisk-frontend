@@ -75,4 +75,19 @@ export function riskNoticeSubmit(id) {
         method: 'put'
     })
 }
+// 根据task显示不同的内容
+export function riskNoticeQueryTask(taskId, formId) {
+    return request({
+        url: `/riskmgr_mgr/safety_risk_notice_mgr/query/${taskId}/${formId}`,
+        method: 'get'
+    })
+}
+// 处理待办
+export function riskNoticeComplete(data) {
+    return request({
+        url: `/riskmgr_mgr/safety_risk_notice_mgr/complete/${data.taskId}`,
+        method: 'post',
+        data
+    })
+}
 // =========  风险提示 end ==============

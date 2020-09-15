@@ -54,14 +54,12 @@
         <tab5 v-if="tabIndex==5" />
       </el-tab-pane>
     </el-tabs>
-    <echeck ref="check"></echeck>
     <edetail ref="detail"></edetail>
   </div>
 </template>
 
 <script>
 import eform from "./form";
-import echeck from "./components/check";
 import edetail from "./components/detail";
 import tab1 from "./components/tab1";
 import tab2 from "./components/tab2";
@@ -69,7 +67,7 @@ import tab3 from "./components/tab3";
 import tab4 from "./components/tab4";
 import tab5 from "./components/tab5";
 export default {
-  components: { eform, echeck, edetail, tab1, tab2, tab3, tab4, tab5 },
+  components: { eform, edetail, tab1, tab2, tab3, tab4, tab5 },
   data() {
     return {
       isAdd: false,
@@ -107,11 +105,6 @@ export default {
     edit(row) {
       this.isAdd = false;
       let _this = this.$refs.form;
-      _this.form = Object.assign({}, row);
-      _this.dialog = true;
-    },
-    check(row) {
-      let _this = this.$refs.check;
       _this.form = Object.assign({}, row);
       _this.dialog = true;
     },
