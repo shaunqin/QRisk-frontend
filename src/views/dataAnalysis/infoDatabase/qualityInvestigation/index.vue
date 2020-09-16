@@ -2,6 +2,7 @@
   <div class="app-container">
     <div class="head-container">
       <search />
+      <el-button class="filter-item" size="mini" type="primary" icon="el-icon-plus" @click="add">新增</el-button>
     </div>
     <!--表格渲染-->
     <el-table
@@ -11,7 +12,7 @@
       :highlight-current-row="true"
       style="width: 100%;"
     >
-      <el-table-column type="index" width="50" :index="getIndex"/>
+      <el-table-column type="index" width="50" :index="getIndex" />
       <el-table-column prop="infoSourceText" label="信息来源" width="100" />
       <el-table-column label="发生日期" width="100">
         <template slot-scope="{row}">
@@ -39,20 +40,22 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
+    <eform ref="form" :is-add="isAdd"></eform>
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
 import search from "../components/search2";
+import eform from "./form";
 export default {
-  components: { search },
+  components: { search, eform },
   mixins: [initData],
   data() {
     return {
       isSuperAdmin: false,
       userInfo: {},
-      selections: []
+      selections: [],
     };
   },
   mounted() {
@@ -64,7 +67,11 @@ export default {
       this.params = { type: 2, ...this.params };
       return true;
     },
-  }
+    add() {
+      this.isAdd = true;
+      this.$refs.form.dialog = true;
+    },
+  },
 };
 </script>
 

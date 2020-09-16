@@ -2,6 +2,7 @@
   <div class="app-container">
     <div class="head-container">
       <search />
+      <el-button class="filter-item" size="mini" type="primary" icon="el-icon-plus" @click="add">新增</el-button>
     </div>
     <!--表格渲染-->
     <el-table
@@ -38,14 +39,16 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
+    <eform ref="form" :is-add="isAdd"></eform>
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
 import search from "../components/search2";
+import eform from "./form";
 export default {
-  components: { search },
+  components: { search, eform },
   mixins: [initData],
   data() {
     return {
@@ -62,6 +65,10 @@ export default {
       this.url = `/infoDatabase_mgr/infoDatabase_mgr/query/pageList/${this.page}/${this.size}`;
       this.params = { type: 8, ...this.params };
       return true;
+    },
+    add() {
+      this.isAdd = true;
+      this.$refs.form.dialog = true;
     },
   },
 };

@@ -24,3 +24,10 @@ export const queryHazardList = (params) => {
     params
   })
 }
+// 诱因 list
+export const queryIncentiveList = () => {
+  return request({
+    url: `/info_mgr/incentive_mgr/query/all`,
+    method: 'get'
+  })
+}
