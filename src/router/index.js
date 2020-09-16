@@ -370,35 +370,26 @@ export const asyncRoutes = [{
   ]
 },
 {
-  path: '/hiddenDangerInvestigation',
+  path: '/hazardsInvestigation',
   component: Layout,
   meta: {
-    title: 'hiddenDangerInvestigation',
+    title: 'hazardsInvestigation',
     icon: 'bug'
   },
-  redirect: '/hiddenDangerInvestigation/index',
+  redirect: '/hazardsInvestigation/index',
   children: [{
     path: 'index',
-    component: () => import('@/views/hiddenDangerInvestigation/index'),
+    component: () => import('@/views/hazardsInvestigation/index'),
     meta: {
-      title: 'hiddenDangerInvestigation',
-      icon: 'hiddenDangerInvestigation'
+      title: 'hazardsInvestigation',
+      icon: 'hazardsInvestigation'
     },
     hidden: true,
-    redirect: '/hiddenDangerInvestigation/index/safetyHazardsReport',
+    redirect: '/hazardsInvestigation/index/safetyHazardsReport',
     children: [
-      // {
-      //   path: 'safetyHazardControlList',
-      //   component: () => import('@/views/hiddenDangerInvestigation/safetyHazardControlList/index'),
-      //   name: 'safetyHazardControlList',
-      //   hidden: true,
-      //   meta: {
-      //     title: 'safetyHazardControlList'
-      //   }
-      // },
       {
         path: 'safetyHazardsReport',
-        component: () => import('@/views/hiddenDangerInvestigation/safetyHazardsReport/index'),
+        component: () => import('@/views/hazardsInvestigation/safetyHazardsReport/index'),
         name: 'safetyHazardsReport',
         hidden: true,
         meta: {
@@ -407,7 +398,7 @@ export const asyncRoutes = [{
       },
       {
         path: 'safetyHazardsControl',
-        component: () => import('@/views/hiddenDangerInvestigation/safetyHazardsControl/index'),
+        component: () => import('@/views/hazardsInvestigation/safetyHazardsControl/index'),
         name: 'safetyHazardsControl',
         meta: {
           title: 'safetyHazardsControl'
@@ -461,42 +452,6 @@ export const asyncRoutes = [{
     }]
   }]
 },
-/* {
-  path: '/system',
-  component: Layout,
-  redirect: '/system/user',
-  name: 'SystemManage',
-  meta: {
-    title: 'systemManage',
-    icon: 'component'
-  },
-  children: [
-    {
-      path: 'user',
-      component: () => import('@/views/system/Employee/index.vue'),
-      name: 'UserManage',
-      meta: { title: 'userManage' }
-    },
-    {
-      path: 'role',
-      component: () => import('@/views/system/role/index.vue'),
-      name: 'RolesManage',
-      meta: { title: 'rolesManage' }
-    },
-    {
-      path: 'auth',
-      component: () => import('@/views/system/auth/index.vue'),
-      name: 'AuthorityManage',
-      meta: { title: 'authorityManage' }
-    },
-    {
-      path: 'dict',
-      component: () => import('@/views/system/dict/index.vue'),
-      name: 'DataDictionary',
-      meta: { title: 'dataDictionary' }
-    }
-  ]
-}, */
 
 // 404 page must be placed at the end !!!
 {

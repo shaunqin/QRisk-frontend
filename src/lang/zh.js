@@ -54,7 +54,7 @@ export default {
     riskImplementationInput: '风险实施填写',
     riskImplementationConfirm: '风险实施确认',
     riskImplementationSearch: '已确认风险实施',
-    hiddenDangerInvestigation: '隐患排查',
+    hazardsInvestigation: '隐患排查',
     safetyHazardControlList: '任务单下发',
     safetyHazardsControl: '安全隐患管控',
     safetyHazardsReport: '安全隐患上报',

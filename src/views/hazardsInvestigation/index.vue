@@ -4,7 +4,7 @@
       <el-col :span="3">
         <div class="index-menu">
           <router-link
-            :to="'/hiddenDangerInvestigation/index/'+item.path"
+            :to="'/hazardsInvestigation/index/'+item.path"
             class="index-menu-item pan-btn blue-btn"
             :class="$route.meta.title==item.meta.title?'is-active':''"
             v-for="item in routes"
@@ -35,7 +35,7 @@ export default {
   },
   created() {
     this.permission_routes.map(route => {
-      if (route.path === "/hiddenDangerInvestigation") {
+      if (route.path === "/hazardsInvestigation") {
         this.routes = route.children[0].children;
       }
     });
