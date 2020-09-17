@@ -9,7 +9,7 @@
       ></dict-select>
     </el-col>
     <el-col :span="20">
-      <el-select filterable multiple v-model="_value" style="width: 100%;" placeholder="请旋转诱因">
+      <el-select filterable multiple v-model="_value" style="width: 100%;" placeholder="请选择诱因">
         <el-option v-for="item in list" :key="item.id" :label="item.name" :value="item.no"></el-option>
       </el-select>
     </el-col>
