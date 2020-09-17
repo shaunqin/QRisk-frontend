@@ -16,7 +16,7 @@
       <el-table-column prop="infoSourceText" label="信息来源" width="100" />
       <el-table-column label="发生日期" width="100">
         <template slot-scope="{row}">
-          <span>{{row.happenDate.substring(0,10)}}</span>
+          <span>{{formatShortDate(row.happenDate)}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="eventOverview" label="事件概述" min-width="150" show-overflow-tooltip />
@@ -47,6 +47,7 @@
 import initData from "@/mixins/initData";
 import search from "../components/search2";
 import eform from "./form";
+import { formatShortDate } from "@/utils/datetime";
 export default {
   components: { search, eform },
   mixins: [initData],
@@ -61,6 +62,7 @@ export default {
     this.init();
   },
   methods: {
+    formatShortDate,
     beforeInit() {
       this.url = `/infoDatabase_mgr/infoDatabase_mgr/query/pageList/${this.page}/${this.size}`;
       this.params = { type: 8, ...this.params };
