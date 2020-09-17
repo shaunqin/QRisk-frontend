@@ -9,6 +9,7 @@
     :limit="limit"
     :flat="flat"
     placeholder="请选择..."
+    appendToBody
   />
 </template>
 
@@ -82,5 +83,10 @@ export default {
   /deep/ .el-scrollbar__wrap {
     overflow-x: auto;
   }
+}
+</style>
+<style lang="scss">
+.vue-treeselect--append-to-body {
+  z-index: 99999 !important;
 }
 </style>
