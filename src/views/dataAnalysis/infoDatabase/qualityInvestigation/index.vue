@@ -30,6 +30,14 @@
       <el-table-column prop="sourceOfRiskText" label="危险源" width="120" show-overflow-tooltip />
       <el-table-column prop="risk" label="风险" width="120" />
       <el-table-column prop="incentive" label="诱因" width="120" />
+      <el-table-column label="操作" width="110" fixed="right">
+        <template slot-scope="{row}">
+          <el-button-group v-if="row.status=='1'">
+            <el-button type="primary" size="mini" icon="el-icon-edit" @click="edit(row.id)"></el-button>
+            <el-button type="primary" size="mini" icon="el-icon-upload" @click="doSub(row.id)"></el-button>
+          </el-button-group>
+        </template>
+      </el-table-column>
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -41,6 +49,7 @@
       @current-change="pageChange"
     />
     <eform ref="form" :is-add="isAdd"></eform>
+    <editform ref="editform" :is-add="isAdd"></editform>
   </div>
 </template>
 
@@ -48,9 +57,11 @@
 import initData from "@/mixins/initData";
 import search from "../components/search2";
 import eform from "./form";
+import editform from "./editForm";
 import { formatShortDate } from "@/utils/datetime";
+import { detailInfobase, delInfobase ,modifyInfobase} from "@/api/infodb";
 export default {
-  components: { search, eform },
+  components: { search, eform ,editform},
   mixins: [initData],
   data() {
     return {
@@ -72,6 +83,55 @@ export default {
     add() {
       this.isAdd = true;
       this.$refs.form.dialog = true;
+    },
+    edit(id) {
+      this.isAdd = false;
+      let _this = this.$refs.editform;
+      detailInfobase(id).then((res) => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          const { obj } = res;
+          _this.form = {
+            id: obj.id,
+            infoSource: obj.infoSource,
+            happenDate: obj.happenDate,
+            place: obj.place,
+            riskLevel1: obj.riskLevel1,
+            riskLevel2: obj.riskLevel2,
+            sourceOfRisk: obj.sourceOfRisk,
+            aircraftType: obj.aircraftType,
+            responsibleUnit: obj.responsibleUnit,
+            product: obj.product,
+            systemCode: obj.systemCode,
+            eventOverview: obj.eventOverview,
+            causeAnalysis: obj.causeAnalysis,
+            risk: obj.risk,
+            incentive: obj.incentive,
+            type: obj.type,
+          };
+          _this.files = obj.filesList;
+          _this.dialog = true;
+        }
+      });
+    },
+    doSub(id) {
+      let form = {
+        id,
+        status: "0",
+      };
+      this.$confirm("确定提交嘛？提交后将不能编辑。")
+        .then(() => {
+          modifyInfobase(form).then((res) => {
+            if (res.code != "200") {
+              this.$message.error(res.msg);
+            } else {
+              this.$message.success("提交成功");
+              this.init();
+            }
+          });
+        })
+        .catch(() => {});
     },
   },
 };

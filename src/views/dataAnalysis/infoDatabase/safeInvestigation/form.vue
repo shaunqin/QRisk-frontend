@@ -149,6 +149,7 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
+      <el-button :loading="loading" type="success" @click="doSave">暂存</el-button>
       <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
     </div>
   </el-dialog>
@@ -299,6 +300,17 @@ export default {
         if (valid) {
           this.loading = true;
           if (this.isAdd) {
+            this.doAdd();
+          }
+        }
+      });
+    },
+    doSave() {
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          this.loading = true;
+          if (this.isAdd) {
+            this.form.status = "1";
             this.doAdd();
           }
         }
