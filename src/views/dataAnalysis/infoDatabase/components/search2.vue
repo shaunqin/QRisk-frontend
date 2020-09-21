@@ -1,5 +1,20 @@
 <template>
-  <el-form class="search" size="mini" :model="queryForm" label-width="70px" label-position="left" inline>
+  <el-form
+    class="search"
+    size="mini"
+    :model="queryForm"
+    label-width="70px"
+    label-position="left"
+    inline
+  >
+    <el-form-item label="信息来源">
+      <dict-select
+        :value="queryForm.infoSource"
+        :type="sourceType"
+        @change="dictChange($event,'infoSource',queryForm)"
+        style="width:120px"
+      />
+    </el-form-item>
     <el-form-item label="发生日期">
       <el-date-picker
         v-model="date"
@@ -11,11 +26,48 @@
         unlink-panels
       ></el-date-picker>
     </el-form-item>
+    <el-form-item label="地点" label-width="50" v-if="type==1">
+      <el-input v-model="queryForm.place" placeholder style="width:130px"></el-input>
+    </el-form-item>
+    <el-form-item label="机型" label-width="50" v-if="type!=8">
+      <dict-select
+        :value="queryForm.aircraftType"
+        type="aircraft"
+        @change="dictChange($event,'aircraftType',queryForm)"
+        style="width:100px"
+      />
+    </el-form-item>
     <el-form-item label="事件概述">
-      <el-input v-model="queryForm.eventOverview" placeholder="请输入事件概述" style="width:130px"></el-input>
+      <el-input v-model="queryForm.eventOverview" placeholder style="width:130px"></el-input>
     </el-form-item>
     <el-form-item label="原因分析">
-      <el-input v-model="queryForm.causeAnalysis" placeholder="请输入原因分析" style="width:130px"></el-input>
+      <el-input v-model="queryForm.causeAnalysis" placeholder style="width:130px"></el-input>
+    </el-form-item>
+    <el-form-item label="责任单位">
+      <department
+        :value="queryForm.responsibleUnit"
+        @change="deptChange"
+        style="width:200px;line-height:20px"
+      ></department>
+    </el-form-item>
+    <el-form-item label="产品" label-width="50">
+      <dict-select
+        :value="queryForm.product"
+        type="product"
+        @change="dictChange($event,'product',queryForm)"
+        style="width:130px"
+      />
+    </el-form-item>
+    <el-form-item label="系统" label-width="50">
+      <dict-select
+        :value="queryForm.systemCode"
+        type="system"
+        @change="dictChange($event,'systemCode',queryForm)"
+        style="width:100px"
+      />
+    </el-form-item>
+    <el-form-item label="风险" label-width="50">
+      <risk-select :value="queryForm.risk" @change="riskChange" style="width: 300px"></risk-select>
     </el-form-item>
     <el-form-item>
       <el-button
@@ -37,12 +89,38 @@
 </template>
 
 <script>
+import dictSelect from "@/components/common/dictSelect";
+import department from "@/components/Department";
+import riskSelect from "./riskSelect";
 export default {
+  components: { dictSelect, department, riskSelect },
   data() {
     return {
-      queryForm: {},
+      queryForm: {
+        infoSource: "",
+        startHappenDate: "",
+        endHappenDate: "",
+        place: "",
+        aircraftType: "",
+        eventOverview: "",
+        causeAnalysis: "",
+        responsibleUnit: null,
+        product: "",
+        systemCode: "",
+        risk: "",
+      },
       date: "",
     };
+  },
+  props: {
+    sourceType: {
+      type: String,
+      default: "",
+    },
+    type: {
+      type: String,
+      default: "",
+    },
   },
   watch: {
     date(val) {
@@ -63,16 +141,50 @@ export default {
       _this.init();
     },
     refresh() {
-      this.queryForm = {};
+      this.queryForm = {
+        infoSource: "",
+        startHappenDate: "",
+        endHappenDate: "",
+        place: "",
+        aircraftType: "",
+        eventOverview: "",
+        causeAnalysis: "",
+        responsibleUnit: null,
+        product: "",
+        systemCode: "",
+        risk: "",
+      };
       this.date = "";
       this.toQuery(this.queryForm);
+    },
+    dictChange(val, key, row) {
+      row[key] = val;
+    },
+    deptChange(val) {
+      this.queryForm.responsibleUnit = val;
+    },
+    riskChange(val) {
+      this.queryForm.risk = val.join(",");
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.search{
+.search {
   display: inline;
+  .el-form-item {
+    margin-bottom: 8px;
+  }
+}
+/deep/ .vue-treeselect__control {
+  height: 30px;
+  .vue-treeselect__placeholder,
+  .vue-treeselect__single-value {
+    line-height: 30px;
+  }
+}
+/deep/ .vue-treeselect--append-to-body {
+  z-index: 2000 !important;
 }
 </style>

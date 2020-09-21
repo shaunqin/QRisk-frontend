@@ -13,7 +13,7 @@
           <el-form-item label="信息来源" prop="infoSource">
             <dict-select
               :value="form.infoSource"
-              type="info_source"
+              type="info_source_customer"
               @change="dictChange($event,'infoSource',form)"
             />
           </el-form-item>

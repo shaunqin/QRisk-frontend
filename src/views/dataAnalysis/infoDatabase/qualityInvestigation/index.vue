@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="head-container">
-      <search />
+      <search sourceType="info_source_qauit" type="2" />
       <el-button class="filter-item" size="mini" type="primary" icon="el-icon-plus" @click="add">新增</el-button>
     </div>
     <!--表格渲染-->
@@ -59,9 +59,9 @@ import search from "../components/search2";
 import eform from "./form";
 import editform from "./editForm";
 import { formatShortDate } from "@/utils/datetime";
-import { detailInfobase, delInfobase ,modifyInfobase} from "@/api/infodb";
+import { detailInfobase, delInfobase, modifyInfobase } from "@/api/infodb";
 export default {
-  components: { search, eform ,editform},
+  components: { search, eform, editform },
   mixins: [initData],
   data() {
     return {

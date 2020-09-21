@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="head-container">
-      <search />
+      <search sourceType="info_source" type="1" />
       <el-button class="filter-item" size="mini" type="primary" icon="el-icon-plus" @click="add">新增</el-button>
     </div>
     <!--表格渲染-->
