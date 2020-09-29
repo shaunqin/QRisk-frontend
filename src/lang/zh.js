@@ -65,9 +65,10 @@ export default {
     notice: '通知',
     agencyMatters: '代办事项',
     workDone: '已办事项',
-    dataAnalysis:'数据分析',
-    riskEvaluateMonthly:'月度风险评价',
-    riskManageControl:'在控风险管理'
+    dataAnalysis: '数据分析',
+    riskEvaluateMonthly: '月度风险评价',
+    riskManageControl: '在控风险管理',
+    cruxRisk: '关键风险'
   },
   navbar: {
     dashboard: '首页',

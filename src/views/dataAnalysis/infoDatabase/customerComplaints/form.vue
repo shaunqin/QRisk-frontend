@@ -23,20 +23,20 @@
             <el-date-picker v-model="form.happenDate" placeholder style="width: 100%;"></el-date-picker>
           </el-form-item>
         </el-col>
-        <!-- <el-col :span="6">
+        <el-col :span="6">
           <el-form-item label="地点" prop="place">
             <el-input v-model="form.place" style="width: 100%;" />
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="机型" prop="aircraftType">
+          <el-form-item label="机型">
             <dict-select
               :value="form.aircraftType"
               type="aircraft"
               @change="dictChange($event,'aircraftType',form)"
             />
           </el-form-item>
-        </el-col>-->
+        </el-col>
         <el-col :span="24">
           <el-form-item label="事件概述" prop="eventOverview">
             <el-input v-model="form.eventOverview" type="textarea" rows="3" style="width: 100%;" />
@@ -377,7 +377,7 @@ export default {
       row.responsibleUnit = val;
     },
     riskChange(val) {
-      this.form.risk = val.join(",");
+      this.form.risk = val;
     },
     incentiveChange(val, row) {
       row.incentive = val.join(",");

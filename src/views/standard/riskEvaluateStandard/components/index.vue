@@ -35,7 +35,7 @@ export default {
       selections: [],
       department: null,
       chartData: {},
-      data: []
+      data: [],
     };
   },
   created() {
@@ -53,21 +53,21 @@ export default {
           // height: "50%",
           top: "10%",
           left: "13%",
-          right:20
+          right: 20,
         },
         xAxis: {
           type: "category",
           data: x,
           splitArea: {
-            show: true
-          }
+            show: true,
+          },
         },
         yAxis: {
           type: "category",
           data: y,
           splitArea: {
-            show: true
-          }
+            show: true,
+          },
         },
         // visualMap: {
         //   min: 0,
@@ -89,19 +89,19 @@ export default {
             data: data,
             label: {
               show: true,
-              color: "#000"
+              color: "#000",
             },
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
-                shadowColor: "rgba(0, 0, 0, 0.5)"
-              }
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
             },
             itemStyle: {
-              color: params => params.data[3]
-            }
-          }
-        ]
+              color: (params) => params.data[3],
+            },
+          },
+        ],
       };
     },
     deptChange(val) {
@@ -109,24 +109,24 @@ export default {
       this.getChartsData();
     },
     getChartsData() {
-      queryMatrixData(this.department || "000003").then(res => {
+      queryMatrixData(this.department || "000003").then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
           const { x, y, data } = res.obj;
           let _xAxis = [],
             _yAxis = [];
-          x.map(item => {
+          x.map((item) => {
             _xAxis.push(item.riskLevel);
           });
-          y.map(item => {
+          y.map((item) => {
             _yAxis.push(`${item.riskLevel}(${item.standard})`);
           });
           this.renderChart(_xAxis, _yAxis, data);
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -29,7 +29,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="机型" prop="aircraftType">
+          <el-form-item label="机型">
             <dict-select
               :value="form.aircraftType"
               type="aircraft"
@@ -206,9 +206,6 @@ export default {
         sourceOfRisk: [
           { required: true, message: "危险源不能为空", trigger: "blur" },
         ],
-        aircraftType: [
-          { required: true, message: "机型不能为空", trigger: "blur" },
-        ],
         responsibleUnit: [
           { required: true, message: "责任单位不能为空", trigger: "blur" },
         ],
@@ -377,7 +374,7 @@ export default {
       row.responsibleUnit = val;
     },
     riskChange(val) {
-      this.form.risk = val.join(",");
+      this.form.risk = val;
     },
     incentiveChange(val, row) {
       row.incentive = val.join(",");

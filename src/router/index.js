@@ -281,7 +281,7 @@ export const asyncRoutes = [{
         {
           path: 'index',
           component: () => import('@/views/dataAnalysis/riskEvaluateMonthly/index'),
-          name: 'index',
+          name: 'riskEvaluateMonthlyIndex',
           meta: {
             title: 'index'
           }
@@ -301,7 +301,7 @@ export const asyncRoutes = [{
         {
           path: 'index',
           component: () => import('@/views/dataAnalysis/riskManageControl/index'),
-          name: 'index',
+          name: 'riskManageControlIndex',
           meta: {
             title: 'index'
           }
@@ -348,6 +348,26 @@ export const asyncRoutes = [{
       }
     ]
   }]
+},
+{
+  path: '/cruxRisk',
+  component: Layout,
+  meta: {
+    title: 'cruxRisk',
+    icon: 'cruxRisk'
+  },
+  redirect: '/cruxRisk/list',
+  children: [
+    {
+      path: 'list',
+      component: () => import('@/views/cruxRisk/index'),
+      name: 'cruxRiskList',
+      hidden: true,
+      meta: {
+        title: 'cruxRiskList'
+      }
+    }
+  ]
 },
 {
   path: '/safetyRiskPrompt',
@@ -451,6 +471,27 @@ export const asyncRoutes = [{
       }
     }]
   }]
+},
+{
+  path: '/message',
+  component: Layout,
+  meta: {
+    title: 'message',
+    icon: 'star'
+  },
+  hidden: true,
+  redirect: '/message/list',
+  children: [
+    {
+      path: 'list',
+      component: () => import('@/views/message/index'),
+      name: 'messagelist',
+      hidden: true,
+      meta: {
+        title: 'messagelist'
+      }
+    }
+  ]
 },
 
 // 404 page must be placed at the end !!!

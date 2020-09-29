@@ -6,19 +6,21 @@
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-
         <!-- <screenfull id="screenfull" class="right-menu-item hover-effect" /> -->
 
         <!-- <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip> -->
+        </el-tooltip>-->
 
         <!-- 语言切换 -->
         <!-- <lang-select class="right-menu-item hover-effect" /> -->
-
       </template>
-
-      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click" placement="bottom">
+      <message-bell />
+      <el-dropdown
+        class="avatar-container right-menu-item hover-effect"
+        trigger="click"
+        placement="bottom"
+      >
         <div class="avatar-wrapper">
           <img :src="userImgUrl" class="user-avatar" />
           <span class="user-name">{{userInfo.userName||'admin@123'}}</span>
@@ -26,9 +28,7 @@
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/">
-            <el-dropdown-item>
-              {{ $t('navbar.dashboard') }}
-            </el-dropdown-item>
+            <el-dropdown-item>{{ $t('navbar.dashboard') }}</el-dropdown-item>
           </router-link>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">{{ $t('navbar.logOut') }}</span>
@@ -40,12 +40,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
-import Screenfull from '@/components/Screenfull'
+import { mapGetters } from "vuex";
+import Breadcrumb from "@/components/Breadcrumb";
+import Hamburger from "@/components/Hamburger";
+import Screenfull from "@/components/Screenfull";
 // import SizeSelect from '@/components/SizeSelect'
-import LangSelect from '@/components/LangSelect'
+import LangSelect from "@/components/LangSelect";
+import MessageBell from "@/components/MessageBell";
 
 export default {
   components: {
@@ -53,30 +54,27 @@ export default {
     Hamburger,
     Screenfull,
     // SizeSelect,
-    LangSelect
+    LangSelect,
+    MessageBell,
   },
   data() {
     return {
-      userImgUrl: require('@/assets/user_images/login-user.gif')
-    }
+      userImgUrl: require("@/assets/user_images/login-user.gif"),
+    };
   },
   computed: {
-    ...mapGetters([
-      'sidebar',
-      'device',
-      "userInfo"
-    ])
+    ...mapGetters(["sidebar", "device", "userInfo"]),
   },
   methods: {
     toggleSideBar() {
-      this.$store.dispatch('app/toggleSideBar')
+      this.$store.dispatch("app/toggleSideBar");
     },
     async logout() {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-    }
-  }
-}
+      await this.$store.dispatch("user/logout");
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -85,18 +83,18 @@ export default {
   overflow: hidden;
   position: relative;
   background: transparent;
-  box-shadow: 0 1px 4px rgba(0,21,41,.08);
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 
   .hamburger-container {
     line-height: 46px;
     height: 100%;
     float: left;
     cursor: pointer;
-    transition: background .3s;
-    -webkit-tap-highlight-color:transparent;
+    transition: background 0.3s;
+    -webkit-tap-highlight-color: transparent;
 
     &:hover {
-      background: rgba(0, 0, 0, .025)
+      background: rgba(0, 0, 0, 0.025);
     }
   }
 
@@ -113,6 +111,7 @@ export default {
     float: right;
     height: 100%;
     line-height: 50px;
+    display: flex;
 
     &:focus {
       outline: none;
@@ -128,10 +127,10 @@ export default {
 
       &.hover-effect {
         cursor: pointer;
-        transition: background .3s;
+        transition: background 0.3s;
 
         &:hover {
-          background: rgba(0, 0, 0, .025)
+          background: rgba(0, 0, 0, 0.025);
         }
       }
     }
@@ -151,7 +150,7 @@ export default {
           height: 40px;
           border-radius: 50%;
         }
-        .user-name{
+        .user-name {
           margin: 0 8px;
           color: #fff;
         }

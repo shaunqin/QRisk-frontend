@@ -19,6 +19,11 @@
       <el-table-column label="创建时间">
         <template slot-scope="{row}">{{format(row.createTime)}}</template>
       </el-table-column>
+      <el-table-column label="预览" width="100">
+        <template slot-scope="{row}">
+          <el-button type="text" icon="el-icon-view" @click="preview(row)"></el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -42,7 +47,7 @@ export default {
       isSuperAdmin: false,
       userInfo: {},
       selections: [],
-      department: ""
+      department: "",
     };
   },
   created() {
@@ -61,8 +66,9 @@ export default {
       //   this.init();
       //   return;
       // }
-    }
-  }
+    },
+    preview(row) {},
+  },
 };
 </script>
 
