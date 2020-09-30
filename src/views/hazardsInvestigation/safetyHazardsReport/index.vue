@@ -6,7 +6,7 @@
         v-model="query"
         clearable
         placeholder="请输入你要搜索的内容"
-        style="width: 200px;"
+        style="width: 200px"
         class="filter-item"
       />
       <el-button
@@ -38,7 +38,7 @@
       :data="data"
       size="small"
       :stripe="true"
-      style="width: 100%;"
+      style="width: 100%"
       @selection-change="selectionChange"
     >
       <el-table-column type="index" width="50" />
@@ -46,12 +46,20 @@
       <el-table-column prop="bb" label="任务类型" />
       <el-table-column prop="cc" label="任务通知" />
       <el-table-column prop="dd" label="反馈时间" />
-      <el-table-column prop="ee" label="安全隐患管控清单" />
-      <el-table-column prop="ff" label="安全隐患统计表" />
+      <el-table-column prop="ee" label="安全隐患管控清单">
+        <template slot-scope="{row}">
+          <el-button type="text" size="mini" @click="showHazardsList(row)">{{ row.ee }}</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column prop="ff" label="安全隐患统计表">
+        <template slot-scope="{row}">
+          <el-button type="text" size="mini" @click="showHazardsStatistics(row)">{{ row.ff }}</el-button>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="255px" align="center" fixed="right">
         <template slot-scope="scope">
           <el-button-group>
-            <el-button size="mini">上报</el-button>
+            <el-button size="mini" @click="report">上报</el-button>
             <el-button size="mini" icon="el-icon-edit" @click="edit(scope.row)"></el-button>
             <el-button size="mini" icon="el-icon-delete" @click="subDelete(scope.row.id)"></el-button>
             <el-button size="mini">取消任务</el-button>
@@ -63,7 +71,7 @@
     <el-pagination
       :total="total"
       :current-page="page"
-      style="margin-top: 8px;text-align: right"
+      style="margin-top: 8px; text-align: right"
       layout="total, prev, pager, next, sizes"
       @size-change="sizeChange"
       @current-change="pageChange"
@@ -74,6 +82,10 @@
     <task ref="task" :is-add="isAdd" />
     <!-- 单次任务 -->
     <singleTask ref="singleTask" />
+    <!-- 安全隐患管控清单 -->
+    <hazardsList ref="hazardsList" />
+    <!-- 安全隐患统计表 -->
+    <hazardsStatistics ref="hazardsStatistics" />
   </div>
 </template>
 
@@ -84,8 +96,10 @@ import { safetyHazardsFollow } from "@/dataSource";
 import report from "./components/report";
 import task from "./components/task";
 import singleTask from "./components/singleTask";
+import hazardsList from "./components/hazardsList/list";
+import hazardsStatistics from './components/hazardsStatistics/form'
 export default {
-  components: { eform, report, task, singleTask },
+  components: { eform, report, task, singleTask, hazardsList,hazardsStatistics },
   mixins: [initData],
   data() {
     return {
@@ -150,15 +164,16 @@ export default {
     },
     report() {
       let _this = this.$refs.report;
-      _this.form = {
-        aa: "方案制定存在缺陷",
-        bb: "YP2020050501",
-        cc: "2020-05-06",
-        dd: "2020",
-        ee: "2020-05-06",
-      };
       _this.dialog = true;
     },
+    showHazardsList(row) {
+      let _this = this.$refs.hazardsList;
+      _this.dialog = true;
+    },
+    showHazardsStatistics(row){
+      let _this = this.$refs.hazardsStatistics;
+      _this.dialog = true;
+    }
   },
 };
 </script>

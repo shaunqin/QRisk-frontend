@@ -7,124 +7,113 @@
     title="上报"
     custom-class="big_dialog"
   >
-    <el-card header="基本信息">
-      <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
+    <p class="title">
+      <b>XX单位20XX年1月至X月安全生产隐患排查管控清单</b>
+    </p>
+    <el-form ref="form" :model="form" size="mini" label-width="auto" inline>
+      <el-form-item label="填表人">
+        <span class="readonly">XXX</span>
+      </el-form-item>
+      <el-form-item label="填表日期">
+        <span class="readonly">2020-09-20</span>
+      </el-form-item>
+      <el-form-item label="批准人">
+        <el-input v-model="form.aa" placeholder></el-input>
+      </el-form-item>
+      <el-form-item label="批准日期">
+        <el-date-picker v-model="form.bb" type="date" value-format="yyyy-MM-dd"></el-date-picker>
+      </el-form-item>
+    </el-form>
+    <el-button type="info" size="mini" style="margin-bottom: 10px" @click="addRow">新增一行</el-button>
+    <el-card style="margin-bottom: 20px" v-for="(item, index) in data" :key="index">
+      <el-form size="mini" label-width="80px" inline>
         <el-row>
-          <el-col :span="8">
-            <el-form-item label="任务名称" prop="aa">
-              <el-input v-model="form.aa" style="width: 100%;" />
-            </el-form-item>
-            <el-form-item label="年度">
-              <el-input v-model="form.dd" style="width: 100%;" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="编号" prop="bb">
-              <el-input v-model="form.bb" style="width: 100%;" />
-            </el-form-item>
-            <el-form-item label="反馈日期">
-              <el-input v-model="form.ee" style="width: 100%;" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="时间">
-              <el-input v-model="form.cc" style="width: 100%;" />
+          <el-col :span="24">
+            <el-form-item label="隐患名称">
+              <el-input v-model="item.aa" placeholder style="width: 930px"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
+        <el-form-item label="系统编号">
+          <el-input v-model="item.no" placeholder></el-input>
+        </el-form-item>
+        <el-form-item label="发现时间">
+          <el-input v-model="item.cc" placeholder></el-input>
+        </el-form-item>
+        <el-form-item label="来源">
+          <el-input v-model="item.dd" placeholder></el-input>
+        </el-form-item>
+        <el-form-item label="类型">
+          <el-input v-model="item.ee" placeholder></el-input>
+        </el-form-item>
+        <el-form-item label="等级">
+          <el-input v-model="item.ff" placeholder></el-input>
+        </el-form-item>
+        <el-form-item label="主体单位">
+          <el-input v-model="item.gg" placeholder></el-input>
+        </el-form-item>
+        <el-form-item label="涉及业务">
+          <el-input v-model="item.hh" placeholder></el-input>
+        </el-form-item>
+        <el-form-item label="涉及流程">
+          <el-input v-model="item.ii" placeholder></el-input>
+        </el-form-item>
+        <el-form-item label="原因分析">
+          <el-input v-model="item.jj" placeholder></el-input>
+        </el-form-item>
+        <el-form-item label="治理效果验证标准" label-width="140px">
+          <el-input v-model="item.nn" placeholder></el-input>
+        </el-form-item>
+        <el-form-item label="整改进展">
+          <el-input v-model="item.qq" placeholder></el-input>
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input v-model="item.rr" placeholder style="width: 500px"></el-input>
+        </el-form-item>
       </el-form>
-    </el-card>
-    <el-card header="隐患清单" style="margin-top:20px">
-      <el-button type="info" size="mini" style="margin-bottom:10px" @click="addRow">新增一行</el-button>
+      <el-button type="info" size="mini" style="margin-bottom: 10px" @click="addItemRow(item)">新增一行</el-button>
       <!--表格渲染-->
-      <el-table :data="data" size="small" style="width: 100%;" max-height="400px">
+      <el-table :data="item.array" size="small" style="width: 100%" max-height="400px">
         <el-table-column type="index" width="50" />
-        <el-table-column prop="aa" label="隐患名称" width="120px">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.aa" size="mini" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="bb" label="发现时间" width="120px">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.bb" size="mini" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="cc" label="来源" width="120px">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.cc" size="mini" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="dd" label="等级" width="120px">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.dd" size="mini" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="ee" label="主体单位" width="120px">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.ee" size="mini" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="ff" label="涉及业务" width="120px">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.ff" size="mini" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="gg" label="涉及流程" width="120px">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.gg" size="mini" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="hh" label="监管单位" width="120px">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.hh" size="mini" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="ii" label="原因分析" width="120px">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.aiia" size="mini" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="jj" label="等效措施" width="120px">
+        <el-table-column prop="jj" label="等效措施">
           <template slot-scope="scope">
             <el-input v-model="scope.row.jj" size="mini" placeholder></el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="kk" label="责任人" width="120px">
+        <el-table-column prop="kk" label="责任人">
           <template slot-scope="scope">
             <el-input v-model="scope.row.kk" size="mini" placeholder></el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="ll" label="整改时限" width="120px">
+        <el-table-column prop="ll" label="整改时限">
           <template slot-scope="scope">
             <el-input v-model="scope.row.ll" size="mini" placeholder></el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="mm" label="验证标准" width="120px">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.mm" size="mini" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="nn" label="措施实施情况跟踪" width="120px">
+        <el-table-column prop="nn" label="措施实施情况跟踪">
           <template slot-scope="scope">
             <el-input v-model="scope.row.nn" size="mini" placeholder></el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="oo" label="治理结果情况跟踪" width="120px">
+        <el-table-column prop="oo" label="治理结果情况跟踪">
           <template slot-scope="scope">
             <el-input v-model="scope.row.oo" size="mini" placeholder></el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="pp" label="整改进展" width="120px">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.pp" size="mini" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="qq" label="备注" width="120px">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row. qq" size="mini" placeholder></el-input>
+        <el-table-column label width="80">
+          <template slot-scope="{ $index }">
+            <el-button
+              type="text"
+              icon="el-icon-delete"
+              size="mini"
+              @click="delItemRow(item, $index)"
+            ></el-button>
           </template>
         </el-table-column>
       </el-table>
+      <div class="del">
+        <el-button type="danger" size="small" icon="el-icon-delete" @click="delRow(index)">删除</el-button>
+      </div>
     </el-card>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
@@ -146,59 +135,38 @@ export default {
         bb: "",
         cc: "",
         dd: "",
-        ee: ""
+        ee: "",
       },
       roleSelect: [],
       formRules: {
         aa: [{ required: true, message: "请填写名称", trigger: "blur" }],
-        bb: [{ required: true, message: "请填写名称", trigger: "blur" }]
+        bb: [{ required: true, message: "请填写名称", trigger: "blur" }],
       },
       data: [],
-      form2: {}
+      form2: {},
     };
   },
   props: {},
-  created() {
-    this.data = [
-      {
-        aa: "方案制定存在缺陷",
-        bb: "2020-02-22",
-        cc: "数据分析",
-        dd: "3",
-        ee: "上海",
-        ff: "维修",
-        gg: "开发",
-        hh: "上海",
-        ii: "方案制定",
-        jj: "重新制定",
-        kk: "admin",
-        ll: "3",
-        mm: "符合规范",
-        nn: "跟踪状态",
-        oo: "跟踪状态",
-        pp: "待完成",
-        qq: "备注信息"
-      }
-    ];
-  },
+  created() { },
   methods: {
     cancel() {
       this.resetForm();
     },
     doSubmit() {
-      this.$refs["form"].validate(valid => {
+      this.$refs["form"].validate((valid) => {
         if (valid) {
           // this.loading = true;
           // if (this.isAdd) {
           //   this.doAdd()
           // } else this.doModify()
 
-          this.dialog = false;
-          this.$message({
-            message: "添加成功",
-            type: "success"
-          });
-          this.resetForm();
+          // this.dialog = false;
+          // this.$message({
+          //   message: "添加成功",
+          //   type: "success",
+          // });
+          // this.resetForm();
+          console.log(this.data);
         }
       });
     },
@@ -208,18 +176,18 @@ export default {
       let arr = [];
       for (let i = 0; i < data.length; i++) {
         let obj = {
-          id: ""
+          id: "",
         };
         obj.id = data[i];
         arr.push(obj);
       }
       this.form.roleList = arr;
       add(this.form)
-        .then(res => {
+        .then((res) => {
           if (res.code === "200") {
             this.$message({
               message: "添加成功",
-              type: "success"
+              type: "success",
             });
           } else {
             this.$message.error(res.msg);
@@ -228,17 +196,17 @@ export default {
           this.loading = false;
           this.$parent.init();
         })
-        .catch(err => {
+        .catch((err) => {
           this.loading = false;
         });
     },
     doModify() {
       modify(this.form)
-        .then(res => {
+        .then((res) => {
           if (res.code === "200") {
             this.$message({
               message: "修改成功",
-              type: "success"
+              type: "success",
             });
           } else {
             this.$message.error(res.msg);
@@ -247,7 +215,7 @@ export default {
           this.loading = false;
           this.$parent.init();
         })
-        .catch(err => {
+        .catch((err) => {
           this.loading = false;
         });
     },
@@ -259,7 +227,7 @@ export default {
         bb: "",
         cc: "",
         dd: "",
-        ee: ""
+        ee: "",
       };
       this.roleSelect = [];
     },
@@ -270,7 +238,7 @@ export default {
       let arr = [];
       for (let i = 0; i < e.length; i++) {
         let obj = {
-          id: ""
+          id: "",
         };
         obj.id = e[i];
         arr.push(obj);
@@ -288,27 +256,44 @@ export default {
         gg: "",
         hh: "",
         ii: "",
+        mm: "",
+        pp: "",
+        qq: "",
+        array: [],
+      });
+    },
+    delRow(index) {
+      this.data.splice(index, 1);
+    },
+    addItemRow(item) {
+      item.array.push({
         jj: "",
         kk: "",
         ll: "",
-        mm: "",
         nn: "",
         oo: "",
-        pp: "",
-        qq: ""
       });
-    }
-  }
+    },
+    delItemRow(item, index) {
+      item.array.splice(index, 1);
+    },
+  },
 };
 </script>
 
 
 <style lang="scss" scoped>
-
-.roleSelect {
-  width: 370px;
+.title {
+  text-align: center;
+  font-size: 18px;
+  margin-top: 0;
 }
-.el-select-dropdown {
-  z-index: 99999999999999 !important;
+.readonly {
+  width: 150px;
+  display: inline-block;
+}
+.del {
+  padding: 10px 0 0;
+  text-align: center;
 }
 </style>
