@@ -25,7 +25,12 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="地点" prop="place">
-            <el-input v-model="form.place" style="width: 100%;" />
+            <el-input
+              v-model="form.place"
+              style="width: 100%;"
+              placeholder="请输入城市名称"
+              @blur="checkPlace"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -165,6 +170,7 @@ import incentiveSelect from "../components/incentiveSelect";
 import dictSelect from "@/components/common/dictSelect";
 import eupload from "@/components/Upload/index";
 import riskLevel2CP from "../components/riskLevel2CP";
+import { re } from '@/utils/config-re'
 
 export default {
   components: {
@@ -408,6 +414,14 @@ export default {
       row.riskLevel2 = val;
       row.sourceOfRisk = "";
     },
+    checkPlace(e) {
+      let value = e.target.value;
+      if (value) {
+        if (!re.chinese.test(value)) {
+          this.$message.error("地点请输入中文！");
+        }
+      }
+    }
   },
 };
 </script>

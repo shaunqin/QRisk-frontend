@@ -16,6 +16,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
+            <el-form-item label="发起单位">
+              <el-input v-model="form.danwei" style="width: 100%;" />
+            </el-form-item>
             <el-form-item label="标题" prop="aa">
               <el-input v-model="form.aa" style="width: 100%;" />
             </el-form-item>
@@ -166,7 +169,7 @@ export default {
     };
   },
   props: {},
-  created() {},
+  created() { },
   methods: {
     cancel() {
       this.resetForm();
@@ -278,5 +281,4 @@ export default {
 .el-select-dropdown {
   z-index: 99999999999999 !important;
 }
-
 </style>

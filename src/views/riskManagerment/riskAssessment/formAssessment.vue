@@ -12,6 +12,7 @@
     <step3 v-if="step==3" :form="form"></step3>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
+      <el-button type="success">暂存</el-button>
       <el-button v-if="step==3" :loading="loading" type="primary" @click="doSubmit">确认</el-button>
       <el-button v-if="step!=3" type="primary" @click="nextStep">下一步</el-button>
     </div>
@@ -23,6 +24,7 @@ import { add, modify } from "@/api/emplotee.js";
 import step1 from "./components/step1";
 import step2 from "./components/step2";
 import step3 from "./components/step3";
+import { formatShortDate } from '@/utils/datetime'
 
 export default {
   components: { step1, step2, step3 },
@@ -36,6 +38,7 @@ export default {
         cc: "",
         dd: "",
         ee: "",
+        gg: formatShortDate(new Date()),
         table: [],
         table2: [],
         report: {},
@@ -50,8 +53,9 @@ export default {
     };
   },
   props: {},
-  created() {},
+  created() { },
   methods: {
+    formatShortDate,
     cancel() {
       this.resetForm();
     },
@@ -131,5 +135,4 @@ export default {
 
 
 <style lang="scss" scope>
-
 </style>

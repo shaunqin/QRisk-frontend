@@ -37,11 +37,24 @@
         style="width:100px"
       />
     </el-form-item>
-    <el-form-item label="事件概述">
-      <el-input v-model="queryForm.eventOverview" placeholder style="width:130px"></el-input>
+    <el-form-item label="标题" label-width="50">
+      <el-input v-model="queryForm.title" placeholder style="width:130px"></el-input>
     </el-form-item>
-    <el-form-item label="原因分析">
-      <el-input v-model="queryForm.causeAnalysis" placeholder style="width:130px"></el-input>
+    <el-form-item label="危险源">
+      <el-select
+        clearable
+        filterable
+        v-model="queryForm.sourceOfRisk"
+        placeholder
+        style="width: 130px;"
+      >
+        <el-option
+          v-for="item in riskList"
+          :key="item.diskNo"
+          :label="item.diskName"
+          :value="item.diskNo"
+        ></el-option>
+      </el-select>
     </el-form-item>
     <el-form-item label="责任单位">
       <department
@@ -67,7 +80,7 @@
       />
     </el-form-item>
     <el-form-item label="风险" label-width="50">
-      <risk-select :value="queryForm.risk" @change="riskChange" style="width: 300px"></risk-select>
+      <risk-select :value="queryForm.risk" @change="riskChange" style="width: 150px"></risk-select>
     </el-form-item>
     <el-form-item>
       <el-button
@@ -92,6 +105,7 @@
 import dictSelect from "@/components/common/dictSelect";
 import department from "@/components/Department";
 import riskSelect from "./riskSelect";
+import { queryHazardList } from "@/api/standard";
 export default {
   components: { dictSelect, department, riskSelect },
   data() {
@@ -102,14 +116,15 @@ export default {
         endHappenDate: "",
         place: "",
         aircraftType: "",
-        eventOverview: "",
-        causeAnalysis: "",
+        title: "",
+        sourceOfRisk: "",
         responsibleUnit: null,
         product: "",
         systemCode: "",
         risk: "",
       },
       date: "",
+      riskList: [],
     };
   },
   props: {
@@ -133,6 +148,16 @@ export default {
       }
     },
   },
+  created() {
+    //危险源
+    queryHazardList().then((res) => {
+      if (res.code != "200") {
+        this.$message.error(res.msg);
+      } else {
+        this.riskList = res.obj;
+      }
+    });
+  },
   methods: {
     toQuery(params) {
       let _this = this.$parent;
@@ -147,8 +172,8 @@ export default {
         endHappenDate: "",
         place: "",
         aircraftType: "",
-        eventOverview: "",
-        causeAnalysis: "",
+        title: "",
+        sourceOfRisk: "",
         responsibleUnit: null,
         product: "",
         systemCode: "",
@@ -164,7 +189,7 @@ export default {
       this.queryForm.responsibleUnit = val;
     },
     riskChange(val) {
-      this.queryForm.risk = val.join(",");
+      this.queryForm.risk = val;
     },
   },
 };

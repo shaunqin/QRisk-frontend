@@ -248,11 +248,8 @@
         <el-form-item label="时间">
           <el-date-picker v-model="form.date" style="width:150px"></el-date-picker>
         </el-form-item>
-        <el-form-item label="名称">
-          <el-input v-model="form.name" style="width:150px"></el-input>
-        </el-form-item>
-        <el-form-item label="措施">
-          <el-input v-model="form.cuoshi" style="width:150px"></el-input>
+        <el-form-item label="风险">
+          <el-input v-model="form.risk" style="width:150px"></el-input>
         </el-form-item>
         <el-form-item label="责任单位">
           <department
@@ -260,12 +257,6 @@
             @change="deptChange"
             style="width:200px;line-height: 32px;"
           ></department>
-        </el-form-item>
-        <el-form-item label="落实情况">
-          <el-input v-model="form.lsqk" style="width:150px"></el-input>
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-input v-model="form.status" style="width:150px"></el-input>
         </el-form-item>
       </el-form>
     </div>

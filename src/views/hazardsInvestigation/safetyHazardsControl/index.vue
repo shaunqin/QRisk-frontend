@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <div class="head-container">
-      <el-button type="success" icon="el-icon-s-data" size="mini">生成国航报表</el-button>
-      <el-button type="success" icon="el-icon-s-data" size="mini">生成局方报表</el-button>
+      <el-button type="success" icon="el-icon-s-data" size="mini">生成报表</el-button>
+      <!-- <el-button type="success" icon="el-icon-s-data" size="mini">生成局方报表</el-button> -->
     </div>
     <!--表格渲染-->
     <el-table

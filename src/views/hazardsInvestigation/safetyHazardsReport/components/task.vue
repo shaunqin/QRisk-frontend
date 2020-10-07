@@ -9,12 +9,17 @@
   >
     <el-card header="基本信息">
       <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto" inline>
-        <el-form-item label="任务名称" prop="aa">
-          <el-input v-model="form.aa" style="width: 200px" />
-        </el-form-item>
+        <el-row>
+          <el-col :span="24" class="full-row">
+            <el-form-item label="任务名称" prop="aa">
+              <el-input v-model="form.aa" style="width: 100%" />
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="年度任务">
-          <el-select v-model="form.dd" placeholder="" style="width: 150px;" >
-            <el-option :label="'年度任务'" :value="'年度任务'"></el-option>
+          <el-select v-model="form.dd" placeholder style="width: 150px;">
+            <el-option :label="'年度任务'" :value="'0'"></el-option>
+            <el-option :label="'单次任务'" :value="'1'"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="反馈日期">
@@ -22,7 +27,7 @@
         </el-form-item>
       </el-form>
     </el-card>
-    <el-card header="月度反馈日期设置" style="margin-top:20px">
+    <el-card header="月度反馈日期设置" style="margin-top:20px" v-if="form.dd==0">
       <el-form :model="form2" size="small" label-width="auto">
         <el-row :gutter="16">
           <el-col :span="6">
@@ -72,7 +77,10 @@
         </el-row>
       </el-form>
     </el-card>
-    <el-card header="附件上传"  style="margin-top:20px">
+    <el-card header="单次任务部门" style="margin-top:20px" v-if="form.dd==1">
+      <department :value="form.dept" @change="deptChange" style="width:400px" />
+    </el-card>
+    <el-card header="附件上传" style="margin-top:20px">
       <UploadExcel />
     </el-card>
     <div slot="footer" class="dialog-footer">
@@ -85,9 +93,10 @@
 <script>
 import { add, modify } from "@/api/emplotee.js";
 import UploadExcel from "@/components/UploadExcel";
+import department from "@/components/Department";
 
 export default {
-  components: { UploadExcel },
+  components: { UploadExcel, department },
   data() {
     return {
       loading: false,
@@ -96,8 +105,9 @@ export default {
         aa: "",
         bb: "",
         cc: "",
-        dd: "",
+        dd: "0",
         ee: "",
+        dept: null
       },
       roleSelect: [],
       formRules: {
@@ -114,7 +124,7 @@ export default {
       required: true,
     },
   },
-  created() {},
+  created() { },
   methods: {
     cancel() {
       this.resetForm();
@@ -197,51 +207,21 @@ export default {
       };
       this.roleSelect = [];
     },
-    roleChange(e) {
-      if (e.length <= 1) {
-        this.form.roleList = e[0];
-      }
-      let arr = [];
-      for (let i = 0; i < e.length; i++) {
-        let obj = {
-          id: "",
-        };
-        obj.id = e[i];
-        arr.push(obj);
-      }
-      this.form.roleList = arr;
+    deptChange(val) {
+      this.form.dept = val;
     },
-    roleRemove(e) {},
-    // delwithRoleList() {
-    //   const roleList = this.roleList
-    //   const checkList = this.form.roleList
-    //   let newList = []
-    //   let obj = {}
-    //   for (let i = 0; i < checkList.length; i++) {
-    //     for (let j = 0; j < roleList.length; j++) {
-    //       if (checkList[i] === roleList[j].id) {
-    //         obj.id = Number(checkList[i])
-    //         obj.code = roleList[j].code
-    //         obj.roleDesc = roleList[j].roleDesc
-    //         // obj.sn = roleList[j].sn
-    //         newList.push(obj)
-    //         obj = {}
-    //       }
-    //     }
-    //   }
-    //   this.form.roleList = newList
-    // }
   },
 };
 </script>
 
 
 <style lang="scss" scoped>
-
-.roleSelect {
-  width: 370px;
-}
-.el-select-dropdown {
-  z-index: 99999999999999 !important;
+.full-row {
+  /deep/ .el-form-item {
+    display: flex;
+    .el-form-item__content {
+      flex: 1;
+    }
+  }
 }
 </style>

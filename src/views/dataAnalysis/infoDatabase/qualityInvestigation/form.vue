@@ -25,7 +25,12 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="地点" prop="place">
-            <el-input v-model="form.place" style="width: 100%;" />
+            <el-input
+              v-model="form.place"
+              style="width: 100%;"
+              placeholder="请输入城市名称"
+              @blur="checkPlace"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -38,6 +43,9 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
+          <el-form-item label="标题" prop="title">
+            <el-input v-model="form.title" style="width: 100%;" />
+          </el-form-item>
           <el-form-item label="事件概述" prop="eventOverview">
             <el-input v-model="form.eventOverview" type="textarea" rows="3" style="width: 100%;" />
           </el-form-item>
@@ -165,6 +173,7 @@ import incentiveSelect from "../components/incentiveSelect";
 import dictSelect from "@/components/common/dictSelect";
 import eupload from "@/components/Upload/index";
 import riskLevel2CP from "../components/riskLevel2CP";
+import { re } from '@/utils/config-re'
 
 export default {
   components: {
@@ -184,6 +193,7 @@ export default {
         happenDate: "",
         place: "",
         aircraftType: "",
+        title: "",
         eventOverview: "",
         risk: "",
         filesId: [],
@@ -215,6 +225,9 @@ export default {
         product: [{ required: true, message: "产品不能为空", trigger: "blur" }],
         systemCode: [
           { required: true, message: "系统不能为空", trigger: "blur" },
+        ],
+        title: [
+          { required: true, message: "标题不能为空", trigger: "blur" },
         ],
         eventOverview: [
           { required: true, message: "事件概述不能为空", trigger: "blur" },
@@ -351,6 +364,7 @@ export default {
         happenDate: "",
         place: "",
         aircraftType: "",
+        title: "",
         eventOverview: "",
         risk: "",
         type: "2",
@@ -408,6 +422,14 @@ export default {
       row.riskLevel2 = val;
       row.sourceOfRisk = "";
     },
+    checkPlace(e) {
+      let value = e.target.value;
+      if (value) {
+        if (!re.chinese.test(value)) {
+          this.$message.error("地点请输入中文！");
+        }
+      }
+    }
   },
 };
 </script>

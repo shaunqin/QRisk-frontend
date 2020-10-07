@@ -91,7 +91,6 @@
 
 <script>
 import initData from "@/mixins/initData";
-import eform from "./form";
 import { safetyHazardsFollow } from "@/dataSource";
 import report from "./components/report";
 import task from "./components/task";
@@ -99,7 +98,7 @@ import singleTask from "./components/singleTask";
 import hazardsList from "./components/hazardsList/list";
 import hazardsStatistics from './components/hazardsStatistics/form'
 export default {
-  components: { eform, report, task, singleTask, hazardsList,hazardsStatistics },
+  components: { report, task, singleTask, hazardsList,hazardsStatistics },
   mixins: [initData],
   data() {
     return {

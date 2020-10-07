@@ -24,7 +24,7 @@
             <el-input v-model="scope.row.yy" placeholder></el-input>
           </template>
         </el-table-column>
-        <el-table-column label="发生日期" width="200">
+        <el-table-column label="日期" width="200">
           <template slot-scope="scope">
             <el-input v-model="scope.row.zz" placeholder></el-input>
           </template>

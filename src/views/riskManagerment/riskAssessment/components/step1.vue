@@ -31,7 +31,7 @@
             <el-form-item label="编号">
               <el-input v-model="form.cc" placeholder></el-input>
             </el-form-item>
-            <el-form-item label="批转">
+            <el-form-item label="批准">
               <el-input v-model="form.ff" placeholder></el-input>
             </el-form-item>
           </el-col>
@@ -40,7 +40,7 @@
               <el-input v-model="form.dd" placeholder></el-input>
             </el-form-item>
             <el-form-item label="日期">
-              <el-input v-model="form.gg" placeholder></el-input>
+              <el-date-picker v-model="form.gg" value-format="yyyy-MM-dd" placeholder></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
