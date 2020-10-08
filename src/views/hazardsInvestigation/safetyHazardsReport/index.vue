@@ -24,13 +24,6 @@
         icon="el-icon-plus"
         @click="add"
       >新建任务</el-button>
-      <el-button
-        class="filter-item"
-        size="mini"
-        type="success"
-        icon="el-icon-plus"
-        @click="addSingle"
-      >新建单次任务</el-button>
     </div>
     <!--表格渲染-->
     <el-table
@@ -80,8 +73,6 @@
     <report ref="report"></report>
     <!-- 任务 -->
     <task ref="task" :is-add="isAdd" />
-    <!-- 单次任务 -->
-    <singleTask ref="singleTask" />
     <!-- 安全隐患管控清单 -->
     <hazardsList ref="hazardsList" />
     <!-- 安全隐患统计表 -->
@@ -94,11 +85,10 @@ import initData from "@/mixins/initData";
 import { safetyHazardsFollow } from "@/dataSource";
 import report from "./components/report";
 import task from "./components/task";
-import singleTask from "./components/singleTask";
 import hazardsList from "./components/hazardsList/list";
 import hazardsStatistics from './components/hazardsStatistics/form'
 export default {
-  components: { report, task, singleTask, hazardsList,hazardsStatistics },
+  components: { report, task, hazardsList, hazardsStatistics },
   mixins: [initData],
   data() {
     return {
@@ -169,7 +159,7 @@ export default {
       let _this = this.$refs.hazardsList;
       _this.dialog = true;
     },
-    showHazardsStatistics(row){
+    showHazardsStatistics(row) {
       let _this = this.$refs.hazardsStatistics;
       _this.dialog = true;
     }

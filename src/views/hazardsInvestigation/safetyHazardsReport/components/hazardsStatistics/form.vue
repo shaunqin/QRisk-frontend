@@ -9,57 +9,120 @@
   >
     <!--表格渲染-->
     <el-table :data="form.array" size="small" style="width: 100%">
-      <el-table-column label="排查治理隐患单位"></el-table-column>
+      <el-table-column label="排查治理隐患单位" prop="year"></el-table-column>
       <el-table-column label="一般隐患" label-class-name="noborder">
         <el-table-column label>
           <el-table-column label="排查一般隐患">
-            <el-table-column label="(项)"></el-table-column>
+            <el-table-column label="(项)">
+              <template slot-scope="{row}">
+                <el-input v-model="row.aa" placeholder></el-input>
+              </template>
+            </el-table-column>
           </el-table-column>
           <el-table-column label="其中:已整改">
-            <el-table-column label="(项)"></el-table-column>
+            <el-table-column label="(项)">
+              <template slot-scope="{row}">
+                <el-input v-model="row.bb" placeholder></el-input>
+              </template>
+            </el-table-column>
           </el-table-column>
           <el-table-column label="整改率">
-            <el-table-column label="(%)"></el-table-column>
+            <el-table-column label="(%)">
+              <template slot-scope="{row}">
+                <el-input v-model="row.cc" placeholder></el-input>
+              </template>
+            </el-table-column>
           </el-table-column>
         </el-table-column>
       </el-table-column>
       <el-table-column label="重大隐患">
         <el-table-column label="排查治理重大隐患">
           <el-table-column label="排查重大隐患">
-            <el-table-column label="(项)"></el-table-column>
+            <el-table-column label="(项)">
+              <template slot-scope="{row}">
+                <el-input v-model="row.dd" placeholder></el-input>
+              </template>
+            </el-table-column>
           </el-table-column>
           <el-table-column label="其中:已整改">
-            <el-table-column label="(项)"></el-table-column>
+            <el-table-column label="(项)">
+              <template slot-scope="{row}">
+                <el-input v-model="row.ee" placeholder></el-input>
+              </template>
+            </el-table-column>
           </el-table-column>
           <el-table-column label="整改率">
-            <el-table-column label="(%)"></el-table-column>
+            <el-table-column label="(%)">
+              <template slot-scope="{row}">
+                <el-input v-model="row.ff" placeholder></el-input>
+              </template>
+            </el-table-column>
           </el-table-column>
         </el-table-column>
         <el-table-column label="其中:列入治理计划的重大事故隐患">
           <el-table-column label="列入治理计划的重大隐患">
-            <el-table-column label="(项)"></el-table-column>
+            <el-table-column label="(项)">
+              <template slot-scope="{row}">
+                <el-input v-model="row.gg" placeholder></el-input>
+              </template>
+            </el-table-column>
           </el-table-column>
           <el-table-column label="落实治理目标任务">
-            <el-table-column label="(项)"></el-table-column>
+            <el-table-column label="(项)">
+              <template slot-scope="{row}">
+                <el-input v-model="row.hh" placeholder></el-input>
+              </template>
+            </el-table-column>
           </el-table-column>
           <el-table-column label="落实治理经费物资">
-            <el-table-column label="(项)"></el-table-column>
+            <el-table-column label="(项)">
+              <template slot-scope="{row}">
+                <el-input v-model="row.ii" placeholder></el-input>
+              </template>
+            </el-table-column>
           </el-table-column>
           <el-table-column label="落实治理机构人员">
-            <el-table-column label="(项)"></el-table-column>
+            <el-table-column label="(项)">
+              <template slot-scope="{row}">
+                <el-input v-model="row.jj" placeholder></el-input>
+              </template>
+            </el-table-column>
           </el-table-column>
           <el-table-column label="落实治理时间">
-            <el-table-column label="(项)"></el-table-column>
+            <el-table-column label="(项)">
+              <template slot-scope="{row}">
+                <el-input v-model="row.kk" placeholder></el-input>
+              </template>
+            </el-table-column>
           </el-table-column>
           <el-table-column label="落实安全措施应急预案">
-            <el-table-column label="(项)"></el-table-column>
+            <el-table-column label="(项)">
+              <template slot-scope="{row}">
+                <el-input v-model="row.ll" placeholder></el-input>
+              </template>
+            </el-table-column>
           </el-table-column>
           <el-table-column label="累计落实治理资金">
-            <el-table-column label="(万元)"></el-table-column>
+            <el-table-column label="(万元)">
+              <template slot-scope="{row}">
+                <el-input v-model="row.mm" placeholder></el-input>
+              </template>
+            </el-table-column>
           </el-table-column>
         </el-table-column>
       </el-table-column>
     </el-table>
+    <el-form :model="form" size="small" inline class="mt">
+      <el-form-item label="到期隐患数量">
+        <el-input v-model="form.aa" placeholder></el-input>
+      </el-form-item>
+      <el-form-item label="到期未整改数量">
+        <el-input v-model="form.bb" placeholder></el-input>
+      </el-form-item>
+      <el-form-item label="未按期关闭隐患率">
+        <el-input v-model="form.cc" placeholder></el-input>
+      </el-form-item>
+    </el-form>
 
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
@@ -100,7 +163,13 @@ export default {
     };
   },
   props: {},
-  created() { },
+  created() {
+    this.form.array = [
+      { year: "2020年", aa: "1", bb: "", cc: "", dd: "", ee: "", ff: "", gg: "", hh: "", ii: "", jj: "", kk: "", ll: "", mm: "" },
+      { year: "2019年遗留未整改", aa: "2", bb: "", cc: "", dd: "", ee: "", ff: "", gg: "", hh: "", ii: "", jj: "", kk: "", ll: "", mm: "" },
+      { year: "2018年遗留未整改", aa: "3", bb: "", cc: "", dd: "", ee: "", ff: "", gg: "", hh: "", ii: "", jj: "", kk: "", ll: "", mm: "" },
+    ]
+  },
   methods: {
     cancel() {
       this.resetForm();
@@ -220,5 +289,8 @@ export default {
     z-index: 1;
     transform: translateY(-50%);
   }
+}
+.mt{
+  margin-top: 10px;
 }
 </style>
