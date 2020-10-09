@@ -53,6 +53,7 @@ export default {
     };
   },
   props: {},
+  
   created() { },
   methods: {
     formatShortDate,

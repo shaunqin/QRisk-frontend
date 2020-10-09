@@ -2,8 +2,16 @@
   <el-scrollbar wrap-class="scrollbar-wrapper">
     <div class="app-container">
       <div class="head-container">
-        <el-button size="mini" type="success" icon="el-icon-plus" @click="add">新建通知</el-button>
-        <el-button size="mini" type="success" icon="el-icon-plus" @click="addAssessment">新建评估</el-button>
+        <el-form :model="queryForm" inline>
+          <el-form-item label="部门">
+            <department :value="queryForm.dept" @change="deptChange" style="width:300px" />
+          </el-form-item>
+          <el-form-item label="风险">
+            <el-select v-model="queryForm.risk" placeholder="">
+              <el-option :label="'11'" :value="'111'"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
       </div>
       <!--表格渲染-->
       <el-table v-loading="loading" :data="data" size="small" style="width: 100%;">
@@ -28,13 +36,17 @@
 
 <script>
 import initData from "@/mixins/initData";
+import department from '@/components/Department'
 export default {
-  components: {},
+  components: { department },
   mixins: [initData],
   data() {
     return {
       selections: [],
       type: "",
+      queryForm: {
+        dept: null
+      }
     };
   },
   watch: {
@@ -78,6 +90,9 @@ export default {
     edit(row) {
       console.log(row);
     },
+    deptChange(val) {
+      this.queryForm.dept = val;
+    }
   },
 };
 </script>
@@ -85,9 +100,9 @@ export default {
 <style lang="scss" scoped>
 .app-container {
   margin-top: 10px;
-  .head-container {
-    margin-bottom: 10px;
-  }
+  // .head-container {
+  //   margin-bottom: 10px;
+  // }
 }
 /deep/ .scrollbar-wrapper {
   height: calc(100vh - 60px);

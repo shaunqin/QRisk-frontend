@@ -15,7 +15,13 @@
       <el-col :span="21">
         <div class="head-container">
           <el-button size="mini" type="success" icon="el-icon-plus" @click="add">新建通知</el-button>
-          <el-button size="mini" type="success" icon="el-icon-plus" @click="addAssessment">新建评估</el-button>
+          <el-button
+            size="mini"
+            type="success"
+            icon="el-icon-plus"
+            @click="addAssessment"
+            :disabled="!assessmentType"
+          >新建评估</el-button>
         </div>
         <!--表格渲染-->
         <el-table
@@ -146,7 +152,11 @@ export default {
       this.$refs.form.dialog = true;
     },
     addAssessment() {
-      this.$refs.assessment.dialog = true;
+      let _this = this.$refs.assessment;
+      if (this.assessmentType > 2) {
+        _this.step = 2;
+      }
+      _this.dialog = true;
     },
     edit(row) {
       console.log(row);

@@ -43,6 +43,9 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
+          <el-form-item label="标题" prop="title">
+            <el-input v-model="form.title" style="width: 100%;" />
+          </el-form-item>
           <el-form-item label="事件概述" prop="eventOverview">
             <el-input v-model="form.eventOverview" type="textarea" rows="3" style="width: 100%;" />
           </el-form-item>
@@ -190,6 +193,7 @@ export default {
         happenDate: "",
         place: "",
         aircraftType: "",
+        title: "",
         eventOverview: "",
         risk: "",
         filesId: [],
@@ -221,6 +225,9 @@ export default {
         product: [{ required: true, message: "产品不能为空", trigger: "blur" }],
         systemCode: [
           { required: true, message: "系统不能为空", trigger: "blur" },
+        ],
+        title: [
+          { required: true, message: "标题不能为空", trigger: "blur" },
         ],
         eventOverview: [
           { required: true, message: "事件概述不能为空", trigger: "blur" },
@@ -357,6 +364,7 @@ export default {
         happenDate: "",
         place: "",
         aircraftType: "",
+        title: "",
         eventOverview: "",
         risk: "",
         type: "8",

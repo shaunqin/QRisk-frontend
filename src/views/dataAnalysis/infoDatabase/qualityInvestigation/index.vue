@@ -20,7 +20,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="aircraftTypeText" label="机型" />
-      <el-table-column prop="eventOverview" label="事件概述" min-width="150" show-overflow-tooltip />
+      <el-table-column prop="title" label="标题" min-width="150" show-overflow-tooltip />
       <el-table-column prop="causeAnalysis" label="原因分析" min-width="150" show-overflow-tooltip />
       <el-table-column prop="departmentNameCn" label="责任单位" width="120" show-overflow-tooltip />
       <el-table-column prop="productText" label="产品" width="120" />
@@ -30,11 +30,12 @@
       <el-table-column prop="sourceOfRiskText" label="危险源" width="120" show-overflow-tooltip />
       <el-table-column prop="risk" label="风险" width="120" />
       <el-table-column prop="incentive" label="诱因" width="120" />
-      <el-table-column label="操作" width="110" fixed="right">
+      <el-table-column label="操作" width="150" fixed="right">
         <template slot-scope="{row}">
           <el-button-group v-if="row.status=='1'">
             <el-button type="primary" size="mini" icon="el-icon-edit" @click="edit(row.id)"></el-button>
             <el-button type="primary" size="mini" icon="el-icon-upload" @click="doSub(row.id)"></el-button>
+            <el-button type="danger" size="mini" icon="el-icon-delete" @click="subDel(row.id)"></el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -131,8 +132,22 @@ export default {
             }
           });
         })
-        .catch(() => {});
+        .catch(() => { });
     },
+    subDel(id) {
+      this.$confirm("确定删除嘛？")
+        .then(() => {
+          delInfobase(id).then((res) => {
+            if (res.code != "200") {
+              this.$message.error(res.msg);
+            } else {
+              this.$message.success("删除成功");
+              this.init();
+            }
+          });
+        })
+        .catch(() => { });
+    }
   },
 };
 </script>
