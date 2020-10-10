@@ -115,12 +115,12 @@ export default {
     $route(route) {
       this.assessmentType = route.query.type;
     },
-    assessmentType(val) {
-      this.$notify.warning({
-        message: <span style="color:red">{val}</span>,
-        title: "提示",
-      });
-    },
+    // assessmentType(val) {
+    //   this.$notify.warning({
+    //     message: <span style="color:red">{val}</span>,
+    //     title: "提示",
+    //   });
+    // },
   },
   mounted() {
     this.loading = false;

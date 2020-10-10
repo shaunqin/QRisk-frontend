@@ -1,11 +1,10 @@
 <template>
   <div>
-    <el-card>
-      <div slot="header">
+    <el-card header="危险源清单">
+      <!-- <div slot="header">
         <el-page-header @back="goBack" title content="危险源清单"></el-page-header>
-      </div>
+      </div> -->
       <el-button type="primary" size="mini" @click="addTable" style="margin-bottom:10px">新增一行</el-button>
-      <!-- <el-button type="warning" size="mini" style="margin-bottom:10px">上传附件</el-button> -->
       <!--表格渲染-->
       <el-table :data="form.table2" size="small" style="width: 100%;">
         <el-table-column type="index" width="50" />

@@ -13,8 +13,10 @@
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button type="success">暂存</el-button>
-      <el-button v-if="step==3" :loading="loading" type="primary" @click="doSubmit">确认</el-button>
-      <el-button v-if="step!=3" type="primary" @click="nextStep">下一步</el-button>
+      <template v-if="type!=5&&type!=6">
+        <el-button v-if="step==3" :loading="loading" type="primary" @click="doSubmit">确认</el-button>
+        <el-button v-if="step!=3" type="primary" @click="nextStep">下一步</el-button>
+      </template>
     </div>
   </el-dialog>
 </template>
@@ -53,7 +55,11 @@ export default {
     };
   },
   props: {},
-  
+  computed: {
+    type() {
+      return this.$route.query.type
+    }
+  },
   created() { },
   methods: {
     formatShortDate,
