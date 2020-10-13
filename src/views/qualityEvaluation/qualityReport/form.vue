@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
-    :title="isAdd ? '新增' : '编辑'"
+    :title="isAdd ? '新增' : '填报'"
     custom-class="big_dialog"
   >
     <el-form ref="form" :model="form" label-width="auto">
@@ -23,7 +23,12 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="日期" label-width="40px">
-            <el-date-picker v-model="form.cc" placeholder style="width:100%"></el-date-picker>
+            <el-date-picker
+              v-model="fillInDate"
+              value-format="yyyy-MM-dd"
+              placeholder
+              style="width:100%"
+            ></el-date-picker>
           </el-form-item>
         </el-col>
       </el-row>
@@ -56,7 +61,7 @@
 </template>
 
 <script>
-import { taskAdd, taskModify } from "@/api/quality";
+import { taskAdd, taskModify, updateMonthTaskParam } from "@/api/quality";
 import { queryDictByName } from "@/api/dict";
 import dictSelect from "@/components/common/dictSelect";
 
@@ -66,14 +71,9 @@ export default {
     return {
       loading: false,
       dialog: false,
-      form: {
-        taskName: "",
-        year: "",
-        defaultDay: "",
-        productValue: "",
-        monthTasks: [],
-        type: 2,
-      },
+      monthTaskId: "",
+      fillInDate: "",
+      form: {},
       formRules: {
         taskName: [
           { required: true, message: "任务名称不能为空", trigger: "blur" },
@@ -81,6 +81,7 @@ export default {
       },
       prodList: [],
       product: "",
+      params: {}
     };
   },
   props: {
@@ -99,11 +100,12 @@ export default {
             name: item.name,
             key0: item.value0,
             key1: item.value1,
-            value0: 0,
-            value1: 0,
+            value0: this.params[item.value0] || 0,
+            value1: this.params[item.value1] || 0,
           });
         });
       }
+      console.log(arr)
       return arr;
     },
   },
@@ -157,14 +159,6 @@ export default {
       this.resetForm();
     },
     doSubmit() {
-      // this.$refs["form"].validate((valid) => {
-      //   if (valid) {
-      //     this.loading = true;
-      //     if (this.isAdd) {
-      //       this.doAdd();
-      //     } else this.doModify();
-      //   }
-      // });
       // 格式化数据
       let data = {};
       this.productIndex.map(item => {
@@ -175,7 +169,20 @@ export default {
           data[item.key1] = item.value1;
         }
       })
-      console.log(data)
+      let formData = {
+        fillData: data,
+        fillInDate: this.fillInDate,
+        monthTaskId: this.monthTaskId
+      }
+      // console.log(data)
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          this.loading = true;
+          if (this.isAdd) {
+            this.doAdd();
+          } else this.doModify(formData);
+        }
+      });
     },
     doAdd() {
       taskAdd(this.form)
@@ -197,8 +204,8 @@ export default {
           this.loading = false;
         });
     },
-    doModify() {
-      taskModify(this.form)
+    doModify(formData) {
+      updateMonthTaskParam(formData)
         .then((res) => {
           if (res.code === "200") {
             this.$message({
@@ -228,7 +235,7 @@ export default {
         monthTasks: [],
         type: 2,
       };
-      this.form2 = {};
+      this.product = "";
     },
     dictChange(val) {
       this.form.productValue = val;

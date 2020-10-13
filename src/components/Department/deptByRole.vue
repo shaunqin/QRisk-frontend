@@ -1,5 +1,5 @@
 <template>
-  <treeselect
+  <!-- <treeselect
     v-model="selectValue"
     :options="options"
     :normalizer="normalizer"
@@ -9,13 +9,29 @@
     :limit="limit"
     :flat="flat"
     placeholder="请选择..."
-  />
+  />-->
+  <el-select
+    v-model="selectValue"
+    placeholder="请选择..."
+    :multiple="multiple"
+    filterable
+    style="width:100%"
+    clearable
+    collapse-tags
+  >
+    <el-option
+      v-for="item in options"
+      :key="item.deptId"
+      :label="item.deptNameCn"
+      :value="item.deptPath"
+    ></el-option>
+  </el-select>
 </template>
 
 <script>
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
-import { queryDepartmentTreeByRole } from "@/api/emplotee";
+import { queryDepts } from "@/api/emplotee";
 export default {
   components: { Treeselect },
   data() {
@@ -47,34 +63,14 @@ export default {
       type: Boolean,
       default: false,
     },
-    limit: {
-      type: Number,
-      default: Infinity,
-    },
-    flat: {
-      type: Boolean,
-      default: false,
-    },
   },
   created() {
-    queryDepartmentTreeByRole().then((res) => {
+    queryDepts().then((res) => {
       this.options = res.obj;
     });
   },
   methods: {
-    normalizer(node) {
-      if (node.children == null) {
-        delete node.children;
-      }
-      if (node.children && !node.children.length) {
-        delete node.children;
-      }
-      return {
-        id: node.key,
-        label: node.name,
-        children: node.children,
-      };
-    },
+
   },
 };
 </script>

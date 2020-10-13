@@ -26,6 +26,11 @@
       <el-table-column label="拟制人">
         <template slot-scope="{row}">{{row.issueName}}[{{row.issuer}}]</template>
       </el-table-column>
+      <el-table-column label>
+        <template slot-scope="{row}" v-if="row.pdfUrl!=null">
+          <el-link type="primary" :href="pdfUrl(row)" target="_blank">查看PDF</el-link>
+        </template>
+      </el-table-column>
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -74,6 +79,9 @@ export default {
       this.id = row.id;
       this.$refs.detail.dialog = true;
     },
+    pdfUrl(row) {
+      return `${process.env.VUE_APP_BASE_API}${row.pdfUrl}`
+    }
   },
 };
 </script>

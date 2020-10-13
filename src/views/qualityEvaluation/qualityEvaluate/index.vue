@@ -1,48 +1,55 @@
 <template>
   <div class="app-container">
     <div class="head-container">
-      <el-form :model="queryForm" label-width="auto" inline size="mini">
-        <el-form-item label="日期">
-          <el-date-picker v-model="queryForm.aa" placeholder style="width:130px"></el-date-picker>
+      <el-form class="query" :model="queryForm" label-width="auto" inline>
+        <el-form-item label="年份">
+          <el-date-picker
+            :editable="false"
+            :clearable="false"
+            v-model="queryForm.year"
+            type="year"
+            value-format="yyyy"
+            placeholder
+            style="width:100px"
+          ></el-date-picker>
         </el-form-item>
-        <el-form-item label="部门">
-          <el-select v-model="queryForm.bb" placeholder style="width:130px">
-            <el-option :label="'请选择部门'" :value="'请选择部门'"></el-option>
+        <el-form-item label="月份">
+          <el-select v-model="queryForm.month" placeholder style="width:80px;" clearable>
+            <el-option v-for="num in 12" :key="num" :label="num" :value="num"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="部门">
+          <department :value="queryForm.departmentPath" @change="deptChange" style="width:180px;" />
+        </el-form-item>
         <el-form-item label="产品">
-          <el-select v-model="queryForm.cc" placeholder style="width:130px">
-            <el-option v-for="item in menu1" :key="item" :label="item" :value="item"></el-option>
+          <el-select
+            v-model="queryForm.productValue"
+            placeholder
+            style="width:160px"
+            @change="queryForm.indexValue=indexList[0].value"
+          >
+            <el-option
+              v-for="item in prodList"
+              :key="item.key"
+              :label="item.name"
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="指标">
-          <el-select v-model="queryForm.dd" placeholder style="width:130px">
-            <el-option v-for="item in menu2" :key="item" :label="item" :value="item"></el-option>
+          <el-select v-model="queryForm.indexValue" placeholder style="width:150px">
+            <el-option
+              v-for="item in indexList"
+              :key="item.key"
+              :label="item.name"
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label>
-          <el-button
-            class="filter-item"
-            type="success"
-            icon="el-icon-search"
-            @click="toQuery(queryForm)"
-          >搜索</el-button>
-          <el-link
-            class="filter-item"
-            type="success"
-            icon="el-icon-download"
-            href="#/test"
-            target="_blank"
-            style="margin-left: 10px;"
-          >生成国航文件</el-link>
-          <el-link
-            class="filter-item"
-            type="success"
-            icon="el-icon-download"
-            href="/asssts/files/质量事件调查万时率.xlsx"
-            target="_blank"
-            style="margin-left: 10px;"
-          >生成客户文件</el-link>
+          <el-button type="success" icon="el-icon-search" @click="toQuery(queryForm)">搜索</el-button>
+          <el-button type="text" icon="el-icon-download">生成国航文件</el-button>
+          <el-button type="text" icon="el-icon-download">生成客户文件</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -56,216 +63,109 @@
           :stripe="true"
           :highlight-current-row="true"
           style="width: 100%;"
-          @selection-change="selectionChange"
         >
-          <!-- <el-table-column type="index" width="50" /> -->
-          <el-table-column prop="nn" label width="90" />
+          <el-table-column label width="120">
+            <template slot-scope="{row}">{{renderTbCol(row)}}</template>
+          </el-table-column>
           <el-table-column label="国航机队">
-            <el-table-column label="全月定检出厂飞机第一个航班不正常数量之和" prop="aa" />
-            <el-table-column label="全月出厂飞机总计划工时" prop="bb" />
-            <el-table-column prop="cc" label="定检出厂首班机械原因不正常万时率‱" />
+            <el-table-column label="全月定检出厂飞机第一个航班不正常数量之和" prop="dividend0" />
+            <el-table-column label="全月出厂飞机总计划工时" prop="divisor0" />
+            <el-table-column label="定检出厂首班机械原因不正常万时率‱" prop="result0" />
           </el-table-column>
           <el-table-column label="客户机队">
-            <el-table-column label="全月定检出厂飞机第一个航班不正常数量之和" prop="dd" />
-            <el-table-column label="全月出厂飞机总计划工时" prop="ee" />
-            <el-table-column prop="ff" label="定检出厂首班机械原因不正常万时率‱" />
+            <el-table-column label="全月定检出厂飞机第一个航班不正常数量之和" prop="dividend1" />
+            <el-table-column label="全月出厂飞机总计划工时" prop="divisor1" />
+            <el-table-column label="定检出厂首班机械原因不正常万时率‱" prop="result1" />
           </el-table-column>
         </el-table>
       </el-col>
     </el-row>
-    <eform ref="form" :is-add="isAdd"></eform>
   </div>
 </template>
 
 <script>
-import initData from "@/mixins/initData";
-import eform from "./form";
-import { qualityEvaluate } from "@/dataSource";
+import department from '@/components/Department';
+import { queryDictByName } from '@/api/dict'
+import { queryIndexList } from '@/api/quality'
 export default {
-  components: { eform },
-  mixins: [initData],
+  components: { department },
   data() {
     return {
-      isSuperAdmin: false,
-      userInfo: {},
-      selections: [],
       queryForm: {
-        aa: "",
-        bb: "",
-        cc: "",
-        dd: ""
+        year: new Date().getFullYear().toString(),
+        departmentPath: null,
+        productValue: "",
+        indexValue: ""
       },
-      menu1: ["定检产品", "发动机APU产品", "附件产品", "航线产品"],
-      menu2: [
-        "出厂检发现问题万时率",
-        "定检出厂首班机械原因不正常万时率",
-        "定检出场一周机械原因不正常万时率",
-        "客户满意度调查平均值",
-        "客户质量投诉",
-        "质量事件调查万时率"
-      ]
+      prodList: [],
+      loading: false,
+      data: []
     };
   },
-  mounted() {
-    this.loading = false;
-    this.data = [
-      {
-        nn: "一月",
-        aa: "2",
-        bb: "132189.00",
-        cc: "0.15",
-        dd: "1",
-        ee: "102724.70",
-        ff: "0.10"
-      },
-      {
-        nn: "二月",
-        aa: "2",
-        bb: "132189.00",
-        cc: "0.15",
-        dd: "1",
-        ee: "102724.70",
-        ff: "0.10"
-      },
-      {
-        nn: "三月",
-        aa: "2",
-        bb: "132189.00",
-        cc: "0.15",
-        dd: "1",
-        ee: "102724.70",
-        ff: "0.10"
-      },
-      {
-        nn: "四月",
-        aa: "2",
-        bb: "132189.00",
-        cc: "0.15",
-        dd: "1",
-        ee: "102724.70",
-        ff: "0.10"
-      },
-      {
-        nn: "五月",
-        aa: "2",
-        bb: "132189.00",
-        cc: "0.15",
-        dd: "1",
-        ee: "102724.70",
-        ff: "0.10"
-      },
-      {
-        nn: "六月",
-        aa: "2",
-        bb: "132189.00",
-        cc: "0.15",
-        dd: "1",
-        ee: "102724.70",
-        ff: "0.10"
-      },
-      {
-        nn: "七月",
-        aa: "2",
-        bb: "132189.00",
-        cc: "0.15",
-        dd: "1",
-        ee: "102724.70",
-        ff: "0.10"
-      },
-      {
-        nn: "八月",
-        aa: "2",
-        bb: "132189.00",
-        cc: "0.15",
-        dd: "1",
-        ee: "102724.70",
-        ff: "0.10"
-      },
-      {
-        nn: "九月",
-        aa: "2",
-        bb: "132189.00",
-        cc: "0.15",
-        dd: "1",
-        ee: "102724.70",
-        ff: "0.10"
-      },
-      {
-        nn: "十月",
-        aa: "2",
-        bb: "132189.00",
-        cc: "0.15",
-        dd: "1",
-        ee: "102724.70",
-        ff: "0.10"
-      },
-      {
-        nn: "十一月",
-        aa: "2",
-        bb: "132189.00",
-        cc: "0.15",
-        dd: "1",
-        ee: "102724.70",
-        ff: "0.10"
-      },
-      {
-        nn: "十二月",
-        aa: "2",
-        bb: "132189.00",
-        cc: "0.15",
-        dd: "1",
-        ee: "102724.70",
-        ff: "0.10"
-      },
-      {
-        nn: "一至十二月",
-        aa: "23",
-        bb: "1132189.00",
-        cc: "0.15",
-        dd: "1",
-        ee: "1102724.70",
-        ff: "0.10"
+  computed: {
+    indexList() {
+      if (this.queryForm.productValue != "") {
+        return this.prodList.find(r => r.value == this.queryForm.productValue).children;
       }
-    ];
+      return []
+    }
+  },
+  created() {
+    this.loadData();
   },
   methods: {
     toQuery(name) {
-      if (!name) {
-        this.page = 1;
-        this.init();
-        return;
+      console.log(this.queryForm)
+      this.loading = true;
+      queryIndexList(this.queryForm).then(res => {
+        this.loading = false;
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          this.data = res.obj;
+        }
+      })
+    },
+    loadData() {
+      queryDictByName("quality_product_index").then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          this.prodList = res.obj[0].children;
+          // 默认值
+          this.queryForm.productValue = res.obj[0].children[0].value;
+          this.queryForm.indexValue = res.obj[0].children[0].children[0].value;
+        }
+      })
+    },
+    deptChange(val) {
+      this.queryForm.departmentPath = val;
+    },
+    renderTbCol(row) {
+      if (row.departmentName) {
+        return row.departmentName
+      } else if (row.month) {
+        let month = "";
+        switch (row.month) {
+          case 1: month = "一月"; break;
+          case 2: month = "二月"; break;
+          case 3: month = "三月"; break;
+          case 4: month = "四月"; break;
+          case 5: month = "五月"; break;
+          case 6: month = "六月"; break;
+          case 7: month = "七月"; break;
+          case 8: month = "八月"; break;
+          case 9: month = "九月"; break;
+          case 10: month = "十月"; break;
+          case 11: month = "十一月"; break;
+          case 12: month = "十二月"; break;
+          default: break;
+        }
+        return month;
+      } else {
+        return "一月至十二月";
       }
     },
-    // 选择切换
-    selectionChange: function(selections) {
-      this.selections = selections;
-      this.$emit("selectionChange", { selections: selections });
-    },
-    add() {
-      this.isAdd = true;
-      this.$refs.form.dialog = true;
-    },
-    edit(row) {
-      this.isAdd = false;
-      let _this = this.$refs.form;
-      _this.form = Object.assign({}, row);
-      _this.dialog = true;
-    },
-    subDelete(id) {
-      this.$confirm("确定删除嘛？")
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
-    }
   }
 };
 </script>
@@ -279,4 +179,9 @@ export default {
 // .head-container {
 //   margin-bottom: 20px;
 // }
+.query {
+  .el-form-item {
+    margin-bottom: 8px;
+  }
+}
 </style>

@@ -424,6 +424,7 @@ export default {
       if (value) {
         if (!re.chinese.test(value)) {
           this.$message.error("地点请输入中文！");
+          this.form.place = "";
         }
       }
     }

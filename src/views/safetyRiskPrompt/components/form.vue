@@ -39,8 +39,6 @@
               :value="!item.deptPath?[]:item.deptPath.split(',')"
               @change="deptChange($event,item)"
               :multiple="true"
-              :limit="1"
-              :flat="true"
               style="line-height:20px"
             />
           </el-col>
@@ -122,7 +120,7 @@ export default {
       required: true,
     },
   },
-  created() {},
+  created() { },
   methods: {
     format,
     cancel() {
@@ -172,7 +170,7 @@ export default {
         } else {
           this.$message.success("提交成功");
           this.resetForm();
-           this.$parent.init();
+          this.$parent.init();
         }
         this.loading = false;
       });

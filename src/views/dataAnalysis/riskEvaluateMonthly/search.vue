@@ -506,4 +506,7 @@ export default {
     margin-bottom: 8px;
   }
 }
+.vue-treeselect--append-to-body{
+  z-index: 1 !important;
+}
 </style>

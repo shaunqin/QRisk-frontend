@@ -24,7 +24,7 @@
         <el-date-picker v-model="form.bb" type="date" value-format="yyyy-MM-dd"></el-date-picker>
       </el-form-item>
     </el-form>
-    <el-button type="info" size="mini" style="margin-bottom: 10px" @click="addRow">新增一行</el-button>
+    <el-button type="info" size="mini" style="margin-bottom: 10px" @click="addRow">新增</el-button>
     <el-card style="margin-bottom: 20px" v-for="(item, index) in data" :key="index">
       <el-form size="mini" label-width="80px" inline>
         <el-row>

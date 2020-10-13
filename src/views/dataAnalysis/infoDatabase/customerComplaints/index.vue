@@ -19,6 +19,8 @@
           <span>{{formatShortDate(row.happenDate)}}</span>
         </template>
       </el-table-column>
+      <el-table-column prop="place" label="地点" />
+      <el-table-column prop="aircraftTypeText" label="机型" />
       <el-table-column prop="title" label="标题" min-width="150" show-overflow-tooltip />
       <el-table-column prop="causeAnalysis" label="原因分析" min-width="150" show-overflow-tooltip />
       <el-table-column prop="departmentNameCn" label="责任单位" width="120" show-overflow-tooltip />

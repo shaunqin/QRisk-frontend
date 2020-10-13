@@ -1,6 +1,7 @@
 <template>
   <div class="content" id="toPDF">
     <div class="toPDF">
+      <h3 class="center">月度风险评价报告</h3>
       <h4>一、关键风险状态</h4>
       <!-- 1-1 -->
       <h5 class="title-sec">1、月度关键风险状态</h5>
@@ -881,7 +882,20 @@ export default {
     },
     exportPDF() {
       let dom = document.getElementsByClassName("toPDF");
+      // 计算总页数 
+      let totalPage = 0;
+      let t_height = 0;
+      Array.prototype.forEach.call(dom, (el) => {
+        let el_h = el.offsetHeight;
+        t_height += el_h + 20;
+        if (t_height > 841.89) {
+          totalPage++;
+          t_height = 0;
+        }
+      })
       var pdf = new jsPDF("p", "pt", "a4");
+      pdf.text(290, 830, '1/' + totalPage);
+      let page = 2;
       let _index = 0;
       let _height = 0;
       //pdf页面偏移
@@ -919,6 +933,8 @@ export default {
             _height = imgHeight;
             pdf.addPage();
             pdf.addImage(imgData, "JPEG", 0, 10, imgWidth, imgHeight);
+            pdf.text(290, 830, page + "/" + totalPage);
+            page++;
           }
           if (_index == dom.length) {
             pdf.save("月度风险评价报告.pdf");
@@ -943,5 +959,9 @@ export default {
   height: 15px;
   display: inline-block;
   border-radius: 50%;
+}
+.center {
+  text-align: center;
+  margin-top: 0;
 }
 </style>
