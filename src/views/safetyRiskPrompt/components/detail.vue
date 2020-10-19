@@ -5,6 +5,7 @@
     :before-close="cancel"
     :visible.sync="dialog"
     :title="'详情'"
+    custom-class="big_dialog"
   >
     <el-form ref="form" :model="form" size="small" label-width="auto">
       <el-row :gutter="16">
@@ -23,10 +24,40 @@
       <el-form-item label="背景">
         <span style="white-space: pre-wrap;">{{form.background}}</span>
       </el-form-item>
-      <el-form-item label="风险防范">
+      <el-form-item label="风险防范" v-if="form.measuresVos!=null">
         <ul class="measuresVos">
-          <li v-for="(item,index) in data" :key="index">{{item.content}}</li>
+          <li v-for="(item,index) in form.measuresVos" :key="index">{{item.content}}</li>
         </ul>
+      </el-form-item>
+      <el-form-item label="下发措施" v-if="form.firstLevelMeasure!=null">
+        <el-table :data="form.firstLevelMeasure">
+          <el-table-column label="内容" prop="content" />
+          <el-table-column label="截止日期" prop="deadline" />
+          <el-table-column label="部门" prop="deptName" />
+          <el-table-column label="上报人">
+            <template slot-scope="{row}" v-if="row.filler">{{row.fillerName}}[{{row.filler}}]</template>
+          </el-table-column>
+          <el-table-column label="落实情况" prop="implementStatus" />
+          <el-table-column label="附件预览" >
+            <template slot-scope="{row}">
+              <el-link
+                type="primary"
+                v-if="row.accessory!=null"
+                :href="getUrl(row.accessory.filePath)"
+                target="_blank"
+              >{{row.accessory.originFileName}}</el-link>
+            </template>
+          </el-table-column>
+          <el-table-column label="状态" width="100">
+            <template slot-scope="{row}">
+              <span v-if="row.status==0">待填</span>
+              <span v-if="row.status==1">待填</span>
+              <span v-if="row.status==2">待审核</span>
+              <span v-if="row.status==3">通过</span>
+              <span v-if="row.status==4">驳回</span>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -44,30 +75,14 @@ export default {
       loading: false,
       dialog: false,
       form: {},
-      data: [],
     };
   },
   props: {
-    id: {
-      type: String,
-      default: "",
-    },
-  },
-  watch: {
-    id(val) {
-      if (!!val) {
-        riskNoticeDetail(val).then((res) => {
-          if (res.code != "200") {
-            this.$message.error(res.msg);
-          } else {
-            this.form = res.obj;
-            this.data = res.obj.measuresVos;
-          }
-        });
-      }
-    },
   },
   methods: {
+    getUrl(url) {
+      return process.env.VUE_APP_BASE_API + url;
+    },
     cancel() {
       this.resetForm();
     },

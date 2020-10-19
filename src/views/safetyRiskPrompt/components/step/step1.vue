@@ -10,7 +10,10 @@
         </el-col>
       </el-row>
       <el-form-item label="适用范围">{{data.applyScope}}</el-form-item>
-      <el-form-item label="主题">{{data.title}}</el-form-item>
+      <el-form-item label="主题">
+        <template v-if="data.pdf==null">{{data.title}}</template>
+        <el-link v-else type="primary" :href="baseUrl+data.pdf" target="_blank">{{data.title}}</el-link>
+      </el-form-item>
       <el-form-item label="安全风险">
         <span style="white-space: pre-wrap;">{{data.existingRisk}}</span>
       </el-form-item>
@@ -36,16 +39,18 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      baseUrl: process.env.VUE_APP_BASE_API
+    };
   },
   props: {
     data: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     form: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
   },
   computed: {
@@ -59,7 +64,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this._form);
+    // console.log(this.baseUrl);
   },
 };
 </script>

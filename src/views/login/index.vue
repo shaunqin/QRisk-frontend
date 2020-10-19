@@ -6,8 +6,8 @@
       <el-form ref="loginForm" :model="loginForm" :rules="loginRules" status-icon>
         <el-form-item label>
           <el-radio-group v-model="loginForm.userName">
-            <el-radio label="00089880">风险管理员</el-radio>
-            <el-radio label="00804225">领导</el-radio>
+            <el-radio label="00089715">风险管理员</el-radio>
+            <el-radio label="00048117">领导</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item prop="userName">

@@ -9,17 +9,17 @@
       style="width: 100%;"
     >
       <el-table-column type="index" width="50" />
-      <el-table-column prop="standardNo" label="编号" />
-      <el-table-column label="名称">
+      <el-table-column prop="standardNo" :label="$t('standard.no')" />
+      <el-table-column :label="$t('standard.name')">
         <template slot-scope="scope">
           <el-button type="text">{{scope.row.name}}</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="remark" label="备注" />
-      <el-table-column label="创建时间">
+      <el-table-column prop="remark" :label="$t('standard.remark')" />
+      <el-table-column :label="$t('standard.createTime')">
         <template slot-scope="{row}">{{format(row.createTime)}}</template>
       </el-table-column>
-      <el-table-column label="预览" width="100">
+      <el-table-column :label="$t('standard.preview')" width="100">
         <template slot-scope="{row}">
           <el-button type="text" icon="el-icon-view" @click="preview(row)"></el-button>
         </template>
@@ -67,7 +67,7 @@ export default {
       //   return;
       // }
     },
-    preview(row) {},
+    preview(row) { },
   },
 };
 </script>

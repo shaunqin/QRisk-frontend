@@ -10,11 +10,11 @@
       border
     >
       <!-- <el-table-column type="index" width="50" /> -->
-      <el-table-column prop="category1" label="危险源层级一" width="150"/>
-      <el-table-column prop="cateValue" label="编号" width="100" />
-      <el-table-column prop="category2" label="危险源层级二" width="150" />
-      <el-table-column prop="diskNo" label="编号" width="100" />
-      <el-table-column label="危险源">
+      <el-table-column prop="category1" :label="$t('standard.hazardLevel1')" width="150" />
+      <el-table-column prop="cateValue" :label="$t('standard.no')" width="100" />
+      <el-table-column prop="category2" :label="$t('standard.hazardLevel2')" width="150" />
+      <el-table-column prop="diskNo" :label="$t('standard.no')" width="100" />
+      <el-table-column :label="$t('standard.hazard')">
         <template slot-scope="scope">
           <el-tooltip :content="scope.row.diskDesc" placement="left">
             <span v-text="scope.row.diskName"></span>

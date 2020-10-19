@@ -42,6 +42,39 @@
           </el-table-column>
         </el-table>
       </el-form-item>
+      <el-form-item label="已下发措施" v-if="data.childMeasures!=null">
+        <el-table :data="data.childMeasures" size="mini">
+          <el-table-column label="截止日期" prop="deadline" />
+          <el-table-column label="下发部门" prop="deptName" />
+          <el-table-column label="措施内容" prop="content" />
+          <el-table-column label="落实情况" prop="implementStatus" width="120" show-overflow-tooltip />
+          <el-table-column label="上报人">
+            <template
+              slot-scope="{row}"
+              v-if="row.filler!=null"
+            >{{`${row.fillerName}[${row.filler}]`}}</template>
+          </el-table-column>
+          <el-table-column label="附件预览" width="120" show-overflow-tooltip>
+            <template slot-scope="{row}">
+              <el-link
+                type="primary"
+                v-if="row.accessory!=null"
+                :href="getUrl(row.accessory.filePath)"
+                target="_blank"
+              >{{row.accessory.originFileName}}</el-link>
+            </template>
+          </el-table-column>
+          <el-table-column label="状态" width="100">
+            <template slot-scope="{row}">
+              <span v-if="row.status==0">待填</span>
+              <span v-if="row.status==1">待填</span>
+              <span v-if="row.status==2">待审核</span>
+              <span v-if="row.status==3">通过</span>
+              <span v-if="row.status==4">驳回</span>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -56,11 +89,11 @@ export default {
   props: {
     data: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     form: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
   },
   computed: {
@@ -73,7 +106,7 @@ export default {
       },
     },
   },
-  mounted() {},
+  mounted() { },
   methods: {
     success(res) {
       console.log(res);

@@ -16,6 +16,8 @@
         <!-- <lang-select class="right-menu-item hover-effect" /> -->
       </template>
       <message-bell />
+      <!-- 语言切换 -->
+      <lang-select class="right-menu-item hover-effect" />
       <el-dropdown
         class="avatar-container right-menu-item hover-effect"
         trigger="click"
@@ -23,7 +25,7 @@
       >
         <div class="avatar-wrapper">
           <img :src="userImgUrl" class="user-avatar" />
-          <span class="user-name">{{userInfo.userName||'admin@123'}}</span>
+          <span class="user-name">{{userInfo.realname||'admin@123'}}</span>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">

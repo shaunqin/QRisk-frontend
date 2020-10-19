@@ -9,10 +9,23 @@
       style="width: 100%;"
       @selection-change="selectionChange"
     >
-      <el-table-column prop="name" label="任务名称" min-width="110" show-overflow-tooltip />
-      <el-table-column prop="businessName" label="流程名称" min-width="150" show-overflow-tooltip />
+      <el-table-column prop="businessName" label="流程名称">
+        <template slot-scope="{row}">
+          <el-tag type="success">{{row.businessName}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="name" label="任务名称">
+        <template slot-scope="{row}">
+          <el-tag type="warning">{{row.name}}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="createBy" label="创建人" />
       <el-table-column prop="createTime" label="创建时间" />
+      <el-table-column label width="100">
+        <template slot-scope="{row}">
+          <el-button type="primary" size="mini" @click="detail(row)">查看详情</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -23,13 +36,17 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
+    <doneDetail ref="doneDetail" />
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
 import { format } from "@/utils/datetime";
+import { riskNoticeDoneDetail } from '@/api/risk';
+import doneDetail from './doneDetail'
 export default {
+  components: { doneDetail },
   mixins: [initData],
   mounted() {
     this.init();
@@ -43,6 +60,17 @@ export default {
     selectionChange: function (selections) {
       this.selections = selections;
       this.$emit("selectionChange", { selections: selections });
+    },
+    detail(row) {
+      riskNoticeDoneDetail(row.taskId, row.formId).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          let _this = this.$refs.doneDetail;
+          _this.data = res.obj;
+          _this.dialog = true;
+        }
+      })
     },
   },
 };

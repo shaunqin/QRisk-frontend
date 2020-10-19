@@ -12,14 +12,20 @@
     <step3 ref="step3" v-if="step==3" :data="data" :form="form" @change="formChange" />
     <step4 ref="step4" v-if="step==4" :data="data" :form="form" @change="formChange" />
     <step5 ref="step5" v-if="step==5" :data="data" :form="form" @change="formChange" />
-
+    <hairdown ref="hairdown" :data="data" :form="form" />
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button v-if="step==1||step==4" :loading="loading" type="primary" @click="doSubmit">确认</el-button>
       <el-button v-if="step==2" :loading="loading" type="primary" @click="doSave">保存</el-button>
       <el-button v-if="step==2" :loading="loading" type="success" @click="doSubmit">提交</el-button>
       <el-button v-if="step==3||step==5" :loading="loading" type="primary" @click="doSubmit">上报</el-button>
-      <el-button v-if="step==3||step==5" :loading="loading" type="success" @click="doHairdown">下发</el-button>
+      <el-button
+        v-if="step==3||step==5"
+        :loading="loading"
+        :disabled="!!data.deptMeasure.hiddenIssue"
+        type="success"
+        @click="doHairdown"
+      >下发</el-button>
     </div>
   </el-dialog>
 </template>
@@ -35,8 +41,9 @@ import step2 from "./step/step2";
 import step3 from "./step/step3";
 import step4 from "./step/step4";
 import step5 from "./step/step5";
+import hairdown from './hairdown'
 export default {
-  components: { step1, step2, step3, step4, step5 },
+  components: { step1, step2, step3, step4, step5, hairdown },
   data() {
     return {
       loading: false,
@@ -47,7 +54,7 @@ export default {
         formId: 0,
         processFlag: "",
       },
-      data: {},
+      data: {}, // 父组件赋值
     };
   },
   props: {
@@ -164,8 +171,8 @@ export default {
         this.loading = false;
       });
     },
-    doHairdown(){
-      this.$refs.step5.dialog=true;
+    doHairdown() {
+      this.$refs.hairdown.dialog = true;
     }
   },
 };

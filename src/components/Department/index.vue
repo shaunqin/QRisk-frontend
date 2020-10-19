@@ -8,7 +8,7 @@
     :multiple="multiple"
     :limit="limit"
     :flat="flat"
-    placeholder="请选择..."
+    :placeholder="$t('global.select')"
     appendToBody
   />
 </template>

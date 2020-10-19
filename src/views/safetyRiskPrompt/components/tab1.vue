@@ -41,7 +41,7 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-    <edetail ref="detail" :id="id" />
+    <edetail ref="detail" />
   </div>
 </template>
 
@@ -50,12 +50,12 @@ import initData from "@/mixins/initData";
 import { format } from "@/utils/datetime";
 import eform from "./form";
 import edetail from "./detail";
+import { riskNoticeDetail } from "@/api/risk";
 export default {
   components: { eform, edetail },
   mixins: [initData],
   data() {
     return {
-      id: "",
     };
   },
   mounted() {
@@ -76,8 +76,15 @@ export default {
       this.$refs.form.dialog = true;
     },
     detail(row) {
-      this.id = row.id;
-      this.$refs.detail.dialog = true;
+      riskNoticeDetail(row.id).then((res) => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          let _this = this.$refs.detail;
+          _this.form = res.obj;
+          _this.dialog = true;
+        }
+      });
     },
     pdfUrl(row) {
       return `${process.env.VUE_APP_BASE_API}${row.pdfUrl}`

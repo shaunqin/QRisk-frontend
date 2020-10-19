@@ -10,8 +10,8 @@
       :span-method="objectSpanMethod"
       border
     >
-      <el-table-column prop="cateName" label="类别" width="200" />
-      <el-table-column prop="name" label="诱因" />
+      <el-table-column prop="cateName" :label="$t('standard.catename')" width="200" />
+      <el-table-column prop="name" :label="$t('standard.incentiveName')" />
     </el-table>
     <!--分页组件-->
     <!-- <el-pagination

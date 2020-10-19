@@ -20,20 +20,7 @@
         </el-form-item>
         <el-form-item label>
           <el-button type="success" icon="el-icon-search" @click="toQuery(query)">查询</el-button>
-          <el-button
-            class="filter-item"
-            size="mini"
-            type="success"
-            icon="el-icon-plus"
-            @click="add"
-          >新建</el-button>
-          <el-button
-            type="info"
-            icon="el-icon-document-copy"
-            @click="copy(selections[0])"
-            :disabled="selections.length!=1"
-          >复制</el-button>
-          <el-button type="info">输出报告</el-button>
+          
         </el-form-item>
       </el-form>
     </div>

@@ -11,9 +11,9 @@
       :span-method="objectSpanMethod"
     >
       <!-- <el-table-column type="index" width="50" /> -->
-      <el-table-column prop="product" label="所属产品" width="150" />
-      <el-table-column prop="system" label="系统名称" width="150" />
-      <el-table-column prop="diskSystemDesc" label="备注" show-overflow-tooltip />
+      <el-table-column prop="product" :label="$t('standard.product')" width="150" />
+      <el-table-column prop="system" :label="$t('standard.system')" width="150" />
+      <el-table-column prop="diskSystemDesc" :label="$t('standard.remark')" show-overflow-tooltip />
     </el-table>
     <!--分页组件-->
     <!-- <el-pagination

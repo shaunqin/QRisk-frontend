@@ -40,7 +40,7 @@
         </el-col>
       </el-row>
 
-      <el-form-item label="风险防范措施">
+      <el-form-item label="风险防范措施" class="measures">
         <el-row
           v-for="(item,index) in detailForm.measures"
           :key="index"
@@ -66,7 +66,7 @@
               @change="formChangeStatus"
             ></el-date-picker>
           </el-col>
-          <el-col :span="11">
+          <el-col :span="10">
             <el-input
               v-model="item.content"
               style="width: 100%;"
@@ -89,7 +89,7 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item label="备注">
+      <el-form-item label="审批记录">
         <el-table :data="data.noticeComments" size="mini">
           <el-table-column label="内容" prop="remark" />
           <el-table-column label="处理人">
@@ -153,10 +153,10 @@ export default {
     },
     form: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
   },
-  created() {},
+  created() { },
   computed: {
     _form: {
       get() {
@@ -199,7 +199,6 @@ export default {
       item.deptPath = val.join(",");
     },
     formChangeStatus() {
-      debugger
       this.formChange = true;
     },
   },
@@ -207,5 +206,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.measures{
+  /deep/ .el-form-item__content{
+    padding: 0 4px;
+  }
+}
 </style>
 

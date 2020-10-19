@@ -4,14 +4,14 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
-    :title="isAdd ? '新增' : '填报'"
+    title="审批"
     custom-class="big_dialog"
   >
     <el-form ref="form" :model="form" label-width="auto">
       <el-row :gutter="16">
         <el-col :span="12">
           <el-form-item label="产品" label-width="40px">
-            <el-select v-model="product" placeholder="请选择产品" style="width:100%" clearable>
+            <el-select v-model="product" placeholder="请选择产品" style="width:100%" clearable disabled>
               <el-option
                 v-for="item in prodList"
                 :key="item.value"
@@ -28,6 +28,7 @@
               value-format="yyyy-MM-dd"
               placeholder
               style="width:100%"
+              disabled
             ></el-date-picker>
           </el-form-item>
         </el-col>
@@ -37,25 +38,34 @@
           <el-table-column label prop="name" />
           <el-table-column label="客户机对" v-if="product=='1'||product=='4'">
             <template slot-scope="{row}" v-if="row.key1!=null">
-              <el-input-number v-model="row.value1" placeholder></el-input-number>
+              <el-input-number v-model="row.value1" disabled></el-input-number>
             </template>
           </el-table-column>
           <el-table-column label="国航机对" v-if="product=='1'||product=='4'">
             <template slot-scope="{row}" v-if="row.key0!=null">
-              <el-input-number v-model="row.value0" placeholder></el-input-number>
+              <el-input-number v-model="row.value0" disabled></el-input-number>
             </template>
           </el-table-column>
           <el-table-column label="值" v-if="product=='2'||product=='3'">
             <template slot-scope="{row}" v-if="row.key0!=null">
-              <el-input-number v-model="row.value0" placeholder></el-input-number>
+              <el-input-number v-model="row.value0" disabled></el-input-number>
             </template>
           </el-table-column>
         </el-table>
       </el-form-item>
+      <el-form-item label>
+        <el-radio-group v-model="form.agree">
+          <el-radio label="1">同意</el-radio>
+          <el-radio label="0">驳回</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label>
+        <el-input v-model="form.reason" type="textarea" rows="3" placeholder="请输入备注"></el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
-      <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
+      <el-button :loading="loading" type="primary" @click="doSubmit">确定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -70,10 +80,14 @@ export default {
   data() {
     return {
       loading: false,
+      subloading: false,
       dialog: false,
       monthTaskId: "",
       fillInDate: "",
-      form: {},
+      form: {
+        agree: "",
+        reason: ""
+      },
       formRules: {
         taskName: [
           { required: true, message: "任务名称不能为空", trigger: "blur" },
@@ -81,14 +95,10 @@ export default {
       },
       prodList: [],
       product: "",
-      params: {}
+      params: {},
     };
   },
   props: {
-    isAdd: {
-      type: Boolean,
-      required: true,
-    },
   },
   computed: {
     productIndex() {
@@ -158,82 +168,41 @@ export default {
     cancel() {
       this.resetForm();
     },
-    doSubmit() {
+    doSubmit(status) {
       // 格式化数据
-      let data = {};
-      this.productIndex.map(item => {
-        if (item.key0 != null) {
-          data[item.key0] = item.value0;
-        }
-        if (item.key1 != null) {
-          data[item.key1] = item.value1;
-        }
-      })
-      let formData = {
-        fillData: data,
-        fillInDate: this.fillInDate,
-        monthTaskId: this.monthTaskId
-      }
+      // let data = {};
+      // this.productIndex.map(item => {
+      //   if (item.key0 != null) {
+      //     data[item.key0] = item.value0;
+      //   }
+      //   if (item.key1 != null) {
+      //     data[item.key1] = item.value1;
+      //   }
+      // })
+      // let formData = {
+      //   fillData: data,
+      //   fillInDate: this.fillInDate,
+      //   monthTaskId: this.monthTaskId,
+      //   status
+      // }
       // console.log(data)
-      this.$refs["form"].validate((valid) => {
-        if (valid) {
-          this.loading = true;
-          if (this.isAdd) {
-            this.doAdd();
-          } else this.doModify(formData);
-        }
-      });
-    },
-    doAdd() {
-      taskAdd(this.form)
-        .then((res) => {
-          if (res.code === "200") {
-            this.$message({
-              message: "添加成功",
-              type: "success",
-            });
-            this.resetForm();
-            this.loading = false;
-            this.$parent.init();
-          } else {
-            this.loading = false;
-            this.$message.error(res.msg);
-          }
-        })
-        .catch((err) => {
-          this.loading = false;
-        });
-    },
-    doModify(formData) {
-      updateMonthTaskParam(formData)
-        .then((res) => {
-          if (res.code === "200") {
-            this.$message({
-              message: "修改成功",
-              type: "success",
-            });
-            this.resetForm();
-            this.loading = false;
-            this.$parent.init();
-          } else {
-            this.$message.error(res.msg);
-            this.loading = false;
-          }
-        })
-        .catch((err) => {
-          this.loading = false;
-        });
+
+      if (this.form.agree == "") {
+        this.$message.error("请选择同意/驳回");
+        return;
+      }
+      if (this.form.agree == "0" && this.form.reason == "") {
+        this.$message.error("请输入驳回备注");
+        return;
+      }
+
     },
     resetForm() {
       this.dialog = false;
       this.$refs["form"].resetFields();
       this.form = {
-        taskName: "",
-        year: "",
-        defaultDay: "",
-        productValue: "",
-        monthTasks: [],
-        type: 2,
+        agree: "",
+        reason: ""
       };
       this.product = "";
     },

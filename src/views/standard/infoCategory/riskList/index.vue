@@ -1,6 +1,5 @@
 <template>
   <div class="dataSource">
-    
     <!--表格渲染-->
     <el-table
       v-loading="loading"
@@ -11,14 +10,15 @@
       @selection-change="selectionChange"
     >
       <el-table-column type="index" width="50" />
-      <el-table-column label="风险清单">
+      <el-table-column :label="$t('standard.riskname')">
         <template slot-scope="scope">
-          <el-tooltip v-if="!!scope.row.riskDesc" :content="scope.row.riskDesc" placement="right"><span>{{scope.row.riskName}}</span></el-tooltip>
+          <el-tooltip v-if="!!scope.row.riskDesc" :content="scope.row.riskDesc" placement="right">
+            <span>{{scope.row.riskName}}</span>
+          </el-tooltip>
           <span v-else>{{scope.row.riskName}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="levelDesc" label="事件等级标准" />
-      
+      <el-table-column prop="levelDesc" :label="$t('standard.leveldesc')" />
     </el-table>
     <!--分页组件-->
     <!-- <el-pagination
@@ -28,16 +28,14 @@
       layout="total, prev, pager, next, sizes"
       @size-change="sizeChange"
       @current-change="pageChange"
-    /> -->
+    />-->
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
-import eform from "./form";
-import {riskList} from '@/dataSource'
+import { riskList } from '@/dataSource'
 export default {
-  components: { eform },
   mixins: [initData],
   data() {
     return {
@@ -46,7 +44,7 @@ export default {
       selections: []
     };
   },
-   created() {
+  created() {
     this.init();
   },
   methods: {
@@ -63,7 +61,7 @@ export default {
       // }
     },
     // 选择切换
-    selectionChange: function(selections) {
+    selectionChange: function (selections) {
       this.selections = selections;
       this.$emit("selectionChange", { selections: selections });
     },

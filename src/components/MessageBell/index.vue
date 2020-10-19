@@ -45,7 +45,7 @@ export default {
   font-size: 25px;
   color: #fff;
   line-height: 50px;
-  margin-right: 10px;
+  //margin-right: 10px;
   cursor: pointer;
 }
 /deep/ .el-badge__content.is-fixed {

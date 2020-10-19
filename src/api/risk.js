@@ -45,6 +45,13 @@ export function riskNoticeDetail(id) {
         method: 'get',
     })
 }
+// 风险提示 我的提交详情
+export function riskNoticeSubDetail(id) {
+    return request({
+        url: `/riskmgr_mgr/safety_risk_notice_mgr/query/submitDetail/${id}`,
+        method: 'get',
+    })
+}
 // 添加风险提示
 export function riskNoticeAdd(data) {
     return request({
@@ -88,6 +95,21 @@ export function riskNoticeComplete(data) {
         url: `/riskmgr_mgr/safety_risk_notice_mgr/complete/${data.taskId}`,
         method: 'post',
         data
+    })
+}
+// 单位下发安全风险提示措施
+export function riskNoticeIssue(data) {
+    return request({
+        url: `/riskmgr_mgr/safety_risk_notice_mgr/issue/${data.id}`,
+        method: 'post',
+        data
+    })
+}
+// 查询已办详情
+export function riskNoticeDoneDetail(taskId, formId) {
+    return request({
+        url: `/riskmgr_mgr/safety_risk_notice_mgr/query/hasDoneDetail/${taskId}/${formId}`,
+        method: 'get'
     })
 }
 // =========  风险提示 end ==============

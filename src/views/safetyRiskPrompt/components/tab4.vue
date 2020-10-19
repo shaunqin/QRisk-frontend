@@ -8,8 +8,16 @@
       :highlight-current-row="true"
       style="width: 100%;"
     >
-      <el-table-column prop="name" label="任务名称" min-width="110" show-overflow-tooltip />
-      <el-table-column prop="businessName" label="流程名称" min-width="150" show-overflow-tooltip />
+      <el-table-column prop="businessName" label="流程名称">
+        <template slot-scope="{row}">
+          <el-tag type="success">{{row.businessName}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="name" label="任务名称">
+        <template slot-scope="{row}">
+          <el-tag type="warning">{{row.name}}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="createBy" label="创建人" />
       <el-table-column prop="createTime" label="创建时间" />
       <el-table-column label="操作" width="110">
@@ -56,6 +64,9 @@ export default {
           _this.data = res.obj;
           _this.form.taskId = row.taskId;
           _this.form.formId = row.formId;
+          if (res.obj.step != 4) {
+            _this.form.comment = res.obj.deptMeasure.implementStatus || "";
+          }
           _this.dialog = true;
         }
       });

@@ -21,6 +21,11 @@
       <el-table-column label="拟制人">
         <template slot-scope="{row}">{{row.issueName}}[{{row.issuer}}]</template>
       </el-table-column>
+      <el-table-column label>
+        <template slot-scope="{row}" v-if="row.pdfUrl!=null">
+          <el-link type="primary" :href="pdfUrl(row)" target="_blank">查看PDF</el-link>
+        </template>
+      </el-table-column>
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -31,19 +36,19 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-    <edetail ref="detail" :id="id" />
+    <edetail ref="detail" />
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
 import edetail from "./detail";
+import { riskNoticeSubDetail } from "@/api/risk";
 export default {
   components: { edetail },
   mixins: [initData],
   data() {
     return {
-      id: "",
     };
   },
   mounted() {
@@ -60,9 +65,19 @@ export default {
       this.$emit("selectionChange", { selections: selections });
     },
     detail(row) {
-      this.id = row.id;
-      this.$refs.detail.dialog = true;
+      riskNoticeSubDetail(row.id).then(res => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          let _this = this.$refs.detail;
+          _this.form = res.obj;
+          _this.dialog = true;
+        }
+      })
     },
+    pdfUrl(row) {
+      return `${process.env.VUE_APP_BASE_API}${row.pdfUrl}`
+    }
   },
 };
 </script>

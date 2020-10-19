@@ -21,14 +21,15 @@
         <el-table :data="[data.deptMeasure]" size="mini">
           <el-table-column label="截止日期" prop="deadline" />
           <el-table-column label="措施内容" prop="content" />
-          <el-table-column label="落实情况" prop="implementStatus" />
-          <el-table-column label="经办人" width="200" prop="implementStatus">
+          <el-table-column label="落实情况" prop="implementStatus" min-width="200" show-overflow-tooltip />
+          <el-table-column label="经办人"  prop="implementStatus">
             <template slot-scope="{row}">{{row.fillerName}}[{{row.filler}}]</template>
           </el-table-column>
 
-          <el-table-column label="预览附件" width="120" show-overflow-tooltip>
+          <el-table-column label="预览附件" min-width="120">
             <template slot-scope="{row}">
               <el-link
+                type="primary"
                 v-if="row.accessory!=null"
                 :href="getUrl(row.accessory.filePath)"
                 target="_blank"
@@ -58,11 +59,11 @@ export default {
   props: {
     data: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     form: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
   },
   computed: {
@@ -75,7 +76,7 @@ export default {
       },
     },
   },
-  mounted() {},
+  mounted() { },
   methods: {
     success(res) {
       console.log(res);

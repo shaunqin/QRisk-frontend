@@ -5,15 +5,15 @@
     </div>
     <el-row :gutter="16">
       <el-col :span="12">
-        <table-l :deptPath="department"></table-l>
+        <table-l :deptPath="department" @setIndex="setxIndex"></table-l>
       </el-col>
       <el-col :span="12">
-        <table-r :deptPath="department"></table-r>
+        <table-r :deptPath="department" @setIndex="setyIndex"></table-r>
       </el-col>
     </el-row>
     <el-row :gutter="16">
       <el-col :span="24">
-        <charts width="100%" height="400px" :chartData="chartData" />
+        <charts ref="charts" width="100%" height="400px" :chartData="chartData" />
       </el-col>
     </el-row>
   </div>
@@ -36,6 +36,8 @@ export default {
       department: null,
       chartData: {},
       data: [],
+      xIndex: null,
+      yIndex: null
     };
   },
   created() {
@@ -123,9 +125,41 @@ export default {
             _yAxis.push(`${item.riskLevel}(${item.standard})`);
           });
           this.renderChart(_xAxis, _yAxis, data);
+          this.data = data;
         }
       });
     },
+    highlightPoint(x, y) {
+      // 取索引
+      let xIndex = x - 1;
+      let yIndex = y - 1;
+      let _index = 0;
+      for (let i = 0; i < this.data.length; i++) {
+        let item = this.data[i];
+        if (item[0] == xIndex && item[1] == yIndex) {
+          _index = i;
+          break;
+        }
+      }
+      let myChart = this.$refs.charts.chart;
+      myChart.dispatchAction({ type: 'downplay' })
+      myChart.dispatchAction({
+        type: 'highlight',
+        dataIndex: _index,
+      })
+    },
+    setxIndex(val) {
+      this.xIndex = val;
+      if (this.yIndex != null) {
+        this.highlightPoint(this.xIndex, this.yIndex)
+      }
+    },
+    setyIndex(val) {
+      this.yIndex = val;
+      if (this.xIndex != null) {
+        this.highlightPoint(this.xIndex, this.yIndex)
+      }
+    }
   },
 };
 </script>

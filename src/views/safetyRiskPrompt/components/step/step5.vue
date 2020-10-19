@@ -17,23 +17,6 @@
       <el-form-item label="背景">
         <span style="white-space: pre-wrap;">{{data.background}}</span>
       </el-form-item>
-      <el-form-item label="领导批复">
-        <el-table :data="data.deptMeasure.measureComment">
-          <el-table-column label="内容" prop="remark" />
-          <el-table-column label="批复人">
-            <template slot-scope="{row}">{{row.name}}[{{row.sqlUserId}}]</template>
-          </el-table-column>
-          <el-table-column label="批复时间">
-            <template slot-scope="{row}">{{format(row.createTime)}}</template>
-          </el-table-column>
-          <el-table-column label="批复结果">
-            <template slot-scope="{row}">
-              <span v-if="row.processFlag=='1'">同意</span>
-              <span v-else>驳回</span>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-form-item>
       <el-form-item label="风险防范">
         <el-table :data="[data.deptMeasure]" size="mini">
           <el-table-column label="截止日期" prop="deadline" />
@@ -48,13 +31,31 @@
               <upload :id="row.id" @success="success" />
             </template>
           </el-table-column>
-          <el-table-column label="预览" width="120" show-overflow-tooltip>
+          <el-table-column label="预览" min-width="120">
             <template slot-scope="{row}">
               <el-link
+                type="primary"
                 v-if="row.accessory!=null"
                 :href="getUrl(row.accessory.filePath)"
                 target="_blank"
               >{{row.accessory.originFileName}}</el-link>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-form-item>
+      <el-form-item label="领导批复">
+        <el-table :data="data.deptMeasure.measureComment">
+          <el-table-column label="内容" prop="remark" />
+          <el-table-column label="批复人">
+            <template slot-scope="{row}">{{row.name}}[{{row.sqlUserId}}]</template>
+          </el-table-column>
+          <el-table-column label="批复时间">
+            <template slot-scope="{row}">{{format(row.createTime)}}</template>
+          </el-table-column>
+          <el-table-column label="批复结果">
+            <template slot-scope="{row}">
+              <span v-if="row.processFlag=='1'">同意</span>
+              <span v-else>驳回</span>
             </template>
           </el-table-column>
         </el-table>
@@ -103,11 +104,11 @@ export default {
   props: {
     data: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     form: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
   },
   computed: {
@@ -120,7 +121,7 @@ export default {
       },
     },
   },
-  mounted() {},
+  mounted() { },
   methods: {
     format,
     success(res) {
@@ -135,7 +136,7 @@ export default {
     resetForm() {
       this.dialog = false;
     },
-    doSubmit(){
+    doSubmit() {
       console.log(this.hairdownForm)
     }
   },
