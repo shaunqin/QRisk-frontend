@@ -66,9 +66,18 @@ export const queryDepartmentTreeByRole = () => {
   })
 }
 // 查询下发子部门
-export const queryDepts = () => {
+export const queryDepts = (params) => {
   return request({
     url: `/riskmgr_mgr/safety_risk_notice_mgr/query/depts`,
-    method: 'get'
+    method: 'get',
+    params
+  })
+}
+// 查询人
+export const queryEmplotee = (params) => {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/query/nextOperator`,
+    method: 'get',
+    params
   })
 }

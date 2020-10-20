@@ -18,11 +18,11 @@
           <el-tag type="warning">{{row.name}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="createBy" label="创建人" />
-      <el-table-column prop="createTime" label="创建时间" />
+      <el-table-column prop="createBy" label="发起人" />
+      <el-table-column prop="createTime" label="发起时间" />
       <el-table-column label="操作" width="110">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="subHandle(row)">处理待办</el-button>
+          <el-button type="primary" size="mini" @click="subHandle(row)">办理</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -65,7 +65,7 @@ export default {
           _this.form.taskId = row.taskId;
           _this.form.formId = row.formId;
           if (res.obj.step != 4) {
-            _this.form.comment = res.obj.deptMeasure.implementStatus || "";
+            _this.form.comment = res.obj.deptMeasure ? (res.obj.deptMeasure.implementStatus || "") : "";
           }
           _this.dialog = true;
         }

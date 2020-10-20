@@ -1,6 +1,5 @@
 <template>
   <div class="app-container">
-    <eform ref="form" :is-add="isAdd"></eform>
     <div class="head-container">
       <el-form :model="form" size="mini" inline>
         <el-form-item label="编号">
@@ -20,7 +19,6 @@
         </el-form-item>
         <el-form-item label>
           <el-button type="success" icon="el-icon-search" @click="toQuery(query)">查询</el-button>
-          
         </el-form-item>
       </el-form>
     </div>
@@ -31,7 +29,7 @@
       <el-tab-pane label="草稿" name="2">
         <tab2 v-if="tabIndex==2" />
       </el-tab-pane>
-      <el-tab-pane label="我提交的" name="3">
+      <el-tab-pane label="我拟制的" name="3">
         <tab3 v-if="tabIndex==3" />
       </el-tab-pane>
       <el-tab-pane label="待办" name="4">
@@ -46,7 +44,6 @@
 </template>
 
 <script>
-import eform from "./form";
 import edetail from "./components/detail";
 import tab1 from "./components/tab1";
 import tab2 from "./components/tab2";
@@ -54,7 +51,7 @@ import tab3 from "./components/tab3";
 import tab4 from "./components/tab4";
 import tab5 from "./components/tab5";
 export default {
-  components: { eform, edetail, tab1, tab2, tab3, tab4, tab5 },
+  components: { edetail, tab1, tab2, tab3, tab4, tab5 },
   data() {
     return {
       isAdd: false,
@@ -65,7 +62,7 @@ export default {
       tabIndex: "1",
     };
   },
-  mounted() {},
+  mounted() { },
   methods: {
     toQuery(name) {
       if (!name) {
@@ -78,22 +75,6 @@ export default {
     selectionChange: function (selections) {
       this.selections = selections;
       this.$emit("selectionChange", { selections: selections });
-    },
-    add() {
-      this.isAdd = true;
-      this.$refs.form.dialog = true;
-    },
-    copy(row) {
-      this.isAdd = true;
-      let _this = this.$refs.form;
-      _this.form = Object.assign({}, row);
-      _this.dialog = true;
-    },
-    edit(row) {
-      this.isAdd = false;
-      let _this = this.$refs.form;
-      _this.form = Object.assign({}, row);
-      _this.dialog = true;
     },
     detail(row) {
       let _this = this.$refs.detail;

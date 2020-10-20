@@ -32,13 +32,13 @@
       <el-form-item label="下发措施" v-if="form.firstLevelMeasure!=null">
         <el-table :data="form.firstLevelMeasure">
           <el-table-column label="内容" prop="content" />
-          <el-table-column label="截止日期" prop="deadline" />
-          <el-table-column label="部门" prop="deptName" />
-          <el-table-column label="上报人">
+          <el-table-column label="截止日期" prop="deadline" width="100" />
+          <el-table-column label="部门" prop="deptName" width="120" show-overflow-tooltip />
+          <el-table-column label="上报人" width="135" show-overflow-tooltip>
             <template slot-scope="{row}" v-if="row.filler">{{row.fillerName}}[{{row.filler}}]</template>
           </el-table-column>
           <el-table-column label="落实情况" prop="implementStatus" />
-          <el-table-column label="附件预览" >
+          <el-table-column label="附件预览">
             <template slot-scope="{row}">
               <el-link
                 type="primary"
@@ -48,7 +48,7 @@
               >{{row.accessory.originFileName}}</el-link>
             </template>
           </el-table-column>
-          <el-table-column label="状态" width="100">
+          <el-table-column label="状态" width="80">
             <template slot-scope="{row}">
               <span v-if="row.status==0">待填</span>
               <span v-if="row.status==1">待填</span>
@@ -56,6 +56,40 @@
               <span v-if="row.status==3">通过</span>
               <span v-if="row.status==4">驳回</span>
             </template>
+          </el-table-column>
+          <el-table-column label="办理人">
+            <template slot-scope="{row}">
+              <div v-if="row.reviewerInfo==null">-</div>
+              <el-popover v-else placement="left" width="1000">
+                <el-button type="text" slot="reference">详情</el-button>
+                <el-table :data="row.reviewerInfo">
+                  <el-table-column label="任务名称" prop="taskName"></el-table-column>
+                  <el-table-column label="分配人" width="135">
+                    <template slot-scope="{row}">{{row.name||"-"}}</template>
+                  </el-table-column>
+                  <el-table-column label="角色">
+                    <template slot-scope="{row}">{{row.groupName||"-"}}</template>
+                  </el-table-column>
+                  <el-table-column label="候选人">
+                    <template slot-scope="{row}">{{row.users||"-"}}</template>
+                  </el-table-column>
+                </el-table>
+              </el-popover>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-form-item>
+      <el-form-item label="办理人" v-if="form.reviewerInfo!=null">
+        <el-table :data="form.reviewerInfo">
+          <el-table-column label="任务名称" prop="taskName"></el-table-column>
+          <el-table-column label="分配人" width="135">
+            <template slot-scope="{row}">{{row.name||"-"}}</template>
+          </el-table-column>
+          <el-table-column label="角色">
+            <template slot-scope="{row}">{{row.groupName||"-"}}</template>
+          </el-table-column>
+          <el-table-column label="候选人">
+            <template slot-scope="{row}">{{row.users||"-"}}</template>
           </el-table-column>
         </el-table>
       </el-form-item>

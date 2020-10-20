@@ -19,8 +19,8 @@
           <el-tag type="warning">{{row.name}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="createBy" label="创建人" />
-      <el-table-column prop="createTime" label="创建时间" />
+      <el-table-column prop="createBy" label="发起人" />
+      <el-table-column prop="createTime" label="发起时间" />
       <el-table-column label width="100">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="detail(row)">查看详情</el-button>

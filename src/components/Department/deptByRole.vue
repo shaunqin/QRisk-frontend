@@ -63,9 +63,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    measureId: {
+      type: String,
+      default: null,
+    }
   },
   created() {
-    queryDepts().then((res) => {
+    let form = !!this.measureId ? { measureId: this.measureId } : {}
+    queryDepts(form).then((res) => {
       this.options = res.obj;
     });
   },

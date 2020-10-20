@@ -69,11 +69,11 @@
         </el-row>
       </el-form-item>
     </el-form>
+    <selectEmplotee ref="selectEmplotee" @on-submit="doSubmit" />
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
-      <el-button :loading="loading" type="info">打印</el-button>
       <el-button :loading="save_loading" type="success" @click="doSave">保存</el-button>
-      <el-button :loading="loading" type="primary" @click="doSubmit">提交</el-button>
+      <el-button :loading="loading" type="primary" @click="handleEmp">提交</el-button>
     </div>
   </el-dialog>
 </template>
@@ -82,8 +82,9 @@
 import { riskNoticeAdd, riskNoticeModify, riskNoticeSubmit } from "@/api/risk";
 import department from "@/components/Department/deptByRole";
 import { format } from "@/utils/datetime";
+import selectEmplotee from './selectEmplotee'
 export default {
-  components: { department },
+  components: { department, selectEmplotee },
   data() {
     return {
       loading: false,
@@ -158,13 +159,21 @@ export default {
         }
       });
     },
-    doSubmit() {
+    handleEmp() {
+      if (this.id == "") {
+        this.$message.error("请先保存!");
+        return;
+      }
+      let _this = this.$refs.selectEmplotee;
+      _this.dialog = true;
+    },
+    doSubmit(sqlUserId) {
       if (this.id == "") {
         this.$message.error("请先保存!");
         return;
       }
       this.loading = true;
-      riskNoticeSubmit(this.id).then((res) => {
+      riskNoticeSubmit(this.id, { sqlUserId }).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {

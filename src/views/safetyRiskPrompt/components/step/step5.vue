@@ -28,7 +28,7 @@
           </el-table-column>
           <el-table-column label="附件" width="100">
             <template slot-scope="{row}">
-              <upload :id="row.id" @success="success" />
+              <upload :id="row.id" @success="success($event,row)" />
             </template>
           </el-table-column>
           <el-table-column label="预览" min-width="120">
@@ -124,8 +124,12 @@ export default {
   mounted() { },
   methods: {
     format,
-    success(res) {
+    success(res, row) {
       console.log(res);
+      row.accessory = {
+        filePath: res.obj.filePath,
+        originFileName: res.obj.originFileName
+      }
     },
     getUrl(url) {
       return process.env.VUE_APP_BASE_API + url;

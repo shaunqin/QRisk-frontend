@@ -16,6 +16,7 @@
             <department
               style="width:100%"
               :value="item.deptPath"
+              :measureId="measureId"
               @change="deptChange($event,item)"
             />
           </el-form-item>
@@ -62,16 +63,17 @@ export default {
       dialog: false,
       loading: false,
       hairdownForm: {
-        content: this.data.deptMeasure.content,
+        content: this.data.deptMeasure ? this.data.deptMeasure.content : "",
         pathAndDeadLines: [
           {
-            deadline: this.data.deptMeasure.deadline,
+            deadline: this.data.deptMeasure ? this.data.deptMeasure.deadline : "",
             deptPath: null
           }
         ],
         taskId: this.form.taskId,
-        id: this.data.deptMeasure.id,
+        id: this.data.deptMeasure ? this.data.deptMeasure.id : "",
       },
+      measureId: this.data.deptMeasure ? this.data.deptMeasure.id : "",
     }
   },
   props: {
@@ -91,15 +93,15 @@ export default {
     resetForm() {
       this.dialog = false;
       this.hairdownForm = {
-        content: this.data.deptMeasure.content,
+        content: this.data.deptMeasure ? this.data.deptMeasure.content : "",
         pathAndDeadLines: [
           {
-            deadline: this.data.deptMeasure.deadline,
+            deadline: this.data.deptMeasure ? this.data.deptMeasure.deadline : "",
             deptPath: null
           }
         ],
         taskId: this.form.taskId,
-        id: this.data.deptMeasure.id,
+        id: this.data.deptMeasure ? this.data.deptMeasure.id : "",
       }
     },
     doSubmit() {
@@ -122,7 +124,7 @@ export default {
     },
     addRow() {
       this.hairdownForm.pathAndDeadLines.push({
-        deadline: this.data.deptMeasure.deadline,
+        deadline: this.data.deptMeasure ? this.data.deptMeasure.deadline : "",
         deptPath: null
       });
     },

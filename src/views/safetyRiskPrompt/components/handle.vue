@@ -102,20 +102,11 @@ export default {
     },
     resetForm() {
       this.dialog = false;
-      if (this.step == 2) {
-        // let _this = this.$refs.step2;
-        // _this.detailForm = {
-        //   id: this.data.id,
-        //   no: this.data.no,
-        //   title: this.data.title,
-        //   background: this.data.background,
-        //   existingRisk: this.data.existingRisk,
-        //   measures: this.data.measuresVos,
-        // };
-      }
     },
     formChange(form) {
+      debugger
       console.log(form);
+      this.form = form;
     },
     submitStep1() {
       if (this.form.processFlag == "") {

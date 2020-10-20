@@ -18,26 +18,27 @@
         <span style="white-space: pre-wrap;">{{data.background}}</span>
       </el-form-item>
       <el-form-item label="风险防范">
-        <el-table :data="[data.deptMeasure]" size="mini">
+        <el-table :data="deptMeasure" size="mini">
           <el-table-column label="截止日期" prop="deadline" />
           <el-table-column label="措施内容" prop="content" />
           <el-table-column label="落实情况" width="200">
-            <template>
+            <template slot-scope="{row}" v-show="!!row">
               <el-input v-model="_form.comment" placeholder="请输入落实情况"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="附件" width="100">
             <template slot-scope="{row}">
-              <upload :id="row.id" @success="success" />
+              <upload :id="row.id" @success="success($event,row)" />
             </template>
           </el-table-column>
-          <el-table-column label="预览" width="120" show-overflow-tooltip>
-            <template slot-scope="{row}">
+          <el-table-column label="预览" min-width="120">
+            <template slot-scope="{row}" v-if="row">
               <el-link
-                v-if="row.accessory!=null"
-                :href="getUrl(row.accessory.filePath)"
+                type="primary"
+                v-show="accessory!=null"
+                :href="getUrl(accessory?accessory.filePath:'')"
                 target="_blank"
-              >{{row.accessory.originFileName}}</el-link>
+              >{{accessory?accessory.originFileName:''}}</el-link>
             </template>
           </el-table-column>
         </el-table>
@@ -73,6 +74,26 @@
               <span v-if="row.status==4">驳回</span>
             </template>
           </el-table-column>
+          <el-table-column label="办理人">
+            <template slot-scope="{row}">
+              <div v-if="row.reviewerInfo==null">-</div>
+              <el-popover v-else placement="left" width="1000">
+                <el-button type="text" slot="reference">详情</el-button>
+                <el-table :data="row.reviewerInfo">
+                  <el-table-column label="任务名称" prop="taskName"></el-table-column>
+                  <el-table-column label="分配人" width="135">
+                    <template slot-scope="{row}">{{row.name||"-"}}</template>
+                  </el-table-column>
+                  <el-table-column label="角色">
+                    <template slot-scope="{row}">{{row.groupName||"-"}}</template>
+                  </el-table-column>
+                  <el-table-column label="候选人">
+                    <template slot-scope="{row}">{{row.users||"-"}}</template>
+                  </el-table-column>
+                </el-table>
+              </el-popover>
+            </template>
+          </el-table-column>
         </el-table>
       </el-form-item>
     </el-form>
@@ -84,7 +105,9 @@ import upload from "../upload";
 export default {
   components: { upload },
   data() {
-    return {};
+    return {
+      accessory: {}
+    };
   },
   props: {
     data: {
@@ -102,14 +125,22 @@ export default {
         return this.form;
       },
       set(val) {
+        console.log(val)
         this.$emit("change", val);
       },
     },
+    deptMeasure() {
+      return [{ ...this.data.deptMeasure }]
+    }
   },
   mounted() { },
   methods: {
-    success(res) {
+    success(res, row) {
       console.log(res);
+      this.accessory = {
+        filePath: res.obj.filePath,
+        originFileName: res.obj.originFileName
+      }
     },
     getUrl(url) {
       return process.env.VUE_APP_BASE_API + url;

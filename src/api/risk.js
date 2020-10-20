@@ -76,10 +76,11 @@ export function riskNoticeDelete(id) {
     })
 }
 // 提交风险提示
-export function riskNoticeSubmit(id) {
+export function riskNoticeSubmit(id, params) {
     return request({
         url: `/riskmgr_mgr/safety_risk_notice_mgr/submit/${id}`,
-        method: 'put'
+        method: 'put',
+        params
     })
 }
 // 根据task显示不同的内容
