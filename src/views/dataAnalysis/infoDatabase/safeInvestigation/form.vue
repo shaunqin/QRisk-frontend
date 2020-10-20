@@ -4,13 +4,13 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
-    :title="isAdd ? '新增' : '编辑'"
+    :title="isAdd ? $t('global.add') : $t('global.edit')"
     custom-class="big_dialog"
   >
-    <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="80px">
+    <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
       <el-row :gutter="16">
         <el-col :span="6">
-          <el-form-item label="信息来源" prop="infoSource">
+          <el-form-item :label="$t('analysis.infoSource')" prop="infoSource">
             <dict-select
               :value="form.infoSource"
               type="info_source"
@@ -19,22 +19,22 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="发生日期" prop="happenDate">
+          <el-form-item :label="$t('analysis.happenDate')" prop="happenDate">
             <el-date-picker v-model="form.happenDate" placeholder style="width: 100%;"></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="地点" prop="place">
+          <el-form-item :label="$t('analysis.place')" prop="place" label-width="70px">
             <el-input
               v-model="form.place"
               style="width: 100%;"
-              placeholder="请输入城市名称"
+              :placeholder="$t('analysis.placrPhd')"
               @blur="checkPlace"
             />
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="机型">
+          <el-form-item :label="$t('analysis.aircraftType')" label-width="70px">
             <dict-select
               :value="form.aircraftType"
               type="aircraft"
@@ -43,27 +43,27 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="标题" prop="title">
+          <el-form-item :label="$t('analysis.title')" prop="title">
             <el-input v-model="form.title" style="width: 100%;" />
           </el-form-item>
-          <el-form-item label="事件概述" prop="eventOverview">
+          <el-form-item :label="$t('analysis.eventOverview')" prop="eventOverview">
             <el-input v-model="form.eventOverview" type="textarea" rows="3" style="width: 100%;" />
           </el-form-item>
-          <el-form-item label="风险" prop="risk">
+          <el-form-item :label="$t('analysis.risk')" prop="risk">
             <risk-select :value="form.risk" @change="riskChange" style="width: 50%;"></risk-select>
           </el-form-item>
-          <el-form-item label="附件上传">
+          <el-form-item :label="$t('analysis.fileUpload')">
             <eupload @success="uploadSuccess"></eupload>
           </el-form-item>
           <el-form-item label>
             <el-table :data="files" size="mini">
-              <el-table-column label="文件名" prop="originFileName" />
-              <el-table-column label="文件大小">
+              <el-table-column :label="$t('analysis.fileName')" prop="originFileName" />
+              <el-table-column :label="$t('analysis.fileSize')">
                 <template slot-scope="{row}">{{(row.fileSize/1024).toFixed(2)}}Kb</template>
               </el-table-column>
-              <el-table-column label="操作" width="100px">
+              <el-table-column :label="$t('global.operation')" width="100px">
                 <template slot-scope="{row,$index}">
-                  <el-tooltip content="预览" placement="left">
+                  <el-tooltip :content="$t('analysis.preview')" placement="left">
                     <el-link type="primary" :underline="false" :href="row.url" target="_blank">
                       <svg-icon icon-class="eye-open"></svg-icon>
                     </el-link>
@@ -76,15 +76,15 @@
         </el-col>
       </el-row>
       <el-card v-for="(row,index) in data" :key="index" style="margin-bottom:20px">
-        <el-form-item label="原因分析">
+        <el-form-item :label="$t('analysis.causeAnalysis')">
           <el-input v-model="row.causeAnalysis" placeholder type="textarea" rows="4"></el-input>
         </el-form-item>
         <el-row :gutter="16">
           <el-col :span="8">
-            <el-form-item label="责任单位">
+            <el-form-item :label="$t('analysis.department')">
               <department :value="row.responsibleUnit" @change="deptChange($event,row)"></department>
             </el-form-item>
-            <el-form-item label="危险源层级一" label-width="100px">
+            <el-form-item :label="$t('analysis.riskLevel1')" label-width="100px">
               <el-select
                 clearable
                 v-model="row.riskLevel1"
@@ -102,14 +102,14 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="产品">
+            <el-form-item :label="$t('analysis.product')">
               <dict-select
                 :value="row.product"
                 type="product"
                 @change="dictChange($event,'product',row)"
               />
             </el-form-item>
-            <el-form-item label="危险源层级二" label-width="100px">
+            <el-form-item :label="$t('analysis.riskLevel2')" label-width="100px">
               <riskLevel2CP
                 :value="row.riskLevel2"
                 :list="riskLevel1List"
@@ -119,14 +119,14 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="系统">
+            <el-form-item :label="$t('analysis.system')">
               <dict-select
                 :value="row.systemCode"
                 type="system"
                 @change="dictChange($event,'systemCode',row)"
               />
             </el-form-item>
-            <el-form-item label="危险源">
+            <el-form-item :label="$t('analysis.sourceOfRisk')">
               <el-select
                 clearable
                 filterable
@@ -144,21 +144,30 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="诱因分类">
+        <el-form-item :label="$t('analysis.incentive')">
           <incentive-select :value="row.incentive" @change="incentiveChange($event,row)"></incentive-select>
         </el-form-item>
         <el-form-item label style="text-align: center;">
-          <el-button type="danger" icon="el-icon-delete" @click="delRows(index)">删除</el-button>
+          <el-button
+            type="danger"
+            icon="el-icon-delete"
+            @click="delRows(index)"
+          >{{$t('global.delete')}}</el-button>
         </el-form-item>
       </el-card>
       <el-form-item>
-        <el-button type="info" size="mini" icon="el-icon-plus" @click="addRow">新增原因分析</el-button>
+        <el-button
+          type="info"
+          size="mini"
+          icon="el-icon-plus"
+          @click="addRow"
+        >{{$t('analysis.addCauseAnalysis')}}</el-button>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button type="text" @click="cancel">取消</el-button>
-      <el-button :loading="loading" type="success" @click="doSave">暂存</el-button>
-      <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
+      <el-button type="text" @click="cancel">{{$t('global.cancel')}}</el-button>
+      <el-button :loading="loading" type="success" @click="doSave">{{$t('global.temporaryStorage')}}</el-button>
+      <el-button :loading="loading" type="primary" @click="doSubmit">{{$t('global.confirm')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -202,40 +211,18 @@ export default {
       roleSelect: [],
       formRules: {
         infoSource: [
-          { required: true, message: "信息来源不能为空", trigger: "blur" },
+          { required: true, message: this.$t('analysis.rulesInfoSource'), trigger: "blur" },
         ],
         happenDate: [
-          { required: true, message: "发生日期不能为空", trigger: "blur" },
-        ],
-        riskLevel1: [
-          { required: true, message: "危险源层级一不能为空", trigger: "blur" },
-        ],
-        riskLevel2: [
-          { required: true, message: "危险源层级二不能为空", trigger: "blur" },
-        ],
-        sourceOfRisk: [
-          { required: true, message: "危险源不能为空", trigger: "blur" },
-        ],
-        responsibleUnit: [
-          { required: true, message: "责任单位不能为空", trigger: "blur" },
-        ],
-        product: [{ required: true, message: "产品不能为空", trigger: "blur" }],
-        systemCode: [
-          { required: true, message: "系统不能为空", trigger: "blur" },
+          { required: true, message: this.$t('analysis.ruleshappenDate'), trigger: "blur" },
         ],
         title: [
-          { required: true, message: "标题不能为空", trigger: "blur" },
+          { required: true, message: this.$t('analysis.rulestitle'), trigger: "blur" },
         ],
         eventOverview: [
-          { required: true, message: "事件概述不能为空", trigger: "blur" },
+          { required: true, message: this.$t('analysis.ruleseventOverview'), trigger: "blur" },
         ],
-        causeAnalysis: [
-          { required: true, message: "原因分析不能为空", trigger: "blur" },
-        ],
-        risk: [{ required: true, message: "风险不能为空", trigger: "blur" }],
-        incentive: [
-          { required: true, message: "诱因不能为空", trigger: "blur" },
-        ],
+        risk: [{ required: true, message: this.$t('analysis.rulesrisk'), trigger: "blur" }],
       },
       entArr: [],
       infobaseList: [],

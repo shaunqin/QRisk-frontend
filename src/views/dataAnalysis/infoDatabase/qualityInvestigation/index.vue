@@ -2,7 +2,13 @@
   <div class="app-container">
     <div class="head-container">
       <search sourceType="info_source_qauit" type="2" />
-      <el-button class="filter-item" size="mini" type="primary" icon="el-icon-plus" @click="add">新增</el-button>
+      <el-button
+        class="filter-item"
+        size="mini"
+        type="primary"
+        icon="el-icon-plus"
+        @click="add"
+      >{{$t('global.add')}}</el-button>
     </div>
     <!--表格渲染-->
     <el-table
@@ -13,25 +19,45 @@
       style="width: 100%;"
     >
       <el-table-column type="index" width="50" :index="getIndex" />
-      <el-table-column prop="infoSourceText" label="信息来源" width="100" />
-      <el-table-column label="发生日期" width="100">
+      <el-table-column prop="infoSourceText" :label="$t('analysis.infoSource')" width="100" />
+      <el-table-column :label="$t('analysis.happenDate')" width="110">
         <template slot-scope="{row}">
-          <span>{{formatShortDate(row.happenDate)}}</span>
+          <span v-if="row.happenDate!=null">{{formatShortDate(row.happenDate)}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="place" label="地点" />
-      <el-table-column prop="aircraftTypeText" label="机型" />
-      <el-table-column prop="title" label="标题" min-width="150" show-overflow-tooltip />
-      <el-table-column prop="causeAnalysis" label="原因分析" min-width="150" show-overflow-tooltip />
-      <el-table-column prop="departmentNameCn" label="责任单位" width="120" show-overflow-tooltip />
-      <el-table-column prop="productText" label="产品" width="120" />
-      <el-table-column prop="systemText" label="系统" width="110" />
-      <el-table-column prop="riskLevelText1" label="危险源层级一" width="110" />
-      <el-table-column prop="riskLevelText2" label="危险源层级二" width="110" />
-      <el-table-column prop="sourceOfRiskText" label="危险源" width="120" show-overflow-tooltip />
-      <el-table-column prop="risk" label="风险" width="120" />
-      <el-table-column prop="incentive" label="诱因" width="120" />
-      <el-table-column label="操作" width="150" fixed="right">
+      <el-table-column prop="place" :label="$t('analysis.place')" />
+      <el-table-column prop="aircraftTypeText" :label="$t('analysis.aircraftType')" />
+      <el-table-column
+        prop="title"
+        :label="$t('analysis.title')"
+        min-width="150"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="causeAnalysis"
+        :label="$t('analysis.causeAnalysis')"
+        min-width="150"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="departmentNameCn"
+        :label="$t('analysis.department')"
+        width="120"
+        show-overflow-tooltip
+      />
+      <el-table-column prop="productText" :label="$t('analysis.product')" width="120" />
+      <el-table-column prop="systemText" :label="$t('analysis.system')" width="110" />
+      <el-table-column prop="riskLevelText1" :label="$t('analysis.riskLevel1')" width="110" />
+      <el-table-column prop="riskLevelText2" :label="$t('analysis.riskLevel2')" width="110" />
+      <el-table-column
+        prop="sourceOfRiskText"
+        :label="$t('analysis.sourceOfRisk')"
+        width="120"
+        show-overflow-tooltip
+      />
+      <el-table-column prop="risk" :label="$t('analysis.risk')" width="120" />
+      <el-table-column prop="incentive" :label="$t('analysis.incentive')" width="120" />
+      <el-table-column :label="$t('global.operation')" width="150" fixed="right">
         <template slot-scope="{row}">
           <el-button-group v-if="row.status=='1'">
             <el-button type="primary" size="mini" icon="el-icon-edit" @click="edit(row.id)"></el-button>
@@ -51,7 +77,7 @@
       @current-change="pageChange"
     />
     <eform ref="form" :is-add="isAdd"></eform>
-    <editform ref="editform" :is-add="isAdd"></editform>
+    <editform ref="editform" type="2" :is-add="isAdd"></editform>
   </div>
 </template>
 
@@ -59,7 +85,7 @@
 import initData from "@/mixins/initData";
 import search from "../components/search2";
 import eform from "./form";
-import editform from "./editForm";
+import editform from "../components/editForm";
 import { formatShortDate } from "@/utils/datetime";
 import { detailInfobase, delInfobase, modifyInfobase } from "@/api/infodb";
 export default {
@@ -122,7 +148,7 @@ export default {
         id,
         status: "0",
       };
-      this.$confirm("确定提交嘛？提交后将不能编辑。")
+      this.$confirm(this.$t('analysis.submitConfirm'))
         .then(() => {
           modifyInfobase(form).then((res) => {
             if (res.code != "200") {
@@ -136,7 +162,7 @@ export default {
         .catch(() => { });
     },
     subDel(id) {
-      this.$confirm("确定删除嘛？")
+      this.$confirm(this.$t('analysis.deleteConfirm'))
         .then(() => {
           delInfobase(id).then((res) => {
             if (res.code != "200") {

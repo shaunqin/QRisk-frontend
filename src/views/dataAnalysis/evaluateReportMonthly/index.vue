@@ -10,21 +10,41 @@
       style="width: 100%;"
     >
       <!-- <el-table-column type="index" width="50" /> -->
-      <el-table-column prop="no" label="编号" width="120" />
-      <el-table-column label="发生日期" width="100">
+      <el-table-column prop="no" :label="$t('analysis.no')" width="120" />
+      <el-table-column :label="$t('analysis.happenDate')" width="110">
         <template slot-scope="{row}">{{formatShortDate(row.happenDate)}}</template>
       </el-table-column>
-      <el-table-column prop="eventOverview" label="问题描述" min-width="110" show-overflow-tooltip />
-      <el-table-column prop="deptNameCn1" label="责任单位层级一" width="130" />
-      <el-table-column prop="deptNameCn2" label="责任单位层级二" width="130" />
-      <el-table-column prop="deptNameCn3" label="责任单位层级三" width="130" />
-      <el-table-column prop="productText" label="产品" width="110" />
-      <el-table-column prop="systemText" label="系统" width="110" />
-      <el-table-column prop="riskLevelText1" label="危险源层级一" width="110" />
-      <el-table-column prop="riskLevelText2" label="危险源层级二" width="110" />
-      <el-table-column prop="sourceOfRiskText" label="危险源" width="150" show-overflow-tooltip />
-      <el-table-column prop="riskText" label="风险" width="150" show-overflow-tooltip />
-      <el-table-column prop="incentiveText" label="诱因" width="150" show-overflow-tooltip />
+      <el-table-column
+        prop="eventOverview"
+        :label="$t('analysis.problemDesc')"
+        min-width="120"
+        show-overflow-tooltip
+      />
+      <el-table-column prop="deptNameCn1" :label="$t('analysis.unitLevel1')" width="130" />
+      <el-table-column prop="deptNameCn2" :label="$t('analysis.unitLevel2')" width="130" />
+      <el-table-column prop="deptNameCn3" :label="$t('analysis.unitLevel3')" width="130" />
+      <el-table-column prop="productText" :label="$t('analysis.product')" width="110" />
+      <el-table-column prop="systemText" :label="$t('analysis.system')" width="110" />
+      <el-table-column prop="riskLevelText1" :label="$t('analysis.riskLevel1')" width="110" />
+      <el-table-column prop="riskLevelText2" :label="$t('analysis.riskLevel2')" width="110" />
+      <el-table-column
+        prop="sourceOfRiskText"
+        :label="$t('analysis.sourceOfRisk')"
+        width="150"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="riskText"
+        :label="$t('analysis.risk')"
+        width="150"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="incentiveText"
+        :label="$t('analysis.incentive')"
+        width="150"
+        show-overflow-tooltip
+      />
     </el-table>
     <!--分页组件-->
     <el-pagination

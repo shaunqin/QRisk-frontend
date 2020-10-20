@@ -346,9 +346,7 @@ export default {
     },
     "form.isKeyRisk"(val) {
       // 关键风险
-      if (val == "1") {
-        this.form.risk = "";
-      }
+      this.form.risk = val == "1" ? "-1" : "";
       this.riskDisabled = val == "1";
     },
     "form.riskLevel1": {
@@ -506,7 +504,7 @@ export default {
     margin-bottom: 8px;
   }
 }
-.vue-treeselect--append-to-body{
+.vue-treeselect--append-to-body {
   z-index: 1 !important;
 }
 </style>

@@ -14,7 +14,7 @@
       <el-table-column type="index" width="50" :index="getIndex" />
       <el-table-column prop="no" :label="$t('analysis.no')" width="120" />
       <el-table-column :label="$t('analysis.happenDate')" width="120">
-        <template slot-scope="{row}">{{row.dateTime.substring(0,10)}}</template>
+        <template slot-scope="{row}">{{formatShortDate(row.dateTime)}}</template>
       </el-table-column>
       <el-table-column
         prop="problemDescription"
@@ -58,6 +58,7 @@
 <script>
 import initData from "@/mixins/initData";
 import search from "../components/search";
+import { formatShortDate } from "@/utils/datetime";
 export default {
   components: { search },
   mixins: [initData],
@@ -72,6 +73,7 @@ export default {
     this.init();
   },
   methods: {
+    formatShortDate,
     beforeInit() {
       this.url = `/info_mgr/supervise_mgr/query/pageList/${this.page}/${this.size}`;
       this.params.dataType = "6";

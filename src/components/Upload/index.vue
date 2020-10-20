@@ -11,8 +11,8 @@
       :on-error="error"
       :before-upload="beforeUpload"
     >
-      <el-button size="small" type="primary">点击上传</el-button>
-      <div slot="tip" class="el-upload__tip">文件大小不超过10M</div>
+      <el-button size="small" type="primary">{{$t('upload.clickUpload')}}</el-button>
+      <div slot="tip" class="el-upload__tip">{{$t('upload.tip')}}</div>
     </el-upload>
   </div>
 </template>
@@ -38,11 +38,11 @@ export default {
       this.$emit("success", response);
     },
     error(err, file, fileList) {
-      this.$message.error("上传失败");
+      this.$message.error($t('upload.error'));
     },
     beforeUpload(file) {
       if (file.size > 10 * 1024 * 1024) {
-        this.$message.error("文件大小超过限制");
+        this.$message.error($t('upload.sizeError'));
         return false;
       }
     },

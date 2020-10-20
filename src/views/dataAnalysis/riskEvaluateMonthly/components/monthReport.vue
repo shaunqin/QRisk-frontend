@@ -301,7 +301,14 @@ export default {
       form: {},
     };
   },
+  props: {
+    form: {
+      type: Object,
+      default: () => { },
+    },
+  },
   mounted() {
+    getRiskAssessmentChartData(this.form)
     getRiskAssessmentChartData(1).then((res) => {
       if (res) {
         let indicator = [];

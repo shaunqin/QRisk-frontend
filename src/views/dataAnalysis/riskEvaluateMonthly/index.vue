@@ -13,7 +13,7 @@
         <charttb :form="queryForm2" />
       </el-tab-pane>
       <el-tab-pane label="月度风险评价报告" lazy name="3">
-        <monthreport />
+        <monthreport :form="queryForm1" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -44,7 +44,7 @@ export default {
 
   methods: {
     ...mapMutations({
-      SET_RESETCHART:'user/SET_RESETCHART'
+      SET_RESETCHART: 'user/SET_RESETCHART'
     }),
     toQuery(form) {
       // 防止重复按搜索键没有响应

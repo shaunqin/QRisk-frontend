@@ -35,10 +35,16 @@
             <template slot-scope="{row}">
               <el-link
                 type="primary"
-                v-if="row.accessory!=null"
+                v-if="accessory.filePath==null&&row.accessory!=null"
                 :href="getUrl(row.accessory.filePath)"
                 target="_blank"
               >{{row.accessory.originFileName}}</el-link>
+              <el-link
+                type="primary"
+                v-show="accessory.filePath!=null"
+                :href="getUrl(accessory?accessory.filePath:'')"
+                target="_blank"
+              >{{accessory?accessory.originFileName:''}}</el-link>
             </template>
           </el-table-column>
         </el-table>
@@ -99,6 +105,7 @@ export default {
         taskId: this.form.taskId,
         id: this.data.deptMeasure.id,
       },
+      accessory: {}
     };
   },
   props: {
@@ -126,7 +133,7 @@ export default {
     format,
     success(res, row) {
       console.log(res);
-      row.accessory = {
+      this.accessory = {
         filePath: res.obj.filePath,
         originFileName: res.obj.originFileName
       }

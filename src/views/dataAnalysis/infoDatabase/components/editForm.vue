@@ -4,26 +4,26 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
-    :title="isAdd ? '新增' : '编辑'"
+    :title="isAdd ? $t('global.add') : $t('global.edit')"
     custom-class="big_dialog"
   >
     <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
       <el-row :gutter="16">
         <el-col :span="8">
-          <el-form-item label="信息来源" prop="infoSource">
+          <el-form-item :label="$t('analysis.infoSource')" prop="infoSource">
             <dict-select
               :value="form.infoSource"
-              type="info_source_customer"
+              type="info_source"
               @change="dictChange($event,'infoSource')"
             />
           </el-form-item>
-          <el-form-item label="危险源层级一" prop="riskLevel1">
+          <el-form-item :label="$t('analysis.riskLevel1')" prop="riskLevel1">
             <el-select
               clearable
               v-model="form.riskLevel1"
               placeholder
               style="width: 100%;"
-              @change="form.riskLevel2 = form.sourceOfRisk=''"
+              @change="form.riskLevel2= form.sourceOfRisk=''"
             >
               <el-option
                 v-for="item in riskLevel1List"
@@ -35,10 +35,10 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="发生日期" prop="happenDate">
+          <el-form-item :label="$t('analysis.happenDate')" prop="happenDate">
             <el-date-picker v-model="form.happenDate" placeholder style="width: 100%;"></el-date-picker>
           </el-form-item>
-          <el-form-item label="危险源层级二" prop="riskLevel2">
+          <el-form-item :label="$t('analysis.riskLevel2')" prop="riskLevel2">
             <el-select
               clearable
               v-model="form.riskLevel2"
@@ -56,15 +56,10 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="地点">
-            <el-input
-              v-model="form.place"
-              style="width: 100%;"
-              placeholder="请输入城市名称"
-              @blur="checkPlace"
-            />
+          <el-form-item :label="$t('analysis.place')" prop="place">
+            <el-input v-model="form.place" style="width: 100%;" />
           </el-form-item>
-          <el-form-item label="危险源" prop="sourceOfRisk">
+          <el-form-item :label="$t('analysis.sourceOfRisk')" prop="sourceOfRisk">
             <el-select
               clearable
               filterable
@@ -81,63 +76,59 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="机型">
-                <dict-select
-                  :value="form.aircraftType"
-                  type="aircraft"
-                  @change="dictChange($event,'aircraftType')"
-                />
-              </el-form-item>
-              <el-form-item label="产品" prop="product">
-                <dict-select
-                  :value="form.product"
-                  type="product"
-                  @change="dictChange($event,'product')"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="责任单位" prop="responsibleUnit">
-                <department :value="form.responsibleUnit" @change="deptChange"></department>
-              </el-form-item>
-              <el-form-item label="系统" prop="systemCode" label-width="70px">
-                <dict-select
-                  :value="form.systemCode"
-                  type="system"
-                  @change="dictChange($event,'systemCode')"
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
+        <el-col :span="12">
+          <el-form-item :label="$t('analysis.aircraftType')">
+            <dict-select
+              :value="form.aircraftType"
+              type="aircraft"
+              @change="dictChange($event,'aircraftType')"
+            />
+          </el-form-item>
+          <el-form-item :label="$t('analysis.product')" prop="product">
+            <dict-select
+              :value="form.product"
+              type="product"
+              @change="dictChange($event,'product')"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="$t('analysis.department')" prop="responsibleUnit">
+            <department :value="form.responsibleUnit" @change="deptChange"></department>
+          </el-form-item>
+          <el-form-item :label="$t('analysis.system')" prop="systemCode">
+            <dict-select
+              :value="form.systemCode"
+              type="system"
+              @change="dictChange($event,'systemCode')"
+            />
+          </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="事件概述" prop="eventOverview">
+          <el-form-item :label="$t('analysis.eventOverview')" prop="eventOverview">
             <el-input v-model="form.eventOverview" type="textarea" rows="3" style="width: 100%;" />
           </el-form-item>
-          <el-form-item label="原因分析" prop="causeAnalysis">
+          <el-form-item :label="$t('analysis.causeAnalysis')" prop="causeAnalysis">
             <el-input v-model="form.causeAnalysis" type="textarea" rows="3" style="width: 100%;" />
           </el-form-item>
-          <el-form-item label="风险" prop="risk">
+          <el-form-item :label="$t('analysis.risk')" prop="risk">
             <risk-select :value="form.risk" @change="riskChange"></risk-select>
           </el-form-item>
-          <el-form-item label="诱因" prop="incentive">
+          <el-form-item :label="$t('analysis.incentive')" prop="incentive">
             <incentive-select ref="incentive" :value="form.incentive" @change="incentiveChange"></incentive-select>
           </el-form-item>
-          <el-form-item label="附件上传">
+          <el-form-item :label="$t('analysis.fileUpload')">
             <eupload @success="uploadSuccess"></eupload>
           </el-form-item>
           <el-form-item label>
             <el-table :data="files" size="mini">
-              <el-table-column label="文件名" prop="originFileName" />
-              <el-table-column label="文件大小">
+              <el-table-column :label="$t('analysis.fileName')" prop="originFileName" />
+              <el-table-column :label="$t('analysis.fileSize')">
                 <template slot-scope="{row}">{{(row.fileSize/1024).toFixed(2)}}Kb</template>
               </el-table-column>
-              <el-table-column label="操作" width="100px">
+              <el-table-column :label="$t('global.operation')" width="100px">
                 <template slot-scope="{row,$index}">
-                  <el-tooltip content="预览" placement="left">
+                  <el-tooltip :content="$t('analysis.preview')" placement="left">
                     <el-link type="primary" :underline="false" :href="row.url" target="_blank">
                       <svg-icon icon-class="eye-open"></svg-icon>
                     </el-link>
@@ -151,8 +142,8 @@
       </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button type="text" @click="cancel">取消</el-button>
-      <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
+      <el-button type="text" @click="cancel">{{$t('global.cancel')}}</el-button>
+      <el-button :loading="loading" type="primary" @click="doSubmit">{{$t('global.confirm')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -166,8 +157,6 @@ import riskSelect from "../components/riskSelect";
 import incentiveSelect from "../components/incentiveSelect";
 import dictSelect from "@/components/common/dictSelect";
 import eupload from "@/components/Upload/index";
-import { re } from '@/utils/config-re'
-
 export default {
   components: {
     department,
@@ -175,6 +164,12 @@ export default {
     incentiveSelect,
     dictSelect,
     eupload,
+  },
+  props: {
+    type: {
+      type: String,
+      required: true
+    },
   },
   data() {
     return {
@@ -196,41 +191,41 @@ export default {
         risk: "",
         incentive: "",
         filesId: [],
-        type: "8",
+        type: this.type,
       },
       roleSelect: [],
       formRules: {
         infoSource: [
-          { required: true, message: "信息来源不能为空", trigger: "blur" },
+          { required: true, message: this.$t('analysis.rulesInfoSource'), trigger: "blur" },
         ],
         happenDate: [
-          { required: true, message: "发生日期不能为空", trigger: "blur" },
+          { required: true, message: this.$t('analysis.ruleshappenDate'), trigger: "blur" },
         ],
         riskLevel1: [
-          { required: true, message: "危险源层级一不能为空", trigger: "blur" },
+          { required: true, message: this.$t('analysis.rulesriskLevel1'), trigger: "blur" },
         ],
         riskLevel2: [
-          { required: true, message: "危险源层级二不能为空", trigger: "blur" },
+          { required: true, message: this.$t('analysis.rulesriskLevel2'), trigger: "blur" },
         ],
         sourceOfRisk: [
-          { required: true, message: "危险源不能为空", trigger: "blur" },
+          { required: true, message: this.$t('analysis.rulessourceOfRisk'), trigger: "blur" },
         ],
         responsibleUnit: [
-          { required: true, message: "责任单位不能为空", trigger: "blur" },
+          { required: true, message: this.$t('analysis.rulesresponsibleUnit'), trigger: "blur" },
         ],
-        product: [{ required: true, message: "产品不能为空", trigger: "blur" }],
+        product: [{ required: true, message: this.$t('analysis.rulesproduct'), trigger: "blur" }],
         systemCode: [
-          { required: true, message: "系统不能为空", trigger: "blur" },
+          { required: true, message: this.$t('analysis.rulessystemCode'), trigger: "blur" },
         ],
         eventOverview: [
-          { required: true, message: "事件概述不能为空", trigger: "blur" },
+          { required: true, message: this.$t('analysis.ruleseventOverview'), trigger: "blur" },
         ],
         causeAnalysis: [
-          { required: true, message: "原因分析不能为空", trigger: "blur" },
+          { required: true, message: this.$t('analysis.rulescauseAnalysis'), trigger: "blur" },
         ],
-        risk: [{ required: true, message: "风险不能为空", trigger: "blur" }],
+        risk: [{ required: true, message: this.$t('analysis.rulesrisk'), trigger: "blur" }],
         incentive: [
-          { required: true, message: "诱因不能为空", trigger: "blur" },
+          { required: true, message: this.$t('analysis.rulesincentive'), trigger: "blur" },
         ],
       },
       entArr: [],
@@ -255,9 +250,7 @@ export default {
     "form.riskLevel1": {
       handler(val) {
         if (this.riskLevel1List.length > 0) {
-          let list = this.riskLevel1List.filter(
-            (r) => r.value == val
-          );
+          let list = this.riskLevel1List.filter((r) => r.value == val);
           if (list && list.length > 0) {
             this.riskLevel2List = list[0].children;
             // this.form.riskLevel2 = "";
@@ -271,9 +264,11 @@ export default {
     },
     form: {
       handler(val) {
-        for (let x in val) {
-          if (!!val[x]) {
-            this.$refs.form.clearValidate(x);
+        if (this.$refs.form) {
+          for (let x in val) {
+            if (!!val[x]) {
+              this.$refs.form.clearValidate(x);
+            }
           }
         }
       },
@@ -358,9 +353,11 @@ export default {
       this.form = {
         infoSource: "",
         happenDate: "",
+        place: "",
         riskLevel1: "",
         riskLevel2: "",
         sourceOfRisk: "",
+        aircraftType: "",
         responsibleUnit: null,
         product: "",
         systemCode: "",
@@ -369,7 +366,7 @@ export default {
         risk: "",
         incentive: "",
         filesId: [],
-        type: "8",
+        type: this.type,
       };
       this.files = [];
       this.$refs.incentive.value1 = "";
@@ -393,15 +390,6 @@ export default {
     delFile(index) {
       this.files.splice(index, 1);
     },
-    checkPlace(e) {
-      let value = e.target.value;
-      if (value) {
-        if (!re.chinese.test(value)) {
-          this.$message.error("地点请输入中文！");
-          this.form.place = "";
-        }
-      }
-    }
   },
 };
 </script>

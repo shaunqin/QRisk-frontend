@@ -3,11 +3,10 @@
     class="search"
     size="mini"
     :model="queryForm"
-    label-width="70px"
     label-position="left"
     inline
   >
-    <el-form-item label="信息来源">
+    <el-form-item :label="$t('analysis.infoSource')">
       <dict-select
         :value="queryForm.infoSource"
         :type="sourceType"
@@ -15,21 +14,21 @@
         style="width:120px"
       />
     </el-form-item>
-    <el-form-item label="发生日期">
+    <el-form-item :label="$t('analysis.happenDate')">
       <el-date-picker
         v-model="date"
         type="daterange"
         value-format="yyyy-MM-dd"
-        start-placeholder="开始时间"
-        end-placeholder="结束时间"
+        :start-placeholder="$t('analysis.startDate')"
+        :end-placeholder="$t('analysis.endDate')"
         style="width:215px"
         unlink-panels
       ></el-date-picker>
     </el-form-item>
-    <el-form-item label="地点" label-width="50" v-if="type==1">
+    <el-form-item :label="$t('analysis.place')" v-if="type==1">
       <el-input v-model="queryForm.place" placeholder style="width:130px"></el-input>
     </el-form-item>
-    <el-form-item label="机型" label-width="50" v-if="type!=8">
+    <el-form-item :label="$t('analysis.aircraftType')" label-width="50" v-if="type!=8">
       <dict-select
         :value="queryForm.aircraftType"
         type="aircraft"
@@ -37,10 +36,10 @@
         style="width:100px"
       />
     </el-form-item>
-    <el-form-item label="标题" label-width="50">
+    <el-form-item :label="$t('analysis.title')">
       <el-input v-model="queryForm.title" placeholder style="width:130px"></el-input>
     </el-form-item>
-    <el-form-item label="危险源">
+    <el-form-item :label="$t('analysis.sourceOfRisk')">
       <el-select
         clearable
         filterable
@@ -56,14 +55,14 @@
         ></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="责任单位">
+    <el-form-item :label="$t('analysis.department')">
       <department
         :value="queryForm.responsibleUnit"
         @change="deptChange"
         style="width:200px;line-height:20px"
       ></department>
     </el-form-item>
-    <el-form-item label="产品" label-width="50">
+    <el-form-item :label="$t('analysis.product')" >
       <dict-select
         :value="queryForm.product"
         type="product"
@@ -71,7 +70,7 @@
         style="width:130px"
       />
     </el-form-item>
-    <el-form-item label="系统" label-width="50">
+    <el-form-item :label="$t('analysis.system')" >
       <dict-select
         :value="queryForm.systemCode"
         type="system"
@@ -79,7 +78,7 @@
         style="width:100px"
       />
     </el-form-item>
-    <el-form-item label="风险" label-width="50">
+    <el-form-item :label="$t('analysis.risk')" >
       <risk-select :value="queryForm.risk" @change="riskChange" style="width: 150px"></risk-select>
     </el-form-item>
     <el-form-item>
@@ -89,14 +88,14 @@
         type="success"
         icon="el-icon-search"
         @click="toQuery(queryForm)"
-      >搜索</el-button>
+      >{{$t('global.search')}}</el-button>
       <el-button
         class="filter-item"
         size="mini"
         type="success"
         icon="el-icon-refresh"
         @click="refresh"
-      >重置</el-button>
+      >{{$t('global.reset')}}</el-button>
     </el-form-item>
   </el-form>
 </template>

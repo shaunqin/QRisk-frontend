@@ -67,6 +67,7 @@ export default {
           if (res.obj.step != 4) {
             _this.form.comment = res.obj.deptMeasure ? (res.obj.deptMeasure.implementStatus || "") : "";
           }
+          _this.form.implementStatus = res.obj.deptMeasure ? (res.obj.deptMeasure.implementStatus || "") : "";
           _this.dialog = true;
         }
       });

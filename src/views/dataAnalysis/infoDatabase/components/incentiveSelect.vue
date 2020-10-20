@@ -5,11 +5,17 @@
         type="incentive_category"
         :value="value1"
         @change="dictChange"
-        placeholder="筛选分类"
+        :placeholder="$t('analysis.selectCategory')"
       ></dict-select>
     </el-col>
     <el-col :span="20">
-      <el-select filterable multiple v-model="_value" style="width: 100%;" placeholder="请选择诱因">
+      <el-select
+        filterable
+        multiple
+        v-model="_value"
+        style="width: 100%;"
+        :placeholder="$t('analysis.selectIncentive')"
+      >
         <el-option v-for="item in list" :key="item.id" :label="item.name" :value="item.no"></el-option>
       </el-select>
     </el-col>

@@ -49,10 +49,11 @@ export default {
       loading: false,
       dialog: false,
       form: {
-        comment: "",
+        comment: "", // 驳回备注
         taskId: 0,
         formId: 0,
         processFlag: "",
+        implementStatus: "" // 落实情况
       },
       data: {}, // 父组件赋值
     };

@@ -21,19 +21,33 @@
         <el-table :data="[data.deptMeasure]" size="mini">
           <el-table-column label="截止日期" prop="deadline" />
           <el-table-column label="措施内容" prop="content" />
-          <el-table-column label="落实情况" prop="implementStatus" min-width="200" show-overflow-tooltip />
-          <el-table-column label="经办人"  prop="implementStatus">
+          <el-table-column label="落实情况" min-width="200">
+            <template slot-scope="{row}" v-if="row">
+              <el-input v-model="_form.implementStatus" placeholder></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="经办人" prop="implementStatus">
             <template slot-scope="{row}">{{row.fillerName}}[{{row.filler}}]</template>
           </el-table-column>
-
+          <el-table-column label="附件" width="100">
+            <template slot-scope="{row}">
+              <upload :id="row.id" @success="success($event,row)" />
+            </template>
+          </el-table-column>
           <el-table-column label="预览附件" min-width="120">
             <template slot-scope="{row}">
               <el-link
                 type="primary"
-                v-if="row.accessory!=null"
+                v-if="accessory.filePath==null&&row.accessory!=null"
                 :href="getUrl(row.accessory.filePath)"
                 target="_blank"
               >{{row.accessory.originFileName}}</el-link>
+              <el-link
+                type="primary"
+                v-show="accessory!=null"
+                :href="getUrl(accessory.filePath)"
+                target="_blank"
+              >{{accessory.originFileName}}</el-link>
             </template>
           </el-table-column>
         </el-table>
@@ -54,7 +68,9 @@ import upload from "../upload";
 export default {
   components: { upload },
   data() {
-    return {};
+    return {
+      accessory: {}
+    };
   },
   props: {
     data: {
@@ -78,8 +94,12 @@ export default {
   },
   mounted() { },
   methods: {
-    success(res) {
+    success(res, row) {
       console.log(res);
+      this.accessory = {
+        filePath: res.obj.filePath,
+        originFileName: res.obj.originFileName
+      }
     },
     getUrl(url) {
       return process.env.VUE_APP_BASE_API + url;
