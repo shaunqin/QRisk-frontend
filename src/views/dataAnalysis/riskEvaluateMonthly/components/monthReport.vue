@@ -16,64 +16,9 @@
       <el-table :data="data1_2" size="mini">
         <el-table-column label="公司关键风险" prop="name" width="120"></el-table-column>
         <el-table-column label="预警状态">
-          <el-table-column label="1月">
+          <el-table-column :label="item" v-for="item in data1_2_columns" :key="item">
             <template slot-scope="{row}">
               <span class="cicle" :style="'background:'+getCirclePoint(row.data[0].num)"></span>
-            </template>
-          </el-table-column>
-          <el-table-column label="2月">
-            <template slot-scope="{row}">
-              <span class="cicle" :style="'background:'+getCirclePoint(row.data[1].num)"></span>
-            </template>
-          </el-table-column>
-          <el-table-column label="3月">
-            <template slot-scope="{row}">
-              <span class="cicle" :style="'background:'+getCirclePoint(row.data[2].num)"></span>
-            </template>
-          </el-table-column>
-          <el-table-column label="4月">
-            <template slot-scope="{row}">
-              <span class="cicle" :style="'background:'+getCirclePoint(row.data[3].num)"></span>
-            </template>
-          </el-table-column>
-          <el-table-column label="5月">
-            <template slot-scope="{row}">
-              <span class="cicle" :style="'background:'+getCirclePoint(row.data[4].num)"></span>
-            </template>
-          </el-table-column>
-          <el-table-column label="6月">
-            <template slot-scope="{row}">
-              <span class="cicle" :style="'background:'+getCirclePoint(row.data[5].num)"></span>
-            </template>
-          </el-table-column>
-          <el-table-column label="7月">
-            <template slot-scope="{row}">
-              <span class="cicle" :style="'background:'+getCirclePoint(row.data[6].num)"></span>
-            </template>
-          </el-table-column>
-          <el-table-column label="8月">
-            <template slot-scope="{row}">
-              <span class="cicle" :style="'background:'+getCirclePoint(row.data[7].num)"></span>
-            </template>
-          </el-table-column>
-          <el-table-column label="9月">
-            <template slot-scope="{row}">
-              <span class="cicle" :style="'background:'+getCirclePoint(row.data[8].num)"></span>
-            </template>
-          </el-table-column>
-          <el-table-column label="10月">
-            <template slot-scope="{row}">
-              <span class="cicle" :style="'background:'+getCirclePoint(row.data[9].num)"></span>
-            </template>
-          </el-table-column>
-          <el-table-column label="11月">
-            <template slot-scope="{row}">
-              <span class="cicle" :style="'background:'+getCirclePoint(row.data[10].num)"></span>
-            </template>
-          </el-table-column>
-          <el-table-column label="12月">
-            <template slot-scope="{row}">
-              <span class="cicle" :style="'background:'+getCirclePoint(row.data[11].num)"></span>
             </template>
           </el-table-column>
         </el-table-column>
@@ -282,6 +227,7 @@ export default {
       data1_1: {},
       desc1_1: "",
       data1_2: [],
+      data1_2_columns: [],
       data1_3: {},
       data1_4: { 0: {}, 1: {}, 2: {} },
       data1_5: { 0: {}, 1: {}, 2: {} },
@@ -307,551 +253,16 @@ export default {
       default: () => { },
     },
   },
+  watch: {
+    form: {
+      deep: true,
+      handler(val) {
+        this.init();
+      }
+    }
+  },
   mounted() {
-    getRiskAssessmentChartData(this.form)
-    getRiskAssessmentChartData(1).then((res) => {
-      if (res) {
-        let indicator = [];
-        let data = [];
-        res.map((item) => {
-          indicator.push({ name: item.riskName, max: 100, color: "#000" });
-          data.push(item.num);
-        });
-        this.data1_1 = {
-          tooltip: { position: ["70%", 10] },
-          radar: {
-            indicator: indicator,
-            splitArea: {
-              show: true,
-              areaStyle: {
-                color: ["#fff", "#13ce66", "#ffba00", "#ff7600", "#e64242"],
-              },
-            },
-            // splitNumber: 10,
-          },
-          series: [
-            {
-              name: "风险值",
-              type: "radar",
-              data: [{ value: data }],
-              lineStyle: { color: "#1890ff" },
-            },
-          ],
-        };
-      }
-    });
-    getRiskAssessmentChartData(2).then((res) => {
-      this.data1_2 = res;
-    });
-    getRiskAssessmentChartData(3).then((res) => {
-      let seriesArr = [];
-      let titleArr = [];
-      res.map((item, index) => {
-        seriesArr.push({
-          name: item.name,
-          type: "line",
-          data: item.data.map((r) => r.num),
-          yAxisIndex: index,
-          xAxisIndex: index,
-        });
-        titleArr.push({
-          text: item.name,
-          top: index == 0 ? "0" : index == 1 ? "30%" : "60%",
-        });
-      });
-      this.data1_3 = {
-        tooltip: {
-          trigger: "axis",
-        },
-        axisPointer: {
-          link: { xAxisIndex: "all" },
-        },
-        grid: [
-          { top: 20, height: "25%", left: 150 },
-          { top: "35%", height: "25%", left: 150 },
-          { top: "65%", left: 150 },
-        ],
-        title: titleArr,
-        xAxis: [
-          { type: "category", data: monthxAxis, show: false },
-          { type: "category", data: monthxAxis, show: false, gridIndex: 1 },
-          { type: "category", data: monthxAxis, gridIndex: 2 },
-        ],
-        yAxis: [
-          { type: "value" },
-          { type: "value", gridIndex: 1 },
-          { type: "value", gridIndex: 2 },
-        ],
-        series: seriesArr,
-      };
-    });
-    getRiskAssessmentChartData(4).then((res) => {
-      const color = ["#e6a700", "#ffba00", "#fbff00", "#13ce66", "#ff4949"];
-      res.map((item, index) => {
-        let xAxis = [],
-          data = [];
-        item.data.map((iitem, ii) => {
-          xAxis.push(iitem.productName);
-          data.push({
-            value: iitem.num,
-            itemStyle: {
-              color: color[ii],
-            },
-          });
-        });
-        this.data1_4[index] = {
-          tooltip: {},
-          title: { text: item.name, left: "center" },
-          grid: { top: 30, left: 100 },
-          xAxis: { type: "value" },
-          yAxis: { type: "category", data: xAxis },
-          series: [
-            {
-              type: "bar",
-              name: item.name,
-              data: data,
-              barMaxWidth: 20,
-            },
-          ],
-        };
-      });
-    });
-    getRiskAssessmentChartData(5).then((res) => {
-      const color = ["#e6a700", "#ffba00", "#fbff00", "#13ce66", "#ff4949"];
-      res.map((item, index) => {
-        let xAxis = [],
-          data = [];
-        item.data.map((iitem, ii) => {
-          xAxis.push(iitem.departmentNameCn);
-          data.push({
-            value: iitem.num,
-            itemStyle: {
-              color: color[ii],
-            },
-          });
-        });
-        this.data1_5[index] = {
-          tooltip: {},
-          title: { text: item.name, left: "center" },
-          grid: { top: 30, left: 30 },
-          xAxis: {
-            type: "category",
-            data: xAxis,
-            axisLabel: {
-              rotate: 30,
-            },
-          },
-          yAxis: { type: "value" },
-          series: [
-            {
-              type: "bar",
-              name: item.name,
-              data: data,
-              barMaxWidth: 20,
-            },
-          ],
-        };
-      });
-    });
-    getRiskAssessmentChartData(6).then((res) => {
-      res.map((item) => {
-        item.data.map((iitem) => {
-          this.data1_6.push({
-            risk: item.name,
-            sourceOfRiskName: iitem.sourceOfRiskName,
-            product: iitem.productName,
-            value: item.num,
-          });
-        });
-      });
-    });
-    getRiskAssessmentChartData(7).then((res) => {
-      let xAxis = [],
-        data = [];
-      res.map((item) => {
-        xAxis.push(item.name);
-        data.push(item.num);
-      });
-      this.data2_1 = {
-        title: { text: "风险指数", left: "center" },
-        tooltip: { trigger: "axis" },
-        xAxis: {
-          type: "category",
-          data: xAxis,
-          axisLabel: {
-            rotate: 30,
-          },
-        },
-        yAxis: { type: "value" },
-        series: [
-          {
-            type: "line",
-            data: data,
-          },
-        ],
-      };
-    });
-    getRiskAssessmentChartData(8).then((res) => {
-      let xAxis = [];
-      let seriesArr = [];
-      res.map((item, index) => {
-        let data = [];
-        item.data.map((iitem) => {
-          if (index == 0) {
-            xAxis.push(iitem.sourceOfRiskName);
-          }
-          data.push({
-            value: iitem.num,
-            itemStyle: { color: iitem.color },
-          });
-        });
-        seriesArr.push({
-          name: item.name,
-          type: "bar",
-          stack: "risk",
-          data,
-          label: { show: true, color: "#000" },
-          barMaxWidth: 20,
-        });
-      });
-      this.data2_2 = {
-        tooltip: { trigger: "axis" },
-        title: { text: "风险状态图", left: "center" },
-        grid: { show: true, backgroundColor: "#ececec" },
-        xAxis: {
-          type: "category",
-          data: xAxis,
-          axisLabel: {
-            rotate: 30,
-          },
-        },
-        yAxis: { type: "value" },
-        series: seriesArr,
-      };
-    });
-    getRiskAssessmentChartData(9).then((res) => {
-      let seriesArr = [];
-      let legendArr = [];
-      res.map((item) => {
-        let data = item.data.map((r) => r.num);
-        legendArr.push(item.name);
-        seriesArr.push({
-          type: "line",
-          data: data,
-          name: item.name,
-        });
-      });
-      this.data2_3 = {
-        title: { text: "TOP3的风险趋势图", left: "center" },
-        legend: { bottom: 10 },
-        tooltip: { trigger: "axis" },
-        xAxis: { type: "category", data: monthxAxis },
-        yAxis: { type: "value" },
-        series: seriesArr,
-      };
-    });
-    getRiskAssessmentChartData(10).then((res) => {
-      res.map((item, index) => {
-        let xAxis = [];
-        let seriesArr = [];
-        const color = [];
-        item.list.map((iitem, ii) => {
-          if (xAxis.length == 0) {
-            xAxis = iitem.data.map((r) => r.productName);
-          }
-          let data = [];
-          iitem.data.map((iiitem) => {
-            data.push(iiitem.num);
-          });
-          color.push(iitem.color);
-          if (ii < 5) {
-            seriesArr.push({
-              type: "bar",
-              name: iitem.name,
-              data,
-              stack: "risk",
-              label: { show: true, color: "#000" },
-              barMaxWidth: 20,
-            });
-          } else {
-            seriesArr.push({
-              type: "line",
-              name: iitem.name,
-              data,
-            });
-          }
-        });
-        this.data2_4[index] = {
-          color,
-          tooltip: { trigger: "axis" },
-          legend: { bottom: 10, backgroundColor: "#ececec" },
-          title: { text: item.name, left: "center" },
-          grid: {
-            top: 30,
-            left: 35,
-            bottom: 90,
-            show: true,
-            backgroundColor: "#ececec",
-          },
-          xAxis: {
-            type: "category",
-            data: xAxis,
-            axisLabel: {
-              rotate: 30,
-            },
-          },
-          yAxis: { type: "value" },
-          series: seriesArr,
-        };
-      });
-    });
-    getRiskAssessmentChartData(11).then((res) => {
-      res.map((item, index) => {
-        let xAxis = [];
-        let seriesArr = [];
-        const color = [];
-        item.list.map((iitem, ii) => {
-          if (xAxis.length == 0) {
-            xAxis = iitem.data.map((r) => r.departmentNameCn);
-          }
-          let data = [];
-          iitem.data.map((iiitem) => {
-            data.push(iiitem.num);
-          });
-          color.push(iitem.color);
-          if (ii < 5) {
-            seriesArr.push({
-              type: "bar",
-              name: iitem.name,
-              data,
-              stack: "risk",
-              label: { show: true, color: "#000" },
-              barMaxWidth: 20,
-            });
-          } else {
-            seriesArr.push({
-              type: "line",
-              name: iitem.name,
-              data,
-            });
-          }
-        });
-        this.data2_5[index] = {
-          color,
-          tooltip: { trigger: "axis" },
-          legend: { bottom: 10, backgroundColor: "#ececec" },
-          title: { text: item.name, left: "center" },
-          grid: {
-            top: 30,
-            left: 35,
-            bottom: 90,
-            show: true,
-            backgroundColor: "#ececec",
-          },
-          xAxis: {
-            type: "category",
-            data: xAxis,
-            axisLabel: {
-              rotate: 30,
-            },
-          },
-          yAxis: { type: "value" },
-          series: seriesArr,
-        };
-      });
-    });
-    getRiskAssessmentChartData(12).then((res) => {
-      let seriesArr = [];
-      let dataArr = [];
-      res.map((item) => {
-        let data = item.data.map((r) => r.num);
-        dataArr.push(data);
-        seriesArr.push({
-          type: "bar",
-          stack: "risk",
-          name: item.name,
-          data: data,
-          label: { show: true },
-          barMaxWidth: 20,
-        });
-      });
-      // 计算总和
-      let sunData = [];
-      for (let i = 0; i < dataArr.length; i++) {
-        for (let j = 0; j < dataArr[i].length; j++) {
-          if (sunData[j] == null) sunData[j] = 0;
-          sunData[j] += dataArr[i][j];
-        }
-      }
-      seriesArr.push({
-        type: "line",
-        name: "总数",
-        data: sunData,
-      });
-      this.data3_1 = {
-        legend: { bottom: 10 },
-        tooltip: { trigger: "axis" },
-        title: { text: "信息数据趋势图", left: "center" },
-        xAxis: { type: "category", data: monthxAxis },
-        yAxis: { type: "value" },
-        series: seriesArr,
-      };
-    });
-    getRiskAssessmentChartData(13).then((res) => {
-      let seriesArr = [];
-      let xAxis = res[0].data.map((r) => r.dataTypeName);
-      let legendArr = [];
-      res.map((item) => {
-        let data = item.data.map((r) => r.num);
-        legendArr.push(item.name);
-        seriesArr.push({
-          type: "bar",
-          name: item.name,
-          data,
-          label: { show: true, color: "#000", position: "top" },
-          barMaxWidth: 20,
-        });
-      });
-      // 饼图
-      getRiskAssessmentChartData(17).then((res) => {
-        let data = [];
-        let legendArr2 = [];
-        res.map((item) => {
-          legendArr2.push(item.name);
-          data.push({ name: item.name, value: item.num });
-        });
-        seriesArr.push({
-          type: "pie",
-          radius: [0, "60%"],
-          center: ["75%", "50%"],
-          data,
-        });
 
-        this.data3_2 = {
-          tooltip: {},
-          legend: [
-            { bottom: 10, left: "20%", data: legendArr },
-            { bottom: 10, right: "10%", data: legendArr2 },
-          ],
-          title: [
-            { text: "信息数据统计", left: "20%" },
-            { text: "图表标题", right: "22%" },
-          ],
-          grid: [{ width: "40%", bottom: 80 }, { left: "50%" }],
-          xAxis: {
-            type: "category",
-            data: xAxis,
-            axisLabel: {
-              rotate: 30,
-            },
-          },
-          yAxis: { type: "value" },
-          series: seriesArr,
-        };
-      });
-    });
-    getRiskAssessmentChartData(14).then((res) => {
-      let seriesArr = [];
-      let xAxis = res[0].data.map((r) => r.productName);
-      res.map((item) => {
-        let data = [];
-        item.data.map((iitem) => {
-          data.push(iitem.num);
-        });
-        seriesArr.push({
-          type: "bar",
-          name: item.name,
-          data,
-          stack: "infodb",
-          label: { show: true },
-          barMaxWidth: 20,
-        });
-      });
-      this.data3_3 = {
-        tooltip: { trigger: "axis" },
-        legend: { bottom: 10 },
-        title: { text: "各产品分布图", left: "center" },
-        xAxis: { type: "value" },
-        yAxis: { type: "category", data: xAxis },
-        series: seriesArr,
-      };
-    });
-    getRiskAssessmentChartData(15).then((res) => {
-      let seriesArr = [];
-      let xAxis = res[0].data.map((r) => r.systemName);
-      let dataArr = [];
-      res.map((item) => {
-        let data = item.data.map((r) => r.num);
-        dataArr.push(data);
-        seriesArr.push({
-          type: "bar",
-          name: item.name,
-          data,
-          stack: "infodb",
-          label: { show: true },
-          barMaxWidth: 20,
-        });
-      });
-      // 计算总和
-      let sunData = [];
-      for (let i = 0; i < dataArr.length; i++) {
-        for (let j = 0; j < dataArr[i].length; j++) {
-          if (sunData[j] == null) sunData[j] = 0;
-          sunData[j] += dataArr[i][j];
-        }
-      }
-      seriesArr.push({
-        type: "line",
-        name: "总数",
-        data: sunData,
-      });
-      this.data3_4 = {
-        tooltip: { trigger: "axis" },
-        legend: { bottom: 10 },
-        title: { text: "各系统分布图", left: "center" },
-        yAxis: { type: "value" },
-        xAxis: { type: "category", data: xAxis },
-        series: seriesArr,
-      };
-    });
-    getRiskAssessmentChartData(16).then((res) => {
-      let seriesArr = [];
-      let xAxis = res[0].data.map((r) => r.departmentNameCn);
-      let dataArr = [];
-      res.map((item) => {
-        let data = item.data.map((r) => r.num);
-        dataArr.push(data);
-        seriesArr.push({
-          type: "bar",
-          name: item.name,
-          data,
-          stack: "infodb",
-          label: { show: true },
-          barMaxWidth: 20,
-        });
-      });
-      // 计算总和
-      let sunData = [];
-      for (let i = 0; i < dataArr.length; i++) {
-        for (let j = 0; j < dataArr[i].length; j++) {
-          if (sunData[j] == null) sunData[j] = 0;
-          sunData[j] += dataArr[i][j];
-        }
-      }
-      seriesArr.push({
-        type: "line",
-        name: "总数",
-        data: sunData,
-      });
-      this.data3_5 = {
-        tooltip: { trigger: "axis" },
-        legend: { bottom: 10 },
-        title: { text: "各单位分布图", left: "center" },
-        yAxis: { type: "value" },
-        xAxis: { type: "category", data: xAxis },
-        series: seriesArr,
-      };
-    });
   },
   methods: {
     getCirclePoint(num) {
@@ -949,6 +360,577 @@ export default {
           }
         });
       });
+    },
+    render1_1(res) {
+      let indicator = [];
+      let data = [];
+      res.map((item) => {
+        indicator.push({ name: item.name, max: 100, color: "#000" });
+        data.push(item.num);
+      });
+      this.data1_1 = {
+        tooltip: { position: ["70%", 10] },
+        radar: {
+          indicator: indicator,
+          splitArea: {
+            show: true,
+            areaStyle: {
+              color: ["#fff", "#13ce66", "#ffba00", "#ff7600", "#e64242"],
+            },
+          },
+          // splitNumber: 10,
+        },
+        series: [
+          {
+            name: "风险值",
+            type: "radar",
+            data: [{ value: data }],
+            lineStyle: { color: "#1890ff" },
+          },
+        ],
+      };
+    },
+    render1_2(res) {
+      // 动态绑定列
+      let columns = [];
+      res[0].data.map(item => {
+        columns.push(item.name);
+      })
+      this.data1_2_columns = columns;
+      this.data1_2 = res;
+    },
+    render1_3(res) {
+      let seriesArr = [];
+      let titleArr = [];
+      let _monthxAxis = res[0].data.map(r => r.name);
+      res.map((item, index) => {
+        seriesArr.push({
+          name: item.name,
+          type: "line",
+          data: item.data.map((r) => r.num),
+          yAxisIndex: index,
+          xAxisIndex: index,
+        });
+        titleArr.push({
+          text: item.name,
+          top: index == 0 ? "0" : index == 1 ? "30%" : "60%",
+        });
+      });
+      this.data1_3 = {
+        tooltip: {
+          trigger: "axis",
+        },
+        axisPointer: {
+          link: { xAxisIndex: "all" },
+        },
+        grid: [
+          { top: 20, height: "25%", left: 150 },
+          { top: "35%", height: "25%", left: 150 },
+          { top: "65%", left: 150 },
+        ],
+        title: titleArr,
+        xAxis: [
+          { type: "category", data: _monthxAxis, show: false },
+          { type: "category", data: _monthxAxis, show: false, gridIndex: 1 },
+          { type: "category", data: _monthxAxis, gridIndex: 2 },
+        ],
+        yAxis: [
+          { type: "value" },
+          { type: "value", gridIndex: 1 },
+          { type: "value", gridIndex: 2 },
+        ],
+        series: seriesArr,
+      };
+    },
+    render1_4(res) {
+      const color = ["#e6a700", "#ffba00", "#fbff00", "#13ce66", "#ff4949"];
+      res.map((item, index) => {
+        let xAxis = [],
+          data = [];
+        item.data.map((iitem, ii) => {
+          xAxis.push(iitem.name);
+          data.push({
+            value: iitem.num,
+            itemStyle: {
+              color: color[ii],
+            },
+          });
+        });
+        this.data1_4[index] = {
+          tooltip: {},
+          title: { text: item.name, left: "center" },
+          grid: { top: 30, left: 100 },
+          xAxis: { type: "value" },
+          yAxis: { type: "category", data: xAxis },
+          series: [
+            {
+              type: "bar",
+              name: item.name,
+              data: data,
+              barMaxWidth: 20,
+            },
+          ],
+        };
+      });
+    },
+    render1_5(res) {
+      const color = ["#e6a700", "#ffba00", "#fbff00", "#13ce66", "#ff4949"];
+      res.map((item, index) => {
+        let xAxis = [],
+          data = [];
+        item.data.map((iitem, ii) => {
+          xAxis.push(iitem.name);
+          data.push({
+            value: iitem.num,
+            itemStyle: {
+              color: color[ii],
+            },
+          });
+        });
+        this.data1_5[index] = {
+          tooltip: {},
+          title: { text: item.name, left: "center" },
+          grid: { top: 30, left: 30 },
+          xAxis: {
+            type: "category",
+            data: xAxis,
+            axisLabel: {
+              rotate: 30,
+            },
+          },
+          yAxis: { type: "value" },
+          series: [
+            {
+              type: "bar",
+              name: item.name,
+              data: data,
+              barMaxWidth: 20,
+            },
+          ],
+        };
+      });
+    },
+    // 待改
+    render1_6(res) {
+      res.map((item) => {
+        item.data.map((iitem) => {
+          this.data1_6.push({
+            risk: item.name,
+            sourceOfRiskName: iitem.sourceOfRiskName,
+            product: iitem.productName,
+            value: item.num,
+          });
+        });
+      });
+    },
+    render2_1(res) {
+      let xAxis = [],
+        data = [];
+      res.map((item) => {
+        xAxis.push(item.name);
+        data.push(item.num);
+      });
+      this.data2_1 = {
+        title: { text: "风险指数", left: "center" },
+        tooltip: { trigger: "axis" },
+        xAxis: {
+          type: "category",
+          data: xAxis,
+          axisLabel: {
+            rotate: 30,
+          },
+        },
+        yAxis: { type: "value" },
+        series: [
+          {
+            type: "line",
+            data: data,
+          },
+        ],
+      };
+    },
+    // 数据结构反了
+    render2_2(res) {
+      let xAxis = [];
+      let seriesArr = [];
+      res.map((item, index) => {
+        let data = [];
+        xAxis.push(item.name);
+        item.data.map((iitem) => {
+          data.push({
+            value: iitem.num,
+            itemStyle: { color: iitem.name },
+          });
+        });
+        seriesArr.push({
+          name: item.name,
+          type: "bar",
+          stack: "risk",
+          data,
+          label: { show: true, color: "#000" },
+          barMaxWidth: 20,
+        });
+      });
+      this.data2_2 = {
+        tooltip: { trigger: "axis" },
+        title: { text: "风险状态图", left: "center" },
+        grid: { show: true, backgroundColor: "#ececec" },
+        xAxis: {
+          type: "category",
+          data: xAxis,
+          axisLabel: {
+            rotate: 30,
+          },
+        },
+        yAxis: { type: "value" },
+        series: seriesArr,
+      };
+    },
+    render2_3(res) {
+      let seriesArr = [];
+      let legendArr = [];
+      let _monthxAxis = res[0].data.map(r => r.name)
+      res.map((item) => {
+        let data = item.data.map((r) => r.num);
+        legendArr.push(item.name);
+        seriesArr.push({
+          type: "line",
+          data: data,
+          name: item.name,
+        });
+      });
+      this.data2_3 = {
+        title: { text: "TOP3的风险趋势图", left: "center" },
+        legend: { bottom: 10 },
+        tooltip: { trigger: "axis" },
+        xAxis: { type: "category", data: _monthxAxis },
+        yAxis: { type: "value" },
+        series: seriesArr,
+      };
+    },
+    render2_4(res) {
+      res.map((item, index) => {
+        let xAxis = [];
+        let seriesArr = [];
+        const color = [];
+        item.data.map((iitem, ii) => {
+          if (xAxis.length == 0) {
+            xAxis = iitem.data.map((r) => r.name);
+          }
+          let data = [];
+          iitem.data.map((iiitem) => {
+            data.push(iiitem.num);
+          });
+          color.push(iitem.name);
+          if (ii < 5) {
+            seriesArr.push({
+              type: "bar",
+              name: iitem.name,
+              data,
+              stack: "risk",
+              label: { show: true, color: "#000" },
+              barMaxWidth: 20,
+            });
+          } else {
+            seriesArr.push({
+              type: "line",
+              name: iitem.name,
+              data,
+            });
+          }
+        });
+        this.data2_4[index] = {
+          color,
+          tooltip: { trigger: "axis" },
+          legend: { bottom: 10, backgroundColor: "#ececec" },
+          title: { text: item.name, left: "center" },
+          grid: {
+            top: 30,
+            left: 35,
+            bottom: 90,
+            show: true,
+            backgroundColor: "#ececec",
+          },
+          xAxis: {
+            type: "category",
+            data: xAxis,
+            axisLabel: {
+              rotate: 30,
+            },
+          },
+          yAxis: { type: "value" },
+          series: seriesArr,
+        };
+      });
+    },
+    render2_5(res) {
+      res.map((item, index) => {
+        let xAxis = [];
+        let seriesArr = [];
+        const color = [];
+        item.data.map((iitem, ii) => {
+          if (xAxis.length == 0) {
+            xAxis = iitem.data.map((r) => r.name);
+          }
+          let data = [];
+          iitem.data.map((iiitem) => {
+            data.push(iiitem.num);
+          });
+          color.push(iitem.name);
+          if (ii < 5) {
+            seriesArr.push({
+              type: "bar",
+              name: iitem.name,
+              data,
+              stack: "risk",
+              label: { show: true, color: "#000" },
+              barMaxWidth: 20,
+            });
+          } else {
+            seriesArr.push({
+              type: "line",
+              name: iitem.name,
+              data,
+            });
+          }
+        });
+        this.data2_5[index] = {
+          color,
+          tooltip: { trigger: "axis" },
+          legend: { bottom: 10, backgroundColor: "#ececec" },
+          title: { text: item.name, left: "center" },
+          grid: {
+            top: 30,
+            left: 35,
+            bottom: 90,
+            show: true,
+            backgroundColor: "#ececec",
+          },
+          xAxis: {
+            type: "category",
+            data: xAxis,
+            axisLabel: {
+              rotate: 30,
+            },
+          },
+          yAxis: { type: "value" },
+          series: seriesArr,
+        };
+      });
+    },
+    render3_1(res) {
+      let seriesArr = [];
+      let dataArr = [];
+      let _monthxAxis = res[0].data.map(r => r.name);
+      res.map((item) => {
+        let data = item.data.map((r) => r.num);
+        dataArr.push(data);
+        seriesArr.push({
+          type: "bar",
+          stack: "risk",
+          name: item.name,
+          data: data,
+          label: { show: true },
+          barMaxWidth: 20,
+        });
+      });
+      // 计算总和
+      let sunData = [];
+      for (let i = 0; i < dataArr.length; i++) {
+        for (let j = 0; j < dataArr[i].length; j++) {
+          if (sunData[j] == null) sunData[j] = 0;
+          sunData[j] += dataArr[i][j];
+        }
+      }
+      seriesArr.push({
+        type: "line",
+        name: "总数",
+        data: sunData,
+      });
+      this.data3_1 = {
+        legend: { bottom: 10 },
+        tooltip: { trigger: "axis" },
+        title: { text: "信息数据趋势图", left: "center" },
+        xAxis: { type: "category", data: _monthxAxis },
+        yAxis: { type: "value" },
+        series: seriesArr,
+      };
+    },
+    // 数据待查
+    render3_2(res, res2) {
+      let seriesArr = [];
+      let xAxis = [];
+      let legendArr = [];
+      let data2 = [];
+      res.map((item) => {
+        data2.push(item.num);
+        legendArr.push(item.name);
+        xAxis.push(item.name);
+      });
+      seriesArr.push({
+        type: "bar",
+        data: data2,
+        label: { show: true, color: "#000", position: "top" },
+        barMaxWidth: 20,
+      });
+      // 饼图
+      let data = [];
+      let legendArr2 = [];
+      res2.map((item) => {
+        legendArr2.push(item.name);
+        data.push({ name: item.name, value: item.num });
+      });
+      seriesArr.push({
+        type: "pie",
+        radius: [0, "60%"],
+        center: ["75%", "50%"],
+        data,
+      });
+      this.data3_2 = {
+        tooltip: {},
+        legend: [
+          { bottom: 10, left: "1%", data: legendArr },
+          { bottom: 10, right: "1%", data: legendArr2 },
+        ],
+        title: [
+          { text: "信息数据统计", left: "20%" },
+          { text: "图表标题", right: "22%" },
+        ],
+        grid: [{ width: "40%", bottom: 80 }, { left: "50%" }],
+        xAxis: {
+          type: "category",
+          data: xAxis,
+          axisLabel: {
+            rotate: 30,
+          },
+        },
+        yAxis: { type: "value" },
+        series: seriesArr,
+      };
+    },
+    render3_3(res) {
+      let seriesArr = [];
+      let xAxis = res[0].data.map((r) => r.name);
+      res.map((item) => {
+        let data = [];
+        item.data.map((iitem) => {
+          data.push(iitem.num);
+        });
+        seriesArr.push({
+          type: "bar",
+          name: item.name,
+          data,
+          stack: "infodb",
+          label: { show: true },
+          barMaxWidth: 20,
+        });
+      });
+      this.data3_3 = {
+        tooltip: { trigger: "axis" },
+        legend: { bottom: 10 },
+        title: { text: "各产品分布图", left: "center" },
+        xAxis: { type: "value" },
+        yAxis: { type: "category", data: xAxis },
+        series: seriesArr,
+      };
+    },
+    render3_4(res) {
+      let seriesArr = [];
+      let xAxis = res[0].data.map((r) => r.name);
+      let dataArr = [];
+      res.map((item) => {
+        let data = item.data.map((r) => r.num);
+        dataArr.push(data);
+        seriesArr.push({
+          type: "bar",
+          name: item.name,
+          data,
+          stack: "infodb",
+          label: { show: true },
+          barMaxWidth: 20,
+        });
+      });
+      // 计算总和
+      let sunData = [];
+      for (let i = 0; i < dataArr.length; i++) {
+        for (let j = 0; j < dataArr[i].length; j++) {
+          if (sunData[j] == null) sunData[j] = 0;
+          sunData[j] += dataArr[i][j];
+        }
+      }
+      seriesArr.push({
+        type: "line",
+        name: "总数",
+        data: sunData,
+      });
+      this.data3_4 = {
+        tooltip: { trigger: "axis" },
+        legend: { bottom: 10 },
+        title: { text: "各系统分布图", left: "center" },
+        yAxis: { type: "value" },
+        xAxis: { type: "category", data: xAxis },
+        series: seriesArr,
+      };
+    },
+    render3_5(res) {
+      let seriesArr = [];
+      let xAxis = res[0].data.map((r) => r.name);
+      let dataArr = [];
+      res.map((item) => {
+        let data = item.data.map((r) => r.num);
+        dataArr.push(data);
+        seriesArr.push({
+          type: "bar",
+          name: item.name,
+          data,
+          stack: "infodb",
+          label: { show: true },
+          barMaxWidth: 20,
+        });
+      });
+      // 计算总和
+      let sunData = [];
+      for (let i = 0; i < dataArr.length; i++) {
+        for (let j = 0; j < dataArr[i].length; j++) {
+          if (sunData[j] == null) sunData[j] = 0;
+          sunData[j] += dataArr[i][j];
+        }
+      }
+      seriesArr.push({
+        type: "line",
+        name: "总数",
+        data: sunData,
+      });
+      this.data3_5 = {
+        tooltip: { trigger: "axis" },
+        legend: { bottom: 10 },
+        title: { text: "各单位分布图", left: "center" },
+        yAxis: { type: "value" },
+        xAxis: { type: "category", data: xAxis },
+        series: seriesArr,
+      };
+    },
+    init() {
+      getRiskAssessmentChartData(this.form).then(res => {
+        if (res) {
+          this.render1_1(res.find(r => r.imageNo == '1-1').data); // 1
+          this.render1_2(res.find(r => r.imageNo == '1-2').data); // 2
+          this.render1_3(res.find(r => r.imageNo == '1-3').data); // 3
+          this.render1_4(res.find(r => r.imageNo == '1-4').data); // 4
+          this.render1_5(res.find(r => r.imageNo == '1-5').data); // 5
+          // this.render1_6(res.find(r => r.imageNo == '1-6').data); // 6
+          this.render2_1(res.find(r => r.imageNo == '2-1').data); // 7
+          // this.render2_2(res.find(r => r.imageNo == '2-2').data); // 8
+          this.render2_3(res.find(r => r.imageNo == '2-3').data); // 9
+          this.render2_4(res.find(r => r.imageNo == '2-4').data); // 10
+          this.render2_5(res.find(r => r.imageNo == '2-5').data); // 11
+          this.render3_1(res.find(r => r.imageNo == '3-1').data); // 12
+          // this.render3_2(res.find(r => r.imageNo == '3-2-1').data, res.find(r => r.imageNo == '3-2-2').data); // 13
+          this.render3_3(res.find(r => r.imageNo == '3-3').data); // 14
+          this.render3_4(res.find(r => r.imageNo == '3-4').data); // 15
+          this.render3_5(res.find(r => r.imageNo == '3-5').data); // 16
+        }
+      })
     },
   },
 };
