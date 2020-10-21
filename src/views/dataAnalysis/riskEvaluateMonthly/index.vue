@@ -12,7 +12,7 @@
       <el-tab-pane label="图表" name="2">
         <charttb :form="queryForm2" />
       </el-tab-pane>
-      <el-tab-pane label="月度风险评价报告" lazy name="3">
+      <el-tab-pane label="月度风险评价报告" name="3">
         <monthreport :form="queryForm1" />
       </el-tab-pane>
     </el-tabs>

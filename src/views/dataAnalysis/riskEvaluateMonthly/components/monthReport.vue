@@ -5,7 +5,7 @@
       <h4>一、关键风险状态</h4>
       <!-- 1-1 -->
       <h5 class="title-sec">1、月度关键风险状态</h5>
-      <echart :chartData="data1_1" />
+      <echart ref="image1" :chartData="data1_1" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
@@ -31,7 +31,7 @@
     <!-- 1-3 -->
     <div class="toPDF">
       <h5 class="title-sec">3、关键风险TOP3趋势</h5>
-      <echart :chartData="data1_3" height="500px" />
+      <echart ref="image2" :chartData="data1_3" height="500px" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
@@ -41,13 +41,13 @@
       <h5 class="title-sec">4、关键风险TOP3状态(各产品)</h5>
       <el-row :gutter="8">
         <el-col :span="8">
-          <echart :chartData="data1_4[0]" />
+          <echart ref="image3" :chartData="data1_4[0]" />
         </el-col>
         <el-col :span="8">
-          <echart :chartData="data1_4[1]" />
+          <echart ref="image4" :chartData="data1_4[1]" />
         </el-col>
         <el-col :span="8">
-          <echart :chartData="data1_4[2]" />
+          <echart ref="image5" :chartData="data1_4[2]" />
         </el-col>
       </el-row>
       <el-input v-model="desc1_1" placeholder>
@@ -59,13 +59,13 @@
       <h5 class="title-sec">5、关键风险TOP3状态(各单位)</h5>
       <el-row :gutter="8">
         <el-col :span="8">
-          <echart :chartData="data1_5[0]" height="200px" />
+          <echart ref="image6" :chartData="data1_5[0]" height="200px" />
         </el-col>
         <el-col :span="8">
-          <echart :chartData="data1_5[1]" height="200px" />
+          <echart ref="image7" :chartData="data1_5[1]" height="200px" />
         </el-col>
         <el-col :span="8">
-          <echart :chartData="data1_5[2]" height="200px" />
+          <echart ref="image8" :chartData="data1_5[2]" height="200px" />
         </el-col>
       </el-row>
       <el-input v-model="desc1_1" placeholder>
@@ -90,7 +90,7 @@
       <h4>二、危险源风险状态</h4>
       <!-- 2-1 -->
       <h5 class="title-sec">1、危险源风险分布(一)</h5>
-      <echart :chartData="data2_1" />
+      <echart ref="image9" :chartData="data2_1" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
@@ -98,7 +98,7 @@
     <!-- 2-2 -->
     <div class="toPDF">
       <h5 class="title-sec">2、危险源风险分布(二)</h5>
-      <echart :chartData="data2_2" />
+      <echart ref="image10" :chartData="data2_2" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
@@ -106,7 +106,7 @@
     <!-- 2-3 -->
     <div class="toPDF">
       <h5 class="title-sec">3、危险源风险TOP3趋势</h5>
-      <echart :chartData="data2_3" />
+      <echart ref="image11" :chartData="data2_3" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
@@ -116,13 +116,13 @@
       <h5 class="title-sec">4、危险源风险TOP3趋势(各产品)</h5>
       <el-row :gutter="8">
         <el-col :span="8">
-          <echart :chartData="data2_4[0]" />
+          <echart ref="image12" :chartData="data2_4[0]" />
         </el-col>
         <el-col :span="8">
-          <echart :chartData="data2_4[1]" />
+          <echart ref="image13" :chartData="data2_4[1]" />
         </el-col>
         <el-col :span="8">
-          <echart :chartData="data2_4[2]" />
+          <echart ref="image14" :chartData="data2_4[2]" />
         </el-col>
       </el-row>
       <el-input v-model="desc1_1" placeholder>
@@ -134,13 +134,13 @@
       <h5 class="title-sec">5、危险源风险TOP3趋势(各单位)</h5>
       <el-row :gutter="8">
         <el-col :span="8">
-          <echart :chartData="data2_5[0]" />
+          <echart ref="image15" :chartData="data2_5[0]" />
         </el-col>
         <el-col :span="8">
-          <echart :chartData="data2_5[1]" />
+          <echart ref="image16" :chartData="data2_5[1]" />
         </el-col>
         <el-col :span="8">
-          <echart :chartData="data2_5[2]" />
+          <echart ref="image17" :chartData="data2_5[2]" />
         </el-col>
       </el-row>
       <el-input v-model="desc1_1" placeholder>
@@ -151,7 +151,7 @@
       <h4>三、信息数据统计</h4>
       <!-- 3-1 -->
       <h5 class="title-sec">1、信息数据统计分布</h5>
-      <echart :chartData="data3_1" />
+      <echart ref="image18" :chartData="data3_1" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
@@ -159,7 +159,7 @@
     <div class="toPDF">
       <!-- 3-2 -->
       <h5 class="title-sec">2、信息数据来源统计</h5>
-      <echart :chartData="data3_2" />
+      <echart ref="image19" :chartData="data3_2" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
@@ -167,7 +167,7 @@
     <div class="toPDF">
       <!-- 3-3 -->
       <h5 class="title-sec">3、信息数据统计(各产品)</h5>
-      <echart :chartData="data3_3" />
+      <echart ref="image20" :chartData="data3_3" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
@@ -175,7 +175,7 @@
     <div class="toPDF">
       <!-- 3-4 -->
       <h5 class="title-sec">4、信息数据统计(各系统)</h5>
-      <echart :chartData="data3_4" />
+      <echart ref="image21" :chartData="data3_4" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
@@ -183,23 +183,23 @@
     <div class="toPDF">
       <!-- 3-5 -->
       <h5 class="title-sec">5、信息数据统计(各单位)</h5>
-      <echart :chartData="data3_5" />
+      <echart ref="image22" :chartData="data3_5" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
     </div>
     <div class="toPDF">
       <h4>四、月度点评与风险防控</h4>
-      <el-form :model="form" label-width="auto" size="small" inline>
+      <el-form :model="formData" label-width="auto" size="small" inline>
         <el-form-item label="时间">
-          <el-date-picker v-model="form.date" style="width:150px"></el-date-picker>
+          <el-date-picker v-model="formData.date" style="width:150px"></el-date-picker>
         </el-form-item>
         <el-form-item label="风险">
-          <el-input v-model="form.risk" style="width:150px"></el-input>
+          <el-input v-model="formData.risk" style="width:150px"></el-input>
         </el-form-item>
         <el-form-item label="责任单位">
           <department
-            :value="form.dept"
+            :value="formData.dept"
             @change="deptChange"
             style="width:200px;line-height: 32px;"
           ></department>
@@ -217,6 +217,7 @@ import { getRiskAssessmentChartData } from "@/api/risk";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import department from "@/components/Department";
+import { mapGetters } from "vuex";
 
 const monthString = "1月,2月,3月,4月,5月,6月,7月,8月,9月,10月,11月,12月";
 const monthxAxis = monthString.split(",");
@@ -244,7 +245,9 @@ export default {
       data3_5: {},
       desc4: "",
       loading: false,
-      form: {},
+      formData: {},
+      spanArr: [],
+      position: 0
     };
   },
   props: {
@@ -259,7 +262,17 @@ export default {
       handler(val) {
         this.init();
       }
-    }
+    },
+    resetChart(val) {
+      if (val == 3) {
+        for (let i = 1; i < 23; i++) {
+          this.$refs[`image${i}`].resizeHandler();
+        }
+      }
+    },
+  },
+  computed: {
+    ...mapGetters(["resetChart"]),
   },
   mounted() {
 
@@ -277,12 +290,12 @@ export default {
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       //表格合并行
       if (columnIndex === 0 || columnIndex === 3) {
-        if (rowIndex % 3 == 0) {
-          return {
-            rowspan: 3,
-            colspan: 1,
-          };
-        } else return [0, 0];
+        const _row = this.spanArr[rowIndex];
+        const _col = _row > 0 ? 1 : 0;
+        return {
+          rowspan: _row,
+          colspan: _col
+        };
       }
     },
     deptChange(val) {
@@ -510,18 +523,35 @@ export default {
         };
       });
     },
-    // 待改
     render1_6(res) {
       res.map((item) => {
         item.data.map((iitem) => {
           this.data1_6.push({
             risk: item.name,
-            sourceOfRiskName: iitem.sourceOfRiskName,
-            product: iitem.productName,
+            sourceOfRiskName: iitem.name,
+            product: iitem.name2,
             value: item.num,
           });
         });
       });
+      console.log(this.data1_6)
+      this.spanArr = [];
+      this.position = 0;
+      this.data1_6.forEach((item, index) => {
+        if (index === 0) {
+          this.spanArr.push(1);
+          this.position = 0;
+        } else {
+          if (this.data1_6[index].risk === this.data1_6[index - 1].risk) {
+            this.spanArr[this.position] += 1;
+            this.spanArr.push(0);
+          } else {
+            this.spanArr.push(1);
+            this.position = index;
+          }
+        }
+      });
+      console.log(this.spanArr)
     },
     render2_1(res) {
       let xAxis = [],
@@ -549,17 +579,16 @@ export default {
         ],
       };
     },
-    // 数据结构反了
     render2_2(res) {
-      let xAxis = [];
+      if (res.length == 0) return;
+      let xAxis = res[0].data.map(r => r.name);
       let seriesArr = [];
       res.map((item, index) => {
         let data = [];
-        xAxis.push(item.name);
         item.data.map((iitem) => {
           data.push({
             value: iitem.num,
-            itemStyle: { color: iitem.name },
+            itemStyle: { color: item.name },
           });
         });
         seriesArr.push({
@@ -587,6 +616,7 @@ export default {
       };
     },
     render2_3(res) {
+      if (res.length == 0) return;
       let seriesArr = [];
       let legendArr = [];
       let _monthxAxis = res[0].data.map(r => r.name)
@@ -621,7 +651,7 @@ export default {
           iitem.data.map((iiitem) => {
             data.push(iiitem.num);
           });
-          color.push(iitem.name);
+          color.push(iitem.color);
           if (ii < 5) {
             seriesArr.push({
               type: "bar",
@@ -676,7 +706,7 @@ export default {
           iitem.data.map((iiitem) => {
             data.push(iiitem.num);
           });
-          color.push(iitem.name);
+          color.push(iitem.color);
           if (ii < 5) {
             seriesArr.push({
               type: "bar",
@@ -719,6 +749,7 @@ export default {
       });
     },
     render3_1(res) {
+      if (res.length == 0) return;
       let seriesArr = [];
       let dataArr = [];
       let _monthxAxis = res[0].data.map(r => r.name);
@@ -756,7 +787,6 @@ export default {
         series: seriesArr,
       };
     },
-    // 数据待查
     render3_2(res, res2) {
       let seriesArr = [];
       let xAxis = [];
@@ -764,7 +794,7 @@ export default {
       let data2 = [];
       res.map((item) => {
         data2.push(item.num);
-        legendArr.push(item.name);
+        // legendArr.push(item.name);
         xAxis.push(item.name);
       });
       seriesArr.push({
@@ -789,7 +819,7 @@ export default {
       this.data3_2 = {
         tooltip: {},
         legend: [
-          { bottom: 10, left: "1%", data: legendArr },
+          // { bottom: 10, left: "1%", data: legendArr },
           { bottom: 10, right: "1%", data: legendArr2 },
         ],
         title: [
@@ -809,6 +839,7 @@ export default {
       };
     },
     render3_3(res) {
+      if (res.length == 0) return;
       let seriesArr = [];
       let xAxis = res[0].data.map((r) => r.name);
       res.map((item) => {
@@ -835,6 +866,7 @@ export default {
       };
     },
     render3_4(res) {
+      if (res.length == 0) return;
       let seriesArr = [];
       let xAxis = res[0].data.map((r) => r.name);
       let dataArr = [];
@@ -873,6 +905,7 @@ export default {
       };
     },
     render3_5(res) {
+      if (res.length == 0) return;
       let seriesArr = [];
       let xAxis = res[0].data.map((r) => r.name);
       let dataArr = [];
@@ -918,14 +951,14 @@ export default {
           this.render1_3(res.find(r => r.imageNo == '1-3').data); // 3
           this.render1_4(res.find(r => r.imageNo == '1-4').data); // 4
           this.render1_5(res.find(r => r.imageNo == '1-5').data); // 5
-          // this.render1_6(res.find(r => r.imageNo == '1-6').data); // 6
+          this.render1_6(res.find(r => r.imageNo == '1-6').data); // 6
           this.render2_1(res.find(r => r.imageNo == '2-1').data); // 7
-          // this.render2_2(res.find(r => r.imageNo == '2-2').data); // 8
+          this.render2_2(res.find(r => r.imageNo == '2-2').data); // 8
           this.render2_3(res.find(r => r.imageNo == '2-3').data); // 9
           this.render2_4(res.find(r => r.imageNo == '2-4').data); // 10
           this.render2_5(res.find(r => r.imageNo == '2-5').data); // 11
           this.render3_1(res.find(r => r.imageNo == '3-1').data); // 12
-          // this.render3_2(res.find(r => r.imageNo == '3-2-1').data, res.find(r => r.imageNo == '3-2-2').data); // 13
+          this.render3_2(res.find(r => r.imageNo == '3-2-1').data, res.find(r => r.imageNo == '3-2-2').data); // 13
           this.render3_3(res.find(r => r.imageNo == '3-3').data); // 14
           this.render3_4(res.find(r => r.imageNo == '3-4').data); // 15
           this.render3_5(res.find(r => r.imageNo == '3-5').data); // 16
