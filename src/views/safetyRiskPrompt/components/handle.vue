@@ -31,11 +31,7 @@
 </template>
 
 <script>
-import {
-  riskNoticeDetail,
-  riskNoticeComplete,
-  riskNoticeModify,
-} from "@/api/risk";
+import { riskNoticeDetail, riskNoticeComplete, riskNoticeModify, validatePWD, } from "@/api/risk";
 import step1 from "./step/step1";
 import step2 from "./step/step2";
 import step3 from "./step/step3";
@@ -56,6 +52,7 @@ export default {
         implementStatus: "" // 落实情况
       },
       data: {}, // 父组件赋值
+      password: ""
     };
   },
   props: {
@@ -73,9 +70,39 @@ export default {
     cancel() {
       this.resetForm();
     },
+    validatePWD() {
+      if (this.form.processFlag == "") {
+        this.$message.error("请选择同意/驳回！");
+        return;
+      }
+      if (this.form.processFlag == "1") {
+        this.$prompt('请输入密码', '', {
+          inputType: 'password',
+        }).then(({ value }) => {
+          if (!value) {
+            this.$message.error("请输入密码");
+          } else {
+            validatePWD(value).then(res => {
+              if (res.code != '200') {
+                this.$message.error(res.msg);
+              } else {
+                if (res.obj) {
+                  this.submitStep1();
+                } else {
+                  this.$message.error("密码不正确")
+                }
+              }
+            })
+          }
+        }).catch(() => { })
+      } else {
+        this.submitStep1();
+      }
+
+    },
     doSubmit() {
       switch (this.step) {
-        case 1:
+        case 1: this.validatePWD(); break;
         case 4:
           this.submitStep1();
           break;

@@ -113,4 +113,12 @@ export function riskNoticeDoneDetail(taskId, formId) {
         method: 'get'
     })
 }
+// 领导验证密码
+export function validatePWD(password) {
+    return request({
+        url: `/riskmgr_mgr/safety_risk_notice_mgr/validatePWD`,
+        method: 'post',
+        data: { password }
+    })
+}
 // =========  风险提示 end ==============
