@@ -173,6 +173,7 @@
           style="width:160px"
           v-model="form.risk"
           placeholder="请选择风险"
+          clearable
         >
           <el-option
             v-for="item in riskList"

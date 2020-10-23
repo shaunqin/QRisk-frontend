@@ -35,12 +35,12 @@
       <el-form-item label>
         <el-table :data="productIndex">
           <el-table-column label prop="name" />
-          <el-table-column label="客户机对" v-if="product=='1'||product=='4'">
+          <el-table-column label="客户机队" v-if="product=='1'||product=='4'">
             <template slot-scope="{row}" v-if="row.key1!=null">
               <el-input-number v-model="row.value1" placeholder></el-input-number>
             </template>
           </el-table-column>
-          <el-table-column label="国航机对" v-if="product=='1'||product=='4'">
+          <el-table-column label="国航机队" v-if="product=='1'||product=='4'">
             <template slot-scope="{row}" v-if="row.key0!=null">
               <el-input-number v-model="row.value0" placeholder></el-input-number>
             </template>
@@ -147,9 +147,9 @@ export default {
         name: '航线维修产品', value: '4', children: [
           { name: '出港基地机械原因航班不正常数量全月之和', value0: 'outMechanicalNum0', value1: 'outMechanicalNum1' },
           { name: '出港基地航班数量全月之和', value0: 'outTotalNum0', value1: 'outTotalNum1' },
-          { name: '执管基地国航机队机组报告故障（TLB、CLB上问题）全月数量', value0: null, value1: 'reportFaultNum' },
-          { name: '执管基地国航机队重复故障全月数量', value0: null, value1: 'repeatFaultNum' },
-          { name: '执管基地国航机队总飞行时间', value0: null, value1: 'flyHoursTotalNum' },
+          { name: '执管基地国航机队机组报告故障（TLB、CLB上问题）全月数量', value0: 'reportFaultNum', value1: null },
+          { name: '执管基地国航机队重复故障全月数量', value0: 'repeatFaultNum', value1: null },
+          { name: '执管基地国航机队总飞行时间', value0: 'flyHoursTotalNum', value1: null },
           { name: '维修差错及质量调查数量', value0: 'repairErrorAndQauditNum0', value1: 'repairErrorAndQauditNum1' },
           { name: '客户质量投诉数量', value0: null, value1: 'customerQuComplaintNum' },
         ]

@@ -153,7 +153,7 @@ export default {
           let res4_2 = res.find(r => r.sortNum == 4).list.find(r => r.sortNum == 17);
           this.seriesMore2render(res4_2, "data4_2", "line", { showLabel: true });
           let res4_3 = res.find(r => r.sortNum == 4).list.find(r => r.sortNum == 18);
-          this.seriesMore2render(res4_3, "data4_3", "bar", { showLabel: true });
+          this.seriesMore2render(res4_3, "data4_3", "bar", { showLabel: true, rotate: 'no' });
         }
       })
     },

@@ -381,7 +381,7 @@ export default {
       let indicator = [];
       let data = [];
       res.map((item) => {
-        indicator.push({ name: item.name, max: 100, color: "#000" });
+        indicator.push({ name: item.name, max: 20000, color: "#000" });
         data.push(item.num);
       });
       this.data1_1 = {
@@ -949,27 +949,31 @@ export default {
     init() {
       this.loading = true;
       getRiskAssessmentChartData(this.form).then(res => {
-        if (res) {
-          this.render1_1(res.find(r => r.imageNo == '1-1').data); // 1
-          this.render1_2(res.find(r => r.imageNo == '1-2').data); // 2
-          this.render1_3(res.find(r => r.imageNo == '1-3').data); // 3
-          this.render1_4(res.find(r => r.imageNo == '1-4').data); // 4
-          this.render1_5(res.find(r => r.imageNo == '1-5').data); // 5
-          this.render1_6(res.find(r => r.imageNo == '1-6').data); // 6
-          this.render2_1(res.find(r => r.imageNo == '2-1').data); // 7
-          this.render2_2(res.find(r => r.imageNo == '2-2').data); // 8
-          this.render2_3(res.find(r => r.imageNo == '2-3').data); // 9
-          this.render2_4(res.find(r => r.imageNo == '2-4').data); // 10
-          this.render2_5(res.find(r => r.imageNo == '2-5').data); // 11
-          this.render3_1(res.find(r => r.imageNo == '3-1').data); // 12
-          this.render3_2(res.find(r => r.imageNo == '3-2-1').data, res.find(r => r.imageNo == '3-2-2').data); // 13
-          this.render3_3(res.find(r => r.imageNo == '3-3').data); // 14
-          this.render3_4(res.find(r => r.imageNo == '3-4').data); // 15
-          this.render3_5(res.find(r => r.imageNo == '3-5').data); // 16
-          this.$nextTick(() => {
-            this.loading = false;
-          })
-        }
+        try {
+          if (res) {
+            this.render1_1(res.find(r => r.imageNo == '1-1').data); // 1
+            this.render1_2(res.find(r => r.imageNo == '1-2').data); // 2
+            this.render1_3(res.find(r => r.imageNo == '1-3').data); // 3
+            this.render1_4(res.find(r => r.imageNo == '1-4').data); // 4
+            this.render1_5(res.find(r => r.imageNo == '1-5').data); // 5
+            this.render1_6(res.find(r => r.imageNo == '1-6').data); // 6
+            this.render2_1(res.find(r => r.imageNo == '2-1').data); // 7
+            this.render2_2(res.find(r => r.imageNo == '2-2').data); // 8
+            this.render2_3(res.find(r => r.imageNo == '2-3').data); // 9
+            this.render2_4(res.find(r => r.imageNo == '2-4').data); // 10
+            this.render2_5(res.find(r => r.imageNo == '2-5').data); // 11
+            this.render3_1(res.find(r => r.imageNo == '3-1').data); // 12
+            this.render3_2(res.find(r => r.imageNo == '3-2-1').data, res.find(r => r.imageNo == '3-2-2').data); // 13
+            this.render3_3(res.find(r => r.imageNo == '3-3').data); // 14
+            this.render3_4(res.find(r => r.imageNo == '3-4').data); // 15
+            this.render3_5(res.find(r => r.imageNo == '3-5').data); // 16
+            this.$nextTick(() => {
+              this.loading = false;
+            })
+          }
+        } catch (e) { console.log(e) }
+      }).catch(() => {
+        this.loading = false;
       })
     },
   },
