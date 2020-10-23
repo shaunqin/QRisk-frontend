@@ -5,7 +5,7 @@
       <h4>一、关键风险状态</h4>
       <!-- 1-1 -->
       <h5 class="title-sec">1、月度关键风险状态</h5>
-      <echart ref="image1" :chartData="data1_1" />
+      <echart ref="image1" :chartData="data1_1" v-loading="loading" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
@@ -31,7 +31,7 @@
     <!-- 1-3 -->
     <div class="toPDF">
       <h5 class="title-sec">3、关键风险TOP3趋势</h5>
-      <echart ref="image2" :chartData="data1_3" height="500px" />
+      <echart ref="image2" :chartData="data1_3" height="500px" v-loading="loading" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
@@ -41,13 +41,13 @@
       <h5 class="title-sec">4、关键风险TOP3状态(各产品)</h5>
       <el-row :gutter="8">
         <el-col :span="8">
-          <echart ref="image3" :chartData="data1_4[0]" />
+          <echart ref="image3" :chartData="data1_4[0]" v-loading="loading" />
         </el-col>
         <el-col :span="8">
-          <echart ref="image4" :chartData="data1_4[1]" />
+          <echart ref="image4" :chartData="data1_4[1]" v-loading="loading" />
         </el-col>
         <el-col :span="8">
-          <echart ref="image5" :chartData="data1_4[2]" />
+          <echart ref="image5" :chartData="data1_4[2]" v-loading="loading" />
         </el-col>
       </el-row>
       <el-input v-model="desc1_1" placeholder>
@@ -59,13 +59,13 @@
       <h5 class="title-sec">5、关键风险TOP3状态(各单位)</h5>
       <el-row :gutter="8">
         <el-col :span="8">
-          <echart ref="image6" :chartData="data1_5[0]" height="200px" />
+          <echart ref="image6" :chartData="data1_5[0]" height="200px" v-loading="loading" />
         </el-col>
         <el-col :span="8">
-          <echart ref="image7" :chartData="data1_5[1]" height="200px" />
+          <echart ref="image7" :chartData="data1_5[1]" height="200px" v-loading="loading" />
         </el-col>
         <el-col :span="8">
-          <echart ref="image8" :chartData="data1_5[2]" height="200px" />
+          <echart ref="image8" :chartData="data1_5[2]" height="200px" v-loading="loading" />
         </el-col>
       </el-row>
       <el-input v-model="desc1_1" placeholder>
@@ -90,7 +90,7 @@
       <h4>二、危险源风险状态</h4>
       <!-- 2-1 -->
       <h5 class="title-sec">1、危险源风险分布(一)</h5>
-      <echart ref="image9" :chartData="data2_1" />
+      <echart ref="image9" :chartData="data2_1" v-loading="loading" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
@@ -98,7 +98,7 @@
     <!-- 2-2 -->
     <div class="toPDF">
       <h5 class="title-sec">2、危险源风险分布(二)</h5>
-      <echart ref="image10" :chartData="data2_2" />
+      <echart ref="image10" :chartData="data2_2" v-loading="loading" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
@@ -106,7 +106,7 @@
     <!-- 2-3 -->
     <div class="toPDF">
       <h5 class="title-sec">3、危险源风险TOP3趋势</h5>
-      <echart ref="image11" :chartData="data2_3" />
+      <echart ref="image11" :chartData="data2_3" v-loading="loading" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
@@ -116,13 +116,13 @@
       <h5 class="title-sec">4、危险源风险TOP3趋势(各产品)</h5>
       <el-row :gutter="8">
         <el-col :span="8">
-          <echart ref="image12" :chartData="data2_4[0]" />
+          <echart ref="image12" :chartData="data2_4[0]" v-loading="loading" />
         </el-col>
         <el-col :span="8">
-          <echart ref="image13" :chartData="data2_4[1]" />
+          <echart ref="image13" :chartData="data2_4[1]" v-loading="loading" />
         </el-col>
         <el-col :span="8">
-          <echart ref="image14" :chartData="data2_4[2]" />
+          <echart ref="image14" :chartData="data2_4[2]" v-loading="loading" />
         </el-col>
       </el-row>
       <el-input v-model="desc1_1" placeholder>
@@ -134,13 +134,13 @@
       <h5 class="title-sec">5、危险源风险TOP3趋势(各单位)</h5>
       <el-row :gutter="8">
         <el-col :span="8">
-          <echart ref="image15" :chartData="data2_5[0]" />
+          <echart ref="image15" :chartData="data2_5[0]" v-loading="loading" />
         </el-col>
         <el-col :span="8">
-          <echart ref="image16" :chartData="data2_5[1]" />
+          <echart ref="image16" :chartData="data2_5[1]" v-loading="loading" />
         </el-col>
         <el-col :span="8">
-          <echart ref="image17" :chartData="data2_5[2]" />
+          <echart ref="image17" :chartData="data2_5[2]" v-loading="loading" />
         </el-col>
       </el-row>
       <el-input v-model="desc1_1" placeholder>
@@ -151,7 +151,7 @@
       <h4>三、信息数据统计</h4>
       <!-- 3-1 -->
       <h5 class="title-sec">1、信息数据统计分布</h5>
-      <echart ref="image18" :chartData="data3_1" />
+      <echart ref="image18" :chartData="data3_1" v-loading="loading" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
@@ -159,7 +159,7 @@
     <div class="toPDF">
       <!-- 3-2 -->
       <h5 class="title-sec">2、信息数据来源统计</h5>
-      <echart ref="image19" :chartData="data3_2" />
+      <echart ref="image19" :chartData="data3_2" v-loading="loading" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
@@ -167,7 +167,7 @@
     <div class="toPDF">
       <!-- 3-3 -->
       <h5 class="title-sec">3、信息数据统计(各产品)</h5>
-      <echart ref="image20" :chartData="data3_3" />
+      <echart ref="image20" :chartData="data3_3" v-loading="loading" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
@@ -175,7 +175,7 @@
     <div class="toPDF">
       <!-- 3-4 -->
       <h5 class="title-sec">4、信息数据统计(各系统)</h5>
-      <echart ref="image21" :chartData="data3_4" />
+      <echart ref="image21" :chartData="data3_4" v-loading="loading" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
@@ -183,14 +183,14 @@
     <div class="toPDF">
       <!-- 3-5 -->
       <h5 class="title-sec">5、信息数据统计(各单位)</h5>
-      <echart ref="image22" :chartData="data3_5" />
+      <echart ref="image22" :chartData="data3_5" v-loading="loading" />
       <el-input v-model="desc1_1" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
     </div>
     <div class="toPDF">
       <h4>四、月度点评与风险防控</h4>
-      <el-form :model="formData" label-width="auto" size="small" inline>
+      <el-form :model="formData" size="small" inline>
         <el-form-item label="时间">
           <el-date-picker v-model="formData.date" style="width:150px"></el-date-picker>
         </el-form-item>
@@ -225,6 +225,7 @@ export default {
   components: { echart, department },
   data() {
     return {
+      loading: false,
       data1_1: {},
       desc1_1: "",
       data1_2: [],
@@ -260,7 +261,9 @@ export default {
     form: {
       deep: true,
       handler(val) {
-        this.init();
+        if (!val.responsibleUnitList) {
+          this.init();
+        }
       }
     },
     resetChart(val) {
@@ -944,6 +947,7 @@ export default {
       };
     },
     init() {
+      this.loading = true;
       getRiskAssessmentChartData(this.form).then(res => {
         if (res) {
           this.render1_1(res.find(r => r.imageNo == '1-1').data); // 1
@@ -962,6 +966,9 @@ export default {
           this.render3_3(res.find(r => r.imageNo == '3-3').data); // 14
           this.render3_4(res.find(r => r.imageNo == '3-4').data); // 15
           this.render3_5(res.find(r => r.imageNo == '3-5').data); // 16
+          this.$nextTick(() => {
+            this.loading = false;
+          })
         }
       })
     },

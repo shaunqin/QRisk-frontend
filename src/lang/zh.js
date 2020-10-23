@@ -68,7 +68,8 @@ export default {
     evaluateReportMonthly: '月度评价报告',
     riskEvaluateMonthly: '月度风险评价',
     riskManageControl: '在控风险管理',
-    cruxRisk: '关键风险'
+    cruxRisk: '关键风险',
+    qualityMonthlyReport: '质量评价月报'
   },
   navbar: {
     dashboard: '首页',

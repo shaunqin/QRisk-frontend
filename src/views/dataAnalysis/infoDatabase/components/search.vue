@@ -1,9 +1,9 @@
 <template>
-  <el-form size="mini" :model="queryForm" label-width="40px" label-position="left" inline>
+  <el-form size="mini" :model="queryForm" inline>
     <el-form-item :label="$t('analysis.no')">
       <el-input v-model="queryForm.no" :placeholder="$t('analysis.pleaseInputNo')"></el-input>
     </el-form-item>
-    <el-form-item :label="$t('analysis.happenDate')" label-width="auto">
+    <el-form-item :label="$t('analysis.happenDate')">
       <el-date-picker
         v-model="date"
         type="daterange"
@@ -14,10 +14,10 @@
         unlink-panels
       ></el-date-picker>
     </el-form-item>
-    <el-form-item :label="$t('analysis.problemDesc')" label-width="auto">
+    <el-form-item :label="$t('analysis.problemDesc')">
       <el-input
         v-model="queryForm.problemDescription"
-        :placeholder="$t('analysis.pleaseInputproblemDesc')"
+        :placeholder="$t('analysis.pleaseInputproblemDes')"
       ></el-input>
     </el-form-item>
     <el-form-item>

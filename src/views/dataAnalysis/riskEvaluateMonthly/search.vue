@@ -51,14 +51,22 @@
           style="width:200px"
           clearable
         ></el-cascader>
-        <el-date-picker
+        <el-cascader
+          v-if="form.dateType=='4'"
+          :options="seasonOption"
+          v-model="yearseasonValue"
+          :props="{ expandTrigger: 'hover' }"
+          style="width:200px"
+          clearable
+        ></el-cascader>
+        <!-- <el-date-picker
           v-if="form.dateType=='4'"
           v-model="date"
           placeholder="请选择年度"
           type="year"
           @change="dateOfYearChange"
           style="width:140px"
-        ></el-date-picker>
+        ></el-date-picker>-->
         <el-date-picker
           v-if="form.dateType=='5'"
           :key="createUniqueString()"
@@ -234,6 +242,7 @@ export default {
   components: { dictSelect, department, chartpup },
   data() {
     let _data = [];
+    let season = [];
     let year = new Date().getFullYear();
     for (let i = 0; i < 20; i++) {
       _data.push({
@@ -256,6 +265,24 @@ export default {
             label: year - i + " 第四季度",
             value: 4,
           },
+        ],
+      });
+      season.push({
+        value: year - i,
+        label: year - i,
+        children: [
+          {
+            label: year - i + " 全年",
+            value: 1,
+          },
+          {
+            label: year - i + " 上半年",
+            value: 2,
+          },
+          {
+            label: year - i + " 下半年",
+            value: 3,
+          }
         ],
       });
     }
@@ -281,7 +308,9 @@ export default {
       date: "",
       date2: "",
       cascaderOption: _data,
+      seasonOption: season,
       seasonValue: "",
+      yearseasonValue: "",
       riskOption: [],
       riskLevel1List: [],
       riskLevel2List: [],
@@ -328,6 +357,15 @@ export default {
       this.seasonValue = "";
     },
     seasonValue(val) {
+      if (val.length > 0) {
+        this.form.dateValue1 = val[0];
+        this.form.dateValue2 = val[1];
+      } else {
+        this.form.dateValue1 = "";
+        this.form.dateValue2 = "";
+      }
+    },
+    yearseasonValue(val) {
       if (val.length > 0) {
         this.form.dateValue1 = val[0];
         this.form.dateValue2 = val[1];

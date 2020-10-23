@@ -68,7 +68,8 @@ export default {
     evaluateReportMonthly: 'EvaluateReportMonthly',
     riskEvaluateMonthly: 'RiskEvaluateMonthly',
     riskManageControl: 'RiskManageControl',
-    cruxRisk: 'CruxRisk'
+    cruxRisk: 'CruxRisk',
+    qualityMonthlyReport: '质量评价月报'
   },
   navbar: {
     dashboard: 'Dashboard',

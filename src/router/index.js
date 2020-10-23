@@ -481,13 +481,23 @@ export const asyncRoutes = [{
       meta: {
         title: 'taskHairdown'
       }
-    }, {
+    },
+    {
       path: 'qualityReport',
       component: () => import('@/views/qualityEvaluation/qualityReport/index'),
       name: 'qualityReport',
       hidden: true,
       meta: {
         title: 'qualityReport'
+      }
+    },
+    {
+      path: 'qualityMonthlyReport',
+      component: () => import('@/views/qualityEvaluation/qualityMonthlyReport/index'),
+      name: 'qualityMonthlyReport',
+      hidden: true,
+      meta: {
+        title: 'qualityMonthlyReport'
       }
     }]
   }]

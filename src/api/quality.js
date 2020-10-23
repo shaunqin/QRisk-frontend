@@ -49,3 +49,11 @@ export function queryIndexList(params) {
         params
     })
 }
+// 质量评价月度报告作图
+export function queryReportData(params) {
+    return request({
+        url: `/quality_mgr/query/getReport`,
+        method: 'post',
+        params
+    })
+}
