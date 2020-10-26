@@ -14,6 +14,7 @@
         multiple
         v-model="_value"
         style="width: 100%;"
+        clearable
         :placeholder="$t('analysis.selectIncentive')"
       >
         <el-option v-for="item in list" :key="item.id" :label="item.name" :value="item.no"></el-option>

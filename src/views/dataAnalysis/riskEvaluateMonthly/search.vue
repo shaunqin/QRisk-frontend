@@ -102,7 +102,7 @@
           :value="form.infoSource"
           type="data_source"
           @change="dictChange($event,'infoSource')"
-          style="width:150px"
+          style="width:320px"
           placeholder="请选择数据来源"
         ></dict-select>
       </el-form-item>
@@ -111,7 +111,7 @@
           :value="form.productValue"
           type="product"
           @change="dictChange($event,'productValue')"
-          style="width:140px"
+          style="width:400px"
           placeholder="请选择产品"
         ></dict-select>
       </el-form-item>
@@ -120,7 +120,7 @@
           :value="form.systemValue"
           type="system"
           @change="dictChange($event,'systemValue')"
-          style="width:140px"
+          style="width:320px"
           placeholder="请选择系统"
         ></dict-select>
       </el-form-item>
@@ -170,10 +170,11 @@
         <el-select
           :disabled="riskDisabled"
           filterable
-          style="width:160px"
-          v-model="form.risk"
+          style="width:350px"
+          v-model="riskMultipleValue"
           placeholder="请选择风险"
           clearable
+          multiple
         >
           <el-option
             v-for="item in riskList"
@@ -207,13 +208,14 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="诱因:">
-        <dict-select
+        <!-- <dict-select
           :value="form.incentive"
           type="incentive_category"
           @change="dictChange($event,'incentive')"
           style="width:120px"
           placeholder="请选择诱因"
-        ></dict-select>
+        ></dict-select>-->
+        <incentiveSelect :value="form.incentive" @change="incentiveChange($event,'incentive')" style="width:500px" />
       </el-form-item>
       <el-form-item label>
         <el-button type="primary" icon="el-icon-search" @click="toQuery">搜索</el-button>
@@ -233,14 +235,15 @@
 <script>
 import { formatDateToWeek, formatShortDate } from "@/utils/datetime";
 import { createUniqueString } from "@/utils/index";
-import dictSelect from "@/components/common/dictSelect";
+import dictSelect from "@/components/common/dictSelectMultiple";
 import { queryRiskList, queryHazardList } from "@/api/standard";
 import { queryDictByName } from "@/api/dict";
 import department from "@/components/Department";
 import chartpup from "./components/chartpup";
 import { eventBus } from "@/utils/eventBus";
+import incentiveSelect from '@/views/dataAnalysis/infoDatabase/components/incentiveSelect'
 export default {
-  components: { dictSelect, department, chartpup },
+  components: { dictSelect, department, chartpup, incentiveSelect },
   data() {
     let _data = [];
     let season = [];
@@ -330,6 +333,7 @@ export default {
       ],
       jisuanType: "",
       sort: "",
+      riskMultipleValue: []
     };
   },
   created() {
@@ -423,6 +427,9 @@ export default {
         this.form.hazardRiskValueSort = val;
       }
     },
+    riskMultipleValue(val) {
+      this.form.risk = val.join(',')
+    }
   },
   methods: {
     formatDateToWeek,
@@ -487,6 +494,9 @@ export default {
     },
     dictChange(val, key) {
       this.form[key] = val;
+    },
+    incentiveChange(val, key) {
+      this.form[key] = val.join(',');
     },
     getHazardList(data) {
       let obj = { label: data.name, value: data.externMap.dicCode };
