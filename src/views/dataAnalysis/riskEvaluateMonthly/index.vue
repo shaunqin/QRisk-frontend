@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="head-container">
       <h3>数据筛选</h3>
-      <search ref="search" @create-charts="createCharts" @toQuery="toQuery" />
+      <search ref="search" @create-charts="createCharts" @toQuery="toQuery" @report="report" />
     </div>
     <h3 class="mt-01">数据分析</h3>
     <el-tabs :value="tabIndex" @tab-click="change">
@@ -13,7 +13,7 @@
         <charttb :form="queryForm2" />
       </el-tab-pane>
       <el-tab-pane label="月度风险评价报告" name="3">
-        <monthreport :form="queryForm1" />
+        <monthreport :form="queryForm3" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -34,6 +34,7 @@ export default {
       tabIndex: "1",
       queryForm1: {},
       queryForm2: {},
+      queryForm3: {},
     };
   },
   mounted() {
@@ -54,6 +55,10 @@ export default {
     createCharts(form) {
       let _f = Object.assign({}, form);
       this.queryForm2 = _f;
+    },
+    report(form) {
+      let _f = Object.assign({}, form);
+      this.queryForm3 = _f;
     },
     change(tab) {
       this.tabIndex = tab.name;
