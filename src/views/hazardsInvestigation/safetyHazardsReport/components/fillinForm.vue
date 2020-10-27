@@ -1,12 +1,5 @@
 <template>
-  <el-dialog
-    :append-to-body="true"
-    :close-on-click-modal="false"
-    :before-close="cancel"
-    :visible.sync="dialog"
-    title="填报"
-    custom-class="big_dialog"
-  >
+  <el-card header="填报">
     <p class="title">
       <b>{{titleForm.title}}</b>
     </p>
@@ -145,11 +138,7 @@
         <el-button type="danger" size="small" icon="el-icon-delete" @click="delRow(index)">删除</el-button>
       </div>
     </el-card>
-    <div slot="footer" class="dialog-footer">
-      <el-button type="text" @click="cancel">取消</el-button>
-      <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
-    </div>
-  </el-dialog>
+  </el-card>
 </template>
 
 <script>

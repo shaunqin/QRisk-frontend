@@ -66,11 +66,15 @@ export default {
     measureId: {
       type: String,
       default: null,
+    },
+    url: {
+      type: String,
+      default: '/riskmgr_mgr/safety_risk_notice_mgr/query/depts',
     }
   },
   created() {
-    let form = !!this.measureId ? { measureId: this.measureId } : {}
-    queryDepts(form).then((res) => {
+    let form = !!this.measureId ? { id: this.measureId } : {}
+    queryDepts(this.url, form).then((res) => {
       this.options = res.obj;
     });
   },

@@ -11,77 +11,122 @@
       <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto" inline>
         <el-row>
           <el-col :span="24" class="full-row">
-            <el-form-item label="任务名称" prop="aa">
-              <el-input v-model="form.aa" style="width: 100%" />
+            <el-form-item label="任务名称" prop="taskName">
+              <el-input v-model="form.taskName" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-form-item label="年度任务">
-          <el-select v-model="form.dd" placeholder style="width: 150px;">
-            <el-option :label="'年度任务'" :value="'0'"></el-option>
-            <el-option :label="'单次任务'" :value="'1'"></el-option>
+          <el-select v-model="form.taskType" placeholder style="width: 150px;" :disabled="!isAdd">
+            <el-option label="年度任务" :value="1"></el-option>
+            <el-option label="单次任务" :value="2"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="反馈日期">
-          <el-date-picker v-model="form2.ee" placeholder style="width:150px"></el-date-picker>
+        <el-form-item label="年度" v-if="form.taskType==1" key="year">
+          <el-date-picker
+            v-model="form.year"
+            type="year"
+            value-format="yyyy"
+            placeholder
+            style="width:100px"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="默认日期" v-if="form.taskType==1" key="defaultDay">
+          <el-select v-model="form.defaultDay" placeholder clearable style="width: 130px;">
+            <el-option
+              v-for="num in 28"
+              :key="num"
+              :label="'每月 '+(num<10?'0'+num:num)+' 日'"
+              :value="num<10?'0'+num:num"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="反馈日期" v-if="form.taskType==2" key="dueDate">
+          <el-date-picker
+            v-model="form.dueDate"
+            value-format="yyyy-MM-dd"
+            placeholder
+            style="width:140px"
+          ></el-date-picker>
         </el-form-item>
       </el-form>
     </el-card>
-    <el-card header="月度反馈日期设置" style="margin-top:20px" v-if="form.dd==0">
+    <el-card header="月度反馈日期设置" style="margin-top:20px" v-if="form.taskType==1">
       <el-form :model="form2" size="small" label-width="auto">
         <el-row :gutter="16">
           <el-col :span="6">
             <el-form-item label="一月">
-              <el-date-picker v-model="form2.dd1" placeholder style="width:100%"></el-date-picker>
+              <el-date-picker v-model="form2['1']" value-format="yyyy-MM-dd" style="width:100%"></el-date-picker>
             </el-form-item>
             <el-form-item label="五月">
-              <el-date-picker v-model="form2.dd5" placeholder style="width:100%"></el-date-picker>
+              <el-date-picker v-model="form2['5']" value-format="yyyy-MM-dd" style="width:100%"></el-date-picker>
             </el-form-item>
             <el-form-item label="九月">
-              <el-date-picker v-model="form2.dd9" placeholder style="width:100%"></el-date-picker>
+              <el-date-picker v-model="form2['9']" value-format="yyyy-MM-dd" style="width:100%"></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="二月">
-              <el-date-picker v-model="form2.dd2" placeholder style="width:100%"></el-date-picker>
+              <el-date-picker v-model="form2['2']" value-format="yyyy-MM-dd" style="width:100%"></el-date-picker>
             </el-form-item>
             <el-form-item label="六月">
-              <el-date-picker v-model="form2.dd6" placeholder style="width:100%"></el-date-picker>
+              <el-date-picker v-model="form2['6']" value-format="yyyy-MM-dd" style="width:100%"></el-date-picker>
             </el-form-item>
             <el-form-item label="十月">
-              <el-date-picker v-model="form2.dd10" placeholder style="width:100%"></el-date-picker>
+              <el-date-picker v-model="form2['10']" value-format="yyyy-MM-dd" style="width:100%"></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="三月">
-              <el-date-picker v-model="form2.dd3" placeholder style="width:100%"></el-date-picker>
+              <el-date-picker v-model="form2['3']" value-format="yyyy-MM-dd" style="width:100%"></el-date-picker>
             </el-form-item>
             <el-form-item label="七月">
-              <el-date-picker v-model="form2.dd7" placeholder style="width:100%"></el-date-picker>
+              <el-date-picker v-model="form2['7']" value-format="yyyy-MM-dd" style="width:100%"></el-date-picker>
             </el-form-item>
             <el-form-item label="十一月">
-              <el-date-picker v-model="form2.dd11" placeholder style="width:100%"></el-date-picker>
+              <el-date-picker v-model="form2['11']" value-format="yyyy-MM-dd" style="width:100%"></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="四月">
-              <el-date-picker v-model="form2.dd4" placeholder style="width:100%"></el-date-picker>
+              <el-date-picker v-model="form2['4']" value-format="yyyy-MM-dd" style="width:100%"></el-date-picker>
             </el-form-item>
             <el-form-item label="八月">
-              <el-date-picker v-model="form2.dd8" placeholder style="width:100%"></el-date-picker>
+              <el-date-picker v-model="form2['8']" value-format="yyyy-MM-dd" style="width:100%"></el-date-picker>
             </el-form-item>
             <el-form-item label="十二月">
-              <el-date-picker v-model="form2.dd12" placeholder style="width:100%"></el-date-picker>
+              <el-date-picker v-model="form2['12']" value-format="yyyy-MM-dd" style="width:100%"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
     </el-card>
-    <el-card header="单次任务部门" style="margin-top:20px" v-if="form.dd==1">
-      <department :value="form.dept" @change="deptChange" style="width:400px" />
+    <el-card header="单次任务部门" style="margin-top:20px" v-if="form.taskType==2">
+      <department :value="form.deptPath" @change="deptChange" style="width:400px" />
     </el-card>
     <el-card header="附件上传" style="margin-top:20px">
-      <UploadExcel />
+      <eupload @success="uploadSuccess"></eupload>
+      <el-table :data="files" size="mini" class="file-table">
+        <el-table-column :label="$t('analysis.fileName')" prop="originFileName" />
+        <el-table-column :label="$t('analysis.fileSize')">
+          <template slot-scope="{row}">{{(row.fileSize/1024).toFixed(2)}}Kb</template>
+        </el-table-column>
+        <el-table-column :label="$t('global.operation')" width="100px">
+          <template slot-scope="{row,$index}">
+            <el-tooltip :content="$t('analysis.preview')" placement="left">
+              <el-link
+                type="primary"
+                :underline="false"
+                :href="baseApi+row.filePath"
+                target="_blank"
+              >
+                <svg-icon icon-class="eye-open"></svg-icon>
+              </el-link>
+            </el-tooltip>&nbsp;&nbsp;
+            <el-button type="text" icon="el-icon-delete" @click="delFile($index)"></el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </el-card>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
@@ -91,31 +136,31 @@
 </template>
 
 <script>
-import { add, modify } from "@/api/emplotee.js";
-import UploadExcel from "@/components/UploadExcel";
+import { add, modify } from "@/api/hazards";
+import eupload from "@/components/Upload/index";
 import department from "@/components/Department";
 
 export default {
-  components: { UploadExcel, department },
+  components: { eupload, department },
   data() {
     return {
       loading: false,
       dialog: false,
       form: {
-        aa: "",
-        bb: "",
-        cc: "",
-        dd: "0",
-        ee: "",
-        dept: null
+        taskName: "",
+        taskType: 1,
+        accId: [],  // 附件
+        dueDate: "", // 反馈日期
+        year: new Date().getFullYear().toString(), // 年份
+        deptPath: null,
+        defaultDay: "", // 默认日期 day
       },
-      roleSelect: [],
       formRules: {
-        aa: [{ required: true, message: "请填写名称", trigger: "blur" }],
-        bb: [{ required: true, message: "请填写名称", trigger: "blur" }],
+        taskName: [{ required: true, message: "请填写任务名称", trigger: "blur" }],
       },
-      entArr: [],
-      form2: {},
+      form2: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: '', 10: '', 11: '', 12: '' },
+      files: [],
+      baseApi: process.env.VUE_APP_BASE_API
     };
   },
   props: {
@@ -125,6 +170,18 @@ export default {
     },
   },
   created() { },
+  watch: {
+    "form.defaultDay"(day) {
+      this.formatDate(this.form.year, day);
+    },
+    "form.year"(year) {
+      this.formatDate(year, this.form.defaultDay);
+    },
+    files(val) {
+      if (val && val.length > 0) this.form.accId = val.map((r) => r.id);
+      else this.form.accId = [];
+    },
+  },
   methods: {
     cancel() {
       this.resetForm();
@@ -132,64 +189,40 @@ export default {
     doSubmit() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
-          // this.loading = true;
-          // if (this.isAdd) {
-          //   this.doAdd()
-          // } else this.doModify()
-
-          this.dialog = false;
-          this.$message({
-            message: "添加成功",
-            type: "success",
-          });
-          this.resetForm();
+          this.loading = true;
+          if (this.isAdd) {
+            this.doAdd()
+          } else this.doModify()
         }
       });
     },
     doAdd() {
-      // this.delwithRoleList()
-      const data = this.roleSelect;
-      let arr = [];
-      for (let i = 0; i < data.length; i++) {
-        let obj = {
-          id: "",
-        };
-        obj.id = data[i];
-        arr.push(obj);
-      }
-      this.form.roleList = arr;
-      add(this.form)
+      add({ ...this.form, dueDates: this.form2 })
         .then((res) => {
           if (res.code === "200") {
-            this.$message({
-              message: "添加成功",
-              type: "success",
-            });
+            this.$message.success('添加成功');
+            this.resetForm();
+            this.$parent.init();
           } else {
             this.$message.error(res.msg);
           }
-          this.resetForm();
           this.loading = false;
-          this.$parent.init();
         })
         .catch((err) => {
           this.loading = false;
         });
     },
     doModify() {
-      modify(this.form)
+      modify({ ...this.form, dueDates: this.form2 })
         .then((res) => {
           if (res.code === "200") {
-            this.$message({
-              message: "修改成功",
-              type: "success",
-            });
+            this.$message.success('添加成功');
+            this.resetForm();
+            this.$parent.init();
           } else {
             this.$message.error(res.msg);
           }
-          this.resetForm();
           this.loading = false;
-          this.$parent.init();
         })
         .catch((err) => {
           this.loading = false;
@@ -199,16 +232,34 @@ export default {
       this.dialog = false;
       this.$refs["form"].resetFields();
       this.form = {
-        aa: "",
-        bb: "",
-        cc: "",
-        dd: "",
-        ee: "",
+        taskName: "",
+        taskType: 1,
+        accId: "",  // 附件
+        dueDate: "", // 反馈日期
+        year: new Date().getFullYear().toString(), // 年份
+        deptPath: null,
+        defaultDay: "", // 默认日期 day
       };
-      this.roleSelect = [];
+      this.form2 = { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: '', 10: '', 11: '', 12: '' };
+      this.files = [];
     },
     deptChange(val) {
-      this.form.dept = val;
+      this.form.deptPath = val;
+    },
+    formatDate(year, day) {
+      if (!!year && !!day) {
+        for (let m = 1; m <= 12; m++) {
+          let month = m < 10 ? '0' + m : m;
+          this.form2[m] = `${year}-${month}-${day}`;
+        }
+      }
+    },
+    uploadSuccess(response) {
+      console.log(response);
+      this.files.push(response.obj);
+    },
+    delFile(index) {
+      this.files.splice(index, 1);
     },
   },
 };
@@ -223,5 +274,8 @@ export default {
       flex: 1;
     }
   }
+}
+.file-table {
+  margin-top: 10px;
 }
 </style>

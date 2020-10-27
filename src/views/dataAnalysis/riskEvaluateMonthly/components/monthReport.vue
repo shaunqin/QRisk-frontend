@@ -591,7 +591,7 @@ export default {
         item.data.map((iitem) => {
           data.push({
             value: iitem.num,
-            itemStyle: { color: item.name },
+            itemStyle: { color: item.color },
           });
         });
         seriesArr.push({

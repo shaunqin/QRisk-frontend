@@ -65,7 +65,7 @@ export default {
     formatShortDate,
     beforeInit() {
       this.url = `/task_mgr/query/monthTask/pageList/${this.page}/${this.size}`;
-      this.params = { noStatus: 1, ...this.params };
+      this.params = { noStatus: 1, type: 2, ...this.params };
       return true;
     },
     add() {
