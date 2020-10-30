@@ -54,9 +54,19 @@ export default {
   mounted() {
     this.init();
   },
+  props: ["queryForm"],
+  watch: {
+    queryForm: {
+      deep: true,
+      handler() {
+        this.init();
+      }
+    }
+  },
   methods: {
     beforeInit() {
       this.url = `/riskmgr_mgr/safety_risk_notice_mgr/query/myIssued/${this.page}/${this.size}`;
+      this.params = { ...this.queryForm };
       return true;
     },
     // 选择切换

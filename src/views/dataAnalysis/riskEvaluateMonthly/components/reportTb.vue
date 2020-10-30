@@ -61,13 +61,14 @@ export default {
   props: {
     form: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
   },
   watch: {
     form: {
       deep: true,
       handler(val) {
+        this.page = 1;
         this.init();
         eventBus.$emit("tab-change", "1");
       },

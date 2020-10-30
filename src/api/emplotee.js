@@ -74,11 +74,19 @@ export const queryDepts = (url, params) => {
     params
   })
 }
-// 查询人
+// 查询人 风险提示下发人
 export const queryEmplotee = (params) => {
   return request({
     url: `/riskmgr_mgr/safety_risk_notice_mgr/query/nextOperator`,
     method: 'get',
     params
+  })
+}
+
+// 查询所有人
+export const queryEmploteeAll = () => {
+  return request({
+    url: `/sys_mgr/staff_mgr/query/all`,
+    method: 'get',
   })
 }

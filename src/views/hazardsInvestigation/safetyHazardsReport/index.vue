@@ -25,7 +25,9 @@
       <el-tab-pane label="待办" name="2">
         <tab2 v-if="tabIndex==2" />
       </el-tab-pane>
-      <el-tab-pane label="已办" name="3"></el-tab-pane>
+      <el-tab-pane label="已办" name="3">
+        <tab3 v-if="tabIndex==3" />
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -33,8 +35,9 @@
 <script>
 import tab1 from './components/tabs/tab1'
 import tab2 from './components/tabs/tab2'
+import tab3 from './components/tabs/tab3'
 export default {
-  components: { tab1, tab2 },
+  components: { tab1, tab2, tab3 },
   data() {
     return {
       isAdd: false,

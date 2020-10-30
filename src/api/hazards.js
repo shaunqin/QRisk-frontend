@@ -42,3 +42,34 @@ export const hazardsIssue = (data) => {
         data
     })
 }
+
+// 处理待办
+export const hazardsComplete = (data) => {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/complete/${data.taskId}`,
+        method: 'post',
+        data
+    })
+}
+// 获取编号
+export const getNo = (deptPath) => {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/nextNo/${deptPath}`,
+        method: 'get',
+    })
+}
+// 查看管控清单详情
+export const queryControlListDetail = (monthTaskId) => {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/query/controlList/${monthTaskId}`,
+        method: 'get',
+    })
+}
+
+// 查询已办详情
+export const queryHasDoneDetail = (taskId, formId) => {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/query/hasDoneDetail/${taskId}/${formId}`,
+        method: 'get',
+    })
+}

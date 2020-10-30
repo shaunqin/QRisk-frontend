@@ -3,34 +3,33 @@
     <div class="head-container">
       <el-form :model="form" size="mini" inline>
         <el-form-item label="编号">
-          <el-input v-model="form.aa" placeholder="请输入编号" style="width:120px"></el-input>
+          <el-input v-model="form.no" placeholder="请输入编号" style="width:120px"></el-input>
         </el-form-item>
         <el-form-item label="主题">
-          <el-input v-model="form.bb" placeholder="请输入主题" style="width:120px"></el-input>
+          <el-input v-model="form.title" placeholder="请输入主题" style="width:120px"></el-input>
         </el-form-item>
         <el-form-item label="责任单位">
-          <el-input v-model="form.cc" placeholder="请输入责任单位" style="width:120px"></el-input>
-        </el-form-item>
-        <el-form-item label="下发单位">
-          <el-input v-model="form.ee" placeholder="请输入责任单位" style="width:120px"></el-input>
-        </el-form-item>
-        <el-form-item label="发布时间">
-          <el-input v-model="form.dd" placeholder="请输入发布时间" style="width:120px"></el-input>
+          <department
+            class="form-dept-tree"
+            :value="form.responsePath"
+            @change="deptChange"
+            style="width:260px"
+          />
         </el-form-item>
         <el-form-item label>
-          <el-button type="success" icon="el-icon-search" @click="toQuery(query)">查询</el-button>
+          <el-button type="success" icon="el-icon-search" @click="toQuery">查询</el-button>
         </el-form-item>
       </el-form>
     </div>
     <el-tabs v-model="tabIndex">
       <el-tab-pane label="已下发" name="1">
-        <tab1 v-if="tabIndex==1" />
+        <tab1 v-if="tabIndex==1" :queryForm="queryForm" />
       </el-tab-pane>
       <el-tab-pane label="草稿" name="2">
-        <tab2 v-if="tabIndex==2" />
+        <tab2 v-if="tabIndex==2" :queryForm="queryForm" />
       </el-tab-pane>
       <el-tab-pane label="我拟制的" name="3">
-        <tab3 v-if="tabIndex==3" />
+        <tab3 v-if="tabIndex==3" :queryForm="queryForm" />
       </el-tab-pane>
       <el-tab-pane label="待办" name="4">
         <tab4 v-if="tabIndex==4" />
@@ -50,52 +49,33 @@ import tab2 from "./components/tab2";
 import tab3 from "./components/tab3";
 import tab4 from "./components/tab4";
 import tab5 from "./components/tab5";
+import department from '@/components/Department'
 export default {
-  components: { edetail, tab1, tab2, tab3, tab4, tab5 },
+  components: { edetail, tab1, tab2, tab3, tab4, tab5, department },
   data() {
     return {
       isAdd: false,
       selections: [],
       form: {
-        aa: "",
+        no: "", title: "", responsePath: null
       },
       tabIndex: "1",
+      queryForm: {}
     };
   },
   mounted() { },
   methods: {
-    toQuery(name) {
-      if (!name) {
-        this.page = 1;
-        this.init();
-        return;
-      }
-    },
-    // 选择切换
-    selectionChange: function (selections) {
-      this.selections = selections;
-      this.$emit("selectionChange", { selections: selections });
+    toQuery() {
+      this.queryForm = Object.assign({}, this.form);
     },
     detail(row) {
       let _this = this.$refs.detail;
       _this.form = Object.assign({}, row);
       _this.dialog = true;
     },
-    subDelete(id) {
-      this.$confirm("确定删除嘛？")
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
-        });
-    },
+    deptChange(val) {
+      this.form.responsePath = val;
+    }
   },
 };
 </script>
@@ -114,5 +94,14 @@ export default {
 }
 .app-container {
   padding: 20px 10px 0 10px;
+}
+.form-dept-tree {
+  z-index: 1 !important;
+  /deep/ .vue-treeselect__control {
+    height: 30px;
+    .vue-treeselect__single-value,.vue-treeselect__placeholder {
+      line-height: 30px;
+    }
+  }
 }
 </style>

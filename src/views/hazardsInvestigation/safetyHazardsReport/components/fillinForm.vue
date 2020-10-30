@@ -12,118 +12,167 @@
       </el-form-item>
     </el-form>
     <!-- 填报 -->
-    <el-button type="info" size="mini" style="margin-bottom: 10px" @click="addRow">新增</el-button>
-    <el-card style="margin-bottom: 20px" v-for="(item, index) in data" :key="index">
-      <el-form size="mini" inline label-width="80px">
+    <el-button
+      type="info"
+      size="mini"
+      style="margin-bottom: 10px"
+      @click="addRow"
+      v-if="!disabled"
+    >新增</el-button>
+    <el-card style="margin-bottom: 20px" v-for="(item, index) in fillinData" :key="index">
+      <el-form ref="form" size="mini" inline label-width="80px">
         <el-row class="fill-row">
           <el-col :span="24">
             <el-form-item label="隐患名称">
-              <el-input v-model="item.aa" placeholder style="width: 930px"></el-input>
+              <el-input
+                v-model="item.hiddenName"
+                placeholder
+                style="width: 930px"
+                :disabled="disabled"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
+        <el-form-item label="编号">
+          <el-input v-model="item.no" style="width: 140px" disabled></el-input>
+        </el-form-item>
         <el-form-item label="发现时间">
-          <el-date-picker v-model="item.cc" value-format="yyyy-MM-dd" style="width: 140px"></el-date-picker>
+          <el-date-picker
+            v-model="item.findTime"
+            value-format="yyyy-MM-dd"
+            style="width: 140px"
+            :disabled="disabled"
+          ></el-date-picker>
         </el-form-item>
         <el-form-item label="来源">
           <dictSelect
             type="data_source"
-            :value="item.dd"
-            @change="dictChange($event,item,'dd')"
+            :value="item.source"
+            @change="dictChange($event,item,'source')"
             style="width: 140px"
+            :disabled="disabled"
           />
         </el-form-item>
         <el-form-item label="类型">
           <dictSelect
             type="hazard_source"
-            :value="item.ee"
-            @change="dictChange($event,item,'ee')"
+            :value="item.type"
+            @change="dictChange($event,item,'type')"
             style="width: 140px"
+            :disabled="disabled"
           />
         </el-form-item>
         <el-form-item label="等级">
           <dictSelect
             type="hidden_danger_level"
-            :value="item.ff"
-            @change="dictChange($event,item,'ff')"
+            :value="item.levels"
+            @change="dictChange($event,item,'levels')"
             style="width: 140px"
+            :disabled="disabled"
           />
         </el-form-item>
         <el-form-item label="涉及业务">
           <dictSelect
             type="product"
-            :value="item.gg"
-            @change="dictChange($event,item,'gg')"
+            :value="item.involveBusiness"
+            @change="dictChange($event,item,'involveBusiness')"
             style="width: 140px"
+            :disabled="disabled"
           />
         </el-form-item>
         <el-form-item label="涉及流程">
           <dictSelect
             type="system"
-            :value="item.ii"
-            @change="dictChange($event,item,'ii')"
+            :value="item.involveProcess"
+            @change="dictChange($event,item,'involveProcess')"
             style="width: 140px"
+            :disabled="disabled"
           />
         </el-form-item>
         <el-form-item label="监管单位">
-          <el-input v-model="item.hh" style="width: 140px"></el-input>
+          <el-input v-model="item.supervisoryUnit" style="width: 140px" :disabled="disabled"></el-input>
         </el-form-item>
         <el-row class="fill-row" :gutter="16">
           <el-col :span="12">
             <el-form-item label="原因分析">
-              <el-input v-model="item.jj" placeholder type="textarea" rows="3"></el-input>
+              <el-input
+                v-model="item.reasonAnalysis"
+                placeholder
+                type="textarea"
+                rows="3"
+                :disabled="disabled"
+              ></el-input>
             </el-form-item>
             <el-form-item label="备注">
-              <el-input v-model="item.rr" type="textarea" rows="3"></el-input>
+              <el-input v-model="item.remarks" type="textarea" rows="3" :disabled="disabled"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="治理效果验证标准">
-              <el-input v-model="item.nn" type="textarea" rows="3"></el-input>
+              <el-input
+                v-model="item.verificationFollowUp"
+                type="textarea"
+                rows="3"
+                :disabled="disabled"
+              ></el-input>
             </el-form-item>
             <el-form-item label="整改进展">
-              <el-input v-model="item.qq" type="textarea" rows="3"></el-input>
+              <el-input
+                v-model="item.rectificationProgress"
+                type="textarea"
+                rows="3"
+                :disabled="disabled"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
-      <el-button type="info" size="mini" style="margin-bottom: 10px" @click="addItemRow(item)">新增一行</el-button>
+      <el-button
+        type="info"
+        size="mini"
+        style="margin-bottom: 10px"
+        @click="addItemRow(item)"
+        v-if="!disabled"
+      >新增一行</el-button>
       <!--表格渲染-->
-      <el-table :data="item.array" size="small" style="width: 100%" max-height="400px">
+      <el-table :data="item.controlList" size="small" style="width: 100%" max-height="400px">
         <el-table-column type="index" width="50" />
-        <el-table-column prop="jj" label="等效措施">
+        <el-table-column label="等效措施">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.jj" size="mini" placeholder></el-input>
+            <el-input v-model="scope.row.measures" size="mini" placeholder :disabled="disabled"></el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="kk" label="责任人">
-          <template slot-scope="scope">
-            <el-select v-model="scope.row.kk" size="mini">
-              <el-option :label="'111'" :value="'1111'"></el-option>
-            </el-select>
+        <el-table-column label="责任人">
+          <template slot-scope="{row}">
+            <el-button
+              :disabled="disabled"
+              type="text"
+              @click="PersonClick(row)"
+            >{{!!row.realname?`${row.realname}[${row.responsiblePerson}]`:'请选择'}}</el-button>
           </template>
         </el-table-column>
-        <el-table-column prop="ll" label="整改时限">
+        <el-table-column label="整改时限">
           <template slot-scope="scope">
             <el-date-picker
-              v-model="scope.row.ll"
+              v-model="scope.row.deadline"
               value-format="yyyy-MM-dd"
               size="mini"
               style="width:100%"
+              :disabled="disabled"
             ></el-date-picker>
           </template>
         </el-table-column>
         <el-table-column prop="nn" label="措施实施情况跟踪">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.nn" size="mini"></el-input>
+            <el-input v-model="scope.row.implementationOfMeasures" size="mini" :disabled="disabled"></el-input>
           </template>
         </el-table-column>
         <el-table-column prop="oo" label="治理结果情况跟踪">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.oo" size="mini" placeholder></el-input>
+            <el-input v-model="scope.row.governanceResults" size="mini" :disabled="disabled"></el-input>
           </template>
         </el-table-column>
-        <el-table-column label width="80">
+        <el-table-column label width="80" v-if="!disabled">
           <template slot-scope="{ $index }">
             <el-button
               type="text"
@@ -134,20 +183,24 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="del">
+      <div class="del" v-if="!disabled">
         <el-button type="danger" size="small" icon="el-icon-delete" @click="delRow(index)">删除</el-button>
       </div>
     </el-card>
+    <emplotee ref="emplotee" @subPerson="subPerson" />
   </el-card>
 </template>
 
 <script>
-import { add, modify } from "@/api/emplotee.js";
 import { mapGetters } from "vuex";
 import { formatShortDate } from '@/utils/datetime'
 import dictSelect from '@/components/common/dictSelect'
+import emplotee from './person'
+import { getNo } from '@/api/hazards'
+import { eventBus } from '@/utils/eventBus'
+
 export default {
-  components: { dictSelect },
+  components: { dictSelect, emplotee },
   data() {
     return {
       loading: false,
@@ -157,25 +210,36 @@ export default {
         reportDate: formatShortDate(new Date()),
         title: ""
       },
-      form: {
-        aa: "",
-        bb: "",
-        cc: "",
-        dd: "",
-        ee: "",
-      },
-      roleSelect: [],
-      formRules: {
-        aa: [{ required: true, message: "请填写名称", trigger: "blur" }],
-        bb: [{ required: true, message: "请填写名称", trigger: "blur" }],
-      },
-      data: [],
-      form2: {},
+      fillinData: [],
     };
   },
-  props: {},
+  props: {
+    data: {
+      type: Object,
+      default: () => { }
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  },
   created() {
     this.titleForm.reportName = this.userInfo.realname;
+    this.titleForm.title = this.data.controlListName;
+  },
+  mounted() {
+    eventBus.$on("accept-source", (data) => {
+      // 循环获取编号
+      data.map(item => {
+        getNo(this.data.deptPath).then(res => {
+          if (res.code != '200') {
+            this.$message.error(res.msg);
+          } else {
+            this.fillinData.push({ ...item, no: res.obj });
+          }
+        })
+      })
+    });
   },
   computed: {
     ...mapGetters(["userInfo"]),
@@ -186,22 +250,23 @@ export default {
       this.resetForm();
     },
     doSubmit() {
-      this.$refs["form"].validate((valid) => {
-        if (valid) {
-          // this.loading = true;
-          // if (this.isAdd) {
-          //   this.doAdd()
-          // } else this.doModify()
+      console.log(this.fillinData);
+      //   this.$refs["form"].validate((valid) => {
+      //     if (valid) {
+      //       // this.loading = true;
+      //       // if (this.isAdd) {
+      //       //   this.doAdd()
+      //       // } else this.doModify()
 
-          // this.dialog = false;
-          // this.$message({
-          //   message: "添加成功",
-          //   type: "success",
-          // });
-          // this.resetForm();
-          console.log(this.data);
-        }
-      });
+      //       // this.dialog = false;
+      //       // this.$message({
+      //       //   message: "添加成功",
+      //       //   type: "success",
+      //       // });
+      //       // this.resetForm();
+      //       console.log(this.fillinData);
+      //     }
+      //   });
     },
     doAdd() {
       // this.delwithRoleList()
@@ -254,64 +319,71 @@ export default {
     },
     resetForm() {
       this.dialog = false;
-      this.$refs["form"].resetFields();
-      this.form = {
-        aa: "",
-        bb: "",
-        cc: "",
-        dd: "",
-        ee: "",
-      };
-      this.roleSelect = [];
-    },
-    roleChange(e) {
-      if (e.length <= 1) {
-        this.form.roleList = e[0];
-      }
-      let arr = [];
-      for (let i = 0; i < e.length; i++) {
-        let obj = {
-          id: "",
-        };
-        obj.id = e[i];
-        arr.push(obj);
-      }
-      this.form.roleList = arr;
+      //   this.$refs["form"].resetFields();
+      this.fillinData = [];
     },
     addRow(e) {
-      this.data.push({
-        aa: "",
-        bb: "",
-        cc: "",
-        dd: "",
-        ee: "",
-        ff: "",
-        gg: "",
-        hh: "",
-        ii: "",
-        mm: "",
-        pp: "",
-        qq: "",
-        array: [],
-      });
+      getNo(this.data.deptPath).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          this.fillinData.push({
+            controlList: [
+              {
+                deadline: "",
+                governanceResults: "",
+                implementationOfMeasures: "",
+                measures: "",
+                responsiblePerson: "",
+                realname: ''
+              }
+            ],
+            deptPath: "",
+            findTime: "",
+            hiddenName: "",
+            involveBusiness: "",
+            involveProcess: "",
+            levels: "",
+            no: res.obj,
+            reasonAnalysis: "",
+            rectificationProgress: "",
+            remarks: "",
+            source: "",
+            supervisoryUnit: "",
+            type: "",
+            verificationFollowUp: ""
+          });
+        }
+      })
+
     },
     delRow(index) {
-      this.data.splice(index, 1);
+      this.fillinData.splice(index, 1);
     },
     addItemRow(item) {
-      item.array.push({
-        jj: "",
-        kk: "",
-        ll: "",
-        nn: "",
-        oo: "",
+      item.controlList.push({
+        deadline: "",
+        governanceResults: "",
+        implementationOfMeasures: "",
+        measures: "",
+        responsiblePerson: "",
+        realname: ''
       });
     },
     delItemRow(item, index) {
-      item.array.splice(index, 1);
+      item.controlList.splice(index, 1);
     },
     dictChange(val, row, key) {
       row[key] = val;
+    },
+    PersonClick(row) {
+      let _this = this.$refs.emplotee;
+      _this.item = row;
+      _this.dialog = true;
+    },
+    subPerson(user, row) {
+      row.realname = user.realname;
+      row.responsiblePerson = user.sqlUserId;
     }
   },
 };
@@ -338,6 +410,12 @@ export default {
     .el-form-item__content {
       flex: 1;
     }
+  }
+}
+/deep/ .is-disabled {
+  .el-input__inner,
+  .el-textarea__inner {
+    color: #000;
   }
 }
 </style>

@@ -71,12 +71,22 @@ export default {
     };
   },
   mixins: [initData],
+  props: ["queryForm"],
+  watch: {
+    queryForm: {
+      deep: true,
+      handler() {
+        this.init();
+      }
+    }
+  },
   mounted() {
     this.init();
   },
   methods: {
     beforeInit() {
       this.url = `/riskmgr_mgr/safety_risk_notice_mgr/query/draft/${this.page}/${this.size}`;
+      this.params = { ...this.queryForm };
       return true;
     },
     // 选择切换
@@ -118,7 +128,7 @@ export default {
             }
           });
         })
-        .catch(() => {});
+        .catch(() => { });
     },
     submit() {
       let id = this.selections[0];

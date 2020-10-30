@@ -84,18 +84,36 @@
         </el-table-column>
       </el-table>
     </el-card>
+    <el-card header="审批记录" key="comments" v-if="comments.length>0">
+      <el-table :data="comments" size="mini">
+        <el-table-column label="审批人">
+          <template slot-scope="{row}">
+            <span>{{row.name}}[{{row.sqlUserId}}}]</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="审批日期">
+          <template slot-scope="{row}">
+            <span>{{format(row.createTime)}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="备注" prop="remark" />
+        <el-table-column label="结果">
+          <template slot-scope="{row}">
+            <span v-if="row.processFlag==1">同意</span>
+            <span v-if="row.processFlag==2">驳回</span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
     <fillinForm ref="fillinForm" :data="data" />
-    <list2copy ref="list2copy" />
   </div>
 </template>
 
 <script>
-import { formatShortDate } from '@/utils/datetime'
+import { formatShortDate, format } from '@/utils/datetime'
 import fillinForm from '../fillinForm'
-import { queryControlListDetail } from '@/api/hazards'
-import list2copy from '../list2copy'
 export default {
-  components: { fillinForm, list2copy },
+  components: { fillinForm, },
   data() {
     return {
       baseApi: process.env.VUE_APP_BASE_API
@@ -111,6 +129,11 @@ export default {
       default: () => { }
     }
   },
+  watch: {
+    data() {
+      this.loadData();
+    }
+  },
   computed: {
     childTask() {
       if (this.data.childTask == null) {
@@ -118,20 +141,25 @@ export default {
       } else {
         return this.data.childTask
       }
-    }
+    },
+    comments() {
+      if (this.data.comments == null) {
+        return []
+      } else {
+        return this.data.comments
+      }
+    },
   },
+  mounted() { this.loadData(); },
   methods: {
     formatShortDate,
-    showList(row) {
-      queryControlListDetail(row.taskId).then(res => {
-        if (res.code != '200') {
-          this.$message.error(res.msg);
-        } else {
-          let _this = this.$refs.list2copy;
-          _this.tbSource = res.obj.hiddenDangerControlList;
-          _this.dialog = true;
-        }
-      })
+    format,
+    showList(row) { },
+    loadData() {
+      this.$refs.fillinForm.fillinData = this.data.deptControlList.hiddenDangerControlList;
+      this.$refs.fillinForm.titleForm.reportName = this.data.deptControlList.fillerName;
+      this.$refs.fillinForm.titleForm.reportDate = this.formatShortDate(this.data.deptControlList.fillDate);
+      this.$refs.fillinForm.titleForm.title = this.data.controlListName;
     }
   }
 }

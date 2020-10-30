@@ -1,5 +1,12 @@
 <template>
-  <div>
+  <el-dialog
+    :append-to-body="true"
+    :close-on-click-modal="false"
+    :before-close="cancel"
+    :visible.sync="dialog"
+    title="任务详情"
+    custom-class="big_dialog"
+  >
     <el-card header="详情">
       <el-form inline class="detail-form">
         <el-row>
@@ -34,6 +41,7 @@
         </el-form-item>
       </el-form>
     </el-card>
+
     <el-card header="下发任务" key="childTask" v-if="childTask.length>0">
       <el-table :data="childTask" size="mini">
         <el-table-column prop="deptName" label="部门" />
@@ -62,53 +70,49 @@
             <el-button type="info" size="mini" @click="showList(row)">查看</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="办理人">
+      </el-table>
+    </el-card>
+    <el-card header="审批记录" key="comments" v-if="comments.length>0">
+      <el-table :data="comments" size="mini">
+        <el-table-column label="审批人">
           <template slot-scope="{row}">
-            <div v-if="row.reviewerInfo==null">-</div>
-            <el-popover v-else placement="left" width="1000">
-              <el-button type="text" slot="reference">详情</el-button>
-              <el-table :data="row.reviewerInfo" size="mini">
-                <el-table-column label="任务名称" prop="taskName"></el-table-column>
-                <el-table-column label="分配人" width="135">
-                  <template slot-scope="{row}">{{row.name||"-"}}</template>
-                </el-table-column>
-                <el-table-column label="角色">
-                  <template slot-scope="{row}">{{row.groupName||"-"}}</template>
-                </el-table-column>
-                <el-table-column label="候选人">
-                  <template slot-scope="{row}">{{row.users||"-"}}</template>
-                </el-table-column>
-              </el-table>
-            </el-popover>
+            <span>{{row.name}}[{{row.sqlUserId}}}]</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="审批日期">
+          <template slot-scope="{row}">
+            <span>{{format(row.createTime)}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="备注" prop="remark" />
+        <el-table-column label="结果">
+          <template slot-scope="{row}">
+            <span v-if="row.processFlag==1">同意</span>
+            <span v-if="row.processFlag==2">驳回</span>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
-    <fillinForm ref="fillinForm" :data="data" />
-    <list2copy ref="list2copy" />
-  </div>
+
+    <fillinForm ref="fillinForm" :disabled="true" :data="data" key="fillinForm" />
+
+    <div slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="cancel">确定</el-button>
+    </div>
+  </el-dialog>
 </template>
 
 <script>
-import { formatShortDate } from '@/utils/datetime'
-import fillinForm from '../fillinForm'
-import { queryControlListDetail } from '@/api/hazards'
-import list2copy from '../list2copy'
+import { formatShortDate, format } from '@/utils/datetime'
+import fillinForm from './fillinForm'
 export default {
-  components: { fillinForm, list2copy },
+  components: { fillinForm, },
   data() {
     return {
-      baseApi: process.env.VUE_APP_BASE_API
-    }
-  },
-  props: {
-    data: {
-      type: Object,
-      default: () => { }
-    },
-    form: {
-      type: Object,
-      default: () => { }
+      loading: false,
+      dialog: false,
+      data: {}, // 父组件赋值
+      baseApi: process.env.VUE_APP_BASE_API,
     }
   },
   computed: {
@@ -118,22 +122,40 @@ export default {
       } else {
         return this.data.childTask
       }
+    },
+    comments() {
+      if (this.data.comments == null) {
+        return []
+      } else {
+        return this.data.comments
+      }
+    },
+  },
+  watch: {
+    data() {
+      this.loadData();
     }
   },
   methods: {
     formatShortDate,
-    showList(row) {
-      queryControlListDetail(row.taskId).then(res => {
-        if (res.code != '200') {
-          this.$message.error(res.msg);
-        } else {
-          let _this = this.$refs.list2copy;
-          _this.tbSource = res.obj.hiddenDangerControlList;
-          _this.dialog = true;
+    format,
+    cancel() {
+      this.resetForm();
+    },
+    resetForm() {
+      this.dialog = false;
+    },
+    loadData() {
+      this.$nextTick(() => {
+        if (this.data.deptControlList) {
+          this.$refs.fillinForm.fillinData = this.data.deptControlList.hiddenDangerControlList;
+          this.$refs.fillinForm.titleForm.reportName = this.data.deptControlList.fillerName;
+          this.$refs.fillinForm.titleForm.reportDate = this.formatShortDate(this.data.deptControlList.fillDate);
+          this.$refs.fillinForm.titleForm.title = this.data.controlListName;
         }
       })
     }
-  }
+  },
 }
 </script>
 
@@ -148,6 +170,7 @@ export default {
   list-style-type: decimal;
   padding-inline-start: 20px;
 }
+
 .el-card + .el-card {
   margin-top: 20px;
 }

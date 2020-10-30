@@ -8,7 +8,7 @@
     custom-class="big_dialog"
   >
     <el-card header="基本信息">
-      <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto" inline>
+      <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="80px" inline>
         <el-row>
           <el-col :span="24" class="full-row">
             <el-form-item label="任务名称" prop="taskName">
@@ -52,7 +52,7 @@
       </el-form>
     </el-card>
     <el-card header="月度反馈日期设置" style="margin-top:20px" v-if="form.taskType==1">
-      <el-form :model="form2" size="small" label-width="auto">
+      <el-form :model="form2" size="small" label-width="60px">
         <el-row :gutter="16">
           <el-col :span="6">
             <el-form-item label="一月">

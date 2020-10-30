@@ -62,43 +62,36 @@
             <el-button type="info" size="mini" @click="showList(row)">查看</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="办理人">
-          <template slot-scope="{row}">
-            <div v-if="row.reviewerInfo==null">-</div>
-            <el-popover v-else placement="left" width="1000">
-              <el-button type="text" slot="reference">详情</el-button>
-              <el-table :data="row.reviewerInfo" size="mini">
-                <el-table-column label="任务名称" prop="taskName"></el-table-column>
-                <el-table-column label="分配人" width="135">
-                  <template slot-scope="{row}">{{row.name||"-"}}</template>
-                </el-table-column>
-                <el-table-column label="角色">
-                  <template slot-scope="{row}">{{row.groupName||"-"}}</template>
-                </el-table-column>
-                <el-table-column label="候选人">
-                  <template slot-scope="{row}">{{row.users||"-"}}</template>
-                </el-table-column>
-              </el-table>
-            </el-popover>
-          </template>
-        </el-table-column>
       </el-table>
     </el-card>
-    <fillinForm ref="fillinForm" :data="data" />
-    <list2copy ref="list2copy" />
+
+    <fillinForm ref="fillinForm" :disabled="disabled" :data="data" />
+    <el-card>
+      <el-radio-group v-model="form.processFlag">
+        <el-radio label="1">同意</el-radio>
+        <el-radio label="2">驳回</el-radio>
+      </el-radio-group>
+      <el-input
+        v-model="form.comment"
+        type="textarea"
+        rows="3"
+        placeholder="请输入备注"
+        style="margin-top:10px"
+      ></el-input>
+    </el-card>
   </div>
 </template>
 
 <script>
-import { formatShortDate } from '@/utils/datetime'
+import { formatShortDate, format } from '@/utils/datetime'
 import fillinForm from '../fillinForm'
-import { queryControlListDetail } from '@/api/hazards'
-import list2copy from '../list2copy'
+import dictSelect from '@/components/common/dictSelect'
 export default {
-  components: { fillinForm, list2copy },
+  components: { fillinForm, dictSelect },
   data() {
     return {
-      baseApi: process.env.VUE_APP_BASE_API
+      baseApi: process.env.VUE_APP_BASE_API,
+      disabled: true,
     }
   },
   props: {
@@ -111,6 +104,11 @@ export default {
       default: () => { }
     }
   },
+  watch: {
+    data() {
+      this.loadData();
+    }
+  },
   computed: {
     childTask() {
       if (this.data.childTask == null) {
@@ -118,20 +116,21 @@ export default {
       } else {
         return this.data.childTask
       }
+    },
+    _form() {
+      return this.form
     }
   },
+  mounted() { this.loadData(); },
   methods: {
     formatShortDate,
-    showList(row) {
-      queryControlListDetail(row.taskId).then(res => {
-        if (res.code != '200') {
-          this.$message.error(res.msg);
-        } else {
-          let _this = this.$refs.list2copy;
-          _this.tbSource = res.obj.hiddenDangerControlList;
-          _this.dialog = true;
-        }
-      })
+    format,
+    showList(row) { },
+    loadData() {
+      this.$refs.fillinForm.fillinData = this.data.deptControlList.hiddenDangerControlList;
+      this.$refs.fillinForm.titleForm.reportName = this.data.deptControlList.fillerName;
+      this.$refs.fillinForm.titleForm.reportDate = this.formatShortDate(this.data.deptControlList.fillDate);
+      this.$refs.fillinForm.titleForm.title = this.data.controlListName;
     }
   }
 }
@@ -150,5 +149,17 @@ export default {
 }
 .el-card + .el-card {
   margin-top: 20px;
+}
+
+.fill-row {
+  /deep/ .el-form-item {
+    display: flex;
+    .el-form-item__content {
+      flex: 1;
+    }
+  }
+}
+/deep/ .is-disabled {
+  color: #000;
 }
 </style>

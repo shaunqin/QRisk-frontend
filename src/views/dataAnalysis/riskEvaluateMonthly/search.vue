@@ -215,7 +215,13 @@
           style="width:120px"
           placeholder="请选择诱因"
         ></dict-select>-->
-        <incentiveSelect :value="form.incentive" @change="incentiveChange($event,'incentive')" style="width:500px" />
+        <incentiveSelect
+          :value="form.incentive"
+          :value1="form.incentiveType"
+          @change="incentiveChange($event,'incentive')"
+          @value1-change="incentiveTypeChange($event,'incentiveType')"
+          style="width:500px"
+        />
       </el-form-item>
       <el-form-item label>
         <el-button type="primary" icon="el-icon-search" @click="toQuery">搜索</el-button>
@@ -241,7 +247,7 @@ import { queryDictByName } from "@/api/dict";
 import department from "@/components/Department";
 import chartpup from "./components/chartpup";
 import { eventBus } from "@/utils/eventBus";
-import incentiveSelect from '@/views/dataAnalysis/infoDatabase/components/incentiveSelect'
+import incentiveSelect from './components/incentiveSelect'
 export default {
   components: { dictSelect, department, chartpup, incentiveSelect },
   data() {
@@ -304,6 +310,7 @@ export default {
         riskLevel2: "", //危险源层级2
         risk: "", //风险
         isKeyRisk: "", //关键风险
+        incentiveType: "", //诱因分类
         incentive: "", //诱因
         riskLevel: "", //风险等级
         riskValueSort: "",
@@ -497,6 +504,9 @@ export default {
     },
     incentiveChange(val, key) {
       this.form[key] = val.join(',');
+    },
+    incentiveTypeChange(val, key) {
+      this.form[key] = val;
     },
     getHazardList(data) {
       let obj = { label: data.name, value: data.externMap.dicCode };

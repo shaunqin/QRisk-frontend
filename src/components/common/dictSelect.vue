@@ -1,5 +1,11 @@
 <template>
-  <el-select clearable v-model="_value" :placeholder="placeholder" style="width: 100%;">
+  <el-select
+    clearable
+    v-model="_value"
+    :placeholder="placeholder"
+    style="width: 100%;"
+    :disabled="disabled"
+  >
     <!-- code作为key -->
     <el-option v-for="item in list" :key="item.key" :label="item.name" :value="item.value"></el-option>
   </el-select>
@@ -26,6 +32,10 @@ export default {
       type: String,
       default: "",
     },
+    disabled: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     _value: {

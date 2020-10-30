@@ -10,12 +10,7 @@
       >新建任务</el-button>
     </div>
     <!--表格渲染-->
-    <el-table
-      v-loading="loading"
-      :data="data"
-      size="small"
-      style="width: 100%;"
-    >
+    <el-table v-loading="loading" :data="data" size="small" style="width: 100%;">
       <el-table-column type="index" width="50" :index="getIndex" />
       <el-table-column prop="taskName" label="任务名称" />
       <el-table-column label="任务类型">
@@ -24,10 +19,10 @@
           <span v-if="row.taskType==2">月度任务</span>
         </template>
       </el-table-column>
-      <el-table-column prop="dueDate" label="反馈时间" /> 
-      <el-table-column prop="ee" label="安全隐患管控清单">
+      <el-table-column prop="dueDate" label="反馈时间" />
+      <el-table-column label="安全隐患管控清单">
         <template slot-scope="{row}">
-          <el-button type="text" size="mini" @click="showHazardsList(row)">{{ row.ee }}</el-button>
+          <el-button type="text" size="mini" @click="showHazardsList(row)">查看</el-button>
         </template>
       </el-table-column>
       <el-table-column prop="ff" label="安全隐患统计表">
@@ -55,6 +50,7 @@
       @current-change="pageChange"
     />
     <task ref="task" :is-add="isAdd" />
+    <hazardsList ref="hazardsList" :taskId="taskId" :type="type" />
   </div>
 </template>
 
@@ -62,9 +58,16 @@
 import { detail } from "@/api/hazards";
 import task from '../task';
 import initData from "@/mixins/initData";
+import hazardsList from '../hazardsList/list'
 export default {
   mixins: [initData],
-  components: { task },
+  components: { task, hazardsList },
+  data() {
+    return {
+      taskId: "",
+      type: ""
+    }
+  },
   mounted() {
     this.init();
   },
@@ -91,6 +94,11 @@ export default {
           _this.dialog = true;
         }
       })
+    },
+    showHazardsList(row) {
+      this.taskId = row.id;
+      this.type = row.taskType;
+      this.$refs.hazardsList.dialog = true;
     }
   }
 }
