@@ -25,9 +25,9 @@
           <el-button type="text" size="mini" @click="showHazardsList(row)">查看</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="ff" label="安全隐患统计表">
+      <el-table-column label="安全隐患统计表">
         <template slot-scope="{row}">
-          <el-button type="text" size="mini" @click="showHazardsStatistics(row)">{{ row.ff }}</el-button>
+          <el-button type="text" size="mini" @click="showHazardsStatistics(row)">查看</el-button>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="200px" align="center" fixed="right">

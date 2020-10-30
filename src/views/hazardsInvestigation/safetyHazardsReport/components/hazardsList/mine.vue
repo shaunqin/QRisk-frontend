@@ -2,13 +2,8 @@
   <div>
     <!--表格渲染-->
     <el-table :data="data" size="small" style="width: 100%" max-height="400px">
-      <el-table-column prop="deptName" label="主体单位" width="120px" show-overflow-tooltip />
-      <el-table-column prop="month" label="月份" width="60px" />
-      <el-table-column label="填报人" width="120px">
-        <template slot-scope="{row}">{{ `${row.fillerName}[${row.filler}]` }}</template>
-      </el-table-column>
       <el-table-column prop="hiddenName" label="隐患名称" width="120px" show-overflow-tooltip />
-      <el-table-column prop="no" label="编号" width="120px" />
+      <el-table-column prop="no" label="编号" width="150px" show-overflow-tooltip />
       <el-table-column label="发现时间" width="100px">
         <template slot-scope="{row}">{{formatShortDate(row.findTime)}}</template>
       </el-table-column>
@@ -70,6 +65,12 @@
         show-overflow-tooltip
       />
       <el-table-column prop="remarks" label="备注" width="120px" show-overflow-tooltip />
+      <el-table-column label="操作" fixed="right" width="130">
+        <template slot-scope="{row}">
+          <el-button type="danger" size="mini" icon="el-icon-delete" @click="subDelete(row.id)"></el-button>
+          <el-button type="primary" size="mini" icon="el-icon-edit" @click="edit(row)"></el-button>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -77,6 +78,8 @@
 <script>
 import initData from '@/mixins/initData'
 import { formatShortDate } from '@/utils/datetime'
+import { deleteHiddenDanger } from "@/api/hazards";
+
 export default {
   mixins: [initData],
   props: ["taskId", "type"],
@@ -87,12 +90,30 @@ export default {
       }
     }
   },
+  mounted() {
+    this.init();
+  },
   methods: {
     formatShortDate,
     beforeInit() {
       this.url = `/riskmgr_mgr/hidden_danger/query/myControllList/${this.taskId}/${this.type}`;
       return true
     },
+    subDelete(id) {
+      this.$confirm("确定删除吗？").then(() => {
+        deleteHiddenDanger(id).then(res => {
+          if (res.code != '200') {
+            this.$message.error(res.msg);
+          } else {
+            this.$message.success("删除成功！")
+            this.init();
+          }
+        })
+      }).catch(() => { })
+    },
+    edit(row) {
+      this.$emit("edit", row);
+    }
   },
 }
 </script>

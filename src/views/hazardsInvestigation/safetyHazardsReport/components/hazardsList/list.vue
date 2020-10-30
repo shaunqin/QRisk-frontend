@@ -83,7 +83,7 @@
         <el-table-column prop="remarks" label="备注" width="120px" show-overflow-tooltip />
         <el-table-column label="操作" fixed="right" width="100">
           <template slot-scope="{ row }">
-            <el-button type="success" icon="el-icon-document-copy" size="mini" @click="edit(row)"></el-button>
+            <el-button type="success" icon="el-icon-document-copy" size="mini" @click="copy(row)"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -98,11 +98,10 @@
       />
     </el-card>
     <el-card header="我填报的">
-      <mine :taskId="taskId" :type="type" />
+      <mine ref="mine" :taskId="taskId" :type="type" @edit="edit" />
     </el-card>
     <div slot="footer" class="dialog-footer">
-      <el-button type="text" @click="cancel">取消</el-button>
-      <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
+      <el-button type="primary" @click="cancel">取消</el-button>
     </div>
     <eform ref="form" />
   </el-dialog>
@@ -110,7 +109,7 @@
 
 <script>
 import initData from '@/mixins/initData'
-import { add, modify } from "@/api/emplotee.js";
+import { copyHiddenDanger } from "@/api/hazards";
 import eform from "./form";
 import { formatShortDate } from '@/utils/datetime'
 import mine from './mine'
@@ -145,94 +144,27 @@ export default {
     cancel() {
       this.resetForm();
     },
-    doSubmit() {
-      this.$refs["form"].validate((valid) => {
-        if (valid) {
-          // this.loading = true;
-          // if (this.isAdd) {
-          //   this.doAdd()
-          // } else this.doModify()
-
-          this.dialog = false;
-          this.$message({
-            message: "添加成功",
-            type: "success",
-          });
-          this.resetForm();
-        }
-      });
-    },
-    doAdd() {
-      // this.delwithRoleList()
-      const data = this.roleSelect;
-      let arr = [];
-      for (let i = 0; i < data.length; i++) {
-        let obj = {
-          id: "",
-        };
-        obj.id = data[i];
-        arr.push(obj);
-      }
-      this.form.roleList = arr;
-      add(this.form)
-        .then((res) => {
-          if (res.code === "200") {
-            this.$message({
-              message: "添加成功",
-              type: "success",
-            });
-          } else {
-            this.$message.error(res.msg);
-          }
-          this.resetForm();
-          this.loading = false;
-          this.$parent.init();
-        })
-        .catch((err) => {
-          this.loading = false;
-        });
-    },
-    doModify() {
-      modify(this.form)
-        .then((res) => {
-          if (res.code === "200") {
-            this.$message({
-              message: "修改成功",
-              type: "success",
-            });
-          } else {
-            this.$message.error(res.msg);
-          }
-          this.resetForm();
-          this.loading = false;
-          this.$parent.init();
-        })
-        .catch((err) => {
-          this.loading = false;
-        });
-    },
     resetForm() {
       this.dialog = false;
       this.$parent.taskId = "";
     },
-    roleChange(e) {
-      if (e.length <= 1) {
-        this.form.roleList = e[0];
-      }
-      let arr = [];
-      for (let i = 0; i < e.length; i++) {
-        let obj = {
-          id: "",
-        };
-        obj.id = e[i];
-        arr.push(obj);
-      }
-      this.form.roleList = arr;
+    copy(row) {
+      this.$confirm("确定复制吗？").then(() => {
+        copyHiddenDanger(row.id).then(res => {
+          if (res.code != '200') {
+            this.$message.error(res.msg);
+          } else {
+            this.$message.success("复制成功！")
+            this.$refs.mine.init();
+          }
+        })
+      }).catch(() => { })
     },
     edit(row) {
       let _this = this.$refs.form;
+      _this.form = row;
       _this.dialog = true;
-    },
+    }
   },
 };
 </script>

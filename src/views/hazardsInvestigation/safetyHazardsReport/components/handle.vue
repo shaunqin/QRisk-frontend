@@ -7,19 +7,14 @@
     title="处理待办"
     custom-class="big_dialog"
   >
-    <step1 ref="step1" v-if="step==1" :data="data" :form="form" @change="formChange" />
-    <step2 ref="step2" v-if="step==2" :data="data" :form="form" @change="formChange" />
-    <step3 ref="step3" v-if="step==3" :data="data" :form="form" @change="formChange" />
-    <!-- <step4 ref="step4" v-if="step==4" :data="data" :form="form" @change="formChange" />
-    <step5 ref="step5" v-if="step==5" :data="data" :form="form" @change="formChange" />-->
+    <step1 ref="step1" v-if="step==1" :data="data" :form="form" />
+    <step2 ref="step2" v-if="step==2" :data="data" :form="form" />
+    <step3 ref="step3" v-if="step==3" :data="data" :form="form" />
     <hairdown ref="hairdown" :data="data" :form="form" />
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
-      <el-button v-if="step==1||step==3" type="primary" @click="doReport">填报</el-button>
+      <el-button v-if="(step==1||step==3)&&!hiddenFill" type="primary" @click="doReport">填报</el-button>
       <el-button v-if="step==2" :loading="loading" type="primary" @click="doSubmit">确认</el-button>
-      <!--<el-button v-if="step==2" :loading="loading" type="primary" @click="doSave">保存</el-button>
-      <el-button v-if="step==2" :loading="loading" type="success" @click="doSubmit">提交</el-button>
-      <el-button v-if="step==3||step==5" :loading="loading" type="primary" @click="doSubmit">上报</el-button>-->
       <el-button
         v-if="step==3||step==1"
         :loading="loading"
@@ -32,20 +27,14 @@
 </template>
 
 <script>
-// import { riskNoticeDetail, riskNoticeComplete, riskNoticeModify, validatePWD, } from "@/api/risk";
 import { hazardsComplete, } from "@/api/hazards";
 import step1 from "./step/step1";
 import step2 from "./step/step2";
 import step3 from "./step/step3";
-// import step4 from "./step/step4";
-// import step5 from "./step/step5";
 import hairdown from './hairdown'
 
 export default {
-  components: {
-    step1, hairdown, step2, step3,
-    //  step4, step5,  
-  },
+  components: { step1, hairdown, step2, step3 },
   data() {
     return {
       loading: false,
@@ -66,6 +55,9 @@ export default {
     step() {
       return this.data.step;
     },
+    hiddenFill() {
+      return this.data.hiddenFill
+    }
   },
   methods: {
     cancel() {
@@ -73,31 +65,12 @@ export default {
     },
     doSubmit() {
       switch (this.step) {
-        case 1: this.validatePWD(); break;
-        case 4:
-          this.submitStep1();
-          break;
         case 2:
           this.submitStep2();
-          break;
-        case 3:
-        case 5:
-          this.submitStep3();
           break;
         default:
           break;
       }
-    },
-    doSave() {
-      let _this = this.$refs.step2;
-      riskNoticeModify(_this.detailForm).then((res) => {
-        if (res.code != "200") {
-          this.$message.error(res.msg);
-        } else {
-          this.$message.success("保存成功");
-          _this.formChange = false;
-        }
-      });
     },
     resetForm() {
       this.dialog = false;
@@ -109,13 +82,6 @@ export default {
         sqlUserId: "",
         hiddenDangerList: []
       };
-    },
-    formChange(form) {
-      debugger
-      console.log(form);
-      this.form = form;
-    },
-    submitStep1() {
     },
     submitStep2() {
       if (this.form.processFlag == "") {
@@ -129,19 +95,6 @@ export default {
       console.log(this.form);
       this.loading = true;
       hazardsComplete(this.form).then((res) => {
-        if (res.code != "200") {
-          this.$message.error(res.msg);
-        } else {
-          this.$message.success("操作成功");
-          this.resetForm();
-          this.$parent.init();
-        }
-        this.loading = false;
-      });
-    },
-    submitStep3() {
-      this.loading = true;
-      riskNoticeComplete(this.form).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {

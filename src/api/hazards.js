@@ -73,3 +73,19 @@ export const queryHasDoneDetail = (taskId, formId) => {
         method: 'get',
     })
 }
+// 复制到自己
+export const copyHiddenDanger = (hiddenDangerId) => {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/copy/${hiddenDangerId}`,
+        method: 'post',
+    })
+}
+// modify 自己的复制
+export const modifyHiddenDanger = (data) => {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/modifyHiddenDanger`,
+        method: 'put',
+        data
+    })
+}
+// 
