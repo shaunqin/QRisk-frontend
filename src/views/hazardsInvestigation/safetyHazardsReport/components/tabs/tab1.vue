@@ -30,6 +30,25 @@
           <el-button type="text" size="mini" @click="showHazardsStatistics(row)">查看</el-button>
         </template>
       </el-table-column>
+      <el-table-column label="状态">
+        <template slot-scope="{row}">
+          <span v-if="row.taskType==2">
+            <span v-if="row.status==1">初始化</span>
+            <span v-if="row.status==2">待完成</span>
+            <span v-if="row.status==3">待完成</span>
+            <span v-if="row.status==4">待完成</span>
+            <span v-if="row.status==5">已完成</span>
+            <span v-if="row.status==6">待完成</span>
+            <span v-if="row.status==7">已取消</span>
+          </span>
+          <span v-else>
+            <span v-if="row.status==1">初始化</span>
+            <span v-if="row.status==2">待完成</span>
+            <span v-if="row.status==3">已完成</span>
+            <span v-if="row.status==4">已取消</span>
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="200px" align="center" fixed="right">
         <template slot-scope="scope">
           <el-button-group>

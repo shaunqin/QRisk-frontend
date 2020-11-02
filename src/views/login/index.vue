@@ -2,7 +2,7 @@
   <div ref="box" class="container">
     <!-- 卡片 element-ui 组件 -->
     <el-card class="my-card">
-      <span class="title">后台管理系统</span>
+      <span class="title">风险管理系统前台</span>
       <el-form ref="loginForm" :model="loginForm" :rules="loginRules" status-icon>
         <el-form-item label>
           <el-radio-group v-model="loginForm.userName">
