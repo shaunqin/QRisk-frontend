@@ -10,6 +10,12 @@
       <el-form-item label="填表日期">
         <span class="readonly">{{titleForm.reportDate}}</span>
       </el-form-item>
+      <el-form-item label="批准人" v-if="!!titleForm.approverName">
+        <span class="readonly">{{titleForm.approverName}}</span>
+      </el-form-item>
+      <el-form-item label="批准日期" v-if="!!titleForm.approveDate">
+        <span class="readonly">{{titleForm.approveDate}}</span>
+      </el-form-item>
     </el-form>
     <!-- 填报 -->
     <el-button
@@ -208,7 +214,9 @@ export default {
       titleForm: {
         reportName: '',
         reportDate: formatShortDate(new Date()),
-        title: ""
+        title: "",
+        approverName:"",
+        approveDate:""
       },
       fillinData: [],
     };

@@ -44,7 +44,7 @@
         </el-table-column>
         <el-table-column label="填报人">
           <template slot-scope="{row}">
-            <span v-if="row.filler!=null">{{row.fillerName}}[{{row.filler}}}]</span>
+            <span v-if="row.filler!=null">{{row.fillerName}}[{{row.filler}}]</span>
           </template>
         </el-table-column>
         <el-table-column label="状态">
@@ -88,7 +88,7 @@
       <el-table :data="comments" size="mini">
         <el-table-column label="审批人">
           <template slot-scope="{row}">
-            <span>{{row.name}}[{{row.sqlUserId}}}]</span>
+            <span>{{row.name}}[{{row.sqlUserId}}]</span>
           </template>
         </el-table-column>
         <el-table-column label="审批日期">

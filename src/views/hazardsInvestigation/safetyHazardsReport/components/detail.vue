@@ -52,7 +52,7 @@
         </el-table-column>
         <el-table-column label="填报人">
           <template slot-scope="{row}">
-            <span v-if="row.filler!=null">{{row.fillerName}}[{{row.filler}}}]</span>
+            <span v-if="row.filler!=null">{{row.fillerName}}[{{row.filler}}]</span>
           </template>
         </el-table-column>
         <el-table-column label="状态">
@@ -63,6 +63,26 @@
             <span v-if="row.status==5">通过</span>
             <span v-if="row.status==6">驳回</span>
             <span v-if="row.status==7">取消</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="办理人">
+          <template slot-scope="{row}">
+            <div v-if="row.reviewerInfo==null">-</div>
+            <el-popover v-else placement="left" width="800">
+              <el-button type="text" slot="reference">详情</el-button>
+              <el-table :data="row.reviewerInfo" size="mini">
+                <el-table-column label="任务名称" prop="taskName"></el-table-column>
+                <el-table-column label="分配人" width="135">
+                  <template slot-scope="{row}">{{row.name||"-"}}</template>
+                </el-table-column>
+                <el-table-column label="角色">
+                  <template slot-scope="{row}">{{row.groupName||"-"}}</template>
+                </el-table-column>
+                <el-table-column label="候选人">
+                  <template slot-scope="{row}">{{row.users||"-"}}</template>
+                </el-table-column>
+              </el-table>
+            </el-popover>
           </template>
         </el-table-column>
         <el-table-column label="管控清单" width="100">
@@ -76,7 +96,7 @@
       <el-table :data="comments" size="mini">
         <el-table-column label="审批人">
           <template slot-scope="{row}">
-            <span>{{row.name}}[{{row.sqlUserId}}}]</span>
+            <span>{{row.name}}[{{row.sqlUserId}}]</span>
           </template>
         </el-table-column>
         <el-table-column label="审批日期">
@@ -94,7 +114,19 @@
       </el-table>
     </el-card>
 
-    <fillinForm ref="fillinForm" :disabled="true" :data="data" key="fillinForm" />
+    <fillinForm
+      v-if="data.deptControlList!=null&&data.deptControlList.hiddenDangerControlList.length>0"
+      ref="fillinForm"
+      :disabled="true"
+      :data="data"
+      key="fillinForm"
+    />
+    <detailFillin
+      ref="detailFillin"
+      :data="detailData"
+      :fillinData="detailFillinData"
+      key="detailFillin"
+    />
 
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="cancel">确定</el-button>
@@ -105,14 +137,18 @@
 <script>
 import { formatShortDate, format } from '@/utils/datetime'
 import fillinForm from './fillinForm'
+import detailFillin from './detailFillin'
+import { queryControlListDetail } from '@/api/hazards'
 export default {
-  components: { fillinForm, },
+  components: { fillinForm, detailFillin },
   data() {
     return {
       loading: false,
       dialog: false,
       data: {}, // 父组件赋值
       baseApi: process.env.VUE_APP_BASE_API,
+      detailData: {},
+      detailFillinData: []
     }
   },
   computed: {
@@ -147,11 +183,25 @@ export default {
     },
     loadData() {
       this.$nextTick(() => {
-        if (this.data.deptControlList) {
+        if (this.data.deptControlList && this.$refs.fillinForm) {
           this.$refs.fillinForm.fillinData = this.data.deptControlList.hiddenDangerControlList;
           this.$refs.fillinForm.titleForm.reportName = this.data.deptControlList.fillerName;
           this.$refs.fillinForm.titleForm.reportDate = this.formatShortDate(this.data.deptControlList.fillDate);
           this.$refs.fillinForm.titleForm.title = this.data.controlListName;
+          this.$refs.fillinForm.titleForm.approverName = this.data.deptControlList.approverName;
+          this.$refs.fillinForm.titleForm.approveDate = this.formatShortDate(this.data.deptControlList.approveDate);
+        }
+      })
+    },
+    showList(row) {
+      queryControlListDetail(row.taskId).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          let _this = this.$refs.detailFillin;
+          this.detailData = res.obj;
+          this.detailFillinData = res.obj.hiddenDangerControlList;
+          _this.dialog = true;
         }
       })
     }

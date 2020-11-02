@@ -33,6 +33,18 @@
       <el-table-column prop="sourceOfRiskText" label="危险源" width="150" show-overflow-tooltip />
       <el-table-column prop="riskText" label="风险" width="150" show-overflow-tooltip />
       <el-table-column prop="incentiveText" label="诱因" width="150" show-overflow-tooltip />
+      <el-table-column prop="incentiveText" label="危险源关联次数" width="150">
+        <template slot-scope="{row}">{{row.hazardRiskCalcVo.hazardsEventsNo}}</template>
+      </el-table-column>
+      <el-table-column prop="incentiveText" label="可能性等级" width="120">
+        <template slot-scope="{row}">{{row.hazardRiskCalcVo.possiblityLevel}}</template>
+      </el-table-column>
+      <el-table-column prop="incentiveText" label="严重性等级" width="120">
+        <template slot-scope="{row}">{{row.hazardRiskCalcVo.severityLevel}}</template>
+      </el-table-column>
+      <el-table-column prop="incentiveText" label="风险等级" width="100">
+        <template slot-scope="{row}">{{row.hazardRiskCalcVo.level}}</template>
+      </el-table-column>
     </el-table>
     <!--分页组件-->
     <el-pagination

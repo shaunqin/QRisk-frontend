@@ -15,9 +15,14 @@
       <el-table-column prop="supervisoryUnit" label="监管单位" width="120px" show-overflow-tooltip />
       <el-table-column prop="reasonAnalysis" label="原因分析" width="120px" show-overflow-tooltip />
       <el-table-column label="等效措施" width="150px">
-        <template slot-scope="{ row }">
+        <template slot-scope="{ row }" show-overflow-tooltip>
           <ul class="tab-ul">
-            <li v-for="item in row.controlList" :key="item.id">{{ item.measures }}</li>
+            <li v-for="item in row.controlList" :key="item.id">
+              <el-popover trigger="hover" v-if="true" placement="top">
+                <span>{{item.measures}}</span>
+                <div class="text" slot="reference">{{item.measures}}</div>
+              </el-popover>
+            </li>
           </ul>
         </template>
       </el-table-column>
@@ -41,14 +46,24 @@
       <el-table-column label="措施实施情况跟踪" width="160px">
         <template slot-scope="{ row }">
           <ul class="tab-ul">
-            <li v-for="item in row.controlList" :key="item.id">{{ item.implementationOfMeasures }}</li>
+            <li v-for="item in row.controlList" :key="item.id">
+              <el-popover trigger="hover" v-if="true" placement="top">
+                <span>{{item.implementationOfMeasures}}</span>
+                <div class="text" slot="reference">{{item.implementationOfMeasures}}</div>
+              </el-popover>
+            </li>
           </ul>
         </template>
       </el-table-column>
       <el-table-column label="治理结果情况跟踪" width="160px">
         <template slot-scope="{ row }">
           <ul class="tab-ul">
-            <li v-for="item in row.controlList" :key="item.id">{{ item.governanceResults }}</li>
+            <li v-for="item in row.controlList" :key="item.id">
+              <el-popover trigger="hover" v-if="true" placement="top">
+                <span>{{item.governanceResults}}</span>
+                <div class="text" slot="reference">{{item.governanceResults}}</div>
+              </el-popover>
+            </li>
           </ul>
         </template>
       </el-table-column>

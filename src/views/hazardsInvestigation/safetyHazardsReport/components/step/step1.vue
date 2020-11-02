@@ -44,7 +44,7 @@
         </el-table-column>
         <el-table-column label="填报人">
           <template slot-scope="{row}">
-            <span v-if="row.filler!=null">{{row.fillerName}}[{{row.filler}}}]</span>
+            <span v-if="row.filler!=null">{{row.fillerName}}[{{row.filler}}]</span>
           </template>
         </el-table-column>
         <el-table-column label="状态">
