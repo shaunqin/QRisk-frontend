@@ -18,7 +18,7 @@
             <el-form-item label="部门">{{data.deptName}}</el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="发起人">{{data.founderName}}[{{data.founder}}]</el-form-item>
+            <el-form-item label="下发人">{{data.founderName}}[{{data.founder}}]</el-form-item>
           </el-col>
         </el-row>
         <el-form-item label="附件">
@@ -106,14 +106,17 @@
       </el-table>
     </el-card>
     <fillinForm ref="fillinForm" :data="data" />
+    <list2copy ref="list2copy" />
   </div>
 </template>
 
 <script>
 import { formatShortDate, format } from '@/utils/datetime'
 import fillinForm from '../fillinForm'
+import { queryControlListDetail } from '@/api/hazards'
+import list2copy from '../list2copy'
 export default {
-  components: { fillinForm, },
+  components: { fillinForm, list2copy },
   data() {
     return {
       baseApi: process.env.VUE_APP_BASE_API
@@ -154,7 +157,17 @@ export default {
   methods: {
     formatShortDate,
     format,
-    showList(row) { },
+    showList(row) {
+      queryControlListDetail(row.taskId).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          let _this = this.$refs.list2copy;
+          _this.tbSource = res.obj.hiddenDangerControlList;
+          _this.dialog = true;
+        }
+      })
+    },
     loadData() {
       this.$refs.fillinForm.fillinData = this.data.deptControlList.hiddenDangerControlList;
       this.$refs.fillinForm.titleForm.reportName = this.data.deptControlList.fillerName;

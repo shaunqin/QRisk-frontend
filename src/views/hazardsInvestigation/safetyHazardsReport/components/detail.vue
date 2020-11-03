@@ -25,7 +25,7 @@
             <el-form-item label="部门">{{data.deptName}}</el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="发起人">{{data.founderName}}[{{data.founder}}]</el-form-item>
+            <el-form-item label="下发人">{{data.founderName}}[{{data.founder}}]</el-form-item>
           </el-col>
         </el-row>
         <el-form-item label="附件">

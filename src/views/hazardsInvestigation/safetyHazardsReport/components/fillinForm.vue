@@ -215,8 +215,8 @@ export default {
         reportName: '',
         reportDate: formatShortDate(new Date()),
         title: "",
-        approverName:"",
-        approveDate:""
+        approverName: "",
+        approveDate: ""
       },
       fillinData: [],
     };
@@ -231,9 +231,17 @@ export default {
       default: false
     }
   },
+  watch: {
+    data: {
+      deep: true,
+      handler() {
+        this.titleForm.title = this.data.controlListName;
+      }
+    }
+  },
   created() {
     this.titleForm.reportName = this.userInfo.realname;
-    this.titleForm.title = this.data.controlListName;
+        this.titleForm.title = this.data.controlListName;
   },
   mounted() {
     eventBus.$on("accept-source", (data) => {

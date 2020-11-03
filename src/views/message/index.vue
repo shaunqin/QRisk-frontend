@@ -82,11 +82,11 @@ export default {
               this.$message.error(res.msg);
             } else {
               this.$message.success("删除成功");
-              thisa.init();
+              this.init();
             }
           });
         })
-        .catch(() => {});
+        .catch(() => { });
     },
   },
 };

@@ -13,7 +13,7 @@ export const deleteBatch = (ids) => {
   return request({
     url: `/notice/deleteBatch`,
     method: 'delete',
-    data: { ids }
+    data: ids
   })
 }
 //查询提示详情并已读
