@@ -8,8 +8,15 @@
     custom-class="big_dialog"
   >
     <el-card header="全部列表">
+      <search style="matgin-bottom:8px" />
       <!--表格渲染-->
-      <el-table :data="data" size="small" style="width: 100%" max-height="400px">
+      <el-table
+        v-loading="loading"
+        :data="data"
+        size="small"
+        style="width: 100%"
+        max-height="400px"
+      >
         <el-table-column prop="deptName" label="主体单位" width="120px" show-overflow-tooltip />
         <el-table-column prop="month" label="月份" width="60px" />
         <el-table-column label="填报人" width="120px">
@@ -128,13 +135,13 @@ import { copyHiddenDanger } from "@/api/hazards";
 import eform from "./form";
 import { formatShortDate } from '@/utils/datetime'
 import mine from './mine'
+import search from './search'
 
 export default {
-  components: { eform, mine },
+  components: { eform, mine, search },
   mixins: [initData],
   data() {
     return {
-      loading: false,
       dialog: false,
       data: [],
     };

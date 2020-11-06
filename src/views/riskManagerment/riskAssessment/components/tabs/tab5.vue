@@ -36,7 +36,7 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-    <doneDetail ref="doneDetail" />
+    <!-- <doneDetail ref="doneDetail" /> -->
   </div>
 </template>
 
@@ -44,26 +44,16 @@
 import initData from "@/mixins/initData";
 import { format } from "@/utils/datetime";
 import { riskNoticeDoneDetail } from '@/api/risk';
-import doneDetail from './doneDetail'
+// import doneDetail from './doneDetail'
 export default {
-  components: { doneDetail },
+  // components: { doneDetail },
   mixins: [initData],
   mounted() {
     this.init();
   },
-  props: ["queryForm"],
-  watch: {
-    queryForm: {
-      deep: true,
-      handler() {
-        this.init();
-      }
-    }
-  },
   methods: {
     beforeInit() {
-      this.url = `/riskmgr_mgr/safety_risk_notice_mgr/query/hasDone/${this.page}/${this.size}`;
-      this.params = { ...this.queryForm };
+      this.url = `/risk_mgr/special_risk_notice_mgr/query/hasDone/${this.page}/${this.size}`;
       return true;
     },
     // 选择切换

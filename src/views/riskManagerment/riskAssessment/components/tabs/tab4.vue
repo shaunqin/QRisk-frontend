@@ -7,7 +7,6 @@
       size="small"
       :highlight-current-row="true"
       style="width: 100%;"
-      @selection-change="selectionChange"
     >
       <el-table-column prop="businessName" label="流程名称">
         <template slot-scope="{row}">
@@ -21,9 +20,10 @@
       </el-table-column>
       <el-table-column prop="createBy" label="发起人" />
       <el-table-column prop="createTime" label="发起时间" />
-      <el-table-column label width="100">
+      <el-table-column label="操作" width="150">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="detail(row)">查看详情</el-button>
+          <el-button type="primary" size="mini" @click="doFillin(row)">填报</el-button>
+          <el-button type="primary" size="mini" @click="subHandle(row)">办理</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -36,52 +36,58 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-    <doneDetail ref="doneDetail" />
+    <!-- 处理待办 -->
+    <handle ref="handle" />
+    <!-- 填报 -->
+    <fillin ref="fillin" />
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
-import { format } from "@/utils/datetime";
-import { riskNoticeDoneDetail } from '@/api/risk';
-import doneDetail from './doneDetail'
+import { specialRiskFill } from "@/api/risk";
+import handle from "../handle";
+import fillin from '../fillinDialog';
 export default {
-  components: { doneDetail },
   mixins: [initData],
+  components: { handle, fillin },
   mounted() {
     this.init();
   },
-  props: ["queryForm"],
-  watch: {
-    queryForm: {
-      deep: true,
-      handler() {
-        this.init();
-      }
-    }
-  },
   methods: {
     beforeInit() {
-      this.url = `/riskmgr_mgr/safety_risk_notice_mgr/query/hasDone/${this.page}/${this.size}`;
-      this.params = { ...this.queryForm };
+      this.url = `/risk_mgr/special_risk_notice_mgr/query/queryTodo/${this.page}/${this.size}`;
       return true;
     },
-    // 选择切换
-    selectionChange: function (selections) {
-      this.selections = selections;
-      this.$emit("selectionChange", { selections: selections });
-    },
-    detail(row) {
-      riskNoticeDoneDetail(row.taskId, row.formId).then(res => {
-        if (res.code != '200') {
+    subHandle(row) {
+      specialRiskFill(row.taskId).then((res) => {
+        if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
-          let _this = this.$refs.doneDetail;
+          let _this = this.$refs.handle;
           _this.data = res.obj;
+          _this.form.taskId = row.taskId;
+          _this.form.formId = row.formId;
+          _this.dialog = true;
+        }
+      });
+    },
+    doFillin(row) {
+      let _this = this.$refs.fillin;
+      _this.dialog = true;
+      specialRiskFill(row.taskId).then(res => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          _this.data = res.obj;
+          _this.form.id = res.obj.id;
+          if (res.obj.hazardVoList && res.obj.hazardVoList.length > 0) {
+            _this.form.hazardList = res.obj.hazardVoList;
+          }
           _this.dialog = true;
         }
       })
-    },
+    }
   },
 };
 </script>

@@ -88,4 +88,18 @@ export const modifyHiddenDanger = (data) => {
         data
     })
 }
-// 
+
+// cancel 取消任务
+export const cancelHiddenDanger = (taskId, type) => {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/cancel/${taskId}/${type}`,
+        method: 'delete',
+    })
+}
+// delete 取消任务
+export const deleteHiddenDanger = (taskId, type) => {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/delete/${taskId}/${type}`,
+        method: 'delete',
+    })
+}

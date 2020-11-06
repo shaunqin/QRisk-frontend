@@ -54,7 +54,7 @@
           <el-button-group>
             <el-button size="mini" icon="el-icon-edit" @click="edit(scope.row)"></el-button>
             <el-button size="mini" icon="el-icon-delete" @click="subDelete(scope.row.id)"></el-button>
-            <el-button size="mini">取消任务</el-button>
+            <el-button size="mini" @click="subCancel(scope.row)">取消任务</el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { detail } from "@/api/hazards";
+import { detail, cancelHiddenDanger, deleteHiddenDanger } from "@/api/hazards";
 import task from '../task';
 import initData from "@/mixins/initData";
 import hazardsList from '../hazardsList/list'
@@ -90,9 +90,19 @@ export default {
   mounted() {
     this.init();
   },
+  props: ["queryForm"],
+  watch: {
+    queryForm: {
+      deep: true,
+      handler() {
+        this.init();
+      }
+    }
+  },
   methods: {
     beforeInit() {
       this.url = `/riskmgr_mgr/hidden_danger/query/pageList/${this.page}/${this.size}`;
+      this.params = { ...this.queryForm }
       return true;
     },
     add() {
@@ -118,6 +128,30 @@ export default {
       this.taskId = row.id;
       this.type = row.taskType;
       this.$refs.hazardsList.dialog = true;
+    },
+    subCancel(row) {
+      this.$confirm("确认取消任务吗？").then(() => {
+        cancelHiddenDanger(row.id, row.taskType).then(res => {
+          if (res.code != '200') {
+            this.$message.error(res.msg);
+          } else {
+            this.$message.success("取消任务成功！");
+            this.init();
+          }
+        })
+      }).catch(() => { });
+    },
+    subDelete(id) {
+      this.$confirm("确认删除吗？").then(() => {
+        deleteHiddenDanger(row.id, row.taskType).then(res => {
+          if (res.code != '200') {
+            this.$message.error(res.msg);
+          } else {
+            this.$message.success("删除成功！");
+            this.init();
+          }
+        })
+      }).catch(() => { });
     }
   }
 }

@@ -1,44 +1,67 @@
 <template>
   <div class="app-container">
-    <div class="head-container">
-      <el-form :model="form" size="mini" inline>
-        <el-form-item label="编号">
-          <el-input v-model="form.no" placeholder="请输入编号" style="width:120px"></el-input>
-        </el-form-item>
-        <el-form-item label="主题">
-          <el-input v-model="form.title" placeholder="请输入主题" style="width:120px"></el-input>
-        </el-form-item>
-        <el-form-item label="责任单位">
-          <department
-            class="form-dept-tree"
-            :value="form.responsePath"
-            @change="deptChange"
-            style="width:260px"
-          />
-        </el-form-item>
-        <el-form-item label>
-          <el-button type="success" icon="el-icon-search" @click="toQuery">查询</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-    <el-tabs v-model="tabIndex">
-      <el-tab-pane label="已下发" name="1">
-        <tab1 v-if="tabIndex==1" :queryForm="queryForm" />
-      </el-tab-pane>
-      <el-tab-pane label="草稿" name="2">
-        <tab2 v-if="tabIndex==2" :queryForm="queryForm" />
-      </el-tab-pane>
-      <el-tab-pane label="我拟制的" name="3">
-        <tab3 v-if="tabIndex==3" :queryForm="queryForm" />
-      </el-tab-pane>
-      <el-tab-pane label="待办" name="4">
-        <tab4 v-if="tabIndex==4" />
-      </el-tab-pane>
-      <el-tab-pane label="已办" name="5">
-        <tab5 v-if="tabIndex==5" />
-      </el-tab-pane>
-    </el-tabs>
-    <edetail ref="detail"></edetail>
+    <el-scrollbar wrap-class="scrollbar-wrapper">
+      <div class="head-container">
+        <el-form :model="form" size="mini" inline v-if="tabIndex==1||tabIndex==2||tabIndex==3">
+          <el-form-item label="编号">
+            <el-input v-model="form.no" placeholder="请输入编号" style="width:120px"></el-input>
+          </el-form-item>
+          <el-form-item label="主题">
+            <el-input v-model="form.title" placeholder="请输入主题" style="width:120px"></el-input>
+          </el-form-item>
+          <el-form-item label="责任单位">
+            <department
+              class="form-dept-tree"
+              :value="form.responsePath"
+              @change="deptChange"
+              style="width:260px"
+            />
+          </el-form-item>
+          <el-form-item label>
+            <el-button type="success" icon="el-icon-search" @click="toQuery">查询</el-button>
+          </el-form-item>
+        </el-form>
+        <el-form :model="form" size="mini" inline v-if="tabIndex==4||tabIndex==5">
+          <el-form-item label="任务名称">
+            <el-input v-model="form.name" placeholder="请输入任务名称" style="width:120px"></el-input>
+          </el-form-item>
+          <el-form-item label="发起人">
+            <el-input v-model="form.starter" placeholder="请输入发起人" style="width:120px"></el-input>
+          </el-form-item>
+          <el-form-item label="发起时间">
+            <el-date-picker
+              v-model="date"
+              unlink-panels
+              type="daterange"
+              placeholder="请选择发起时间"
+              value-format="yyyy-MM-dd"
+              style="width:260px"
+            ></el-date-picker>
+          </el-form-item>
+          <el-form-item label>
+            <el-button type="success" icon="el-icon-search" @click="toQuery">查询</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+      <el-tabs v-model="tabIndex">
+        <el-tab-pane label="已下发" name="1">
+          <tab1 v-if="tabIndex==1" :queryForm="queryForm" />
+        </el-tab-pane>
+        <el-tab-pane label="草稿" name="2">
+          <tab2 v-if="tabIndex==2" :queryForm="queryForm" />
+        </el-tab-pane>
+        <el-tab-pane label="我拟制的" name="3">
+          <tab3 v-if="tabIndex==3" :queryForm="queryForm" />
+        </el-tab-pane>
+        <el-tab-pane label="待办" name="4">
+          <tab4 v-if="tabIndex==4" :queryForm="queryForm" />
+        </el-tab-pane>
+        <el-tab-pane label="已办" name="5">
+          <tab5 v-if="tabIndex==5" :queryForm="queryForm" />
+        </el-tab-pane>
+      </el-tabs>
+      <edetail ref="detail"></edetail>
+    </el-scrollbar>
   </div>
 </template>
 
@@ -60,8 +83,24 @@ export default {
         no: "", title: "", responsePath: null
       },
       tabIndex: "1",
-      queryForm: {}
+      queryForm: {},
+      date: ""
     };
+  },
+  watch: {
+    date(val) {
+      if (val) {
+        this.form.startTime = val[0];
+        this.form.endTime = val[1];
+      } else {
+        this.form.startTime = "";
+        this.form.endTime = "";
+      }
+    },
+    tabIndex() {
+      this.form = {};
+      this.toQuery();
+    }
   },
   mounted() { },
   methods: {
@@ -99,9 +138,13 @@ export default {
   z-index: 1 !important;
   /deep/ .vue-treeselect__control {
     height: 30px;
-    .vue-treeselect__single-value,.vue-treeselect__placeholder {
+    .vue-treeselect__single-value,
+    .vue-treeselect__placeholder {
       line-height: 30px;
     }
   }
 }
+ /deep/ .scrollbar-wrapper{
+    height: calc(100vh - 60px);
+  }
 </style>

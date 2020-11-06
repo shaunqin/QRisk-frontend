@@ -527,9 +527,10 @@ export default {
       });
     },
     render1_6(res) {
+      let t_data = [];
       res.map((item) => {
         item.data.map((iitem) => {
-          this.data1_6.push({
+          t_data.push({
             risk: item.name,
             sourceOfRiskName: iitem.name,
             product: iitem.name2,
@@ -537,7 +538,7 @@ export default {
           });
         });
       });
-      console.log(this.data1_6)
+      this.data1_6 = t_data;
       this.spanArr = [];
       this.position = 0;
       this.data1_6.forEach((item, index) => {

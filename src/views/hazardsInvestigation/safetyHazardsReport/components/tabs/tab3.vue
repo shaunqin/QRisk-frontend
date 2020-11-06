@@ -50,9 +50,19 @@ export default {
   mounted() {
     this.init();
   },
+  props: ["queryForm"],
+  watch: {
+    queryForm: {
+      deep: true,
+      handler() {
+        this.init();
+      }
+    }
+  },
   methods: {
     beforeInit() {
       this.url = `/riskmgr_mgr/hidden_danger/query/hasDone/${this.page}/${this.size}`;
+      this.params = { ...this.queryForm }
       return true;
     },
     detail(row) {

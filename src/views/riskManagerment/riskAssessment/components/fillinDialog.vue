@@ -8,133 +8,131 @@
     custom-class="big_dialog"
   >
     <el-card header="详细信息">
-      <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
-        <el-row :gutter="16">
-          <el-col :span="12">
-            <el-form-item label="编号">
-              <el-input v-model="form.jj" style="width: 100%;" />
-            </el-form-item>
-          </el-col>
+      <el-form size="small" label-width="80px" class="info" inline>
+        <el-form-item label="编号">{{data.no}}</el-form-item>
+        <el-form-item label="截止日期">{{formatShortDate(data.endTime)}}</el-form-item>
+        <el-form-item label="下发部门">{{data.issueDeptName}}</el-form-item>
+        <el-row class="fill-row">
           <el-col :span="24">
-            <el-form-item label="发起单位">
-              <el-input v-model="form.danwei" style="width: 100%;" />
-            </el-form-item>
-            <el-form-item label="标题" prop="aa">
-              <el-input v-model="form.aa" style="width: 100%;" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="单位/部门">
-              <el-input v-model="form.bb" style="width: 100%;" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="分析人">
-              <el-input v-model="form.cc" style="width: 100%;" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="批准">
-              <el-input v-model="form.dd" style="width: 100%;" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="日期">
-              <el-input v-model="form.ee" style="width: 100%;" />
-            </el-form-item>
+            <el-form-item label="标题">{{data.title}}</el-form-item>
+            <el-form-item label="通知内容">{{data.noteContent}}</el-form-item>
           </el-col>
         </el-row>
       </el-form>
     </el-card>
 
     <el-card style="margin-top:20px">
-      <el-button type="primary" size="mini" @click="addTable" style="margin-bottom:10px">新增一行</el-button>
-      <el-button type="warning" size="mini" style="margin-bottom:10px">上传附件</el-button>
-      <!--表格渲染-->
-      <el-table v-loading="loading" :data="data" size="small" style="width: 100%;" height="50vh">
-        <el-table-column type="index" width="50" />
-        <el-table-column label="编号" width="200">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.ww" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column label="产品" width="200">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.xx" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column label="系统" width="200">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.yy" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column label="发生日期" width="200">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.zz" placeholder></el-input>
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="aa" label="危险源" width="200">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.aa" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="bb" label="问题描述" width="200">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.bb" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="cc" label="ID" width="200">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.cc" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="dd" label="可能性" width="200">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.dd" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="ee" label="严重性" width="200">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.ee" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="ff" label="可能导致的风险" width="200">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.ff" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="gg" label="风险等级" width="200">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.gg" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="hh" label="根原因分析" width="200">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.hh" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="ii" label="控制措施" width="200">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.ii" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="jj" label="责任单位" width="200">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.jj" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="kk" label="控制状态" width="200">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.kk" placeholder></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="ll" label="完成期限" width="200">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.ll" placeholder></el-input>
-          </template>
-        </el-table-column>
-      </el-table>
+      <el-button :disabled="formEnable" type="primary" size="mini" @click="addHazard" style="margin-bottom:10px">新增危险源</el-button>
+      <el-card shadow="never" v-for="(item,index) in form.hazardList" :key="index">
+        <el-form size="mini" inline label-width="70px" :disabled="formEnable">
+          <el-form-item label="系统">
+            <dict-select
+              :value="item.system"
+              type="system"
+              @change="dictChange($event,item,'system')"
+              style="width:130px"
+            />
+          </el-form-item>
+          <el-form-item label="子系统">
+            <dict-select
+              :value="item.subSystem"
+              type="system"
+              @change="dictChange($event,item,'subSystem')"
+              style="width:130px"
+            />
+          </el-form-item>
+          <el-form-item label="可能性">
+            <dict-select
+              :value="item.possibility"
+              type="probability_level"
+              @change="dictChange($event,item,'possibility')"
+              style="width:130px"
+            />
+          </el-form-item>
+          <el-form-item label="严重性">
+            <dict-select
+              :value="item.seriousness"
+              type="severity_level_matrix_graph"
+              @change="dictChange($event,item,'seriousness')"
+            />
+          </el-form-item>
+          <el-form-item label="风险等级">
+            <dict-select
+              :value="item.riskLevel"
+              type="risk_level"
+              @change="dictChange($event,item,'riskLevel')"
+              style="width:130px"
+            />
+          </el-form-item>
+          <el-form-item label="控制措施">
+            <el-input v-model="item.controlMeasure"></el-input>
+          </el-form-item>
+          <el-form-item label="控制状态">
+            <el-input v-model="item.controlState"></el-input>
+          </el-form-item>
+          <el-form-item label="完成期限">
+            <el-date-picker v-model="item.deadline" value-format="yyyy-MM-dd"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="管理流程">
+            <el-input v-model="item.managementProcess"></el-input>
+          </el-form-item>
+          <el-row :gutter="16" class="fill-row">
+            <el-col :span="12">
+              <el-form-item label="问题描述">
+                <el-input v-model="item.hazardSource" type="textarea" rows="3"></el-input>
+              </el-form-item>
+              <el-form-item label="根原因分析">
+                <el-input v-model="item.rootCauseAnalysis" type="textarea" rows="3"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="责任单位">
+                <el-input v-model="item.responsibleUnit"></el-input>
+              </el-form-item>
+              <el-form-item label="可能导致的风险">
+                <el-input v-model="item.possibleRisks" type="textarea" rows="3"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <!-- 风险表格 -->
+        <el-button :disabled="riskEnable" type="info" size="mini" class="at" @click="addRow(item)">新增一行</el-button>
+        <el-table :data="item.specialRiskMeasureList" size="small" max-height="400px">
+          <el-table-column type="index" width="50" />
+          <el-table-column label="控制措施">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.controlMeasure" :disabled="riskEnable"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="责任单位">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.reponsibleDept" :disabled="riskEnable"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="控制状态">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.completion" :disabled="completionEnable">
+                <el-option label="未控制" value="1"></el-option>
+                <el-option label="控制中" value="2"></el-option>
+                <el-option label="关闭" value="3"></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column label="完成期限">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.deadline" :disabled="riskEnable"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column width="80">
+            <template slot-scope="{$index}">
+              <el-button :disabled="riskEnable" type="text" size="mini" icon="el-icon-delete" @click="delCol($index,item)"></el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="center">
+          <el-button :disabled="formEnable" type="danger" icon="el-icon-delete" size="mini" @click="delHazard(index)">删除</el-button>
+        </div>
+      </el-card>
     </el-card>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
@@ -145,129 +143,148 @@
 
 <script>
 import initData from "@/mixins/initData";
-import { add, modify } from "@/api/emplotee.js";
+import { specialRiskSaveHazard } from "@/api/risk";
+import { formatShortDate } from '@/utils/datetime'
+import dictSelect from '@/components/common/dictSelect';
 
 export default {
+  components: { dictSelect },
   mixins: [initData],
   data() {
     return {
       loading: false,
       dialog: false,
       form: {
-        aa: "",
-        bb: "",
-        cc: "",
-        dd: "",
-        ee: ""
+        id: "",
+        hazardList: [{
+          controlMeasure: "", // 控制措施
+          controlState: "", // 控制状态
+          deadline: "", // 完成期限
+          hazardSource: "", // 危险源描述
+          managementProcess: "", // 管理流程
+          possibility: "", // 可能性
+          possibleRisks: "",// 可能导致的风险
+          responsibleUnit: "", // 责任单位
+          riskLevel: "", // 风险等级
+          rootCauseAnalysis: "", // 根原因分析
+          seriousness: "", // 严重性
+          specialRiskMeasureList: [
+            {
+              completion: "",
+              controlMeasure: "",
+              deadline: "",
+              reponsibleDept: ""
+            }],
+          subSystem: "", // 子系统
+          system: "" //系统
+        }]
       },
-      roleSelect: [],
-      formRules: {
-        aa: [{ required: true, message: "请填写名称", trigger: "blur" }],
-        bb: [{ required: true, message: "请填写名称", trigger: "blur" }]
-      },
-      entArr: []
+      data: {}, // 父级赋值
     };
   },
-  props: {},
+  computed: {
+    type() {
+      return this.data.step;
+    },
+    formEnable() {
+      return this.data.step != 1
+    },
+    riskEnable() {
+      return this.data.step == 3
+    },
+    completionEnable() {
+      return this.data.step != 3
+    }
+  },
   created() { },
   methods: {
+    formatShortDate,
     cancel() {
       this.resetForm();
     },
     doSubmit() {
-      this.dialog = false;
-      this.$message({
-        message: "填报成功",
-        type: "success"
-      });
-      this.resetForm();
-    },
-    doAdd() {
-      // this.delwithRoleList()
-      const data = this.roleSelect;
-      let arr = [];
-      for (let i = 0; i < data.length; i++) {
-        let obj = {
-          id: ""
-        };
-        obj.id = data[i];
-        arr.push(obj);
-      }
-      this.form.roleList = arr;
-      add(this.form)
-        .then(res => {
-          if (res.code === "200") {
-            this.$message({
-              message: "添加成功",
-              type: "success"
-            });
-          } else {
-            this.$message.error(res.msg);
-          }
-          this.resetForm();
-          this.loading = false;
+      this.loading = true;
+      specialRiskSaveHazard(this.form).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          this.$message.success("填报成功");
           this.$parent.init();
-        })
-        .catch(err => {
-          this.loading = false;
-        });
-    },
-    doModify() {
-      modify(this.form)
-        .then(res => {
-          if (res.code === "200") {
-            this.$message({
-              message: "修改成功",
-              type: "success"
-            });
-          } else {
-            this.$message.error(res.msg);
-          }
           this.resetForm();
-          this.loading = false;
-          this.$parent.init();
-        })
-        .catch(err => {
-          this.loading = false;
-        });
+        }
+        this.loading = false;
+      })
     },
     resetForm() {
       this.dialog = false;
-      this.data = [];
-    },
-    roleChange(e) {
-      if (e.length <= 1) {
-        this.form.roleList = e[0];
+      this.form = {
+        id: "",
+        hazardList: [{
+          controlMeasure: "",
+          controlState: "",
+          deadline: "",
+          hazardSource: "",
+          managementProcess: "",
+          possibility: "",
+          possibleRisks: "",
+          responsibleUnit: "",
+          riskLevel: "",
+          rootCauseAnalysis: "",
+          seriousness: "",
+          specialRiskMeasureList: [
+            {
+              completion: "",
+              controlMeasure: "",
+              deadline: "",
+              reponsibleDept: ""
+            }],
+          subSystem: "",
+          system: ""
+        }]
       }
-      let arr = [];
-      for (let i = 0; i < e.length; i++) {
-        let obj = {
-          id: ""
-        };
-        obj.id = e[i];
-        arr.push(obj);
-      }
-      this.form.roleList = arr;
+      this.data = {};
     },
-    addTable() {
-      this.data.push({
-        aa: "",
-        bb: "",
-        cc: "",
-        dd: "",
-        ee: "",
-        ff: "",
-        gg: "",
-        hh: "",
-        ii: "",
-        jj: "",
-        kk: "",
-        ll: "",
-        ww: "",
-        xx: "",
-        yy: "",
-        zz: ""
+    addHazard() {
+      this.form.hazardList.push({
+        controlMeasure: "",
+        controlState: "",
+        deadline: "",
+        hazardSource: "",
+        managementProcess: "",
+        possibility: "",
+        possibleRisks: "",
+        responsibleUnit: "",
+        riskLevel: "",
+        rootCauseAnalysis: "",
+        seriousness: "",
+        specialRiskMeasureList: [
+          {
+            completion: "",
+            controlMeasure: "",
+            deadline: "",
+            reponsibleDept: ""
+          }],
+        subSystem: "",
+        system: ""
       });
+    },
+    delHazard(index) {
+      this.form.hazardList.splice(index, 1);
+    },
+    addRow(item) {
+      item.specialRiskMeasureList.push({
+        completion: "",
+        controlMeasure: "",
+        deadline: "",
+        hazardId: "",
+        reponsibleDept: ""
+      })
+    },
+    delCol(index, item) {
+      item.specialRiskMeasureList.splice(index, 1);
+    },
+    dictChange(val, item, key) {
+      item[key] = val;
     }
   }
 };
@@ -275,10 +292,28 @@ export default {
 
 
 <style lang="scss" scoped>
-.roleSelect {
-  width: 370px;
+.info {
+  /deep/ .el-form-item__content {
+    min-width: 200px;
+  }
 }
-.el-select-dropdown {
-  z-index: 99999999999999 !important;
+.fill-row {
+  /deep/ .el-form-item {
+    display: flex;
+    .el-form-item__content {
+      flex: 1;
+    }
+  }
+}
+
+.el-card + .el-card {
+  margin-top: 20px;
+}
+.center {
+  margin-top: 8px;
+  text-align: center;
+}
+.at {
+  margin-bottom: 8px;
 }
 </style>

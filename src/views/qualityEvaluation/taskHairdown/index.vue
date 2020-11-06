@@ -73,6 +73,7 @@ export default {
   methods: {
     beforeInit() {
       this.url = `/task_mgr/query/yearTask/pageList/${this.page}/${this.size}`;
+      this.params = { type: 2 };
       return true;
     },
     toQuery(name) {

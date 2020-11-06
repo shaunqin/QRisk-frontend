@@ -122,3 +122,66 @@ export function validatePWD(password) {
     })
 }
 // =========  风险提示 end ==============
+
+// ======== 专项风险 =======
+// 添加通知
+export function specialRiskAdd(data) {
+    return request({
+        url: `/risk_mgr/special_risk_notice_mgr/add`,
+        method: 'post',
+        data
+    })
+}
+// 详情
+export function specialRiskDetail(id) {
+    return request({
+        url: `/risk_mgr/special_risk_notice_mgr/query/detail/${id}`,
+        method: 'get',
+    })
+}
+// 修改
+export function specialRiskModify(data) {
+    return request({
+        url: `/risk_mgr/special_risk_notice_mgr/modify`,
+        method: 'put',
+        data
+    })
+}
+// 删除
+export function specialRiskDelete(id) {
+    return request({
+        url: `/risk_mgr/special_risk_notice_mgr/delete/${id}`,
+        method: 'delete'
+    })
+}
+// 提交
+export function specialRiskSubmit(id) {
+    return request({
+        url: `/risk_mgr/special_risk_notice_mgr/submit/${id}`,
+        method: 'get'
+    })
+}
+// 填报
+export function specialRiskFill(taskId) {
+    return request({
+        url: `/risk_mgr/special_risk_notice_mgr/fill/${taskId}`,
+        method: 'get'
+    })
+}
+// 填报危险源清单并生成风险评价报告
+export function specialRiskSaveHazard(data) {
+    return request({
+        url: `/risk_mgr/special_risk_notice_mgr/saveHazard`,
+        method: 'post',
+        data
+    })
+}
+// 处理待办
+export function specialRiskComplete(data) {
+    return request({
+        url: `/risk_mgr/special_risk_notice_mgr/complete`,
+        method: 'post',
+        data
+    })
+}
+// ======== 专项风险 end =======

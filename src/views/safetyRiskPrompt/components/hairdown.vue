@@ -62,18 +62,20 @@ export default {
     return {
       dialog: false,
       loading: false,
-      hairdownForm: {
-        content: this.data.deptMeasure ? this.data.deptMeasure.content : "",
-        pathAndDeadLines: [
-          {
-            deadline: this.data.deptMeasure ? this.data.deptMeasure.deadline : "",
-            deptPath: null
-          }
-        ],
-        taskId: this.form.taskId,
-        id: this.data.deptMeasure ? this.data.deptMeasure.id : "",
-      },
-      measureId: this.data.deptMeasure ? this.data.deptMeasure.id : "",
+      hairdownForm: {},
+      // hairdownForm: {
+      //   content: this.data.deptMeasure ? this.data.deptMeasure.content : "",
+      //   pathAndDeadLines: [
+      //     {
+      //       deadline: this.data.deptMeasure ? this.data.deptMeasure.deadline : "",
+      //       deptPath: null
+      //     }
+      //   ],
+      //   taskId: this.form.taskId,
+      //   id: this.data.deptMeasure ? this.data.deptMeasure.id : "",
+      // },
+      // measureId: this.data.deptMeasure ? this.data.deptMeasure.id : "",
+      measureId: ""
     }
   },
   props: {
@@ -85,6 +87,25 @@ export default {
       type: Object,
       default: () => { },
     },
+  },
+  watch: {
+    data: {
+      deep: true,
+      handler() {
+        this.hairdownForm = {
+          content: this.data.deptMeasure ? this.data.deptMeasure.content : "",
+          pathAndDeadLines: [
+            {
+              deadline: this.data.deptMeasure ? this.data.deptMeasure.deadline : "",
+              deptPath: null
+            }
+          ],
+          taskId: this.form.taskId,
+          id: this.data.deptMeasure ? this.data.deptMeasure.id : "",
+        };
+        this.measureId = this.data.deptMeasure ? this.data.deptMeasure.id : "";
+      }
+    }
   },
   methods: {
     cancel() {

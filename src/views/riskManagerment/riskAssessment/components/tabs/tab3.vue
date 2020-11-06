@@ -9,22 +9,12 @@
       style="width: 100%;"
       @selection-change="selectionChange"
     >
-      <el-table-column prop="businessName" label="流程名称">
-        <template slot-scope="{row}">
-          <el-tag type="success">{{row.businessName}}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column prop="name" label="任务名称">
-        <template slot-scope="{row}">
-          <el-tag type="warning">{{row.name}}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column prop="createBy" label="发起人" />
-      <el-table-column prop="createTime" label="发起时间" />
-      <el-table-column label width="100">
-        <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="detail(row)">查看详情</el-button>
-        </template>
+      <el-table-column prop="no" label="编号" width="120" />
+      <el-table-column prop="title" label="标题" min-width="150" show-overflow-tooltip />
+      <el-table-column prop="noteContent" label="通知内容" min-width="150" show-overflow-tooltip />
+      <el-table-column prop="issueDept" label="下发部门" />
+      <el-table-column label="拟制人">
+        <template slot-scope="{row}">{{row.issueName}}[{{row.staffno}}]</template>
       </el-table-column>
     </el-table>
     <!--分页组件-->
@@ -36,18 +26,21 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-    <doneDetail ref="doneDetail" />
+    <!-- <edetail ref="detail" /> -->
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
-import { format } from "@/utils/datetime";
-import { riskNoticeDoneDetail } from '@/api/risk';
-import doneDetail from './doneDetail'
+// import edetail from "./detail";
+import { riskNoticeSubDetail } from "@/api/risk";
 export default {
-  components: { doneDetail },
+  // components: { edetail },
   mixins: [initData],
+  data() {
+    return {
+    };
+  },
   mounted() {
     this.init();
   },
@@ -62,7 +55,7 @@ export default {
   },
   methods: {
     beforeInit() {
-      this.url = `/riskmgr_mgr/safety_risk_notice_mgr/query/hasDone/${this.page}/${this.size}`;
+      this.url = `/risk_mgr/special_risk_notice_mgr/query/myIssued/${this.page}/${this.size}`;
       this.params = { ...this.queryForm };
       return true;
     },
@@ -72,16 +65,19 @@ export default {
       this.$emit("selectionChange", { selections: selections });
     },
     detail(row) {
-      riskNoticeDoneDetail(row.taskId, row.formId).then(res => {
-        if (res.code != '200') {
+      riskNoticeSubDetail(row.id).then(res => {
+        if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
-          let _this = this.$refs.doneDetail;
-          _this.data = res.obj;
+          let _this = this.$refs.detail;
+          _this.form = res.obj;
           _this.dialog = true;
         }
       })
     },
+    pdfUrl(row) {
+      return `${process.env.VUE_APP_BASE_API}${row.pdfUrl}`
+    }
   },
 };
 </script>
