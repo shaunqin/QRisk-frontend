@@ -9,7 +9,7 @@
       style="width: 100%;"
       @selection-change="selectionChange"
     >
-      <el-table-column prop="no" label="编号" width="110" />
+      <el-table-column prop="no" label="编号" width="130" />
       <el-table-column label="主题" min-width="150" show-overflow-tooltip>
         <template slot-scope="{row}">
           <el-button type="text" @click="detail(row)">{{row.title}}</el-button>

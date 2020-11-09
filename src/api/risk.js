@@ -83,6 +83,22 @@ export function riskNoticeSubmit(id, params) {
         params
     })
 }
+// 保存并提交风险提示 
+export function riskNoticeSaveandSubmit(data) {
+    return request({
+        url: `/riskmgr_mgr/safety_risk_notice_mgr/saveAndSubmit`,
+        method: 'post',
+        data
+    })
+}
+// 更新并提交风险提示 
+export function riskNoticeUpdateandSubmit(data) {
+    return request({
+        url: `/riskmgr_mgr/safety_risk_notice_mgr/updateAndSubmit`,
+        method: 'post',
+        data
+    })
+}
 // 根据task显示不同的内容
 export function riskNoticeQueryTask(taskId, formId) {
     return request({
@@ -119,6 +135,13 @@ export function validatePWD(password) {
         url: `/riskmgr_mgr/safety_risk_notice_mgr/validatePWD`,
         method: 'post',
         data: { password }
+    })
+}
+// 待办数量
+export function queryTodoCount() {
+    return request({
+        url: `/riskmgr_mgr/safety_risk_notice_mgr/query/queryTodoCount`,
+        method: 'get',
     })
 }
 // =========  风险提示 end ==============
@@ -185,3 +208,11 @@ export function specialRiskComplete(data) {
     })
 }
 // ======== 专项风险 end =======
+
+// 风险提示编号
+export function getRiskNoticeNo() {
+    return request({
+        url: `/riskmgr_mgr/safety_risk_notice_mgr/getNextNo`,
+        method: 'get',
+    })
+}

@@ -103,3 +103,11 @@ export const deleteHiddenDanger = (taskId, type) => {
         method: 'delete',
     })
 }
+
+// 待办数量
+export function queryTodoCount() {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/query/queryTodoCount`,
+        method: 'get',
+    })
+}

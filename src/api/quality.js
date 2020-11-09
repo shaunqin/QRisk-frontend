@@ -57,3 +57,11 @@ export function queryReportData(params) {
         params
     })
 }
+
+// 查询年度任务详情
+export function queryYearTaskDetail(id) {
+    return request({
+        url: `/task_mgr/query/yearTask/detail/${id}`,
+        method: 'get',
+    })
+}

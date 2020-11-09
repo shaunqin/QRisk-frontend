@@ -32,7 +32,7 @@
       <el-table-column prop="taskNo" label="编号" />
       <el-table-column prop="taskName" label="名称" />
       <el-table-column prop="year" label="年度" />
-      <el-table-column prop="productValue" label="产品" />
+      <el-table-column prop="productName" label="产品" />
       <el-table-column label="操作" width="130px" align="center" fixed="right">
         <template slot-scope="scope">
           <el-button-group>
@@ -57,6 +57,7 @@
 <script>
 import initData from "@/mixins/initData";
 import eform from "./form";
+import { queryYearTaskDetail } from '@/api/quality'
 export default {
   components: { eform },
   mixins: [initData],
@@ -90,8 +91,15 @@ export default {
     edit(row) {
       this.isAdd = false;
       let _this = this.$refs.form;
-      _this.form = Object.assign({}, row);
-      _this.dialog = true;
+      queryYearTaskDetail(row.yearTaskId).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          _this.form = res.obj;
+          _this.dialog = true;
+        }
+      })
+
     },
     subDelete(id) {
       this.$confirm("确定删除嘛？")

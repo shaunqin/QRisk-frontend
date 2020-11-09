@@ -53,7 +53,10 @@
         <el-tab-pane label="我拟制的" name="3">
           <tab3 v-if="tabIndex==3" :queryForm="queryForm" />
         </el-tab-pane>
-        <el-tab-pane label="待办" name="4">
+        <el-tab-pane name="4">
+          <el-badge slot="label" :value="count" class="item" :hidden="!count">
+            <span>待办</span>
+          </el-badge>
           <tab4 v-if="tabIndex==4" :queryForm="queryForm" />
         </el-tab-pane>
         <el-tab-pane label="已办" name="5">
@@ -73,6 +76,7 @@ import tab3 from "./components/tab3";
 import tab4 from "./components/tab4";
 import tab5 from "./components/tab5";
 import department from '@/components/Department'
+import { queryTodoCount } from '@/api/risk'
 export default {
   components: { edetail, tab1, tab2, tab3, tab4, tab5, department },
   data() {
@@ -84,7 +88,8 @@ export default {
       },
       tabIndex: "1",
       queryForm: {},
-      date: ""
+      date: "",
+      count: 0
     };
   },
   watch: {
@@ -102,7 +107,15 @@ export default {
       this.toQuery();
     }
   },
-  mounted() { },
+  created() {
+    queryTodoCount().then(res => {
+      if (res.code != '200') {
+        this.$message.error(res.msg);
+      } else {
+        this.count = res.obj;
+      }
+    })
+  },
   methods: {
     toQuery() {
       this.queryForm = Object.assign({}, this.form);
@@ -144,7 +157,10 @@ export default {
     }
   }
 }
- /deep/ .scrollbar-wrapper{
-    height: calc(100vh - 60px);
-  }
+/deep/ .scrollbar-wrapper {
+  height: calc(100vh - 60px);
+}
+/deep/ .el-badge__content.is-fixed {
+  top: 10px;
+}
 </style>

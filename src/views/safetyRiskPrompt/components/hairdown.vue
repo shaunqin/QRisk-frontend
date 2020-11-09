@@ -15,9 +15,10 @@
           <el-form-item label="责任单位">
             <department
               style="width:100%"
-              :value="item.deptPath"
+              :value="!item.deptPath?[]:item.deptPath.split(',')"
               :measureId="measureId"
               @change="deptChange($event,item)"
+              :multiple="true"
             />
           </el-form-item>
         </el-col>
@@ -107,6 +108,20 @@ export default {
       }
     }
   },
+  created() {
+    this.hairdownForm = {
+      content: this.data.deptMeasure ? this.data.deptMeasure.content : "",
+      pathAndDeadLines: [
+        {
+          deadline: this.data.deptMeasure ? this.data.deptMeasure.deadline : "",
+          deptPath: null
+        }
+      ],
+      taskId: this.form.taskId,
+      id: this.data.deptMeasure ? this.data.deptMeasure.id : "",
+    };
+    this.measureId = this.data.deptMeasure ? this.data.deptMeasure.id : "";
+  },
   methods: {
     cancel() {
       this.resetForm();
@@ -135,13 +150,12 @@ export default {
           this.$message.success("下发成功");
           this.resetForm();
           // 刷新父页面
-          debugger
           this.$parent.$parent.$parent.subHandle(this.form);
         }
       })
     },
     deptChange(val, item) {
-      item.deptPath = val;
+      item.deptPath = val.join(",");
     },
     addRow() {
       this.hairdownForm.pathAndDeadLines.push({

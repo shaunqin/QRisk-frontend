@@ -17,7 +17,6 @@
     filterable
     style="width:100%"
     clearable
-    collapse-tags
   >
     <el-option
       v-for="item in options"

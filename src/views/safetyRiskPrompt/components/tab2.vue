@@ -19,7 +19,7 @@
         size="mini"
         type="success"
         icon="el-icon-upload"
-        @click="submit"
+        @click="handleEmp"
         :disabled="selections.length!=1"
       >提交</el-button>
     </div>
@@ -33,7 +33,7 @@
       @selection-change="selectionChange"
     >
       <el-table-column type="selection" width="45" />
-      <el-table-column prop="no" label="编号" width="110" />
+      <el-table-column prop="no" label="编号" width="130" />
       <el-table-column prop="title" label="主题" min-width="150" show-overflow-tooltip />
       <el-table-column prop="background" label="背景" min-width="150" show-overflow-tooltip />
       <el-table-column prop="existingRisk" label="安全风险" min-width="150" show-overflow-tooltip />
@@ -52,19 +52,21 @@
       @current-change="pageChange"
     />
     <eform ref="form" :isAdd="isAdd" />
+    <selectEmplotee ref="selectEmplotee" @on-submit="doSubmit" />
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
 import eform from "./form";
+import selectEmplotee from './selectEmplotee'
 import {
   riskNoticeDetail,
   riskNoticeDelete,
   riskNoticeSubmit,
 } from "@/api/risk";
 export default {
-  components: { eform },
+  components: { eform, selectEmplotee },
   data() {
     return {
       selections: [],
@@ -130,9 +132,13 @@ export default {
         })
         .catch(() => { });
     },
-    submit() {
+    handleEmp() {
+      let _this = this.$refs.selectEmplotee;
+      _this.dialog = true;
+    },
+    doSubmit(sqlUserId) {
       let id = this.selections[0];
-      riskNoticeSubmit(id).then((res) => {
+      riskNoticeSubmit(id, { sqlUserId }).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {

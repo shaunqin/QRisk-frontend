@@ -13,8 +13,7 @@
       style="width: 100%;"
       @selection-change="selectionChange"
     >
-      <el-table-column type="selection" width="45" />
-      <el-table-column prop="no" label="编号" width="110" />
+      <el-table-column prop="no" label="编号" width="130" />
       <el-table-column label="主题" min-width="150" show-overflow-tooltip>
         <template slot-scope="{row}">
           <el-button type="text" @click="detail(row)">{{row.title}}</el-button>
@@ -50,7 +49,7 @@ import initData from "@/mixins/initData";
 import { format } from "@/utils/datetime";
 import eform from "./form";
 import edetail from "./detail";
-import { riskNoticeDetail } from "@/api/risk";
+import { riskNoticeDetail, getRiskNoticeNo } from "@/api/risk";
 export default {
   components: { eform, edetail },
   mixins: [initData],
@@ -83,7 +82,16 @@ export default {
     },
     add() {
       this.isAdd = true;
-      this.$refs.form.dialog = true;
+      getRiskNoticeNo().then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          let _this = this.$refs.form;
+          _this.form.no = res.obj;
+          _this.dialog = true;
+        }
+      })
+
     },
     detail(row) {
       riskNoticeDetail(row.id).then((res) => {

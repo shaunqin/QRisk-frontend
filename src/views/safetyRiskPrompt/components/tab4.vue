@@ -71,7 +71,7 @@ export default {
           this.$message.error(res.msg);
         } else {
           let _this = this.$refs.handle;
-          _this.data = res.obj;
+          _this.data = { ...res.obj, measures: res.obj.measuresVos };
           _this.form.taskId = row.taskId;
           _this.form.formId = row.formId;
           if (res.obj.step != 4) {

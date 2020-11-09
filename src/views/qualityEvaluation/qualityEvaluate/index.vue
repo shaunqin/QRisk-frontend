@@ -99,7 +99,8 @@ export default {
       },
       prodList: [],
       loading: false,
-      data: []
+      data: [],
+      columns: {}
     };
   },
   computed: {

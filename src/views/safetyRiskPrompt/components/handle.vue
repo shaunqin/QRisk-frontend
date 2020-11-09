@@ -18,7 +18,12 @@
       <el-button v-if="step==1||step==4" :loading="loading" type="primary" @click="doSubmit">确认</el-button>
       <el-button v-if="step==2" :loading="loading" type="primary" @click="doSave">保存</el-button>
       <el-button v-if="step==2" :loading="loading" type="success" @click="doSubmit">提交</el-button>
-      <el-button v-if="(step==3||step==5)&&!hiddenFill" :loading="loading" type="primary" @click="doSubmit">上报</el-button>
+      <el-button
+        v-if="(step==3||step==5)&&!hiddenFill"
+        :loading="loading"
+        type="primary"
+        @click="doSubmit"
+      >上报</el-button>
       <el-button
         v-if="step==3||step==5"
         :loading="loading"
@@ -59,7 +64,7 @@ export default {
     step() {
       return this.data.step;
     },
-    hiddenFill(){
+    hiddenFill() {
       return this.data.hiddenFill;
     }
   },
@@ -129,7 +134,6 @@ export default {
       this.dialog = false;
     },
     formChange(form) {
-      debugger
       console.log(form);
       this.form = form;
     },
@@ -143,7 +147,7 @@ export default {
         return;
       }
       this.loading = true;
-      riskNoticeComplete(this.form).then((res) => {
+      riskNoticeComplete({ ...this.form, safetyRiskNotice: this.data }).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
@@ -189,7 +193,7 @@ export default {
     },
     doHairdown() {
       this.$refs.hairdown.dialog = true;
-    }
+    },
   },
 };
 </script>

@@ -11,7 +11,7 @@
       <el-row :gutter="16">
         <el-col :span="8">
           <el-form-item label="编号" prop="no">
-            <el-input v-model="form.no" style="width: 100%;" />
+            <el-input v-model="form.no" style="width: 100%;" disabled />
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -19,10 +19,10 @@
             <el-input v-model="form.title" style="width: 100%;" />
           </el-form-item>
           <el-form-item label="背景" prop="background">
-            <el-input v-model="form.background" style="width: 100%;" type="textarea" rows="3" />
+            <el-input v-model="form.background" style="width: 100%;" type="textarea" rows="6" />
           </el-form-item>
           <el-form-item label="存在的安全风险" prop="existingRisk">
-            <el-input v-model="form.existingRisk" style="width: 100%;" type="textarea" rows="3" />
+            <el-input v-model="form.existingRisk" style="width: 100%;" type="textarea" rows="6" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -51,7 +51,13 @@
             ></el-date-picker>
           </el-col>
           <el-col :span="11">
-            <el-input v-model="item.content" style="width: 100%;" placeholder="措施内容" />
+            <el-input
+              v-model="item.content"
+              style="width: 100%;"
+              placeholder="措施内容"
+              type="textarea"
+              rows="3"
+            />
           </el-col>
           <el-col :span="2">
             <el-button type="text" icon="el-icon-delete" size="mini" @click="delRisk(index)"></el-button>
@@ -79,7 +85,7 @@
 </template>
 
 <script>
-import { riskNoticeAdd, riskNoticeModify, riskNoticeSubmit } from "@/api/risk";
+import { riskNoticeAdd, riskNoticeModify, riskNoticeSaveandSubmit, riskNoticeUpdateandSubmit } from "@/api/risk";
 import department from "@/components/Department/deptByRole";
 import { format } from "@/utils/datetime";
 import selectEmplotee from './selectEmplotee'
@@ -112,7 +118,6 @@ export default {
           },
         ],
       },
-      id: "",
     };
   },
   props: {
@@ -131,10 +136,9 @@ export default {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           this.save_loading = true;
-          if (this.isAdd && this.id == "") {
+          if (this.isAdd) {
             riskNoticeAdd(this.form).then((res) => {
               if (res.code === "200") {
-                this.id = res.obj;
                 this.form.id = res.obj;
                 this.$message.success("添加成功");
                 this.save_loading = false;
@@ -160,20 +164,32 @@ export default {
       });
     },
     handleEmp() {
-      if (this.id == "") {
-        this.$message.error("请先保存!");
-        return;
-      }
       let _this = this.$refs.selectEmplotee;
       _this.dialog = true;
     },
     doSubmit(sqlUserId) {
-      if (this.id == "") {
-        this.$message.error("请先保存!");
-        return;
+      if (this.isAdd) {
+        this.saveAndSubmit(sqlUserId);
+      } else {
+        this.updateAndSubmit(sqlUserId);
       }
+    },
+    saveAndSubmit(sqlUserId) {
       this.loading = true;
-      riskNoticeSubmit(this.id, { sqlUserId }).then((res) => {
+      riskNoticeSaveandSubmit({ ...this.form, sqlUserId }).then((res) => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          this.$message.success("提交成功");
+          this.resetForm();
+          this.$parent.init();
+        }
+        this.loading = false;
+      });
+    },
+    updateAndSubmit(sqlUserId) {
+      this.loading = true;
+      riskNoticeUpdateandSubmit({ ...this.form, sqlUserId }).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {

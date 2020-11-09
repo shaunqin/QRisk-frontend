@@ -57,7 +57,10 @@
       <el-tab-pane label="已下发" name="1">
         <tab1 v-if="tabIndex==1" :queryForm="queryForm" />
       </el-tab-pane>
-      <el-tab-pane label="待办" name="2">
+      <el-tab-pane name="2">
+        <el-badge slot="label" :value="count" class="item" :hidden="!count">
+          <span>待办</span>
+        </el-badge>
         <tab2 v-if="tabIndex==2" :queryForm="queryForm" />
       </el-tab-pane>
       <el-tab-pane label="已办" name="3">
@@ -71,6 +74,7 @@
 import tab1 from './components/tabs/tab1'
 import tab2 from './components/tabs/tab2'
 import tab3 from './components/tabs/tab3'
+import { queryTodoCount } from '@/api/hazards'
 export default {
   components: { tab1, tab2, tab3 },
   data() {
@@ -80,10 +84,18 @@ export default {
       tabIndex: '1',
       form: {},
       queryForm: {},
-      date: ""
+      date: "",
+      count: 0
     };
   },
-  mounted() {
+  created() {
+    queryTodoCount().then(res => {
+      if (res.code != '200') {
+        this.$message.error(res.msg);
+      } else {
+        this.count = res.obj;
+      }
+    })
   },
   watch: {
     tabIndex() {
@@ -112,4 +124,8 @@ export default {
 // .head-container {
 //   margin-bottom: 10px;
 // }
+
+/deep/ .el-badge__content.is-fixed {
+  top: 10px;
+}
 </style>
