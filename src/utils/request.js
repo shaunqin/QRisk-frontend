@@ -6,8 +6,8 @@ import { Message } from 'element-ui'
 // create an axios instance
 const service = axios.create({
   // baseURL: `http://192.168.98.2:8999`,
-  baseURL: `http://192.168.98.175:8999`,
-  // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  // baseURL: `http://192.168.98.175:8999`,
+  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 600000 // request timeout
 })
