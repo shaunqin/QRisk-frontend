@@ -74,10 +74,11 @@ const actions = {
     return new Promise((resolve, reject) => {
       findCurrentUser().then(response => {
         if (response.code === '200') {
+          let roles = ['admin', ...response.obj.roleList];
           const data = {
-            roles: ['admin']
+            roles: roles
           }
-          commit('SET_ROLES', ['admin'])
+          commit('SET_ROLES', roles)
           commit('SET_USERINFO', response.obj)
           resolve(data)
         } else {

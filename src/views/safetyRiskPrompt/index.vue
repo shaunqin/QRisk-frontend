@@ -44,13 +44,13 @@
         </el-form>
       </div>
       <el-tabs v-model="tabIndex">
-        <el-tab-pane label="已下发" name="1">
+        <el-tab-pane label="已下发" name="1" v-if="!onlyLeader">
           <tab1 v-if="tabIndex==1" :queryForm="queryForm" />
         </el-tab-pane>
-        <el-tab-pane label="草稿" name="2">
+        <el-tab-pane label="草稿" name="2" v-if="!onlyLeader">
           <tab2 v-if="tabIndex==2" :queryForm="queryForm" />
         </el-tab-pane>
-        <el-tab-pane label="我拟制的" name="3">
+        <el-tab-pane label="我拟制的" name="3" v-if="!onlyLeader">
           <tab3 v-if="tabIndex==3" :queryForm="queryForm" />
         </el-tab-pane>
         <el-tab-pane name="4">
@@ -77,6 +77,7 @@ import tab4 from "./components/tab4";
 import tab5 from "./components/tab5";
 import department from '@/components/Department'
 import { queryTodoCount } from '@/api/risk'
+import { mapGetters } from 'vuex'
 export default {
   components: { edetail, tab1, tab2, tab3, tab4, tab5, department },
   data() {
@@ -91,6 +92,18 @@ export default {
       date: "",
       count: 0
     };
+  },
+  computed: {
+    ...mapGetters(["roles"]),
+    onlyLeader() {
+      if (this.roles.length == 2 && this.roles.includes('RISK_MANAGER_LEADER')) {
+        this.tabIndex = "4";
+        return true;
+      } else {
+        this.tabIndex = "1";
+        return false;
+      }
+    }
   },
   watch: {
     date(val) {

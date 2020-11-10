@@ -2,7 +2,14 @@
   <div>
     <eform ref="form" :is-add="isAdd"></eform>
     <div class="head-container">
-      <el-button class="filter-item" size="mini" type="success" icon="el-icon-plus" @click="add">新建</el-button>
+      <el-button
+        v-if="roles.includes('RISK_MANAGER')"
+        class="filter-item"
+        size="mini"
+        type="success"
+        icon="el-icon-plus"
+        @click="add"
+      >新建</el-button>
     </div>
     <!--表格渲染-->
     <el-table
@@ -50,6 +57,7 @@ import { format } from "@/utils/datetime";
 import eform from "./form";
 import edetail from "./detail";
 import { riskNoticeDetail, getRiskNoticeNo } from "@/api/risk";
+import { mapGetters } from 'vuex'
 export default {
   components: { eform, edetail },
   mixins: [initData],
@@ -66,7 +74,10 @@ export default {
       }
     }
   },
-  mounted() {
+  computed: {
+    ...mapGetters(["roles"])
+  },
+  created() {
     this.init();
   },
   methods: {

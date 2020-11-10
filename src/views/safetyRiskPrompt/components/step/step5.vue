@@ -18,7 +18,7 @@
         <span style="white-space: pre-wrap;">{{data.background}}</span>
       </el-form-item>
       <el-form-item label="风险防范">
-        <el-table :data="[data.deptMeasure]" size="mini">
+        <el-table :data="[data.deptMeasure]" size="mini" key="deptMeasure">
           <el-table-column label="截止日期" prop="deadline" width="100" />
           <el-table-column label="措施内容" prop="content" width="200" show-overflow-tooltip />
           <el-table-column label="落实情况" min-width="200">
@@ -50,7 +50,14 @@
         </el-table>
       </el-form-item>
       <el-form-item label="领导批复">
-        <leaderApprvalRecord :data="data.deptMeasure.measureComment" type="safety_measures" />
+        <leaderApprvalRecord
+          key="leaderrecord"
+          :data="data.deptMeasure.measureComment"
+          type="safety_measures"
+        />
+      </el-form-item>
+      <el-form-item label="已下发措施" v-if="data.childMeasures!=null" key="childMeasures">
+        <childMeasures :data="data.childMeasures" />
       </el-form-item>
     </el-form>
     <el-dialog
@@ -81,8 +88,9 @@ import upload from "../upload";
 import { format } from "@/utils/datetime";
 import department from "@/components/Department/deptByRole";
 import leaderApprvalRecord from '../leaderApprvalRecord'
+import childMeasures from '../childMeasures'
 export default {
-  components: { upload, department, leaderApprvalRecord },
+  components: { upload, department, leaderApprvalRecord, childMeasures },
   data() {
     return {
       dialog: false,

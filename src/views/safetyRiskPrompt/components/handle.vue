@@ -178,19 +178,18 @@ export default {
       });
     },
     submitStep3() {
-      debugger
       this.form.processFlag = "4";
-      // this.loading = true;
-      // riskNoticeComplete(this.form).then((res) => {
-      //   if (res.code != "200") {
-      //     this.$message.error(res.msg);
-      //   } else {
-      //     this.$message.success("操作成功");
-      //     this.resetForm();
-      //     this.$parent.init();
-      //   }
-      //   this.loading = false;
-      // });
+      this.loading = true;
+      riskNoticeComplete(this.form).then((res) => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          this.$message.success("操作成功");
+          this.resetForm();
+          this.$parent.init();
+        }
+        this.loading = false;
+      });
     },
     doHairdown() {
       this.$refs.hairdown.dialog = true;

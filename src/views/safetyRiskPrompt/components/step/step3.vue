@@ -49,7 +49,7 @@
           <el-table-column label="下发部门" prop="deptName" width="110" show-overflow-tooltip />
           <el-table-column label="措施内容" prop="content" />
           <el-table-column label="落实情况" prop="implementStatus" />
-          <el-table-column label="上报人" width="110">
+          <el-table-column label="上报人" width="120">
             <template
               slot-scope="{row}"
               v-if="row.filler!=null"
@@ -116,7 +116,8 @@ export default {
   components: { upload, leaderRecord },
   data() {
     return {
-      accessory: {}
+      accessory: {},
+      summary: ""
     };
   },
   props: {
@@ -130,20 +131,21 @@ export default {
     },
   },
   computed: {
-    // _form: {
-    //   get() {
-    //     return this.form;
-    //   },
-    //   set(val) {
-    //     console.log(val)
-    //     this.$emit("change", val);
-    //   },
-    // },
     deptMeasure() {
       return [{ ...this.data.deptMeasure }]
     }
   },
-  mounted() { },
+  watch: {
+    data: {
+      deep: true,
+      handler(val) {
+        this.form.comment = val.summary;
+      }
+    }
+  },
+  created() {
+    this.form.comment = this.data.summary;
+  },
   methods: {
     success(res, row) {
       console.log(res);
