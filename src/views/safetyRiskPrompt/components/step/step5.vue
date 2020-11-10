@@ -19,11 +19,11 @@
       </el-form-item>
       <el-form-item label="风险防范">
         <el-table :data="[data.deptMeasure]" size="mini">
-          <el-table-column label="截止日期" prop="deadline" />
-          <el-table-column label="措施内容" prop="content" />
-          <el-table-column label="落实情况" width="200">
+          <el-table-column label="截止日期" prop="deadline" width="100" />
+          <el-table-column label="措施内容" prop="content" width="200" show-overflow-tooltip />
+          <el-table-column label="落实情况" min-width="200">
             <template>
-              <el-input v-model="_form.comment" placeholder="请输入落实情况"></el-input>
+              <el-input v-model="_form.comment" placeholder="请输入落实情况" type="textarea" rows="3"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="附件" width="100">
@@ -31,7 +31,7 @@
               <upload :id="row.id" @success="success($event,row)" />
             </template>
           </el-table-column>
-          <el-table-column label="预览" min-width="120">
+          <el-table-column label="预览" width="150">
             <template slot-scope="{row}">
               <el-link
                 type="primary"
@@ -50,21 +50,7 @@
         </el-table>
       </el-form-item>
       <el-form-item label="领导批复">
-        <el-table :data="data.deptMeasure.measureComment">
-          <el-table-column label="内容" prop="remark" />
-          <el-table-column label="批复人">
-            <template slot-scope="{row}">{{row.name}}[{{row.sqlUserId}}]</template>
-          </el-table-column>
-          <el-table-column label="批复时间">
-            <template slot-scope="{row}">{{format(row.createTime)}}</template>
-          </el-table-column>
-          <el-table-column label="批复结果">
-            <template slot-scope="{row}">
-              <span v-if="row.processFlag=='1'">同意</span>
-              <span v-else>驳回</span>
-            </template>
-          </el-table-column>
-        </el-table>
+        <leaderApprvalRecord :data="data.deptMeasure.measureComment" type="safety_measures" />
       </el-form-item>
     </el-form>
     <el-dialog
@@ -94,8 +80,9 @@
 import upload from "../upload";
 import { format } from "@/utils/datetime";
 import department from "@/components/Department/deptByRole";
+import leaderApprvalRecord from '../leaderApprvalRecord'
 export default {
-  components: { upload, department },
+  components: { upload, department, leaderApprvalRecord },
   data() {
     return {
       dialog: false,

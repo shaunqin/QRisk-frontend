@@ -90,21 +90,7 @@
         </el-row>
       </el-form-item>
       <el-form-item label="审批记录">
-        <el-table :data="data.noticeComments" size="mini">
-          <el-table-column label="内容" prop="remark" />
-          <el-table-column label="处理人">
-            <template slot-scope="{row}">{{row.name}}[{{row.sqlUserId}}]</template>
-          </el-table-column>
-          <el-table-column label="处理日期">
-            <template slot-scope="{row}">{{format(row.createTime)}}</template>
-          </el-table-column>
-          <el-table-column label="处理结果">
-            <template slot-scope="{row}">
-              <span v-if="row.processFlag=='1'">同意</span>
-              <span v-else>驳回</span>
-            </template>
-          </el-table-column>
-        </el-table>
+        <leaderApprvalRecord :data="data.noticeComments" type="safety_risk_notice" />
       </el-form-item>
     </el-form>
   </div>
@@ -114,8 +100,9 @@
 import { riskNoticeAdd, riskNoticeModify, riskNoticeSubmit } from "@/api/risk";
 import department from "@/components/Department/deptByRole";
 import { format } from "@/utils/datetime";
+import leaderApprvalRecord from '../leaderApprvalRecord'
 export default {
-  components: { department },
+  components: { department, leaderApprvalRecord },
   data() {
     return {
       loading: false,
@@ -200,14 +187,14 @@ export default {
     },
     formChangeStatus() {
       this.formChange = true;
-    },
+    }
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.measures{
-  /deep/ .el-form-item__content{
+.measures {
+  /deep/ .el-form-item__content {
     padding: 0 4px;
   }
 }

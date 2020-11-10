@@ -19,11 +19,16 @@
       </el-form-item>
       <el-form-item label="风险防范">
         <el-table :data="[data.deptMeasure]" size="mini">
-          <el-table-column label="截止日期" prop="deadline" />
-          <el-table-column label="措施内容" prop="content" />
+          <el-table-column label="截止日期" prop="deadline" width="100" />
+          <el-table-column label="措施内容" prop="content" width="200" show-overflow-tooltip />
           <el-table-column label="落实情况" min-width="200">
             <template slot-scope="{row}" v-if="row">
-              <el-input v-model="_form.implementStatus" placeholder></el-input>
+              <el-input
+                v-model="_form.implementStatus"
+                placeholder="请输入落实情况"
+                type="textarea"
+                rows="3"
+              ></el-input>
             </template>
           </el-table-column>
           <el-table-column label="经办人" prop="implementStatus">
@@ -34,7 +39,7 @@
               <upload :id="row.id" @success="success($event,row)" />
             </template>
           </el-table-column>
-          <el-table-column label="预览附件" min-width="120">
+          <el-table-column label="预览附件" width="150">
             <template slot-scope="{row}">
               <el-link
                 type="primary"

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form ref="form" :model="_form" size="small" label-width="auto">
+    <el-form ref="form" size="small" label-width="auto">
       <el-row :gutter="16">
         <el-col :span="12">
           <el-form-item label="编号">{{data.no}}</el-form-item>
@@ -19,11 +19,11 @@
       </el-form-item>
       <el-form-item label="风险防范">
         <el-table :data="deptMeasure" size="mini">
-          <el-table-column label="截止日期" prop="deadline" />
-          <el-table-column label="措施内容" prop="content" />
-          <el-table-column label="落实情况" width="200">
+          <el-table-column label="截止日期" prop="deadline" width="100" />
+          <el-table-column label="措施内容" prop="content" width="200" show-overflow-tooltip />
+          <el-table-column label="落实情况" min-width="200">
             <template slot-scope="{row}" v-show="!!row">
-              <el-input v-model="_form.comment" placeholder="请输入落实情况"></el-input>
+              <el-input v-model="form.comment" placeholder="请输入落实情况" type="textarea" rows="3"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="附件" width="100">
@@ -31,7 +31,7 @@
               <upload :id="row.id" @success="success($event,row)" />
             </template>
           </el-table-column>
-          <el-table-column label="预览" min-width="120">
+          <el-table-column label="预览" width="150">
             <template slot-scope="{row}" v-if="row">
               <el-link
                 type="primary"
@@ -45,17 +45,17 @@
       </el-form-item>
       <el-form-item label="已下发措施" v-if="data.childMeasures!=null">
         <el-table :data="data.childMeasures" size="mini">
-          <el-table-column label="截止日期" prop="deadline" />
-          <el-table-column label="下发部门" prop="deptName" />
+          <el-table-column label="截止日期" prop="deadline" width="100" />
+          <el-table-column label="下发部门" prop="deptName" width="110" show-overflow-tooltip />
           <el-table-column label="措施内容" prop="content" />
-          <el-table-column label="落实情况" prop="implementStatus" width="120" show-overflow-tooltip />
-          <el-table-column label="上报人">
+          <el-table-column label="落实情况" prop="implementStatus" />
+          <el-table-column label="上报人" width="110">
             <template
               slot-scope="{row}"
               v-if="row.filler!=null"
             >{{`${row.fillerName}[${row.filler}]`}}</template>
           </el-table-column>
-          <el-table-column label="附件预览" width="120" show-overflow-tooltip>
+          <el-table-column label="附件预览" width="120">
             <template slot-scope="{row}">
               <el-link
                 type="primary"
@@ -74,11 +74,11 @@
               <span v-if="row.status==4">驳回</span>
             </template>
           </el-table-column>
-          <el-table-column label="办理人">
+          <el-table-column label="办理人" width="80">
             <template slot-scope="{row}">
               <div v-if="row.reviewerInfo==null">-</div>
               <el-popover v-else placement="left" width="1000">
-                <el-button type="text" slot="reference">详情</el-button>
+                <el-button type="text" size="mini" slot="reference">详情</el-button>
                 <el-table :data="row.reviewerInfo">
                   <el-table-column label="任务名称" prop="taskName"></el-table-column>
                   <el-table-column label="分配人" width="135">
@@ -94,6 +94,15 @@
               </el-popover>
             </template>
           </el-table-column>
+          <el-table-column label="审批记录" width="100">
+            <template slot-scope="{row}">
+              <div v-if="row.measureComment==null">-</div>
+              <el-popover v-else placement="left" width="1000">
+                <el-button type="text" size="mini" slot="reference">详情</el-button>
+                <leaderRecord :data="row.measureComment" type="safety_measures" />
+              </el-popover>
+            </template>
+          </el-table-column>
         </el-table>
       </el-form-item>
     </el-form>
@@ -102,8 +111,9 @@
 
 <script>
 import upload from "../upload";
+import leaderRecord from '../leaderApprvalRecord'
 export default {
-  components: { upload },
+  components: { upload, leaderRecord },
   data() {
     return {
       accessory: {}
@@ -120,15 +130,15 @@ export default {
     },
   },
   computed: {
-    _form: {
-      get() {
-        return this.form;
-      },
-      set(val) {
-        console.log(val)
-        this.$emit("change", val);
-      },
-    },
+    // _form: {
+    //   get() {
+    //     return this.form;
+    //   },
+    //   set(val) {
+    //     console.log(val)
+    //     this.$emit("change", val);
+    //   },
+    // },
     deptMeasure() {
       return [{ ...this.data.deptMeasure }]
     }

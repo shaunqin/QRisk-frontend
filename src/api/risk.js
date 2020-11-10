@@ -144,6 +144,14 @@ export function queryTodoCount() {
         method: 'get',
     })
 }
+// 历史版本详情
+export function getOriginFormByCommentId(params) {
+    return request({
+        url: `/riskmgr_mgr/safety_risk_notice_mgr/getOriginFormByCommentId`,
+        method: 'get',
+        params
+    })
+}
 // =========  风险提示 end ==============
 
 // ======== 专项风险 =======
