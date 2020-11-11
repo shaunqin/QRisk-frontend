@@ -67,15 +67,13 @@
           <el-table-column label width="120">
             <template slot-scope="{row}">{{renderTbCol(row)}}</template>
           </el-table-column>
-          <el-table-column label="国航机队">
-            <el-table-column label="全月定检出厂飞机第一个航班不正常数量之和" prop="dividend0" />
-            <el-table-column label="全月出厂飞机总计划工时" prop="divisor0" />
-            <el-table-column label="定检出厂首班机械原因不正常万时率‱" prop="result0" />
-          </el-table-column>
-          <el-table-column label="客户机队">
-            <el-table-column label="全月定检出厂飞机第一个航班不正常数量之和" prop="dividend1" />
-            <el-table-column label="全月出厂飞机总计划工时" prop="divisor1" />
-            <el-table-column label="定检出厂首班机械原因不正常万时率‱" prop="result1" />
+          <el-table-column v-for="(column,index) in columns" :key="index" :label="column.name">
+            <el-table-column
+              v-for="(item,iindex) in column.children"
+              :key="iindex"
+              :label="item.name"
+              :prop="item.prop"
+            />
           </el-table-column>
         </el-table>
       </el-col>
@@ -86,7 +84,7 @@
 <script>
 import department from '@/components/Department';
 import { queryDictByName } from '@/api/dict'
-import { queryIndexList } from '@/api/quality'
+import { queryIndexList, queryDefaultValue } from '@/api/quality'
 export default {
   components: { department },
   data() {
@@ -100,7 +98,21 @@ export default {
       prodList: [],
       loading: false,
       data: [],
-      columns: {}
+      columns: [
+        {
+          "name": "国航机队",
+          "children": [
+            { "name": "出厂检发现问题数量", "prop": "dividend0" },
+            { "name": "全月出厂飞机总计划工时", "prop": "divisor0" },
+            { "name": "出厂检发现问题万时率", "prop": "result0" }]
+        },
+        {
+          "name": "客户机队",
+          "children": [
+            { "name": "出厂检发现问题数量", "prop": "dividend1" },
+            { "name": "全月出厂飞机总计划工时", "prop": "divisor1" },
+            { "name": "出厂检发现问题万时率", "prop": "result1" }]
+        }]
     };
   },
   computed: {
@@ -116,16 +128,32 @@ export default {
   },
   methods: {
     toQuery(name) {
-      console.log(this.queryForm)
-      this.loading = true;
-      queryIndexList(this.queryForm).then(res => {
-        this.loading = false;
+      let obj = {
+        setObjectName: `quality_product_index_${this.queryForm.productValue}_${this.queryForm.indexValue}_title_cn`,
+        type: 2
+      };
+      queryDefaultValue(obj).then(res => {
         if (res.code != '200') {
-          this.$message.error(res.msg);
+          this.$message.error("未配置参数");
+          return false;
         } else {
-          this.data = res.obj;
+          this.columns = res.obj;
+          return true;
+        }
+      }).then(data => {
+        if (data) {
+          this.loading = true;
+          queryIndexList(this.queryForm).then(res => {
+            this.loading = false;
+            if (res.code != '200') {
+              this.$message.error(res.msg);
+            } else {
+              this.data = res.obj;
+            }
+          })
         }
       })
+
     },
     loadData() {
       queryDictByName("quality_product_index").then(res => {

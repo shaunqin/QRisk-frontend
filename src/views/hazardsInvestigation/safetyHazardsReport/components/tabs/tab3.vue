@@ -18,6 +18,7 @@
           <el-tag type="warning">{{row.name}}</el-tag>
         </template>
       </el-table-column>
+      <el-table-column prop="businessTitle" label="任务标题" />
       <el-table-column prop="createBy" label="发起人" />
       <el-table-column prop="createTime" label="发起时间" />
       <el-table-column label="操作" width="110">
