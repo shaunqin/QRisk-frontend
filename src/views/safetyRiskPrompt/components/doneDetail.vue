@@ -33,13 +33,12 @@
         <el-table :data="deptMeasure" size="mini">
           <el-table-column label="截止日期" prop="deadline" />
           <el-table-column label="措施内容" prop="content" />
-          <el-table-column
-            label="落实情况"
-            prop="implementStatus"
-            min-width="200"
-            show-overflow-tooltip
-          />
-          <el-table-column label="经办人" prop="implementStatus">
+          <el-table-column label="落实情况" min-width="200" align="left">
+            <template slot-scope="{row}">
+              <span style="white-space: break-spaces;" v-html="row.implementStatus"></span>
+            </template>
+          </el-table-column>
+          <el-table-column label="经办人">
             <template slot-scope="{row}">{{row.fillerName}}[{{row.filler}}]</template>
           </el-table-column>
 
@@ -76,91 +75,17 @@
         </el-table>
       </el-form-item>
       <el-form-item label="已下发措施" v-if="childMeasures.length>0">
-        <el-table :data="childMeasures" key="1" size="mini">
-          <el-table-column label="截止日期" prop="deadline" />
-          <el-table-column label="下发部门" prop="deptName" min-width="120" />
-          <el-table-column label="措施内容" prop="content" />
-          <el-table-column label="落实情况" prop="implementStatus" width="120" show-overflow-tooltip />
-          <el-table-column label="上报人">
-            <template
-              slot-scope="{row}"
-              v-if="row.filler!=null"
-            >{{`${row.fillerName}[${row.filler}]`}}</template>
-          </el-table-column>
-          <el-table-column label="附件预览" min-width="120">
-            <template slot-scope="{row}">
-              <el-link
-                type="primary"
-                v-if="row.accessory!=null"
-                :href="getUrl(row.accessory.filePath)"
-                target="_blank"
-              >{{row.accessory.originFileName}}</el-link>
-            </template>
-          </el-table-column>
-          <el-table-column label="状态" width="100">
-            <template slot-scope="{row}">
-              <span v-if="row.status==0">待填</span>
-              <span v-if="row.status==1">待填</span>
-              <span v-if="row.status==2">待审核</span>
-              <span v-if="row.status==3">通过</span>
-              <span v-if="row.status==4">驳回</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="办理人" width="80">
-            <template slot-scope="{row}">
-              <div v-if="row.reviewerInfo==null">-</div>
-              <el-popover v-else placement="left" width="1000">
-                <el-button type="text" slot="reference">详情</el-button>
-                <el-table :data="row.reviewerInfo">
-                  <el-table-column label="任务名称" prop="taskName"></el-table-column>
-                  <el-table-column label="分配人" width="135">
-                    <template slot-scope="{row}">{{row.name||"-"}}</template>
-                  </el-table-column>
-                  <el-table-column label="角色">
-                    <template slot-scope="{row}">{{row.groupName||"-"}}</template>
-                  </el-table-column>
-                  <el-table-column label="候选人">
-                    <template slot-scope="{row}">{{row.users||"-"}}</template>
-                  </el-table-column>
-                </el-table>
-              </el-popover>
-            </template>
-          </el-table-column>
-        </el-table>
+        <childMeasures :data="childMeasures" key="childMeasures" />
       </el-form-item>
       <el-form-item label="处理记录" v-if="measureComment.length>0">
-        <el-table :data="measureComment" key="2" size="mini">
-          <el-table-column label="处理时间">
-            <template slot-scope="{row}">{{format(row.createTime)}}</template>
-          </el-table-column>
-          <el-table-column label="经办人">
-            <template slot-scope="{row}">{{row.name}}[{{row.sqlUserId}}]</template>
-          </el-table-column>
-          <el-table-column label="备注" prop="remark"></el-table-column>
-          <el-table-column label="处理结果">
-            <template slot-scope="{row}">
-              <span v-if="row.processFlag==1">同意</span>
-              <span v-if="row.processFlag==2">驳回</span>
-            </template>
-          </el-table-column>
-        </el-table>
+        <leaderApprvalRecord key="measureComment" :data="measureComment" type="safety_measures" />
       </el-form-item>
       <el-form-item label="处理记录" v-if="noticeComments.length>0">
-        <el-table :data="noticeComments" key="3" size="mini">
-          <el-table-column label="处理时间">
-            <template slot-scope="{row}">{{format(row.createTime)}}</template>
-          </el-table-column>
-          <el-table-column label="经办人">
-            <template slot-scope="{row}">{{row.name}}[{{row.sqlUserId}}]</template>
-          </el-table-column>
-          <el-table-column label="备注" prop="remark"></el-table-column>
-          <el-table-column label="处理结果">
-            <template slot-scope="{row}">
-              <span v-if="row.processFlag==1">同意</span>
-              <span v-if="row.processFlag==2">驳回</span>
-            </template>
-          </el-table-column>
-        </el-table>
+        <leaderApprvalRecord
+          key="leaderApprvalRecord"
+          :data="noticeComments"
+          type="safety_risk_notice"
+        />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -172,7 +97,10 @@
 
 <script>
 import { format } from '@/utils/datetime'
+import childMeasures from './childMeasures'
+import leaderApprvalRecord from './leaderApprvalRecord'
 export default {
+  components: { childMeasures, leaderApprvalRecord },
   data() {
     return {
       dialog: false,

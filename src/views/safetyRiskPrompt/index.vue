@@ -121,13 +121,7 @@ export default {
     }
   },
   created() {
-    queryTodoCount().then(res => {
-      if (res.code != '200') {
-        this.$message.error(res.msg);
-      } else {
-        this.count = res.obj;
-      }
-    })
+    this.loadCount();
   },
   methods: {
     toQuery() {
@@ -140,6 +134,15 @@ export default {
     },
     deptChange(val) {
       this.form.responsePath = val;
+    },
+    loadCount() {
+      queryTodoCount().then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          this.count = res.obj;
+        }
+      })
     }
   },
 };

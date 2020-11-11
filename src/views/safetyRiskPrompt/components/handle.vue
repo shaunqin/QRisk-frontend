@@ -154,6 +154,7 @@ export default {
           this.$message.success("操作成功");
           this.resetForm();
           this.$parent.init();
+          this.loadCount();
         }
         this.loading = false;
       });
@@ -173,6 +174,7 @@ export default {
           this.$message.success("操作成功");
           this.resetForm();
           this.$parent.init();
+          this.loadCount();
         }
         this.loading = false;
       });
@@ -187,6 +189,7 @@ export default {
           this.$message.success("操作成功");
           this.resetForm();
           this.$parent.init();
+          this.loadCount();
         }
         this.loading = false;
       });
@@ -194,6 +197,9 @@ export default {
     doHairdown() {
       this.$refs.hairdown.dialog = true;
     },
+    loadCount() {
+      this.$parent.$parent.$parent.$parent.$parent.loadCount();
+    }
   },
 };
 </script>
