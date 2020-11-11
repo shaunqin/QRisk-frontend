@@ -54,7 +54,7 @@
       </el-form>
     </div>
     <el-tabs v-model="tabIndex">
-      <el-tab-pane label="已下发" name="1">
+      <el-tab-pane label="已下发" name="1" v-if="!onlyLeader">
         <tab1 v-if="tabIndex==1" :queryForm="queryForm" />
       </el-tab-pane>
       <el-tab-pane name="2">
@@ -75,6 +75,7 @@ import tab1 from './components/tabs/tab1'
 import tab2 from './components/tabs/tab2'
 import tab3 from './components/tabs/tab3'
 import { queryTodoCount } from '@/api/hazards'
+import { mapGetters } from 'vuex'
 export default {
   components: { tab1, tab2, tab3 },
   data() {
@@ -89,13 +90,19 @@ export default {
     };
   },
   created() {
-    queryTodoCount().then(res => {
-      if (res.code != '200') {
-        this.$message.error(res.msg);
+    this.loadCount();
+  },
+  computed: {
+    ...mapGetters(["roles"]),
+    onlyLeader() {
+      if (this.roles.length == 2 && this.roles.includes('RISK_MANAGER_LEADER')) {
+        this.tabIndex = "2";
+        return true;
       } else {
-        this.count = res.obj;
+        this.tabIndex = "1";
+        return false;
       }
-    })
+    }
   },
   watch: {
     tabIndex() {
@@ -115,6 +122,15 @@ export default {
   methods: {
     toQuery() {
       this.queryForm = Object.assign({}, this.form);
+    },
+    loadCount() {
+      queryTodoCount().then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          this.count = res.obj;
+        }
+      })
     }
   },
 };

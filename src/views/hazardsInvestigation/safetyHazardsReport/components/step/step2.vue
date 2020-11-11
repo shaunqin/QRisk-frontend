@@ -91,7 +91,7 @@ export default {
   data() {
     return {
       baseApi: process.env.VUE_APP_BASE_API,
-      disabled: true,
+      disabled: false,
     }
   },
   props: {

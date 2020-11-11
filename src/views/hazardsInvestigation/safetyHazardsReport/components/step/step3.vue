@@ -82,28 +82,19 @@
             </el-popover>
           </template>
         </el-table-column>
+        <el-table-column label="审批记录" width="80">
+          <template slot-scope="{row}">
+            <div v-if="row.comments==null">-</div>
+            <el-popover v-else placement="left" width="1000">
+              <el-button type="text" slot="reference">详情</el-button>
+              <approvalRecord :data="row.comments" />
+            </el-popover>
+          </template>
+        </el-table-column>
       </el-table>
     </el-card>
     <el-card header="审批记录" key="comments" v-if="comments.length>0">
-      <el-table :data="comments" size="mini">
-        <el-table-column label="审批人">
-          <template slot-scope="{row}">
-            <span>{{row.name}}[{{row.sqlUserId}}]</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="审批日期">
-          <template slot-scope="{row}">
-            <span>{{format(row.createTime)}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="备注" prop="remark" />
-        <el-table-column label="结果">
-          <template slot-scope="{row}">
-            <span v-if="row.processFlag==1">同意</span>
-            <span v-if="row.processFlag==2">驳回</span>
-          </template>
-        </el-table-column>
-      </el-table>
+      <approvalRecord :data="comments" />
     </el-card>
     <fillinForm ref="fillinForm" :data="data" />
     <list2copy ref="list2copy" />
@@ -115,8 +106,9 @@ import { formatShortDate, format } from '@/utils/datetime'
 import fillinForm from '../fillinForm'
 import { queryControlListDetail } from '@/api/hazards'
 import list2copy from '../list2copy'
+import approvalRecord from '../approvalRecord'
 export default {
-  components: { fillinForm, list2copy },
+  components: { fillinForm, list2copy, approvalRecord },
   data() {
     return {
       baseApi: process.env.VUE_APP_BASE_API

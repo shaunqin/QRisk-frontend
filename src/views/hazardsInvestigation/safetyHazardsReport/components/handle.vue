@@ -92,7 +92,10 @@ export default {
         this.$message.error("请输入驳回备注！");
         return;
       }
-      console.log(this.form);
+      // 获取领导修改的填报数据
+      if (this.$refs.step2) {
+        this.form.hiddenDangerList = this.$refs.step2.$refs.fillinForm.fillinData;
+      }
       this.loading = true;
       hazardsComplete(this.form).then((res) => {
         if (res.code != "200") {
@@ -101,6 +104,7 @@ export default {
           this.$message.success("操作成功");
           this.resetForm();
           this.$parent.init();
+          this.loadCount();
         }
         this.loading = false;
       });
@@ -128,8 +132,12 @@ export default {
           this.resetForm(); // 关闭主弹窗
           _this.resetForm();  // 关闭子弹窗
           this.$parent.init();
+          this.loadCount();
         }
       })
+    },
+    loadCount() {
+      this.$parent.$parent.$parent.$parent.loadCount();
     }
   },
 };

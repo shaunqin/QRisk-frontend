@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--表格渲染-->
-    <el-table :data="data" size="small" style="width: 100%" max-height="400px">
+    <el-table v-loading="loading" :data="data" size="small" style="width: 100%" max-height="400px">
       <el-table-column prop="hiddenName" label="隐患名称" width="120px" show-overflow-tooltip />
       <el-table-column prop="no" label="编号" width="150px" show-overflow-tooltip />
       <el-table-column label="发现时间" width="100px">

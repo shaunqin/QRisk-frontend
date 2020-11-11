@@ -111,3 +111,12 @@ export function queryTodoCount() {
         method: 'get',
     })
 }
+
+// 原始表单详情
+export function getOriginFormByCommentId(params) {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/getOriginFormByCommentId`,
+        method: 'get',
+        params
+    })
+}

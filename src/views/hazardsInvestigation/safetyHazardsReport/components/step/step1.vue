@@ -62,7 +62,7 @@
             <el-button type="info" size="mini" @click="showList(row)">查看</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="办理人">
+        <el-table-column label="办理人" width="80">
           <template slot-scope="{row}">
             <div v-if="row.reviewerInfo==null">-</div>
             <el-popover v-else placement="left" width="1000">
@@ -82,6 +82,15 @@
             </el-popover>
           </template>
         </el-table-column>
+        <el-table-column label="审批记录" width="80">
+          <template slot-scope="{row}">
+            <div v-if="row.comments==null">-</div>
+            <el-popover v-else placement="left" width="1000">
+              <el-button type="text" slot="reference">详情</el-button>
+              <approvalRecord :data="row.comments" />
+            </el-popover>
+          </template>
+        </el-table-column>
       </el-table>
     </el-card>
     <fillinForm ref="fillinForm" :data="data" />
@@ -94,8 +103,9 @@ import { formatShortDate } from '@/utils/datetime'
 import fillinForm from '../fillinForm'
 import { queryControlListDetail } from '@/api/hazards'
 import list2copy from '../list2copy'
+import approvalRecord from '../approvalRecord'
 export default {
-  components: { fillinForm, list2copy },
+  components: { fillinForm, list2copy, approvalRecord },
   data() {
     return {
       baseApi: process.env.VUE_APP_BASE_API
