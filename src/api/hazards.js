@@ -120,3 +120,12 @@ export function getOriginFormByCommentId(params) {
         params
     })
 }
+
+// 导出
+export function exportList(type, params) {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/export/myControlList/${type}`,
+        method: 'get',
+        params
+    })
+}

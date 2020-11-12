@@ -120,6 +120,13 @@
       />
     </el-card>
     <el-card header="我填报的">
+      <el-button
+        class="mb"
+        size="mini"
+        type="primary"
+        icon="el-icon-download"
+        @click="doExport(1)"
+      >导出</el-button>
       <mine ref="mine" :taskId="taskId" :type="type" @edit="edit" />
     </el-card>
     <div slot="footer" class="dialog-footer">
@@ -131,7 +138,7 @@
 
 <script>
 import initData from '@/mixins/initData'
-import { copyHiddenDanger } from "@/api/hazards";
+import { copyHiddenDanger, exportList } from "@/api/hazards";
 import eform from "./form";
 import { formatShortDate } from '@/utils/datetime'
 import mine from './mine'
@@ -186,6 +193,24 @@ export default {
       let _this = this.$refs.form;
       _this.form = row;
       _this.dialog = true;
+    },
+    doExport(listType) {
+      let params = {};
+      if (listType == 1) {
+        params = { taskId: this.taskId, type: this.type };
+      } else {
+        params = { ...this.params, taskId: this.taskId, type: this.type };
+      }
+      this.$loading();
+      exportList(listType, params).then(res => {
+        this.$loading().close();
+        if (res.code != '200') {
+          this.$message.error(res.obj);
+        } else {
+          let url = `${process.env.VUE_APP_BASE_API}${res.obj}`;
+          location.href = url;
+        }
+      })
     }
   },
 };
@@ -206,5 +231,8 @@ export default {
 }
 .el-card + .el-card {
   margin-top: 20px;
+}
+.mb {
+  margin-bottom: 8px;
 }
 </style>

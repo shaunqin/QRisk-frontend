@@ -64,6 +64,7 @@
       <el-form-item label>
         <el-button type="primary" icon="el-icon-search" @click="toQuery">搜索</el-button>
         <el-button type="primary" icon="el-icon-refresh" @click="reset">重置</el-button>
+        <el-button type="primary" icon="el-icon-download" @click="doExport">导出</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -118,6 +119,11 @@ export default {
         supervisoryUnit: ""
       };
       this.toQuery();
+    },
+    doExport(){
+      let _this = this.$parent.$parent.$parent;
+      _this.params = { ...this.form };
+      _this.doExport(2);
     }
   },
 }
