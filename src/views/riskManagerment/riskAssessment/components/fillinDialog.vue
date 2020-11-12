@@ -22,7 +22,13 @@
     </el-card>
 
     <el-card style="margin-top:20px">
-      <el-button :disabled="formEnable" type="primary" size="mini" @click="addHazard" style="margin-bottom:10px">新增危险源</el-button>
+      <el-button
+        :disabled="formEnable"
+        type="primary"
+        size="mini"
+        @click="addHazard"
+        style="margin-bottom:10px"
+      >新增危险源</el-button>
       <el-card shadow="never" v-for="(item,index) in form.hazardList" :key="index">
         <el-form size="mini" inline label-width="70px" :disabled="formEnable">
           <el-form-item label="系统">
@@ -64,15 +70,6 @@
               style="width:130px"
             />
           </el-form-item>
-          <el-form-item label="控制措施">
-            <el-input v-model="item.controlMeasure"></el-input>
-          </el-form-item>
-          <el-form-item label="控制状态">
-            <el-input v-model="item.controlState"></el-input>
-          </el-form-item>
-          <el-form-item label="完成期限">
-            <el-date-picker v-model="item.deadline" value-format="yyyy-MM-dd"></el-date-picker>
-          </el-form-item>
           <el-form-item label="管理流程">
             <el-input v-model="item.managementProcess"></el-input>
           </el-form-item>
@@ -86,9 +83,6 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="责任单位">
-                <el-input v-model="item.responsibleUnit"></el-input>
-              </el-form-item>
               <el-form-item label="可能导致的风险">
                 <el-input v-model="item.possibleRisks" type="textarea" rows="3"></el-input>
               </el-form-item>
@@ -96,7 +90,13 @@
           </el-row>
         </el-form>
         <!-- 风险表格 -->
-        <el-button :disabled="riskEnable" type="info" size="mini" class="at" @click="addRow(item)">新增一行</el-button>
+        <el-button
+          :disabled="riskEnable"
+          type="info"
+          size="mini"
+          class="at"
+          @click="addRow(item)"
+        >新增一行</el-button>
         <el-table :data="item.specialRiskMeasureList" size="small" max-height="400px">
           <el-table-column type="index" width="50" />
           <el-table-column label="控制措施">
@@ -106,7 +106,11 @@
           </el-table-column>
           <el-table-column label="责任单位">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.reponsibleDept" :disabled="riskEnable"></el-input>
+              <department
+                :value="scope.row.reponsibleDept"
+                @change="deptChange($event,scope.row)"
+                :disabled="riskEnable"
+              />
             </template>
           </el-table-column>
           <el-table-column label="控制状态">
@@ -120,17 +124,34 @@
           </el-table-column>
           <el-table-column label="完成期限">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.deadline" :disabled="riskEnable"></el-input>
+              <el-date-picker
+                v-model="scope.row.deadline"
+                value-format="yyyy-MM-dd"
+                :disabled="riskEnable"
+                style="max-width:100%"
+              ></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column width="80">
             <template slot-scope="{$index}">
-              <el-button :disabled="riskEnable" type="text" size="mini" icon="el-icon-delete" @click="delCol($index,item)"></el-button>
+              <el-button
+                :disabled="riskEnable"
+                type="text"
+                size="mini"
+                icon="el-icon-delete"
+                @click="delCol($index,item)"
+              ></el-button>
             </template>
           </el-table-column>
         </el-table>
         <div class="center">
-          <el-button :disabled="formEnable" type="danger" icon="el-icon-delete" size="mini" @click="delHazard(index)">删除</el-button>
+          <el-button
+            :disabled="formEnable"
+            type="danger"
+            icon="el-icon-delete"
+            size="mini"
+            @click="delHazard(index)"
+          >删除</el-button>
         </div>
       </el-card>
     </el-card>
@@ -146,9 +167,10 @@ import initData from "@/mixins/initData";
 import { specialRiskSaveHazard } from "@/api/risk";
 import { formatShortDate } from '@/utils/datetime'
 import dictSelect from '@/components/common/dictSelect';
+import department from '@/components/Department'
 
 export default {
-  components: { dictSelect },
+  components: { dictSelect, department },
   mixins: [initData],
   data() {
     return {
@@ -157,14 +179,10 @@ export default {
       form: {
         id: "",
         hazardList: [{
-          controlMeasure: "", // 控制措施
-          controlState: "", // 控制状态
-          deadline: "", // 完成期限
           hazardSource: "", // 危险源描述
           managementProcess: "", // 管理流程
           possibility: "", // 可能性
           possibleRisks: "",// 可能导致的风险
-          responsibleUnit: "", // 责任单位
           riskLevel: "", // 风险等级
           rootCauseAnalysis: "", // 根原因分析
           seriousness: "", // 严重性
@@ -173,7 +191,7 @@ export default {
               completion: "",
               controlMeasure: "",
               deadline: "",
-              reponsibleDept: ""
+              reponsibleDept: null
             }],
           subSystem: "", // 子系统
           system: "" //系统
@@ -220,14 +238,10 @@ export default {
       this.form = {
         id: "",
         hazardList: [{
-          controlMeasure: "",
-          controlState: "",
-          deadline: "",
           hazardSource: "",
           managementProcess: "",
           possibility: "",
           possibleRisks: "",
-          responsibleUnit: "",
           riskLevel: "",
           rootCauseAnalysis: "",
           seriousness: "",
@@ -236,7 +250,7 @@ export default {
               completion: "",
               controlMeasure: "",
               deadline: "",
-              reponsibleDept: ""
+              reponsibleDept: null
             }],
           subSystem: "",
           system: ""
@@ -246,14 +260,10 @@ export default {
     },
     addHazard() {
       this.form.hazardList.push({
-        controlMeasure: "",
-        controlState: "",
-        deadline: "",
         hazardSource: "",
         managementProcess: "",
         possibility: "",
         possibleRisks: "",
-        responsibleUnit: "",
         riskLevel: "",
         rootCauseAnalysis: "",
         seriousness: "",
@@ -262,7 +272,7 @@ export default {
             completion: "",
             controlMeasure: "",
             deadline: "",
-            reponsibleDept: ""
+            reponsibleDept: null
           }],
         subSystem: "",
         system: ""
@@ -276,8 +286,7 @@ export default {
         completion: "",
         controlMeasure: "",
         deadline: "",
-        hazardId: "",
-        reponsibleDept: ""
+        reponsibleDept: null
       })
     },
     delCol(index, item) {
@@ -285,6 +294,9 @@ export default {
     },
     dictChange(val, item, key) {
       item[key] = val;
+    },
+    deptChange(val, row) {
+      row.reponsibleDept = val;
     }
   }
 };

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="head-container">
-      <el-button size="mini" type="success" icon="el-icon-plus" @click="add">新建通知</el-button>
+      <el-button size="mini" type="success" icon="el-icon-plus" :disabled="!assessmentType" @click="add">新建通知</el-button>
       <el-button
         size="mini"
         type="success"

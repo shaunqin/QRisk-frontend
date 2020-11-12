@@ -31,3 +31,12 @@ export const queryIncentiveList = () => {
     method: 'get'
   })
 }
+
+// 风险等级标准
+export const queryRiskLevelStandard = (params) => {
+  return request({
+    url: `/info_mgr/risk_value_standard_mgr/query/all`,
+    method: 'get',
+    params
+  })
+}

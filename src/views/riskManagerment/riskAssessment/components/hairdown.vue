@@ -4,24 +4,19 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
-    :title="type"
+    title="下发"
   >
-    <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
-      <el-row :gutter="16">
-        <el-col :span="24">
-          <el-form-item label="标题">
-            <el-input v-model="form.aa" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="日期" prop="bb">
-            <el-input v-model="form.bb" style="width: 100%;" />
-          </el-form-item>
-          <el-form-item label="选择部门">
-            <el-select v-model="bumen" placeholder="选择部门">
-              <el-option :label="'选择部门'" :value="'选择部门'"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
+    <el-form ref="form" :model="form" size="small">
+      <el-form-item label="选择部门" label-width="80px">
+        <department
+          :value="form.pathAndDeadLines"
+          :multiple="true"
+          @change="deptChange"
+          style="width:100%"
+          :measureId="measureId"
+          url="/risk_mgr/special_risk_notice_mgr/query/depts"
+        />
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
@@ -31,165 +26,58 @@
 </template>
 
 <script>
-import { add, modify } from "@/api/emplotee.js";
+import { specialRiskComplete } from "@/api/risk";
+import department from '@/components/Department/deptByRole'
 
 export default {
+  components: { department },
   data() {
     return {
       loading: false,
       dialog: false,
-      form: {
-        aa: "",
-        bb: "",
-        cc: "",
-        dd: "",
-        ee: ""
-      },
-      roleSelect: [],
-      formRules: {
-        aa: [{ required: true, message: "请填写名称", trigger: "blur" }],
-        bb: [{ required: true, message: "请填写名称", trigger: "blur" }]
-      },
-      entArr: [],
-      dataString: "",
-      bumen: ""
+      measureId: ""
     };
   },
-  props: {
-    type: {
-      type: String,
-      required: ""
+  props: ["data", "form"],
+  created() {
+    this.measureId = this.data.id;
+  },
+  watch: {
+    data: {
+      deep: true,
+      handler(newData) {
+        this.measureId = newData.id;
+      }
     }
   },
-  created() {},
   methods: {
     cancel() {
       this.resetForm();
     },
     doSubmit() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          // this.loading = true;
-          // if (this.isAdd) {
-          //   this.doAdd()
-          // } else this.doModify()
-
-          this.dialog = false;
-          this.$message({
-            message: "添加成功",
-            type: "success"
-          });
+      this.form.processFlag = "3";
+      specialRiskComplete(this.form).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
           this.resetForm();
+          this.$parent.$parent.resetForm();
+          this.$parent.$parent.$parent.init(); // 刷新父页面
         }
-      });
-    },
-    doAdd() {
-      // this.delwithRoleList()
-      const data = this.roleSelect;
-      let arr = [];
-      for (let i = 0; i < data.length; i++) {
-        let obj = {
-          id: ""
-        };
-        obj.id = data[i];
-        arr.push(obj);
-      }
-      this.form.roleList = arr;
-      add(this.form)
-        .then(res => {
-          if (res.code === "200") {
-            this.$message({
-              message: "添加成功",
-              type: "success"
-            });
-          } else {
-            this.$message.error(res.msg);
-          }
-          this.resetForm();
-          this.loading = false;
-          this.$parent.init();
-        })
-        .catch(err => {
-          this.loading = false;
-        });
-    },
-    doModify() {
-      modify(this.form)
-        .then(res => {
-          if (res.code === "200") {
-            this.$message({
-              message: "修改成功",
-              type: "success"
-            });
-          } else {
-            this.$message.error(res.msg);
-          }
-          this.resetForm();
-          this.loading = false;
-          this.$parent.init();
-        })
-        .catch(err => {
-          this.loading = false;
-        });
+      })
     },
     resetForm() {
       this.dialog = false;
       this.$refs["form"].resetFields();
-      this.form = {
-        aa: "",
-        bb: "",
-        cc: "",
-        dd: "",
-        ee: ""
-      };
-      this.roleSelect = [];
+      this.form.pathAndDeadLines = [];
     },
-    roleChange(e) {
-      if (e.length <= 1) {
-        this.form.roleList = e[0];
-      }
-      let arr = [];
-      for (let i = 0; i < e.length; i++) {
-        let obj = {
-          id: ""
-        };
-        obj.id = e[i];
-        arr.push(obj);
-      }
-      this.form.roleList = arr;
-    },
-    roleRemove(e) {}
-    // delwithRoleList() {
-    //   const roleList = this.roleList
-    //   const checkList = this.form.roleList
-    //   let newList = []
-    //   let obj = {}
-    //   for (let i = 0; i < checkList.length; i++) {
-    //     for (let j = 0; j < roleList.length; j++) {
-    //       if (checkList[i] === roleList[j].id) {
-    //         obj.id = Number(checkList[i])
-    //         obj.code = roleList[j].code
-    //         obj.roleDesc = roleList[j].roleDesc
-    //         // obj.sn = roleList[j].sn
-    //         newList.push(obj)
-    //         obj = {}
-    //       }
-    //     }
-    //   }
-    //   this.form.roleList = newList
-    // }
+    deptChange(val) {
+      this.form.pathAndDeadLines = val;
+    }
   }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 </style>
 
-<style lang="scss">
-.roleSelect {
-  width: 370px;
-}
-.el-select-dropdown {
-  z-index: 99999999999999 !important;
-}
-</style>

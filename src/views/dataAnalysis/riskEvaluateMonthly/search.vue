@@ -9,6 +9,9 @@
       label-position="left"
       ref="form"
     >
+      <el-form-item label="编号">
+        <el-input v-model="form.no" placeholder></el-input>
+      </el-form-item>
       <el-form-item label="责任单位">
         <department
           :value="responsibleUnitList"
@@ -186,14 +189,20 @@
         <el-checkbox v-model="form.isKeyRisk" border true-label="1" false-label="0">是否关键风险</el-checkbox>
       </el-form-item>
       <el-form-item label="风险计算:">
-        <el-select style="width:120px" v-model="form.riskLevel	" placeholder="风险等级" clearable>
+        <el-select
+          style="width:120px"
+          v-model="riskLevelCacheValue"
+          placeholder="风险等级"
+          clearable
+          @change="riskLevelChange"
+        >
           <el-option
-            v-for="item in ['#fff','#ffba00','#74bcff','#13ce66','#e64242']"
-            :key="item"
-            :value="item"
+            v-for="item in riskColor"
+            :key="item.id"
+            :value="item.standardLevel"
           >
             <span
-              :style="'background-color:'+item"
+              :style="'background-color:'+item.color"
               style="display: block;width: 80px;height: 25px;border: 1px solid #ccc;"
             ></span>
           </el-option>
@@ -242,7 +251,7 @@
 import { formatDateToWeek, formatShortDate } from "@/utils/datetime";
 import { createUniqueString } from "@/utils/index";
 import dictSelect from "@/components/common/dictSelectMultiple";
-import { queryRiskList, queryHazardList } from "@/api/standard";
+import { queryRiskList, queryHazardList, queryRiskLevelStandard } from "@/api/standard";
 import { queryDictByName } from "@/api/dict";
 import department from "@/components/Department";
 import chartpup from "./components/chartpup";
@@ -298,6 +307,7 @@ export default {
     }
     return {
       form: {
+        no: "",
         responsibleUnitList: "", //责任单位
         dateType: "", //日期类型
         dateValue1: "", //日期值1
@@ -340,7 +350,9 @@ export default {
       ],
       jisuanType: "",
       sort: "",
-      riskMultipleValue: []
+      riskMultipleValue: [],
+      riskColor: [],
+      riskLevelCacheValue: ""
     };
   },
   created() {
@@ -360,6 +372,11 @@ export default {
         });
       }
     });
+    queryRiskLevelStandard({ unitType: 1 }).then(res => {
+      if (res.code == "200") {
+        this.riskColor = res.obj
+      }
+    })
   },
   watch: {
     "form.dateType"(val) {
@@ -526,6 +543,7 @@ export default {
     reset() {
       this.$refs["form"].resetFields();
       this.form = {
+        no: "",
         responsibleUnitList: [], //责任单位
         dateType: "", //日期类型
         dateValue1: "", //日期值1
@@ -555,6 +573,14 @@ export default {
     },
     report() {
       this.$emit("report", this.form);
+    },
+    riskLevelChange(val) {
+      if (!!val) {
+        let color = this.riskColor.find(r => r.standardLevel == val).color;
+        this.form.riskLevel = color;
+      } else {
+        this.form.riskLevel = "";
+      }
     }
   },
 };

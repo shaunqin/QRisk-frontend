@@ -11,12 +11,12 @@
     <!-- <step2 ref="step2" v-if="step==2" :data="data" :form="form" @change="formChange" />
     <step3 ref="step3" v-if="step==3" :data="data" :form="form" @change="formChange" />
     <step4 ref="step4" v-if="step==4" :data="data" :form="form" @change="formChange" />
-    <step5 ref="step5" v-if="step==5" :data="data" :form="form" @change="formChange" />
-    <hairdown ref="hairdown" :data="data" :form="form" />-->
+    <step5 ref="step5" v-if="step==5" :data="data" :form="form" @change="formChange" />-->
+    <hairdown ref="hairdown" :data="data" :form="form" />
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button :loading="loading" type="primary" @click="doSubmit">上报</el-button>
-      <el-button :loading="loading" type="success" @click="doHairdown">下发</el-button>
+      <el-button type="success" @click="doHairdown">下发</el-button>
     </div>
   </el-dialog>
 </template>
@@ -28,22 +28,24 @@ import step1 from "./step/step1";
 // import step3 from "./step/step3";
 // import step4 from "./step/step4";
 // import step5 from "./step/step5";
-// import hairdown from './hairdown'
+import hairdown from './hairdown'
 export default {
   components: {
-    step1,
-    // step2, step3, step4, step5, hairdown
+    step1, hairdown
+    // step2, step3, step4, step5, 
   },
   data() {
     return {
       loading: false,
+      hdLoading: false,
       dialog: false,
       form: {
         comment: "", // 驳回备注
         taskId: 0,
         formId: 0,
         processFlag: "",
-        implementStatus: "" // 落实情况
+        implementStatus: "", // 落实情况
+        pathAndDeadLines: [] // 下发部门
       },
       data: {}, // 父组件赋值
       password: ""
@@ -92,19 +94,10 @@ export default {
       this.dialog = false;
     },
     formChange(form) {
-      debugger
       console.log(form);
       this.form = form;
     },
     submitStep1() {
-      if (this.form.processFlag == "") {
-        this.$message.error("请选择同意/驳回！");
-        return;
-      }
-      if (this.form.processFlag == "2" && this.form.comment == "") {
-        this.$message.error("请输入驳回备注！");
-        return;
-      }
       this.loading = true;
       specialRiskComplete(this.form).then((res) => {
         if (res.code != "200") {

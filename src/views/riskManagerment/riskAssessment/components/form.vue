@@ -76,19 +76,20 @@
         <el-table :data="form.specialRiskAnalyses" size="mini" max-height="500">
           <el-table-column label="系统" min-width="130">
             <template slot-scope="{row}">
-              <el-input v-model="row.system" placeholder></el-input>
+              <dictSelect
+                type="system"
+                :value="row.system"
+                @change="dictChange($event,row,'system')"
+              />
             </template>
           </el-table-column>
           <el-table-column label="子系统" width="130">
             <template slot-scope="{row}">
-              <el-select v-model="row.subSystem" placeholder>
-                <el-option
-                  v-for="item in ['维修实例','生产控制','工程技术','安全质量','航材管理','培训教育','计量检测','生产保障']"
-                  :key="item"
-                  :label="item"
-                  :value="item"
-                ></el-option>
-              </el-select>
+              <dictSelect
+                type="system"
+                :value="row.subSystem"
+                @change="dictChange($event,row,'subSystem')"
+              />
             </template>
           </el-table-column>
           <el-table-column label="管理流程" min-width="130">
@@ -164,9 +165,10 @@
 <script>
 import { specialRiskAdd, specialRiskModify } from "@/api/risk";
 import department from "@/components/Department";
+import dictSelect from '@/components/common/dictSelect'
 
 export default {
-  components: { department },
+  components: { department, dictSelect },
   data() {
     return {
       loading: false,
@@ -308,6 +310,9 @@ export default {
     },
     delCol(index) {
       this.form.specialRiskAnalyses.splice(index, 1);
+    },
+    dictChange(val, row, key) {
+      row[key] = val;
     }
   }
 };
