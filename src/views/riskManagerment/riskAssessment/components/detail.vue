@@ -34,10 +34,10 @@
         <el-form-item label="批准">{{data.approval}}</el-form-item>
         <el-form-item label="批准日期">{{formatShortDate(data.approvalDate)}}</el-form-item>
         <el-table :data="data.specialRiskAnalyses" size="mini" max-height="500">
-          <el-table-column label="系统" prop="system" />
-          <el-table-column label="子系统" prop="subSystem" />
+          <el-table-column label="系统" prop="systemName" />
+          <el-table-column label="子系统" prop="subSystemName" />
           <el-table-column label="管理流程" prop="managementProcess" />
-          <el-table-column label="责任单位" prop="reponsibleUnit" />
+          <el-table-column label="责任单位" prop="reponsibleUnitName" />
           <el-table-column label="岗位" prop="post" />
           <el-table-column label="流程要素">
             <el-table-column label="人" prop="processHuman" />
@@ -56,20 +56,14 @@
     <!-- 危险源 -->
     <el-card header="危险源">
       <el-table :data="data.hazardVoList" size="mini">
-        <el-table-column label="系统" prop="system" />
-        <el-table-column label="子系统" prop="subSystem" />
-        <el-table-column label="可能性" prop="possibility" />
-        <el-table-column label="严重性" prop="seriousness" />
-        <el-table-column label="风险等级" prop="riskLevel" />
-        <el-table-column label="控制措施" prop="controlMeasure" />
-        <el-table-column label="控制状态" prop="controlState" />
-        <el-table-column label="完成期限" width="100">
-          <template slot-scope="{row}">{{formatShortDate(row.deadline)}}</template>
-        </el-table-column>
+        <el-table-column label="系统" prop="systemName" />
+        <el-table-column label="子系统" prop="subSystemName" />
+        <el-table-column label="可能性" prop="possibilityName" />
+        <el-table-column label="严重性" prop="seriousnessName" />
+        <el-table-column label="风险等级" prop="riskLevelName" />
         <el-table-column label="管理流程" prop="managementProcess" />
         <el-table-column label="问题描述" prop="hazardSource" />
         <el-table-column label="根原因分析" prop="rootCauseAnalysis" width="140" show-overflow-tooltip />
-        <el-table-column label="责任单位" prop="responsibleUnit" />
         <el-table-column label="可能导致的风险" prop="possibleRisks" width="160" show-overflow-tooltip />
         <el-table-column label="风险控制措施" width="160" show-overflow-tooltip>
           <template slot-scope="{row}">
@@ -81,14 +75,17 @@
         <el-table-column label="风险责任单位" width="160" show-overflow-tooltip>
           <template slot-scope="{row}">
             <ul class="tab-ul">
-              <li v-for="item in row.specialRiskMeasureList" :key="item.id">{{item.reponsibleDept}}</li>
+              <li
+                v-for="item in row.specialRiskMeasureList"
+                :key="item.id"
+              >{{item.reponsibleDeptName}}</li>
             </ul>
           </template>
         </el-table-column>
         <el-table-column label="风险控制状态" width="160" show-overflow-tooltip>
           <template slot-scope="{row}">
             <ul class="tab-ul">
-              <li v-for="item in row.specialRiskMeasureList" :key="item.id">{{item.completion}}</li>
+              <li v-for="item in row.specialRiskMeasureList" :key="item.id">{{item.completionName}}</li>
             </ul>
           </template>
         </el-table-column>

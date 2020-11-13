@@ -56,6 +56,7 @@ export default {
     },
     doSubmit() {
       this.form.processFlag = "3";
+      this.loading = true;
       specialRiskComplete(this.form).then(res => {
         if (res.code != '200') {
           this.$message.error(res.msg);
@@ -64,6 +65,7 @@ export default {
           this.$parent.$parent.resetForm();
           this.$parent.$parent.$parent.init(); // 刷新父页面
         }
+        this.loading = false;
       })
     },
     resetForm() {

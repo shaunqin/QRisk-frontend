@@ -51,6 +51,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/styles/variables.scss";
 .riskManagement-container {
   padding: 20px 0 0 20px;
   .index-menu {
@@ -64,7 +65,7 @@ export default {
       margin: 0 0 10px;
       display: block;
       &.router-link-active {
-        background: #324157;
+        background: $pageMenuBg;
         color: #fff;
       }
     }

@@ -75,7 +75,7 @@
         <el-table-column label="风险控制状态" width="160" show-overflow-tooltip>
           <template slot-scope="{row}">
             <ul class="tab-ul">
-              <li v-for="item in row.specialRiskMeasureList" :key="item.id">{{item.completion}}</li>
+              <li v-for="item in row.specialRiskMeasureList" :key="item.id">{{item.completionName}}</li>
             </ul>
           </template>
         </el-table-column>

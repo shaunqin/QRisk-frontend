@@ -20,9 +20,12 @@
     z-index: 1001;
     overflow: hidden;
     display: flex;
-    background:linear-gradient(270deg,rgba(18,5,88,1) 0%,rgba(15,3,65,1));
+    // background:linear-gradient(270deg,rgba(18,5,88,1) 0%,rgba(15,3,65,1));
+    background: url('../assets/images/home-bg.png');
+    background-size: cover;
     align-items: center;
-    .el-menu{
+
+    .el-menu {
       background: transparent;
     }
 
@@ -42,7 +45,8 @@
     .el-scrollbar {
       height: 100%;
       flex: 1;
-      .el-menu{
+
+      .el-menu {
         display: flex;
       }
     }
@@ -72,9 +76,9 @@
       height: 100%;
       width: 100% !important;
     }
-    
+
     //+++
-    .el-menu-item{
+    .el-menu-item {
       padding: 0 5px;
     }
 
@@ -82,7 +86,8 @@
     .el-submenu__title,
     .el-menu-item {
       font-size: 16px;
-      span{
+
+      span {
         padding: 5px 20px;
       }
     }
@@ -94,26 +99,31 @@
     //     background-color: $menuHover !important;
     //   }
     // }
-    .submenu-title-noDropdown{
-      &:hover{
+    .submenu-title-noDropdown {
+      &:hover {
         color: #fff !important;
         background: transparent;
-        span{
+
+        span {
           background: $menuActiveBg;
           border-radius: 15px;
         }
       }
-      &:focus{
+
+      &:focus {
         background: transparent;
       }
     }
-    
-    .el-menu .router-link-active .el-menu-item,.el-menu-item.is-active{
+
+    .el-menu .router-link-active .el-menu-item,
+    .el-menu-item.is-active {
       color: #fff !important;
-      &:focus{
+
+      &:focus {
         background: transparent;
       }
-      span{
+
+      span {
         background: $menuActiveBg;
         border-radius: 15px;
       }
@@ -191,35 +201,40 @@
     min-width: $sideBarWidth !important;
   }
 
-  
+
   .app-container {
     height: 100%;
     display: flex;
     flex-flow: column nowrap;
+
     .head {
       width: 100%;
       display: flex;
       flex-flow: row wrap;
-      margin-bottom:10px;
-      
-      .head-buttons{
+      margin-bottom: 10px;
+
+      .head-buttons {
         display: flex;
         justify-content: space-evenly;
         align-items: center;
       }
-      .head-button{
-          cursor: pointer;
-          color: #ffffff;
-          font-size: 18px
-        }
-      .search{
+
+      .head-button {
+        cursor: pointer;
+        color: #ffffff;
+        font-size: 18px
+      }
+
+      .search {
         margin-left: 10px;
       }
+
       .pagination {
         margin-left: auto;
       }
     }
-    .table-info{
+
+    .table-info {
       position: relative;
       flex-grow: 1;
     }

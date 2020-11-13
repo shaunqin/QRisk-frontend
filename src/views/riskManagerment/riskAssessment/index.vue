@@ -80,6 +80,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/styles/variables.scss";
 .filter-item {
   > .el-input__inner {
     height: 32px !important;
@@ -99,7 +100,7 @@ export default {
     margin-bottom: 10px;
     display: block;
     &.active {
-      background: #324157;
+      background: $pageMenuBg;
       color: #fff;
     }
   }

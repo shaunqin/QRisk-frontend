@@ -8,18 +8,19 @@
       :highlight-current-row="true"
       style="width: 100%;"
     >
-      <el-table-column prop="businessName" label="流程名称">
+      <el-table-column prop="businessName" label="流程名称" width="200">
         <template slot-scope="{row}">
           <el-tag type="success">{{row.businessName}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="任务名称">
+      <el-table-column prop="name" label="任务名称" width="180">
         <template slot-scope="{row}">
           <el-tag type="warning">{{row.name}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="createBy" label="发起人" />
-      <el-table-column prop="createTime" label="发起时间" />
+      <el-table-column prop="businessTitle" label="任务标题" show-overflow-tooltip />
+      <el-table-column prop="createBy" label="发起人" width="130" />
+      <el-table-column prop="createTime" label="发起时间" width="140" />
       <el-table-column label="操作" width="150">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="doFillin(row)">填报</el-button>
@@ -67,7 +68,7 @@ export default {
           let _this = this.$refs.handle;
           _this.data = res.obj;
           _this.form.taskId = row.taskId;
-          _this.form.formId = row.formId;
+          _this.form.formId = res.obj.id;
           _this.dialog = true;
         }
       });

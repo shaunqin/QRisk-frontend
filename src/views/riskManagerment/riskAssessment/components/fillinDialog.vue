@@ -205,13 +205,13 @@ export default {
       return this.data.step;
     },
     formEnable() {
-      return this.data.step != 1
+      return this.data.step == 4 || this.data.step == 5 || this.data.step == 6
     },
     riskEnable() {
-      return this.data.step == 3
+      return this.data.step == 5 || this.data.step == 6
     },
     completionEnable() {
-      return this.data.step != 3
+      return this.data.step != 5 && this.data.step != 6
     }
   },
   created() { },
