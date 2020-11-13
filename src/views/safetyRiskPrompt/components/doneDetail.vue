@@ -87,6 +87,20 @@
           type="safety_risk_notice"
         />
       </el-form-item>
+      <el-form-item label="办理人" v-if="reviewerInfo.length>0">
+        <el-table :data="reviewerInfo" key="reviewerInfo">
+          <el-table-column label="任务名称" prop="taskName"></el-table-column>
+          <el-table-column label="分配人" width="135">
+            <template slot-scope="{row}">{{row.name||"-"}}</template>
+          </el-table-column>
+          <el-table-column label="角色">
+            <template slot-scope="{row}">{{row.groupName||"-"}}</template>
+          </el-table-column>
+          <el-table-column label="候选人">
+            <template slot-scope="{row}">{{row.users||"-"}}</template>
+          </el-table-column>
+        </el-table>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
@@ -129,6 +143,12 @@ export default {
     childMeasures() {
       if (this.data.childMeasures) {
         return this.data.childMeasures;
+      }
+      return []
+    },
+    reviewerInfo() {
+      if (this.data.reviewerInfo) {
+        return this.data.reviewerInfo;
       }
       return []
     }

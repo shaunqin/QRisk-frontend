@@ -48,8 +48,7 @@
         </el-form-item>
         <el-form-item label>
           <el-button type="success" icon="el-icon-search" @click="toQuery(queryForm)">搜索</el-button>
-          <el-button type="text" icon="el-icon-download">生成国航文件</el-button>
-          <el-button type="text" icon="el-icon-download">生成客户文件</el-button>
+          <el-button type="text" icon="el-icon-download" @click="download">生成文件</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -195,6 +194,12 @@ export default {
         return "一月至十二月";
       }
     },
+    download() {
+      const qs = require('qs')
+      let params = qs.stringify(this.queryForm);
+      let url = `${process.env.VUE_APP_BASE_API}/quality_mgr/downLoad/produceFile?${params}`;
+      location.href = url;
+    }
   }
 };
 </script>
