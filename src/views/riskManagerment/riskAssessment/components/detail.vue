@@ -21,7 +21,7 @@
       </el-form>
     </el-card>
     <!-- 系统和工作分析记录表 -->
-    <el-card header="系统和工作分析记录表" key="specialRiskAnalyses">
+    <el-card header="系统和工作分析记录表" key="specialRiskAnalyses" v-if="data.assType==1||data.assType==2">
       <el-form size="mini" class="info2" inline>
         <el-row class="fill-row">
           <el-col :span="24">
@@ -54,7 +54,7 @@
       </el-form>
     </el-card>
     <!-- 危险源 -->
-    <el-card header="危险源">
+    <el-card header="危险源" key="hazardVoList" v-if="data.type=='2'">
       <el-table :data="data.hazardVoList" size="mini">
         <el-table-column label="系统" prop="systemName" />
         <el-table-column label="子系统" prop="subSystemName" />
@@ -99,6 +99,29 @@
       </el-table>
     </el-card>
 
+    <el-card header="办理人" key="reviewerInfo" v-if="data.reviewerInfo&&data.reviewerInfo.length>0">
+      <el-table :data="data.reviewerInfo" size="mini">
+        <el-table-column label="任务名称" prop="taskName"></el-table-column>
+        <el-table-column label="分配人" width="135">
+          <template slot-scope="{row}">{{row.name||"-"}}</template>
+        </el-table-column>
+        <el-table-column label="角色">
+          <template slot-scope="{row}">{{row.groupName||"-"}}</template>
+        </el-table-column>
+        <el-table-column label="候选人">
+          <template slot-scope="{row}">{{row.users||"-"}}</template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+
+    <el-card
+      header="审批记录"
+      key="noticeComments"
+      v-if="data.noticeComments&&data.noticeComments.length>0"
+    >
+      <apprvalRecord :data="data.noticeComments" />
+    </el-card>
+
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="cancel">取消</el-button>
     </div>
@@ -107,7 +130,9 @@
 
 <script>
 import { formatShortDate } from '@/utils/datetime'
+import apprvalRecord from "./apprvalRecord";
 export default {
+  components: { apprvalRecord },
   data() {
     return {
       dialog: false,

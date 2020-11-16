@@ -68,7 +68,10 @@
         <el-table-column label="风险责任单位" width="160" show-overflow-tooltip>
           <template slot-scope="{row}">
             <ul class="tab-ul">
-              <li v-for="item in row.specialRiskMeasureList" :key="item.id">{{item.reponsibleDept}}</li>
+              <li
+                v-for="item in row.specialRiskMeasureList"
+                :key="item.id"
+              >{{item.reponsibleDeptName}}</li>
             </ul>
           </template>
         </el-table-column>
@@ -82,18 +85,30 @@
         <el-table-column label="风险完成期限" width="160" show-overflow-tooltip>
           <template slot-scope="{row}">
             <ul class="tab-ul">
-              <li v-for="item in row.specialRiskMeasureList" :key="item.id">{{item.deadline}}</li>
+              <li
+                v-for="item in row.specialRiskMeasureList"
+                :key="item.id"
+              >{{formatShortDate(item.deadline)}}</li>
             </ul>
           </template>
         </el-table-column>
       </el-table>
+    </el-card>
+    <el-card
+      header="审批记录"
+      key="noticeComments"
+      v-if="data.noticeComments&&data.noticeComments.length>0"
+    >
+      <apprvalRecord :data="data.noticeComments" />
     </el-card>
   </div>
 </template>
 
 <script>
 import { formatShortDate } from '@/utils/datetime'
+import apprvalRecord from "../apprvalRecord";
 export default {
+  components: { apprvalRecord },
   props: ["data", "form"],
   methods: {
     formatShortDate,

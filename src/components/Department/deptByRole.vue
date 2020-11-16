@@ -18,6 +18,8 @@
     style="width:100%"
     clearable
   >
+    <el-checkbox v-model="checkAll" @change="ckChange">全选</el-checkbox>
+    <el-divider></el-divider>
     <el-option
       v-for="item in options"
       :key="item.deptId"
@@ -37,6 +39,7 @@ export default {
     return {
       options: [],
       treeData: [],
+      checkAll: false
     };
   },
   computed: {
@@ -45,6 +48,9 @@ export default {
         return this.value;
       },
       set(val) {
+        if (val.length != this.options.length) {
+          this.checkAll = false;
+        }
         this.$emit("change", val);
       },
     },
@@ -78,7 +84,13 @@ export default {
     });
   },
   methods: {
-
+    ckChange(val) {
+      if (val) {
+        this.selectValue = this.options.map(r => r.deptPath);
+      } else {
+        this.selectValue = [];
+      }
+    }
   },
 };
 </script>
@@ -88,6 +100,14 @@ export default {
   height: 400px;
   /deep/ .el-scrollbar__wrap {
     overflow-x: auto;
+  }
+}
+.el-divider--horizontal {
+  margin: 4px 0;
+}
+.el-select-dropdown__list {
+  .el-checkbox {
+    margin: 4px 20px;
   }
 }
 </style>

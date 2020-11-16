@@ -32,7 +32,11 @@
       <el-table-column label="拟制人">
         <template slot-scope="{row}">{{row.issueName}}[{{row.issuer}}]</template>
       </el-table-column>
-      <el-table-column label>
+      <el-table-column label="发布时间">
+        <template slot-scope="{row}">{{formatShortDate(row.publishTime)}}</template>
+      </el-table-column>
+      <el-table-column label="发布单位" prop="dept"></el-table-column>
+      <el-table-column label width="80">
         <template slot-scope="{row}" v-if="row.pdfUrl!=null">
           <el-link type="primary" :href="pdfUrl(row)" target="_blank">查看PDF</el-link>
         </template>
@@ -53,7 +57,7 @@
 
 <script>
 import initData from "@/mixins/initData";
-import { format } from "@/utils/datetime";
+import { format, formatShortDate } from "@/utils/datetime";
 import eform from "./form";
 import edetail from "./detail";
 import { riskNoticeDetail, getRiskNoticeNo } from "@/api/risk";
@@ -81,6 +85,7 @@ export default {
     this.init();
   },
   methods: {
+    formatShortDate,
     beforeInit() {
       this.url = `/riskmgr_mgr/safety_risk_notice_mgr/query/pageList/${this.page}/${this.size}`;
       this.params = { ...this.queryForm };

@@ -19,50 +19,49 @@
             <el-input v-model="form.title" style="width: 100%;" />
           </el-form-item>
           <el-form-item label="背景" prop="background">
-            <el-input v-model="form.background" style="width: 100%;" type="textarea" rows="6" />
+            <editer :value="form.background" @input="editerChange($event,'background')" />
+            <!-- <el-input v-model="form.background" style="width: 100%;" type="textarea" rows="6" /> -->
           </el-form-item>
           <el-form-item label="存在的安全风险" prop="existingRisk">
-            <el-input v-model="form.existingRisk" style="width: 100%;" type="textarea" rows="6" />
+            <editer :value="form.existingRisk" @input="editerChange($event,'existingRisk')" />
+            <!-- <el-input v-model="form.existingRisk" style="width: 100%;" type="textarea" rows="6" /> -->
           </el-form-item>
         </el-col>
       </el-row>
 
       <el-form-item label="风险防范措施">
-        <el-row
-          v-for="(item,index) in form.measures"
-          :key="index"
-          style="margin-bottom: 10px;display:flex"
-          :gutter="8"
-        >
-          <el-col :span="6">
+        <el-card v-for="(item,index) in form.measures" :key="index" style="margin-bottom: 10px;">
+          <div>
             <department
               :value="!item.deptPath?[]:item.deptPath.split(',')"
               @change="deptChange($event,item)"
               :multiple="true"
               style="line-height:20px"
             />
-          </el-col>
-          <el-col :span="5">
-            <el-date-picker
-              v-model="item.deadline"
-              value-format="yyyy-MM-dd"
-              placeholder="为空则是长期选项"
-              style="width:100%"
-            ></el-date-picker>
-          </el-col>
-          <el-col :span="11">
-            <el-input
-              v-model="item.content"
-              style="width: 100%;"
-              placeholder="措施内容"
-              type="textarea"
-              rows="3"
-            />
-          </el-col>
-          <el-col :span="2">
-            <el-button type="text" icon="el-icon-delete" size="mini" @click="delRisk(index)"></el-button>
-          </el-col>
-        </el-row>
+          </div>
+          <div style="display:flex;margin-top:10px">
+            <div style="flex:1;">
+              <el-input
+                v-model="item.content"
+                style="width: 100%;"
+                placeholder="措施内容"
+                type="textarea"
+                rows="3"
+              />
+            </div>
+            <div style="width:180px;margin:0 10px">
+              <el-date-picker
+                v-model="item.deadline"
+                value-format="yyyy-MM-dd"
+                placeholder="为空则是长期选项"
+                style="width:100%"
+              ></el-date-picker>
+            </div>
+            <div style="width:55px">
+              <el-button type="danger" icon="el-icon-delete" size="mini" @click="delRisk(index)"></el-button>
+            </div>
+          </div>
+        </el-card>
         <el-row style="margin-top:10px">
           <el-col :span="24">
             <el-button
@@ -89,8 +88,9 @@ import { riskNoticeAdd, riskNoticeModify, riskNoticeSaveandSubmit, riskNoticeUpd
 import department from "@/components/Department/deptByRole";
 import { format } from "@/utils/datetime";
 import selectEmplotee from './selectEmplotee'
+import editer from '@/components/Tinymce'
 export default {
-  components: { department, selectEmplotee },
+  components: { department, selectEmplotee, editer },
   data() {
     return {
       loading: false,
@@ -226,6 +226,9 @@ export default {
     deptChange(val, item) {
       item.deptPath = val.join(",");
     },
+    editerChange(val, key) {
+      this.form[key] = val;
+    }
   },
 };
 </script>

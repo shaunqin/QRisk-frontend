@@ -147,8 +147,7 @@ export default {
             this.$message.error(res.msg);
           } else {
             this.resetForm();
-            this.$parent.$parent.resetForm();
-            this.$parent.$parent.$parent.init(); // 刷新父页面
+            this.$parent.init(); // 刷新父页面
           }
           this.hdLoading = false;
         })

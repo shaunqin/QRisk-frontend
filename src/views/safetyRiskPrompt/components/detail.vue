@@ -62,7 +62,7 @@
               <div v-if="row.reviewerInfo==null">-</div>
               <el-popover v-else placement="left" width="1000">
                 <el-button type="text" slot="reference">详情</el-button>
-                <el-table :data="row.reviewerInfo">
+                <el-table :data="row.reviewerInfo" size="mini">
                   <el-table-column label="任务名称" prop="taskName"></el-table-column>
                   <el-table-column label="分配人" width="135">
                     <template slot-scope="{row}">{{row.name||"-"}}</template>
@@ -80,7 +80,7 @@
         </el-table>
       </el-form-item>
       <el-form-item label="办理人" v-if="form.reviewerInfo!=null">
-        <el-table :data="form.reviewerInfo">
+        <el-table :data="form.reviewerInfo" size="mini">
           <el-table-column label="任务名称" prop="taskName"></el-table-column>
           <el-table-column label="分配人" width="135">
             <template slot-scope="{row}">{{row.name||"-"}}</template>

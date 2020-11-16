@@ -1,7 +1,13 @@
 <template>
   <div>
     <div class="head-container">
-      <el-button size="mini" type="success" icon="el-icon-plus" :disabled="!assessmentType" @click="add">新建通知</el-button>
+      <el-button
+        size="mini"
+        type="success"
+        icon="el-icon-plus"
+        :disabled="!assessmentType"
+        @click="add"
+      >新建通知</el-button>
       <el-button
         size="mini"
         type="success"
@@ -79,9 +85,16 @@ export default {
       this.isAdd = true;
       let _this = this.$refs.form;
       _this.form.assType = this.assessmentType;
+      _this.form.type = "1"; // 通知
       _this.dialog = true;
     },
-    addAssessment() { },
+    addAssessment() {
+      this.isAdd = true;
+      let _this = this.$refs.form;
+      _this.form.assType = this.assessmentType;
+      _this.form.type = "2"; // 评估
+      _this.dialog = true;
+    },
     detail(row) {
       specialRiskDetail(row.id).then((res) => {
         if (res.code != "200") {

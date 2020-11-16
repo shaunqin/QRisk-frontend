@@ -37,17 +37,17 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-    <!-- <doneDetail ref="doneDetail" /> -->
+    <edetail ref="edetail" />
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
 import { format } from "@/utils/datetime";
-import { riskNoticeDoneDetail } from '@/api/risk';
-// import doneDetail from './doneDetail'
+import { specialRiskDetail } from '@/api/risk';
+import edetail from '../detail'
 export default {
-  // components: { doneDetail },
+  components: { edetail },
   mixins: [initData],
   mounted() {
     this.init();
@@ -63,11 +63,11 @@ export default {
       this.$emit("selectionChange", { selections: selections });
     },
     detail(row) {
-      riskNoticeDoneDetail(row.taskId, row.formId).then(res => {
+      specialRiskDetail(row.formId).then(res => {
         if (res.code != '200') {
           this.$message.error(res.msg);
         } else {
-          let _this = this.$refs.doneDetail;
+          let _this = this.$refs.edetail;
           _this.data = res.obj;
           _this.dialog = true;
         }

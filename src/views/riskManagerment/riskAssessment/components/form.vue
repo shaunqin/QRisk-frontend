@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
-    :title="isAdd ? '新增通知' : '编辑通知'"
+    :title="isAdd ? '新增' : '编辑'"
     custom-class="big_dialog"
   >
     <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="80px">
@@ -30,8 +30,9 @@
           </el-form-item>
         </el-col>
       </el-row>
+
       <!-- 系统和工作分析记录表 -->
-      <el-card header="系统和工作分析记录表" v-if="form.assType==1||form.assType==2">
+      <el-card header="系统和工作分析记录表" key="1" v-if="form.assType==1||form.assType==2">
         <el-row :gutter="8">
           <el-col :span="8">
             <el-form-item label="标题">
@@ -153,6 +154,112 @@
           </el-table-column>
         </el-table>
       </el-card>
+
+      <!-- 危险源清单 -->
+      <el-card header="危险源" key="2" style="margin-top:20px" v-if="form.type=='2'">
+        <el-button type="primary" size="mini" @click="addHazard" style="margin-bottom:10px">新增危险源</el-button>
+        <el-card shadow="never" v-for="(item,index) in form.hazardList" :key="index">
+          <el-form size="mini" inline label-width="70px">
+            <el-form-item label="系统">
+              <dict-select
+                :value="item.system"
+                type="system"
+                @change="dictChange($event,item,'system')"
+                style="width:130px"
+              />
+            </el-form-item>
+            <el-form-item label="子系统">
+              <dict-select
+                :value="item.subSystem"
+                type="system"
+                @change="dictChange($event,item,'subSystem')"
+                style="width:130px"
+              />
+            </el-form-item>
+            <el-form-item label="可能性">
+              <dict-select
+                :value="item.possibility"
+                type="probability_level"
+                @change="dictChange($event,item,'possibility')"
+                style="width:130px"
+              />
+            </el-form-item>
+            <el-form-item label="严重性">
+              <dict-select
+                :value="item.seriousness"
+                type="severity_level_matrix_graph"
+                @change="dictChange($event,item,'seriousness')"
+              />
+            </el-form-item>
+            <el-form-item label="风险等级">
+              <dict-select
+                :value="item.riskLevel"
+                type="risk_level"
+                @change="dictChange($event,item,'riskLevel')"
+                style="width:130px"
+              />
+            </el-form-item>
+            <el-form-item label="管理流程">
+              <el-input v-model="item.managementProcess"></el-input>
+            </el-form-item>
+            <el-row :gutter="16" class="fill-row">
+              <el-col :span="12">
+                <el-form-item label="问题描述">
+                  <el-input v-model="item.hazardSource" type="textarea" rows="3"></el-input>
+                </el-form-item>
+                <el-form-item label="根原因分析">
+                  <el-input v-model="item.rootCauseAnalysis" type="textarea" rows="3"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="可能导致的风险">
+                  <el-input v-model="item.possibleRisks" type="textarea" rows="3"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+          <!-- 风险表格 -->
+          <el-button type="info" size="mini" class="at" @click="addSrmRow(item)">新增一行</el-button>
+          <el-table :data="item.specialRiskMeasureList" size="small" max-height="400px">
+            <el-table-column type="index" width="50" />
+            <el-table-column label="控制措施">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.controlMeasure"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="责任单位">
+              <template slot-scope="scope">
+                <department
+                  :value="scope.row.reponsibleDept"
+                  @change="srmDeptChange($event,scope.row)"
+                />
+              </template>
+            </el-table-column>
+            <el-table-column label="完成期限">
+              <template slot-scope="scope">
+                <el-date-picker
+                  v-model="scope.row.deadline"
+                  value-format="yyyy-MM-dd"
+                  style="max-width:100%"
+                ></el-date-picker>
+              </template>
+            </el-table-column>
+            <el-table-column width="80">
+              <template slot-scope="{$index}">
+                <el-button
+                  type="text"
+                  size="mini"
+                  icon="el-icon-delete"
+                  @click="delSrmRow($index,item)"
+                ></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div class="center">
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="delHazard(index)">删除</el-button>
+          </div>
+        </el-card>
+      </el-card>
     </el-form>
 
     <div slot="footer" class="dialog-footer">
@@ -200,6 +307,26 @@ export default {
             processEnvironment: "", // 环
             input: "", // 输入
             output: "", // 输出
+          }
+        ],
+        hazardList: [ // 危险源
+          {
+            hazardSource: "",
+            managementProcess: "",
+            possibility: "",
+            possibleRisks: "",
+            riskLevel: "",
+            rootCauseAnalysis: "",
+            seriousness: "",
+            specialRiskMeasureList: [
+              {
+                completion: "",
+                controlMeasure: "",
+                deadline: "",
+                reponsibleDept: null
+              }],
+            subSystem: "",
+            system: ""
           }
         ],
       },
@@ -284,6 +411,7 @@ export default {
         approvalDate: "", // 批准日期
         type: "1", // 类别,1:通知,2:评估
         specialRiskAnalyses: [],
+        hazardList: [],
       };
     },
     deptChange(val, key) {
@@ -313,6 +441,43 @@ export default {
     },
     dictChange(val, row, key) {
       row[key] = val;
+    },
+    addHazard() {
+      this.form.hazardList.push({
+        hazardSource: "",
+        managementProcess: "",
+        possibility: "",
+        possibleRisks: "",
+        riskLevel: "",
+        rootCauseAnalysis: "",
+        seriousness: "",
+        specialRiskMeasureList: [
+          {
+            completion: "",
+            controlMeasure: "",
+            deadline: "",
+            reponsibleDept: null
+          }],
+        subSystem: "",
+        system: ""
+      });
+    },
+    delHazard(index) {
+      this.form.hazardList.splice(index, 1);
+    },
+    addSrmRow(item) {
+      item.specialRiskMeasureList.push({
+        completion: "",
+        controlMeasure: "",
+        deadline: "",
+        reponsibleDept: null
+      })
+    },
+    delSrmRow(index, item) {
+      item.specialRiskMeasureList.splice(index, 1);
+    },
+    srmDeptChange(val, row) {
+      row.reponsibleDept = val;
     }
   }
 };
@@ -322,5 +487,24 @@ export default {
 <style lang="scss" scope>
 .mb-10 {
   margin-bottom: 10px;
+}
+
+.fill-row {
+  /deep/ .el-form-item {
+    display: flex;
+    .el-form-item__content {
+      flex: 1;
+    }
+  }
+}
+.el-card + .el-card {
+  margin-top: 20px;
+}
+.center {
+  margin-top: 8px;
+  text-align: center;
+}
+.at {
+  margin-bottom: 8px;
 }
 </style>

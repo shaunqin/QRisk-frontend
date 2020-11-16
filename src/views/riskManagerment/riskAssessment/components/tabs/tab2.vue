@@ -115,7 +115,8 @@ export default {
             approval: obj.approval,
             approvalDate: obj.approvalDate,
             type: obj.type,
-            specialRiskAnalyses: obj.specialRiskAnalyses || []
+            specialRiskAnalyses: obj.specialRiskAnalyses || [],
+            hazardList: obj.hazardVoList || []
           };
           _this.dialog = true;
         }

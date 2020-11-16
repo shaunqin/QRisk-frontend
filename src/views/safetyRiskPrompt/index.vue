@@ -13,8 +13,26 @@
             <department
               class="form-dept-tree"
               :value="form.responsePath"
-              @change="deptChange"
-              style="width:260px"
+              @change="deptChange($event,'responsePath')"
+              style="width:220px"
+            />
+          </el-form-item>
+          <el-form-item label="发布日期">
+            <el-date-picker
+              v-model="date"
+              unlink-panels
+              type="daterange"
+              placeholder
+              value-format="yyyy-MM-dd"
+              style="width:220px"
+            ></el-date-picker>
+          </el-form-item>
+          <el-form-item label="发布单位">
+            <department
+              class="form-dept-tree"
+              :value="form.deptPath"
+              @change="deptChange($event,'deptPath')"
+              style="width:220px"
             />
           </el-form-item>
           <el-form-item label>
@@ -132,8 +150,8 @@ export default {
       _this.form = Object.assign({}, row);
       _this.dialog = true;
     },
-    deptChange(val) {
-      this.form.responsePath = val;
+    deptChange(val, key) {
+      this.form[key] = val;
     },
     loadCount() {
       queryTodoCount().then(res => {
