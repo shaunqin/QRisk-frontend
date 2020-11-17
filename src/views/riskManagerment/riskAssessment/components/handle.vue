@@ -67,6 +67,7 @@ export default {
   methods: {
     cancel() {
       this.resetForm();
+      this.loadCount();
     },
     doSubmit() {
       switch (this.step) {
@@ -110,6 +111,7 @@ export default {
           this.$message.success("操作成功");
           this.resetForm();
           this.$parent.init();
+          this.loadCount();
         }
         this.loading = false;
       });
@@ -131,6 +133,7 @@ export default {
           this.$message.success("操作成功");
           this.resetForm();
           this.$parent.init();
+          this.loadCount();
         }
         this.loading = false;
       });
@@ -148,10 +151,14 @@ export default {
           } else {
             this.resetForm();
             this.$parent.init(); // 刷新父页面
+            this.loadCount();
           }
           this.hdLoading = false;
         })
       }
+    },
+    loadCount() {
+      this.$parent.$parent.$parent.$parent.$parent.$parent.loadCount();
     }
   },
 };

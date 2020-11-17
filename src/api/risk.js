@@ -152,6 +152,14 @@ export function getOriginFormByCommentId(params) {
         params
     })
 }
+// 抄送人员列表
+export function queryFillCC(deptPath) {
+    return request({
+        url: `/process/query/fillCC`,
+        method: 'get',
+        params: { deptPath }
+    })
+}
 // =========  风险提示 end ==============
 
 // ======== 专项风险 =======
@@ -213,6 +221,20 @@ export function specialRiskComplete(data) {
         url: `/risk_mgr/special_risk_notice_mgr/complete`,
         method: 'post',
         data
+    })
+}
+// 查询已办详情
+export function specialRiskGasDoneDetail(taskId, formId) {
+    return request({
+        url: `/risk_mgr/special_risk_notice_mgr/query/hasDoneDetail/${taskId}/${formId}`,
+        method: 'get',
+    })
+}
+// 待办数量
+export function specialRiskQueryTodoCount() {
+    return request({
+        url: `/risk_mgr/special_risk_notice_mgr/query/queryTodoCount`,
+        method: 'get',
     })
 }
 // ======== 专项风险 end =======

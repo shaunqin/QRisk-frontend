@@ -24,11 +24,14 @@
           <el-tab-pane name="3" label="我拟制的">
             <tab3 v-if="tabIndex=='3'" />
           </el-tab-pane>
-          <el-tab-pane name="4" label="待办">
-             <tab4 v-if="tabIndex=='4'" />
+          <el-tab-pane name="4">
+            <el-badge slot="label" :value="count" class="item" :hidden="!count">
+              <span>待办</span>
+            </el-badge>
+            <tab4 v-if="tabIndex=='4'" />
           </el-tab-pane>
           <el-tab-pane name="5" label="已办">
-             <tab5 v-if="tabIndex=='5'" />
+            <tab5 v-if="tabIndex=='5'" />
           </el-tab-pane>
         </el-tabs>
       </el-col>
@@ -42,6 +45,7 @@ import tab2 from './components/tabs/tab2';
 import tab3 from './components/tabs/tab3';
 import tab4 from './components/tabs/tab4';
 import tab5 from './components/tabs/tab5';
+import { specialRiskQueryTodoCount } from '@/api/risk'
 export default {
   components: { tab1, tab2, tab3, tab4, tab5 },
   data() {
@@ -58,7 +62,8 @@ export default {
         { name: "其他评估", type: 7 },
       ],
       assessmentType: this.$route.query.type || "",
-      tabIndex: "1"
+      tabIndex: "1",
+      count: 0
     };
   },
   watch: {
@@ -66,7 +71,9 @@ export default {
       this.assessmentType = route.query.type;
     },
   },
-  created() { },
+  created() {
+    this.loadCount();
+  },
   methods: {
     toQuery(name) {
       if (!name) {
@@ -74,6 +81,15 @@ export default {
         this.init();
         return;
       }
+    },
+    loadCount() {
+      specialRiskQueryTodoCount().then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          this.count = res.obj;
+        }
+      })
     }
   }
 };
@@ -109,5 +125,9 @@ export default {
   background: transparent;
   color: #000;
   border-radius: 0;
+}
+
+/deep/ .el-badge__content.is-fixed {
+  top: 10px;
 }
 </style>

@@ -1,12 +1,5 @@
 <template>
-  <el-dialog
-    :append-to-body="true"
-    :close-on-click-modal="false"
-    :before-close="cancel"
-    :visible.sync="dialog"
-    title="任务详情"
-    custom-class="big_dialog"
-  >
+  <div>
     <el-card header="详情">
       <el-form inline class="detail-form">
         <el-row>
@@ -126,37 +119,32 @@
       :data="data"
       key="fillinForm"
     />
+
     <detailFillin
       ref="detailFillin"
       :data="detailData"
       :fillinData="detailFillinData"
       key="detailFillin"
     />
-
-    <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="cancel">确定</el-button>
-    </div>
-  </el-dialog>
+  </div>
 </template>
 
 <script>
 import { formatShortDate, format } from '@/utils/datetime'
-import fillinForm from './fillinForm'
-import detailFillin from './detailFillin'
 import { queryControlListDetail } from '@/api/hazards'
-import approvalRecord from './approvalRecord'
+import approvalRecord from '@/views/hazardsInvestigation/safetyHazardsReport/components/approvalRecord';
+import fillinForm from '@/views/hazardsInvestigation/safetyHazardsReport/components/fillinForm';
+import detailFillin from '@/views/hazardsInvestigation/safetyHazardsReport/components/detailFillin';
 export default {
-  components: { fillinForm, detailFillin, approvalRecord },
+  components: { approvalRecord, detailFillin, fillinForm },
   data() {
     return {
-      loading: false,
-      dialog: false,
-      data: {}, // 父组件赋值
       baseApi: process.env.VUE_APP_BASE_API,
       detailData: {},
       detailFillinData: []
     }
   },
+  props: ["data"],
   computed: {
     childTask() {
       if (this.data.childTask == null) {
@@ -181,18 +169,30 @@ export default {
     }
   },
   watch: {
-    data() {
-      this.loadData();
+    data: {
+      deep: true,
+      handler() {
+        this.loadData();
+      }
     }
+  },
+  created() {
+    this.loadData();
   },
   methods: {
     formatShortDate,
     format,
-    cancel() {
-      this.resetForm();
-    },
-    resetForm() {
-      this.dialog = false;
+    showList(row) {
+      queryControlListDetail(row.taskId).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          let _this = this.$refs.detailFillin;
+          this.detailData = res.obj;
+          this.detailFillinData = res.obj.hiddenDangerControlList;
+          _this.dialog = true;
+        }
+      })
     },
     loadData() {
       this.$nextTick(() => {
@@ -206,18 +206,6 @@ export default {
         }
       })
     },
-    showList(row) {
-      queryControlListDetail(row.taskId).then(res => {
-        if (res.code != '200') {
-          this.$message.error(res.msg);
-        } else {
-          let _this = this.$refs.detailFillin;
-          this.detailData = res.obj;
-          this.detailFillinData = res.obj.hiddenDangerControlList;
-          _this.dialog = true;
-        }
-      })
-    }
   },
 }
 </script>

@@ -24,7 +24,7 @@ export const queryHazardList = (id) => {
   })
 }
 
-// 清空未读提示
+// 查询未读提示
 export function queryUnread() {
   return request({
     url: `/notice/unreadAmount`,

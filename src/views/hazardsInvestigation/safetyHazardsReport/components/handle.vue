@@ -23,6 +23,8 @@
         @click="doHairdown"
       >下发</el-button>
     </div>
+    <!-- 抄送 -->
+    <ccPerson ref="ccPerson" :deptPath="deptPath" @subCC="subCC" />
   </el-dialog>
 </template>
 
@@ -32,9 +34,10 @@ import step1 from "./step/step1";
 import step2 from "./step/step2";
 import step3 from "./step/step3";
 import hairdown from './hairdown'
+import ccPerson from './ccPerson';
 
 export default {
-  components: { step1, hairdown, step2, step3 },
+  components: { step1, hairdown, step2, step3, ccPerson },
   data() {
     return {
       loading: false,
@@ -57,6 +60,9 @@ export default {
     },
     hiddenFill() {
       return this.data.hiddenFill
+    },
+    deptPath() {
+      return this.data.deptPath || ""
     }
   },
   methods: {
@@ -66,11 +72,51 @@ export default {
     doSubmit() {
       switch (this.step) {
         case 2:
-          this.submitStep2();
+          this.judgeCC();
           break;
         default:
           break;
       }
+    },
+    judgeCC() {
+      // 领导审核同意
+      if (this.data.leaderApprove && this.form.processFlag == "1") {
+        this.$refs.ccPerson.dialog = true;
+      } else if (!this.data.leaderApprove && this.form.processFlag == "2" && this.data.cc) {  // 上级风险管理员驳回
+        if (this.form.comment == "") {
+          this.$message.error("请输入驳回备注！");
+          return;
+        }
+        this.$refs.ccPerson.dialog = true;
+      } else {
+        if (this.form.processFlag == "2" && this.form.comment == "") {
+          this.$message.error("请输入驳回备注！");
+          return;
+        }
+        this.subCC({});
+      }
+    },
+    subCC(params) {
+      if (this.form.processFlag == "2" && this.form.comment == "") {
+        this.$message.error("请输入驳回备注！");
+        return;
+      }
+      // 获取领导修改的填报数据
+      if (this.$refs.step2) {
+        this.form.hiddenDangerList = this.$refs.step2.$refs.fillinForm.fillinData;
+      }
+      this.loading = true;
+      hazardsComplete({ ...this.form, ...params }).then((res) => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          this.$message.success("操作成功");
+          this.resetForm();
+          this.$parent.init();
+          this.loadCount();
+        }
+        this.loading = false;
+      });
     },
     resetForm() {
       this.dialog = false;
@@ -82,32 +128,6 @@ export default {
         sqlUserId: "",
         hiddenDangerList: []
       };
-    },
-    submitStep2() {
-      if (this.form.processFlag == "") {
-        this.$message.error("请选择同意/驳回！");
-        return;
-      }
-      if (this.form.processFlag == "2" && this.form.comment == "") {
-        this.$message.error("请输入驳回备注！");
-        return;
-      }
-      // 获取领导修改的填报数据
-      if (this.$refs.step2) {
-        this.form.hiddenDangerList = this.$refs.step2.$refs.fillinForm.fillinData;
-      }
-      this.loading = true;
-      hazardsComplete(this.form).then((res) => {
-        if (res.code != "200") {
-          this.$message.error(res.msg);
-        } else {
-          this.$message.success("操作成功");
-          this.resetForm();
-          this.$parent.init();
-          this.loadCount();
-        }
-        this.loading = false;
-      });
     },
     doHairdown() {
       this.$refs.hairdown.dialog = true;

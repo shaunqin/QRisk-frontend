@@ -32,6 +32,8 @@
         @click="doHairdown"
       >下发</el-button>
     </div>
+    <!-- 抄送 -->
+    <ccPerson ref="ccPerson" :deptPath="deptPath" @subCC="subCC" />
   </el-dialog>
 </template>
 
@@ -42,9 +44,10 @@ import step2 from "./step/step2";
 import step3 from "./step/step3";
 import step4 from "./step/step4";
 import step5 from "./step/step5";
-import hairdown from './hairdown'
+import hairdown from './hairdown';
+import ccPerson from './ccPerson';
 export default {
-  components: { step1, step2, step3, step4, step5, hairdown },
+  components: { step1, step2, step3, step4, step5, hairdown, ccPerson },
   data() {
     return {
       loading: false,
@@ -66,6 +69,9 @@ export default {
     },
     hiddenFill() {
       return this.data.hiddenFill;
+    },
+    deptPath() {
+      return this.data.deptMeasure ? this.data.deptMeasure.deptPath : ""
     }
   },
   methods: {
@@ -100,13 +106,14 @@ export default {
       } else {
         this.submitStep1();
       }
-
     },
     doSubmit() {
       switch (this.step) {
-        case 1: this.validatePWD(); break;
+        case 1:
+          this.validatePWD();
+          break;
         case 4:
-          this.submitStep1();
+          this.judgeCC();
           break;
         case 2:
           this.submitStep2();
@@ -118,6 +125,42 @@ export default {
         default:
           break;
       }
+    },
+    judgeCC() {
+      // 领导审核同意
+      if (this.data.leaderApprove && this.form.processFlag == "1") {
+        this.$refs.ccPerson.dialog = true;
+      } else if (!this.data.leaderApprove && this.form.processFlag == "2" && this.data.cc) {  // 上级风险管理员驳回
+        if (this.form.comment == "") {
+          this.$message.error("请输入驳回备注！");
+          return;
+        }
+        this.$refs.ccPerson.dialog = true;
+      } else {
+        if (this.form.processFlag == "2" && this.form.comment == "") {
+          this.$message.error("请输入驳回备注！");
+          return;
+        }
+        this.subCC({});
+      }
+    },
+    subCC(params) {
+      if (this.form.processFlag == "2" && this.form.comment == "") {
+        this.$message.error("请输入驳回备注！");
+        return;
+      }
+      this.loading = true;
+      riskNoticeComplete({ ...this.form, ...params }).then((res) => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          this.$message.success("操作成功");
+          this.resetForm();
+          this.$parent.init();
+          this.loadCount();
+        }
+        this.loading = false;
+      });
     },
     doSave() {
       let _this = this.$refs.step2;

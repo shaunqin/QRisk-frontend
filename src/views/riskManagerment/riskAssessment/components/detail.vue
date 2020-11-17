@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
-    title="处理待办"
+    title="详情"
     custom-class="big_dialog"
   >
     <el-card header="详细信息">

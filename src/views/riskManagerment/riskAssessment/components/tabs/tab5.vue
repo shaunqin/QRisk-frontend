@@ -44,7 +44,7 @@
 <script>
 import initData from "@/mixins/initData";
 import { format } from "@/utils/datetime";
-import { specialRiskDetail } from '@/api/risk';
+import { specialRiskGasDoneDetail } from '@/api/risk';
 import edetail from '../detail'
 export default {
   components: { edetail },
@@ -63,7 +63,7 @@ export default {
       this.$emit("selectionChange", { selections: selections });
     },
     detail(row) {
-      specialRiskDetail(row.formId).then(res => {
+      specialRiskGasDoneDetail(row.taskId, row.formId).then(res => {
         if (res.code != '200') {
           this.$message.error(res.msg);
         } else {
