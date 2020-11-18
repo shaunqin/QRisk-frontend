@@ -212,8 +212,8 @@
           <el-option label="危险源风险值" value="2"></el-option>
         </el-select>
         <el-radio-group v-model="sort" :disabled="!jisuanType">
-          <el-radio-button label="asc">asc</el-radio-button>
-          <el-radio-button label="desc">desc</el-radio-button>
+          <el-radio-button label="asc">{{ $t('analysis.ascending') }}</el-radio-button>
+          <el-radio-button label="desc">{{ $t('analysis.descending') }}</el-radio-button>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="诱因:">

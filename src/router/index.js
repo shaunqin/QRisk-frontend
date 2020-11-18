@@ -269,26 +269,6 @@ export const asyncRoutes = [{
       ]
     },
     {
-      path: 'evaluateReportMonthly',
-      component: () => import('@/views/dataAnalysis/evaluateReportMonthly/pageindex'),
-      meta: {
-        title: 'evaluateReportMonthly',
-        icon: 'evaluateReportMonthly'
-      },
-      redirect: '/dataAnalysis/evaluateReportMonthly/index',
-      hidden: true,
-      children: [
-        {
-          path: 'index',
-          component: () => import('@/views/dataAnalysis/evaluateReportMonthly/index'),
-          name: 'evaluateReportMonthlyIndex',
-          meta: {
-            title: 'index'
-          }
-        }
-      ]
-    },
-    {
       path: 'riskEvaluateMonthly',
       component: () => import('@/views/dataAnalysis/riskEvaluateMonthly/pageindex'),
       meta: {
@@ -302,6 +282,26 @@ export const asyncRoutes = [{
           path: 'index',
           component: () => import('@/views/dataAnalysis/riskEvaluateMonthly/index'),
           name: 'riskEvaluateMonthlyIndex',
+          meta: {
+            title: 'index'
+          }
+        }
+      ]
+    },
+    {
+      path: 'evaluateReportMonthly',
+      component: () => import('@/views/dataAnalysis/evaluateReportMonthly/pageindex'),
+      meta: {
+        title: 'evaluateReportMonthly',
+        icon: 'evaluateReportMonthly'
+      },
+      redirect: '/dataAnalysis/evaluateReportMonthly/index',
+      hidden: true,
+      children: [
+        {
+          path: 'index',
+          component: () => import('@/views/dataAnalysis/evaluateReportMonthly/index'),
+          name: 'evaluateReportMonthlyIndex',
           meta: {
             title: 'index'
           }

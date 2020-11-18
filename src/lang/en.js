@@ -265,6 +265,8 @@ export default {
     rulescauseAnalysis: 'CauseAnalysis cannot be empty',
     rulesincentive: 'Incentive cannot be empty',
     submitConfirm: 'Are you sure to submit? You will not be able to edit after submitting.',
-    deleteConfirm: 'Are you sure to delete?'
+    deleteConfirm: 'Are you sure to delete?',
+    ascending: 'asc',
+    descending: 'desc'
   }
 }
