@@ -265,6 +265,8 @@ export default {
     rulescauseAnalysis: '原因分析不能为空',
     rulesincentive: '诱因不能为空',
     submitConfirm: '确定提交嘛？提交后将不能编辑。',
-    deleteConfirm: '确定删除嘛？'
+    deleteConfirm: '确定删除嘛？',
+    ascending: '升序',
+    descending: '降序'
   }
 }

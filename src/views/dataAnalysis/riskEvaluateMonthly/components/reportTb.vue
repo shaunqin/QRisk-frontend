@@ -15,6 +15,7 @@
       size="small"
       :highlight-current-row="true"
       style="width: 100%;"
+      max-height="425"
     >
       <!-- <el-table-column type="index" width="50" /> -->
       <el-table-column prop="no" label="编号" width="120" />
