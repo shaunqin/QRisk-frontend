@@ -196,11 +196,7 @@
           clearable
           @change="riskLevelChange"
         >
-          <el-option
-            v-for="item in riskColor"
-            :key="item.id"
-            :value="item.standardLevel"
-          >
+          <el-option v-for="item in riskColor" :key="item.id" :value="item.standardLevel">
             <span
               :style="'background-color:'+item.color"
               style="display: block;width: 80px;height: 25px;border: 1px solid #ccc;"
@@ -251,12 +247,16 @@
 import { formatDateToWeek, formatShortDate } from "@/utils/datetime";
 import { createUniqueString } from "@/utils/index";
 import dictSelect from "@/components/common/dictSelectMultiple";
-import { queryRiskList, queryHazardList, queryRiskLevelStandard } from "@/api/standard";
+import {
+  queryRiskList,
+  queryHazardList,
+  queryRiskLevelStandard,
+} from "@/api/standard";
 import { queryDictByName } from "@/api/dict";
 import department from "@/components/Department";
 import chartpup from "./components/chartpup";
 import { eventBus } from "@/utils/eventBus";
-import incentiveSelect from './components/incentiveSelect'
+import incentiveSelect from "./components/incentiveSelect";
 export default {
   components: { dictSelect, department, chartpup, incentiveSelect },
   data() {
@@ -301,7 +301,7 @@ export default {
           {
             label: year - i + " 下半年",
             value: 3,
-          }
+          },
         ],
       });
     }
@@ -352,7 +352,7 @@ export default {
       sort: "",
       riskMultipleValue: [],
       riskColor: [],
-      riskLevelCacheValue: ""
+      riskLevelCacheValue: "",
     };
   },
   created() {
@@ -372,11 +372,11 @@ export default {
         });
       }
     });
-    queryRiskLevelStandard({ unitType: 1 }).then(res => {
+    queryRiskLevelStandard({ unitType: 1 }).then((res) => {
       if (res.code == "200") {
-        this.riskColor = res.obj
+        this.riskColor = res.obj;
       }
-    })
+    });
   },
   watch: {
     "form.dateType"(val) {
@@ -440,6 +440,17 @@ export default {
     jisuanType(val) {
       if (!val) {
         this.sort = "";
+      } else {
+        if (this.sort == "") this.sort = "asc";
+        else {
+          if (val == "1") {
+            this.form.riskValueSort = this.sort;
+            this.form.hazardRiskValueSort = "";
+          } else {
+            this.form.riskValueSort = "";
+            this.form.hazardRiskValueSort = this.sort;
+          }
+        }
       }
     },
     sort(val) {
@@ -452,8 +463,8 @@ export default {
       }
     },
     riskMultipleValue(val) {
-      this.form.risk = val.join(',')
-    }
+      this.form.risk = val.join(",");
+    },
   },
   methods: {
     formatDateToWeek,
@@ -520,7 +531,7 @@ export default {
       this.form[key] = val;
     },
     incentiveChange(val, key) {
-      this.form[key] = val.join(',');
+      this.form[key] = val.join(",");
     },
     incentiveTypeChange(val, key) {
       this.form[key] = val;
@@ -576,12 +587,12 @@ export default {
     },
     riskLevelChange(val) {
       if (!!val) {
-        let color = this.riskColor.find(r => r.standardLevel == val).color;
+        let color = this.riskColor.find((r) => r.standardLevel == val).color;
         this.form.riskLevel = color;
       } else {
         this.form.riskLevel = "";
       }
-    }
+    },
   },
 };
 </script>

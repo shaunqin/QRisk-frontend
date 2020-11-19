@@ -13,7 +13,7 @@
     <!-- 1-2 -->
     <div class="toPDF">
       <h5 class="title-sec">2、年度关键风险状态</h5>
-      <el-table :data="data1_2" size="mini">
+      <el-table v-loading="loading" class="riskstatus-tb" :data="data1_2" size="mini">
         <el-table-column label="公司关键风险" prop="name" width="120"></el-table-column>
         <el-table-column label="预警状态">
           <el-table-column :label="item" v-for="item in data1_2_columns" :key="item">
@@ -75,7 +75,7 @@
     <!-- 1-6 -->
     <div class="toPDF">
       <h5 class="title-sec">6、关键风险TOP3关联危险源</h5>
-      <el-table :data="data1_6" size="mini" border :span-method="objectSpanMethod">
+      <el-table v-loading="loading" :data="data1_6" size="mini" border :span-method="objectSpanMethod">
         <el-table-column label="风险" prop="risk"></el-table-column>
         <el-table-column label="危险源" prop="sourceOfRiskName"></el-table-column>
         <el-table-column label="产品" prop="product"></el-table-column>
@@ -248,13 +248,13 @@ export default {
       loading: false,
       formData: {},
       spanArr: [],
-      position: 0
+      position: 0,
     };
   },
   props: {
     form: {
       type: Object,
-      default: () => { },
+      default: () => {},
     },
   },
   watch: {
@@ -264,7 +264,7 @@ export default {
         if (!val.responsibleUnitList) {
           this.init();
         }
-      }
+      },
     },
     resetChart(val) {
       if (val == 3) {
@@ -277,17 +277,19 @@ export default {
   computed: {
     ...mapGetters(["resetChart"]),
   },
-  mounted() {
-
-  },
+  mounted() {},
   methods: {
     getCirclePoint(num) {
-      if (num == 10) {
-        return "#e6a700";
-      } else if (num == 20) {
-        return "#11b95c";
+      if (num <= 10) {
+        return "#fff";
+      } else if (num <= 59) {
+        return "#00FF00";
+      } else if (num <= 299) {
+        return "#FFFF00";
+      } else if (num <= 799) {
+        return "#FFC000";
       } else {
-        return "#fff700";
+        return "#FF0000";
       }
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
@@ -297,7 +299,7 @@ export default {
         const _col = _row > 0 ? 1 : 0;
         return {
           rowspan: _row,
-          colspan: _col
+          colspan: _col,
         };
       }
     },
@@ -316,7 +318,7 @@ export default {
     },
     exportPDF() {
       let dom = document.getElementsByClassName("toPDF");
-      // 计算总页数 
+      // 计算总页数
       let totalPage = 0;
       let t_height = 0;
       Array.prototype.forEach.call(dom, (el) => {
@@ -326,9 +328,9 @@ export default {
           totalPage++;
           t_height = 0;
         }
-      })
+      });
       var pdf = new jsPDF("p", "pt", "a4");
-      pdf.text(290, 830, '1/' + totalPage);
+      pdf.text(290, 830, "1/" + totalPage);
       let page = 2;
       let _index = 0;
       let _height = 0;
@@ -409,16 +411,16 @@ export default {
     render1_2(res) {
       // 动态绑定列
       let columns = [];
-      res[0].data.map(item => {
+      res[0].data.map((item) => {
         columns.push(item.name);
-      })
+      });
       this.data1_2_columns = columns;
       this.data1_2 = res;
     },
     render1_3(res) {
       let seriesArr = [];
       let titleArr = [];
-      let _monthxAxis = res[0].data.map(r => r.name);
+      let _monthxAxis = res[0].data.map((r) => r.name);
       res.map((item, index) => {
         seriesArr.push({
           name: item.name,
@@ -555,7 +557,7 @@ export default {
           }
         }
       });
-      console.log(this.spanArr)
+      console.log(this.spanArr);
     },
     render2_1(res) {
       let xAxis = [],
@@ -585,7 +587,7 @@ export default {
     },
     render2_2(res) {
       if (res.length == 0) return;
-      let xAxis = res[0].data.map(r => r.name);
+      let xAxis = res[0].data.map((r) => r.name);
       let seriesArr = [];
       res.map((item, index) => {
         let data = [];
@@ -623,7 +625,7 @@ export default {
       if (res.length == 0) return;
       let seriesArr = [];
       let legendArr = [];
-      let _monthxAxis = res[0].data.map(r => r.name)
+      let _monthxAxis = res[0].data.map((r) => r.name);
       res.map((item) => {
         let data = item.data.map((r) => r.num);
         legendArr.push(item.name);
@@ -756,7 +758,7 @@ export default {
       if (res.length == 0) return;
       let seriesArr = [];
       let dataArr = [];
-      let _monthxAxis = res[0].data.map(r => r.name);
+      let _monthxAxis = res[0].data.map((r) => r.name);
       res.map((item) => {
         let data = item.data.map((r) => r.num);
         dataArr.push(data);
@@ -949,33 +951,43 @@ export default {
     },
     init() {
       this.loading = true;
-      getRiskAssessmentChartData(this.form).then(res => {
-        try {
-          if (res) {
-            this.render1_1(res.find(r => r.imageNo == '1-1').data); // 1
-            this.render1_2(res.find(r => r.imageNo == '1-2').data); // 2
-            this.render1_3(res.find(r => r.imageNo == '1-3').data); // 3
-            this.render1_4(res.find(r => r.imageNo == '1-4').data); // 4
-            this.render1_5(res.find(r => r.imageNo == '1-5').data); // 5
-            this.render1_6(res.find(r => r.imageNo == '1-6').data); // 6
-            this.render2_1(res.find(r => r.imageNo == '2-1').data); // 7
-            this.render2_2(res.find(r => r.imageNo == '2-2').data); // 8
-            this.render2_3(res.find(r => r.imageNo == '2-3').data); // 9
-            this.render2_4(res.find(r => r.imageNo == '2-4').data); // 10
-            this.render2_5(res.find(r => r.imageNo == '2-5').data); // 11
-            this.render3_1(res.find(r => r.imageNo == '3-1').data); // 12
-            this.render3_2(res.find(r => r.imageNo == '3-2-1').data, res.find(r => r.imageNo == '3-2-2').data); // 13
-            this.render3_3(res.find(r => r.imageNo == '3-3').data); // 14
-            this.render3_4(res.find(r => r.imageNo == '3-4').data); // 15
-            this.render3_5(res.find(r => r.imageNo == '3-5').data); // 16
-            this.$nextTick(() => {
-              this.loading = false;
-            })
+      getRiskAssessmentChartData(this.form)
+        .then((response) => {
+          try {
+            if (response.code == "200") {
+              let res = response.obj;
+              this.render1_1(res.find((r) => r.imageNo == "1-1").data); // 1
+              this.render1_2(res.find((r) => r.imageNo == "1-2").data); // 2
+              this.render1_3(res.find((r) => r.imageNo == "1-3").data); // 3
+              this.render1_4(res.find((r) => r.imageNo == "1-4").data); // 4
+              this.render1_5(res.find((r) => r.imageNo == "1-5").data); // 5
+              this.render1_6(res.find((r) => r.imageNo == "1-6").data); // 6
+              this.render2_1(res.find((r) => r.imageNo == "2-1").data); // 7
+              this.render2_2(res.find((r) => r.imageNo == "2-2").data); // 8
+              this.render2_3(res.find((r) => r.imageNo == "2-3").data); // 9
+              this.render2_4(res.find((r) => r.imageNo == "2-4").data); // 10
+              this.render2_5(res.find((r) => r.imageNo == "2-5").data); // 11
+              this.render3_1(res.find((r) => r.imageNo == "3-1").data); // 12
+              this.render3_2(
+                res.find((r) => r.imageNo == "3-2-1").data,
+                res.find((r) => r.imageNo == "3-2-2").data
+              ); // 13
+              this.render3_3(res.find((r) => r.imageNo == "3-3").data); // 14
+              this.render3_4(res.find((r) => r.imageNo == "3-4").data); // 15
+              this.render3_5(res.find((r) => r.imageNo == "3-5").data); // 16
+              this.$nextTick(() => {
+                this.loading = false;
+              });
+            } else {
+              this.$message.error(response.msg);
+            }
+          } catch (e) {
+            console.log(e);
           }
-        } catch (e) { console.log(e) }
-      }).catch(() => {
-        this.loading = false;
-      })
+        })
+        .catch(() => {
+          this.loading = false;
+        });
     },
   },
 };
@@ -997,5 +1009,10 @@ export default {
 .center {
   text-align: center;
   margin-top: 0;
+}
+.riskstatus-tb {
+  /deep/ .el-table__body td {
+    background: #f5f7fa;
+  }
 }
 </style>
