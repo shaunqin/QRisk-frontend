@@ -48,7 +48,7 @@
 import initData from "@/mixins/initData";
 import { specialRiskFill } from "@/api/risk";
 import handle from "../handle";
-import fillin from '../fillinDialog';
+import fillin from "../fillinDialog";
 export default {
   mixins: [initData],
   components: { handle, fillin },
@@ -75,20 +75,27 @@ export default {
     },
     doFillin(row) {
       let _this = this.$refs.fillin;
-      _this.dialog = true;
-      specialRiskFill(row.taskId).then(res => {
+      this.loading = true;
+      specialRiskFill(row.taskId).then((res) => {
+        this.loading = false;
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
           _this.data = res.obj;
           _this.form.id = res.obj.id;
+          _this.form.analysisTitle = res.obj.analysisTitle;
+          _this.form.analysis = res.obj.analysis;
+          _this.form.analysisNo = res.obj.analysisNo;
+          _this.form.approval = res.obj.approval;
+          _this.form.analysisDept = res.obj.analysisDept;
+          _this.form.approvalDate = res.obj.approvalDate;
           if (res.obj.hazardVoList && res.obj.hazardVoList.length > 0) {
             _this.form.hazardList = res.obj.hazardVoList;
           }
           _this.dialog = true;
         }
-      })
-    }
+      });
+    },
   },
 };
 </script>

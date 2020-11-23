@@ -47,7 +47,11 @@
       </el-form>
     </el-card>
     <!-- 危险源 -->
-    <el-card header="危险源">
+    <el-card class="chead">
+      <div slot="header" class="hslot">
+        <span>危险源</span>
+        <el-button type="text" icon="el-icon-tickets" @click="showReport">风险报告</el-button>
+      </div>
       <el-table :data="data.hazardVoList" size="mini">
         <el-table-column label="系统" prop="systemName" />
         <el-table-column label="子系统" prop="subSystemName" />
@@ -101,19 +105,34 @@
     >
       <apprvalRecord :data="data.noticeComments" />
     </el-card>
+    <report ref="report" :formId="formId" :disabled="true" @change="formIdChange" />
   </div>
 </template>
 
 <script>
-import { formatShortDate } from '@/utils/datetime'
+import { formatShortDate } from "@/utils/datetime";
 import apprvalRecord from "../apprvalRecord";
+import report from "../report";
+
 export default {
-  components: { apprvalRecord },
+  components: { apprvalRecord, report },
+  data() {
+    return {
+      formId: "",
+    };
+  },
   props: ["data", "form"],
   methods: {
     formatShortDate,
-  }
-}
+    showReport() {
+      this.formId = this.data.id;
+      this.$refs.report.dialog = true;
+    },
+    formIdChange(val) {
+      this.formId = val;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -148,6 +167,16 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+}
+.chead {
+  /deep/ .el-card__header {
+    padding: 5px 20px;
+  }
+  .hslot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 </style>
