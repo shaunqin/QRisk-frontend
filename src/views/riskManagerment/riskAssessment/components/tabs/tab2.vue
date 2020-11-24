@@ -40,6 +40,9 @@
       <el-table-column label="拟制人">
         <template slot-scope="{row}">{{row.issueName}}[{{row.staffno}}]</template>
       </el-table-column>
+      <el-table-column label="发布日期" width="100">
+        <template slot-scope="{row}">{{formatShortDate(row.createDate)}}</template>
+      </el-table-column>
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -62,6 +65,7 @@ import {
   specialRiskDelete,
   specialRiskSubmit,
 } from "@/api/risk";
+import { formatShortDate } from "@/utils/datetime";
 export default {
   components: { eform },
   data() {
@@ -83,6 +87,7 @@ export default {
     this.init();
   },
   methods: {
+    formatShortDate,
     beforeInit() {
       this.url = `/risk_mgr/special_risk_notice_mgr/query/draft/${this.page}/${this.size}`;
       this.params = { ...this.queryForm };

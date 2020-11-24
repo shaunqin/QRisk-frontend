@@ -19,12 +19,10 @@
             <el-input v-model="form.title" style="width: 100%;" />
           </el-form-item>
           <el-form-item label="背景" prop="background">
-            <editer :value="form.background" @input="editerChange($event,'background')" />
-            <!-- <el-input v-model="form.background" style="width: 100%;" type="textarea" rows="6" /> -->
+            <editer ref="background" v-model="form.background" v-if="dialog" />
           </el-form-item>
           <el-form-item label="存在的安全风险" prop="existingRisk">
-            <editer :value="form.existingRisk" @input="editerChange($event,'existingRisk')" />
-            <!-- <el-input v-model="form.existingRisk" style="width: 100%;" type="textarea" rows="6" /> -->
+            <editer ref="existingRisk" v-model="form.existingRisk" v-if="dialog" />
           </el-form-item>
         </el-col>
       </el-row>

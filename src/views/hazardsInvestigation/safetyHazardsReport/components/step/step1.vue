@@ -91,21 +91,29 @@
             </el-popover>
           </template>
         </el-table-column>
+        <el-table-column label="审核" width="80">
+          <template slot-scope="{row}">
+            <span v-if="!row.reviewing">-</span>
+            <el-button v-else type="primary" size="mini" @click="doHandle(row)">办理</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </el-card>
     <fillinForm ref="fillinForm" :data="data" />
     <list2copy ref="list2copy" />
+    <handle ref="handle" />
   </div>
 </template>
 
 <script>
 import { formatShortDate } from '@/utils/datetime'
 import fillinForm from '../fillinForm'
-import { queryControlListDetail } from '@/api/hazards'
+import { queryControlListDetail, queryHazards } from '@/api/hazards'
 import list2copy from '../list2copy'
 import approvalRecord from '../approvalRecord'
+import handle from '../handlTo2'
 export default {
-  components: { fillinForm, list2copy, approvalRecord },
+  components: { fillinForm, list2copy, approvalRecord, handle },
   data() {
     return {
       baseApi: process.env.VUE_APP_BASE_API
@@ -142,6 +150,24 @@ export default {
           _this.dialog = true;
         }
       })
+    },
+    doHandle(row) {
+      queryHazards(row.runTaskId, row.formId).then((res) => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          let _this = this.$refs.handle;
+          _this.data = res.obj;
+          _this.form.taskId = row.runTaskId;
+          _this.form.formId = row.formId;
+          _this.parentTaskId = row.parentTaskId;
+          if (res.obj.step != 4) {
+            _this.form.comment = res.obj.deptMeasure ? (res.obj.deptMeasure.implementStatus || "") : "";
+          }
+          _this.form.implementStatus = res.obj.deptMeasure ? (res.obj.deptMeasure.implementStatus || "") : "";
+          _this.dialog = true;
+        }
+      });
     }
   }
 }

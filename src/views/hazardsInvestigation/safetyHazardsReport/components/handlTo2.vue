@@ -7,10 +7,11 @@
     title="处理待办"
     custom-class="big_dialog"
   >
-    <step4 ref="step4" v-if="step==4" :data="data" :form="form" @change="formChange" />
+    <step2 ref="step2" v-if="step==2" :data="data" :form="form" />
+    <hairdown ref="hairdown" :data="data" :form="form" />
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
-      <el-button v-if="step==1||step==4" :loading="loading" type="primary" @click="doSubmit">确认</el-button>
+      <el-button v-if="step==2" :loading="loading" type="primary" @click="doSubmit">确认</el-button>
     </div>
     <!-- 抄送 -->
     <ccPerson ref="ccPerson" :deptPath="deptPath" @subCC="subCC" />
@@ -18,12 +19,15 @@
 </template>
 
 <script>
-import { riskNoticeDetail, riskNoticeComplete, riskNoticeModify, validatePWD } from "@/api/risk";
-import step4 from "./step/step4";
-import hairdown from './hairdown';
+import { hazardsComplete, } from "@/api/hazards";
+import step1 from "./step/step1";
+import step2 from "./step/step2";
+import step3 from "./step/step3";
+import hairdown from './hairdown'
 import ccPerson from './ccPerson';
+
 export default {
-  components: { step4, ccPerson },
+  components: { step1, hairdown, step2, step3, ccPerson },
   data() {
     return {
       loading: false,
@@ -33,45 +37,32 @@ export default {
         taskId: 0,
         formId: 0,
         processFlag: "1",
-        implementStatus: "" // 落实情况
+        sqlUserId: "",
+        hiddenDangerList: []
       },
       data: {}, // 父组件赋值
       password: "",
       parentTaskId: ""
     };
   },
-  props: {
-    isSecChild: {
-      type: Boolean,
-      default: false
-    },
-    source: {
-      type: String,
-      default: ''
-    }
-  },
   computed: {
     step() {
       return this.data.step;
     },
     hiddenFill() {
-      return this.data.hiddenFill;
+      return this.data.hiddenFill
     },
     deptPath() {
-      return this.data.deptMeasure ? this.data.deptMeasure.deptPath : ""
+      return this.data.deptPath || ""
     }
   },
   methods: {
     cancel() {
       this.resetForm();
     },
-    formChange(form) {
-      console.log(form);
-      this.form = form;
-    },
     doSubmit() {
       switch (this.step) {
-        case 4:
+        case 2:
           this.judgeCC();
           break;
         default:
@@ -101,35 +92,36 @@ export default {
         this.$message.error("请输入驳回备注！");
         return;
       }
+      // 获取领导修改的填报数据
+      if (this.$refs.step2) {
+        this.form.hiddenDangerList = this.$refs.step2.$refs.fillinForm.fillinData;
+      }
       this.loading = true;
-      riskNoticeComplete({ ...this.form, ...params }).then((res) => {
+      hazardsComplete({ ...this.form, ...params }).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
           this.$message.success("操作成功");
           this.resetForm();
-          // 办理页面弹出办理
-          if (this.isSecChild) {
-            // 刷新父页面-已下发措施
-            if (this.source == 'myIssued') {
-              this.$parent.$parent.$parent.$parent.$parent.$parent.detail({ id: this.form.formId });
-            }
-            else {
-              this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.subHandle({ taskId: this.parentTaskId, formId: this.form.formId });
-            }
-          } else {
-            this.$parent.init();
-            this.loadCount();
-          }
+          // 刷新父页面-已下发措施
+          this.$parent.$parent.$parent.$parent.subHandle({ taskId: this.parentTaskId, formId: this.form.formId });
         }
         this.loading = false;
       });
     },
     resetForm() {
       this.dialog = false;
+      this.form = {
+        comment: "", // 驳回备注
+        taskId: 0,
+        formId: 0,
+        processFlag: "",
+        sqlUserId: "",
+        hiddenDangerList: []
+      };
     },
     loadCount() {
-      this.$parent.$parent.$parent.$parent.$parent.loadCount();
+      this.$parent.$parent.$parent.$parent.loadCount();
     }
   },
 };

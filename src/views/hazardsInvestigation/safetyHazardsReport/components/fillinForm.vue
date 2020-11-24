@@ -3,7 +3,7 @@
     <p class="title">
       <b>{{titleForm.title}}</b>
     </p>
-    <el-form ref="titleForm" size="mini" label-width="auto" inline>
+    <el-form ref="titleForm" size="mini"  inline>
       <el-form-item label="填表人">
         <span class="readonly">{{titleForm.reportName}}</span>
       </el-form-item>

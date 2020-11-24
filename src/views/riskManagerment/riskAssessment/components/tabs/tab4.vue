@@ -52,12 +52,22 @@ import fillin from "../fillinDialog";
 export default {
   mixins: [initData],
   components: { handle, fillin },
+  props: ["queryForm"],
   mounted() {
     this.init();
+  },
+  watch: {
+    queryForm: {
+      deep: true,
+      handler() {
+        this.init();
+      }
+    }
   },
   methods: {
     beforeInit() {
       this.url = `/risk_mgr/special_risk_notice_mgr/query/queryTodo/${this.page}/${this.size}`;
+      this.params = { ...this.queryForm };
       return true;
     },
     subHandle(row) {

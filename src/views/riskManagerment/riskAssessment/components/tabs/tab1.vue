@@ -37,6 +37,9 @@
       <el-table-column label="拟制人">
         <template slot-scope="{row}">{{row.issueName}}[{{row.staffno}}]</template>
       </el-table-column>
+      <el-table-column label="发布日期" width="100">
+        <template slot-scope="{row}">{{formatShortDate(row.createDate)}}</template>
+      </el-table-column>
     </el-table>
     <!--分页组件-->
     <el-pagination
@@ -54,7 +57,7 @@
 
 <script>
 import initData from "@/mixins/initData";
-import { format } from "@/utils/datetime";
+import { formatShortDate } from "@/utils/datetime";
 import eform from "../form";
 import edetail from "../detail";
 import { specialRiskDetail } from "@/api/risk";
@@ -66,11 +69,20 @@ export default {
       selections: []
     };
   },
-  props: ["assessmentType"],
+  props: ["assessmentType", "queryForm"],
   mounted() {
     this.init();
   },
+  watch: {
+    queryForm: {
+      deep: true,
+      handler() {
+        this.init();
+      }
+    }
+  },
   methods: {
+    formatShortDate,
     beforeInit() {
       this.url = `/risk_mgr/special_risk_notice_mgr/query/pageList/${this.page}/${this.size}`;
       this.params = { ...this.queryForm };

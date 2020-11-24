@@ -15,10 +15,10 @@
         <el-input v-model="data.title" style="width: 100%;" />
       </el-form-item>
       <el-form-item label="安全风险">
-        <el-input v-model="data.existingRisk" style="width: 100%;" type="textarea" rows="6" />
+        <editer ref="existingRisk" v-model="data.existingRisk"  v-if="dialog" />
       </el-form-item>
       <el-form-item label="背景">
-        <el-input v-model="data.background" style="width: 100%;" type="textarea" rows="6" />
+        <editer ref="background" v-model="data.background" v-if="dialog" />
       </el-form-item>
 
       <el-form-item label="风险防范措施">
@@ -82,8 +82,9 @@
 
 <script>
 import department from "@/components/Department/deptByRole";
+import editer from '@/components/Tinymce'
 export default {
-  components: { department },
+  components: { department ,editer},
   data() {
     return {
       baseUrl: process.env.VUE_APP_BASE_API,
@@ -108,6 +109,9 @@ export default {
         this.$emit("change", val);
       },
     },
+    dialog(){
+      return this.$parent.$parent.dialog;
+    }
   },
   mounted() {
     // console.log(this.baseUrl);

@@ -20,22 +20,10 @@
             />
           </el-form-item>
           <el-form-item label="背景" prop="background">
-            <el-input
-              v-model="detailForm.background"
-              style="width: 100%;"
-              type="textarea"
-              rows="3"
-              @keyup.native="formChangeStatus"
-            />
+            <editer ref="background" v-model="detailForm.background" v-if="dialog" />
           </el-form-item>
           <el-form-item label="存在的安全风险" prop="existingRisk">
-            <el-input
-              v-model="detailForm.existingRisk"
-              style="width: 100%;"
-              type="textarea"
-              rows="3"
-              @keyup.native="formChangeStatus"
-            />
+            <editer ref="existingRisk" v-model="detailForm.existingRisk"  v-if="dialog" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -101,13 +89,13 @@ import { riskNoticeAdd, riskNoticeModify, riskNoticeSubmit } from "@/api/risk";
 import department from "@/components/Department/deptByRole";
 import { format } from "@/utils/datetime";
 import leaderApprvalRecord from '../leaderApprvalRecord'
+import editer from '@/components/Tinymce'
 export default {
-  components: { department, leaderApprvalRecord },
+  components: { department, leaderApprvalRecord ,editer},
   data() {
     return {
       loading: false,
       save_loading: false,
-      dialog: false,
       detailForm: {
         id: this.data.id,
         no: this.data.no,
@@ -153,6 +141,9 @@ export default {
         this.$emit("change", val);
       },
     },
+    dialog(){
+      return this.$parent.$parent.dialog;
+    }
   },
   watch: {
     data: {

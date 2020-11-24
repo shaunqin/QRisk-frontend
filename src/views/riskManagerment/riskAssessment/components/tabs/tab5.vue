@@ -49,12 +49,23 @@ import edetail from '../detail'
 export default {
   components: { edetail },
   mixins: [initData],
+  props: ["queryForm"],
   mounted() {
     this.init();
   },
+  watch: {
+    queryForm: {
+      deep: true,
+      handler() {
+        this.init();
+      }
+    }
+  },
   methods: {
+    format,
     beforeInit() {
       this.url = `/risk_mgr/special_risk_notice_mgr/query/hasDone/${this.page}/${this.size}`;
+      this.params = { ...this.queryForm };
       return true;
     },
     // 选择切换

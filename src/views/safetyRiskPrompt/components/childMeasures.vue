@@ -56,14 +56,14 @@
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column label="审核" width="70">
+      <el-table-column label="审核" width="80">
         <template slot-scope="{row}">
           <span v-if="!row.reviewing">-</span>
           <el-button v-else type="primary" size="mini" @click="doHandle(row)">办理</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <ehandle ref="ehandle" :isSecChild="true" />
+    <ehandle ref="ehandle" :isSecChild="true" :source="source" />
   </div>
 </template>
 
@@ -78,6 +78,10 @@ export default {
       type: Array,
       default: [],
     },
+    source: {
+      type: String,
+      default: ''
+    }
   },
   methods: {
     getUrl(url) {
