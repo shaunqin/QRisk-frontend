@@ -204,13 +204,14 @@ export default {
     },
     submitStep2() {
       let _this = this.$refs.step2;
-      console.log(_this.formChange);
-      if (_this.formChange) {
-        this.$message("提交前请先保存！");
-        return;
-      }
+      // console.log(_this.formChange);
+      // if (_this.formChange) {
+      //   this.$message("提交前请先保存！");
+      //   return;
+      // }
       this.loading = true;
-      riskNoticeComplete(this.form).then((res) => {
+      let params = { ...this.form, safetyRiskNotice: _this.detailForm }
+      riskNoticeComplete(params).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {

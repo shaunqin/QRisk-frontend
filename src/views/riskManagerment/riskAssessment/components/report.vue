@@ -9,10 +9,10 @@
   >
     <el-card v-for="(item,index) in form" :key="index">
       <el-form class="form" size="mini" label-width="85px">
-        <el-form-item label="标题">{{item.title}}</el-form-item>
+        <el-form-item label="标题">{{item.analysisTitle}}</el-form-item>
         <el-row :gutter="16">
           <el-col :span="8">
-            <el-form-item label="编号">{{item.no}}</el-form-item>
+            <el-form-item label="编号">{{item.analysisNo}}</el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="批准">{{item.approval}}</el-form-item>

@@ -18,11 +18,14 @@
       </el-row>
       <el-form-item label="适用范围">{{form.applyScope}}</el-form-item>
       <el-form-item label="主题">{{form.title}}</el-form-item>
-      <el-form-item label="安全风险">
-        <span style="white-space: pre-wrap;display: block;overflow: auto;" v-html="form.existingRisk"></span>
-      </el-form-item>
       <el-form-item label="背景">
         <span style="white-space: pre-wrap;display: block;overflow: auto;" v-html="form.background"></span>
+      </el-form-item>
+      <el-form-item label="安全风险">
+        <span
+          style="white-space: pre-wrap;display: block;overflow: auto;"
+          v-html="form.existingRisk"
+        ></span>
       </el-form-item>
       <el-form-item label="风险防范" v-if="form.measuresVos!=null">
         <ul class="measuresVos">
@@ -31,6 +34,13 @@
       </el-form-item>
       <el-form-item label="下发措施" v-if="form.firstLevelMeasure!=null">
         <childMeasures :data="form.firstLevelMeasure" source="myIssued" />
+      </el-form-item>
+      <el-form-item label="处理记录" v-if="noticeComments.length>0">
+        <leaderApprvalRecord
+          key="leaderApprvalRecord"
+          :data="noticeComments"
+          type="safety_risk_notice"
+        />
       </el-form-item>
       <el-form-item label="办理人" v-if="form.reviewerInfo!=null">
         <el-table :data="form.reviewerInfo" size="mini">
@@ -57,8 +67,9 @@
 <script>
 import { riskNoticeDetail } from "@/api/risk";
 import childMeasures from './childMeasures'
+import leaderApprvalRecord from './leaderApprvalRecord'
 export default {
-  components: { childMeasures },
+  components: { childMeasures, leaderApprvalRecord },
   data() {
     return {
       loading: false,
@@ -66,7 +77,14 @@ export default {
       form: {},
     };
   },
-  props: {
+  props: {},
+  computed: {
+    noticeComments() {
+      if (this.form.noticeComments) {
+        return this.form.noticeComments;
+      }
+      return []
+    },
   },
   methods: {
     getUrl(url) {

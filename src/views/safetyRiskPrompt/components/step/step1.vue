@@ -14,11 +14,11 @@
       <el-form-item label="主题">
         <el-input v-model="data.title" style="width: 100%;" />
       </el-form-item>
-      <el-form-item label="安全风险">
-        <editer ref="existingRisk" v-model="data.existingRisk"  v-if="dialog" />
-      </el-form-item>
       <el-form-item label="背景">
         <editer ref="background" v-model="data.background" v-if="dialog" />
+      </el-form-item>
+      <el-form-item label="安全风险">
+        <editer ref="existingRisk" v-model="data.existingRisk"  v-if="dialog" />
       </el-form-item>
 
       <el-form-item label="风险防范措施">

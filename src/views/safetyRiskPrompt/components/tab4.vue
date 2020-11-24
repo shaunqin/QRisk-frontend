@@ -8,17 +8,17 @@
       :highlight-current-row="true"
       style="width: 100%;"
     >
-      <el-table-column prop="businessName" label="流程名称" width="220">
+      <el-table-column prop="businessName" label="流程名称" min-width="220">
         <template slot-scope="{row}">
           <el-tag type="success">{{row.businessName}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="任务名称" width="250">
+      <el-table-column prop="name" label="任务名称" min-width="250">
         <template slot-scope="{row}">
           <el-tag type="warning">{{row.name}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="businessTitle" label="主题" show-overflow-tooltip />
+      <el-table-column prop="businessTitle" label="主题" min-width="300" show-overflow-tooltip />
       <el-table-column prop="createBy" label="发起人" width="120" />
       <el-table-column prop="createTime" label="发起时间" width="140" />
       <el-table-column label="操作" width="110">

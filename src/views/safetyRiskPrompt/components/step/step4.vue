@@ -11,11 +11,11 @@
       </el-row>
       <el-form-item label="适用范围">{{data.applyScope}}</el-form-item>
       <el-form-item label="主题">{{data.title}}</el-form-item>
-      <el-form-item label="安全风险">
-        <span style="white-space: pre-wrap;display: block;overflow: auto;" v-html="data.existingRisk"></span>
-      </el-form-item>
       <el-form-item label="背景">
         <span style="white-space: pre-wrap;display: block;overflow: auto;" v-html="data.background"></span>
+      </el-form-item>
+      <el-form-item label="安全风险">
+        <span style="white-space: pre-wrap;display: block;overflow: auto;" v-html="data.existingRisk"></span>
       </el-form-item>
       <el-form-item label="风险防范">
         <el-table :data="[data.deptMeasure]" size="mini">
