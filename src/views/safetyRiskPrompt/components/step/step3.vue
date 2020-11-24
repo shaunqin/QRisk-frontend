@@ -23,7 +23,13 @@
           <el-table-column label="措施内容" prop="content" width="200" show-overflow-tooltip />
           <el-table-column label="落实情况" min-width="200">
             <template slot-scope="{row}" v-show="!!row">
-              <el-input v-model="form.comment" placeholder="请输入落实情况" type="textarea" rows="3" :disabled="!!data.hiddenFill"></el-input>
+              <el-input
+                v-model="form.comment"
+                placeholder="请输入落实情况"
+                type="textarea"
+                rows="3"
+                :disabled="!!data.hiddenFill"
+              ></el-input>
             </template>
           </el-table-column>
           <el-table-column label="附件" width="100" v-if="!data.hiddenFill">

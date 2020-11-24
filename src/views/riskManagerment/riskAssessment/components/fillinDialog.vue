@@ -215,7 +215,7 @@
 
 <script>
 import initData from "@/mixins/initData";
-import { specialRiskSaveHazard } from "@/api/risk";
+import { specialRiskSaveHazard, specialRiskQueryRiskLevel } from "@/api/risk";
 import { formatShortDate } from "@/utils/datetime";
 import dictSelect from "@/components/common/dictSelect";
 import department from "@/components/Department";
@@ -277,7 +277,7 @@ export default {
       return this.data.step != 5 && this.data.step != 6;
     },
   },
-  created() {},
+  created() { },
   methods: {
     formatShortDate,
     cancel() {
@@ -375,6 +375,9 @@ export default {
     },
     dictChange(val, item, key) {
       item[key] = val;
+      if (key == 'hazard' || key == 'possibleRisks') {
+        this.queryRiskLevel(item.hazard, item.possibleRisks, item);
+      }
     },
     deptChange(val, row) {
       row.reponsibleDept = val;
@@ -382,6 +385,18 @@ export default {
     ideUnitChange(val) {
       this.form.identificationUnit = val;
     },
+    /**查询风险 */
+    queryRiskLevel(hazard, risk, item) {
+      if (!!hazard && !!risk) {
+        specialRiskQueryRiskLevel(hazard, risk).then(res => {
+          if (res.code == '200') {
+            item.possibility = res.obj.possibility;
+            item.seriousness = res.obj.seriousness;
+            item.riskLevel = res.obj.riskLevel;
+          }
+        })
+      }
+    }
   },
 };
 </script>

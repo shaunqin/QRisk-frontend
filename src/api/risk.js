@@ -259,6 +259,14 @@ export function specialRiskSaveEvalReport(data) {
     data
   })
 }
+// 查询风险等级
+export function specialRiskQueryRiskLevel(hazard, risk) {
+  return request({
+    url: `/risk_mgr/special_risk_notice_mgr/getRiskLevel/${hazard}/${risk}`,
+    method: 'get',
+  })
+}
+
 // ======== 专项风险 end =======
 
 // 风险提示编号

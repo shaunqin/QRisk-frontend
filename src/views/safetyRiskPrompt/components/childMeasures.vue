@@ -56,21 +56,57 @@
           </el-popover>
         </template>
       </el-table-column>
+      <el-table-column label="审核" width="70">
+        <template slot-scope="{row}">
+          <span v-if="!row.reviewing">-</span>
+          <el-button v-else type="primary" size="mini" @click="doHandle(row)">办理</el-button>
+        </template>
+      </el-table-column>
     </el-table>
+    <ehandle ref="ehandle" :isSecChild="true" />
   </div>
 </template>
 
 <script>
-import leaderApprvalRecord from './leaderApprvalRecord'
+import leaderApprvalRecord from "./leaderApprvalRecord";
+import ehandle from "./handleTo4";
+import { riskNoticeQueryTask } from "@/api/risk";
 export default {
-  components: { leaderApprvalRecord },
-  props: ["data"],
+  components: { leaderApprvalRecord, ehandle },
+  props: {
+    data: {
+      type: Array,
+      default: [],
+    },
+  },
   methods: {
     getUrl(url) {
       return process.env.VUE_APP_BASE_API + url;
     },
-  }
-}
+    doHandle(row) {
+      this.loading = true;
+      riskNoticeQueryTask(row.taskId, row.formId).then((res) => {
+        this.loading = false;
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          let _this = this.$refs.ehandle;
+          _this.data = { ...res.obj, measures: res.obj.measuresVos };
+          _this.form.taskId = row.taskId;
+          _this.form.formId = row.formId;
+          _this.parentTaskId = row.parentTaskId;
+          if (res.obj.step != 4) {
+            _this.form.comment = res.obj.deptMeasure ? res.obj.deptMeasure.implementStatus || "" : "";
+          } else {
+            _this.form.comment = "";
+          }
+          _this.form.implementStatus = res.obj.deptMeasure ? res.obj.deptMeasure.implementStatus || "" : "";
+          _this.dialog = true;
+        }
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
