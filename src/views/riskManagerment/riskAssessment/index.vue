@@ -18,10 +18,10 @@
             <el-form-item label="编号">
               <el-input v-model="form.no" placeholder="请输入编号" style="width:120px"></el-input>
             </el-form-item>
-            <el-form-item label="主题">
+            <el-form-item label="标题">
               <el-input v-model="form.title" placeholder="请输入主题" style="width:120px"></el-input>
             </el-form-item>
-            <el-form-item label="责任单位">
+            <el-form-item label="下发单位">
               <department
                 class="form-dept-tree mini"
                 :value="form.responsePath"
