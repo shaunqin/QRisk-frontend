@@ -84,19 +84,37 @@
             <el-input v-model="item.managementProcess"></el-input>
           </el-form-item>
           <el-form-item label="危险源">
-            <dict-select
+            <el-select v-model="item.hazard" clearable placeholder="请选择危险源" style="width:130px" @change="dictChange(item.hazard,item,'hazard')">
+              <el-option
+                v-for="item in item.hazards"
+                :key="item.diskNo"
+                :label="item.diskName"
+                :value="item.diskNo"
+                >
+              </el-option>
+            </el-select>
+            <!-- <dict-select
               :value="item.hazard"
               type="hazard"
               @change="dictChange($event,item,'hazard')"
               style="width:130px"
-            />
+            /> -->
           </el-form-item>
           <el-form-item label="可能导致的风险" label-width="115px">
-            <dict-select
+            <el-select v-model="item.possibleRisks" clearable placeholder="请选择可能导致的风险" style="width:130px" @change="dictChange(item.possibleRisks,item,'possibleRisks')">
+              <el-option
+                v-for="item in item.possibleRisksList"
+                :key="item.riskNo"
+                :label="item.riskName"
+                :value="item.riskNo"
+                >
+              </el-option>
+            </el-select>
+            <!-- <dict-select
               :value="item.possibleRisks"
               type="risk"
               @change="dictChange($event,item,'possibleRisks')"
-            />
+            /> -->
           </el-form-item>
           <el-form-item label="可能性">
             <dict-select
@@ -238,11 +256,13 @@ export default {
         approvalDate: "",
         hazardList: [
           {
+            hazards: [], // 危险源列表
             hazard: "", // 危险源
             hazardSource: "", // 危险源描述
             managementProcess: "", // 管理流程
             possibility: "", // 可能性
             possibleRisks: "", // 可能导致的风险
+            possibleRisksList: [], // 可能导致的风险列表
             riskLevel: "", // 风险等级
             rootCauseAnalysis: "", // 根原因分析
             seriousness: "", // 严重性
@@ -313,11 +333,14 @@ export default {
         approvalDate: "",
         hazardList: [
           {
+            hazards: [],
             hazard: "",
+            diskNo: "",
             hazardSource: "",
             managementProcess: "",
             possibility: "",
             possibleRisks: "",
+            possibleRisksList: [],
             riskLevel: "",
             rootCauseAnalysis: "",
             seriousness: "",
@@ -374,6 +397,7 @@ export default {
       item.specialRiskMeasureList.splice(index, 1);
     },
     dictChange(val, item, key) {
+      console.log(val, item, key)
       item[key] = val;
       if (key == 'hazard' || key == 'possibleRisks') {
         this.queryRiskLevel(item.hazard, item.possibleRisks, item);
