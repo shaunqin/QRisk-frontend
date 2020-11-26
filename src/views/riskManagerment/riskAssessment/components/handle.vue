@@ -25,6 +25,8 @@
       <el-button v-if="step==1||step==4" :loading="hdLoading" type="success" @click="doHairdown">下发</el-button>
       <el-button v-if="step==2||step==6" :loading="loading" type="primary" @click="doSubmit">确定</el-button>
     </div>
+    <!-- 抄送 -->
+    <ccPerson ref="ccPerson" :deptPath="deptPath" @subCC="subCC" />
   </el-dialog>
 </template>
 
@@ -37,8 +39,9 @@ import step4 from "./step/step4";
 import step5 from "./step/step5";
 import step6 from "./step/step6";
 import hairdown from './hairdown'
+import ccPerson from './ccPerson'
 export default {
-  components: { step1, step2, step3, step4, step5, step6, hairdown },
+  components: { step1, step2, step3, step4, step5, step6, hairdown,ccPerson },
   data() {
     return {
       loading: false,
@@ -62,6 +65,13 @@ export default {
     },
     hiddenFill() {
       return this.data.hiddenFill;
+    },
+    // 是否需要抄送
+    needCC() {
+      return this.data.copy
+    },
+    deptPath() {
+      return this.data.issueDept
     }
   },
   methods: {
@@ -78,7 +88,7 @@ export default {
           break;
         case 2:
         case 6:
-          this.submitStep2();
+          this.judgeCC();
           break;
         default:
           break;
@@ -159,7 +169,43 @@ export default {
     },
     loadCount() {
       this.$parent.$parent.$parent.$parent.$parent.$parent.loadCount();
-    }
+    },
+    judgeCC() {
+      // 领导审核同意
+      if (this.data.leaderApprove && this.form.processFlag == "1") {
+        this.$refs.ccPerson.dialog = true;
+      } else if (!this.data.leaderApprove && this.form.processFlag == "2" && this.needCC) {  // 上级风险管理员驳回
+        if (this.form.comment == "") {
+          this.$message.error("请输入驳回备注！");
+          return;
+        }
+        this.$refs.ccPerson.dialog = true;
+      } else {
+        if (this.form.processFlag == "2" && this.form.comment == "") {
+          this.$message.error("请输入驳回备注！");
+          return;
+        }
+        this.subCC({});
+      }
+    },
+    subCC(params) {
+      if (this.form.processFlag == "2" && this.form.comment == "") {
+        this.$message.error("请输入驳回备注！");
+        return;
+      }
+      this.loading = true;
+      specialRiskComplete({ ...this.form, ...params }).then((res) => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          this.$message.success("操作成功");
+          this.resetForm();
+          this.$parent.init();
+          this.loadCount();
+        }
+        this.loading = false;
+      });
+    },
   },
 };
 </script>

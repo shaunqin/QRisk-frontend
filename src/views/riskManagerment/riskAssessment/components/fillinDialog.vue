@@ -41,7 +41,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="分析单位">
+            <el-form-item label="识别单位">
               <department class="mini" :value="form.identificationUnit" @change="ideUnitChange"></department>
             </el-form-item>
             <el-form-item label="批准日期">

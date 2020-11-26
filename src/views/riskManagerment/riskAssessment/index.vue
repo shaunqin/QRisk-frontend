@@ -208,4 +208,7 @@ export default {
 /deep/ .el-badge__content.is-fixed {
   top: 10px;
 }
+/deep/ .form-dept-tree{
+  z-index: 100 !important;
+}
 </style>
