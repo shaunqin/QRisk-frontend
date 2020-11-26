@@ -474,6 +474,24 @@ export const asyncRoutes = [{
       }
     },
     {
+      path: 'qualityIndex',
+      component: () => import('@/views/qualityEvaluation/qualityIndex/index'),
+      name: 'qualityIndex',
+      hidden: true,
+      meta: {
+        title: 'qualityIndex'
+      }
+    },
+    {
+      path: 'qualityStatistics',
+      component: () => import('@/views/qualityEvaluation/qualityStatistics/index'),
+      name: 'qualityStatistics',
+      hidden: true,
+      meta: {
+        title: 'qualityStatistics'
+      }
+    },
+    {
       path: 'taskHairdown',
       component: () => import('@/views/qualityEvaluation/taskHairdown/index'),
       name: 'taskHairdown',

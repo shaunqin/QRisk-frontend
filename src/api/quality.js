@@ -66,10 +66,67 @@ export function queryYearTaskDetail(id) {
     })
 }
 
+// 删除年度任务
+export function deleteYearTask(id) {
+    return request({
+        url: `/task_mgr/yearTask/delete/${id}`,
+        method: 'post',
+    })
+}
+
 // 根据编号查询默认设置值
 export function queryDefaultValue(params) {
     return request({
         url: `/sys_mgr/defaultSetting_mgr/query/defaultValue`,
+        method: 'get',
+        params
+    })
+}
+
+/**
+ * @description: 审批填报的月度任务数据
+ * @param {*} data
+ */
+export function reviewMonthTaskParam(data) {
+    return request({
+        url: '/task_mgr/reviewMonthTaskParam',
+        method: 'post',
+        data
+    })
+}
+
+/**
+ * @description: 查询产品质量评价指数
+ * @param {*} params
+ */
+export function queryProductIndexList(params) {
+    return request({
+        url: '/quality_mgr/query/productIndexList',
+        method: 'get',
+        params
+    })
+}
+
+/**
+ * @description: 查询产品质量评价统计计算
+ * @param {*} params
+ */
+export function queryProductIndexCount(params) {
+    return request({
+        url: '/quality_mgr/query/productIndexCount',
+        method: 'get',
+        params
+    })
+}
+
+
+/**
+ * @description: 查询默认设置不分页
+ * @param {*} params
+ */
+export function queryDefaultSettingMgrList(params) {
+    return request({
+        url: '/sys_mgr/defaultSetting_mgr/query/List',
         method: 'get',
         params
     })

@@ -4,7 +4,7 @@
       <el-input v-model="form.taskName" placeholder></el-input>
     </el-form-item>
     <el-form-item label="截止日期">
-      <el-date-picker v-model="date" value-format="yyyy-MM-dd" type="daterange" unlink-panels></el-date-picker>
+      <el-date-picker v-model="date" type="monthrange" value-format="yyyy-MM" unlink-panels></el-date-picker>
     </el-form-item>
     <el-form-item label>
       <el-button type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>

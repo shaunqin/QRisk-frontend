@@ -26,7 +26,7 @@
             <el-date-picker
               v-model="fillInDate"
               value-format="yyyy-MM-dd"
-              placeholder
+              placeholde
               style="width:100%"
             ></el-date-picker>
           </el-form-item>
