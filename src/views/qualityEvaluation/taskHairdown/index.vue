@@ -37,7 +37,7 @@
         <template slot-scope="scope">
           <el-button-group>
             <el-button size="mini" icon="el-icon-edit" @click="edit(scope.row)"></el-button>
-            <el-button size="mini" icon="el-icon-delete" @click="subDelete(scope.row.id)"></el-button>
+            <el-button size="mini" icon="el-icon-delete" @click="subDelete(scope.row.yearTaskId)"></el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -57,7 +57,7 @@
 <script>
 import initData from "@/mixins/initData";
 import eform from "./form";
-import { queryYearTaskDetail } from '@/api/quality'
+import { queryYearTaskDetail, deleteYearTask } from '@/api/quality'
 export default {
   components: { eform },
   mixins: [initData],
@@ -104,10 +104,17 @@ export default {
     subDelete(id) {
       this.$confirm("确定删除嘛？")
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
+          deleteYearTask(id).then(res => {
+            if (res.code != '200') {
+              this.$message.error(res.msg);
+            } else {
+              this.init()
+              this.$message({
+                type: "success",
+                message: "删除成功!",
+              });
+            }
+          })
         })
         .catch(() => {
           this.$message({

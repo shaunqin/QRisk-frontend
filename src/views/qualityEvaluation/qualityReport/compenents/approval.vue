@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { taskAdd, taskModify, updateMonthTaskParam } from "@/api/quality";
+import { taskAdd, taskModify, updateMonthTaskParam, reviewMonthTaskParam } from "@/api/quality";
 import { queryDictByName } from "@/api/dict";
 import dictSelect from "@/components/common/dictSelect";
 
@@ -195,7 +195,29 @@ export default {
         this.$message.error("请输入驳回备注");
         return;
       }
-
+      this.loading = true;
+      const params = {
+        taskId: this.monthTaskId,
+        isPassed: this.form.agree,
+        remark: this.form.reason
+      }
+      reviewMonthTaskParam(params).then(res => {
+        if (res.code === "200") {
+            this.$message({
+              message: "审批成功",
+              type: "success",
+            });
+            this.resetForm();
+            this.loading = false;
+            this.$parent.init();
+          } else {
+            this.$message.error(res.msg);
+            this.loading = false;
+          }
+        })
+        .catch((err) => {
+          this.loading = false;
+        });
     },
     resetForm() {
       this.dialog = false;

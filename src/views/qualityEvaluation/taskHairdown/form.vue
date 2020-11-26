@@ -10,7 +10,7 @@
     <el-card header="基本信息">
       <el-form ref="form" :model="form" :rules="formRules" size="small" inline>
         <el-form-item label="任务名称" prop="taskName">
-          <el-input v-model="form.taskName" style="width: 150px;" placeholder="请输入任务名称" />
+          <el-input v-model="form.taskName" style="width: 200px;" placeholder="请输入任务名称" />
         </el-form-item>
         <el-form-item label="年度">
           <el-date-picker
@@ -18,11 +18,11 @@
             value-format="yyyy"
             type="year"
             placeholder="请输入年度"
-            style="width: 130px;"
+            style="width: 150px;"
           ></el-date-picker>
         </el-form-item>
         <el-form-item label="反馈日期">
-          <el-select v-model="form.defaultDay" placeholder clearable style="width: 130px;">
+          <el-select v-model="form.defaultDay" placeholder clearable style="width: 150px;">
             <el-option v-for="num in 31" :key="num" :label="'每月 '+num+' 日'" :value="num"></el-option>
           </el-select>
         </el-form-item>
@@ -163,7 +163,56 @@ export default {
         year: "",
         defaultDay: "",
         productValue: "",
-        monthTasks: [],
+        monthTasks: [
+          {
+            month: 1,
+            dueDate: null
+          },
+          {
+            month: 2,
+            dueDate: null
+          },
+          {
+            month: 3,
+            dueDate: null
+          },
+          {
+            month: 4,
+            dueDate: null
+          },
+          {
+            month: 5,
+            dueDate: null
+          },
+          {
+            month: 6,
+            dueDate: null
+          },
+          {
+            month: 7,
+            dueDate: null
+          },
+          {
+            month: 8,
+            dueDate: null
+          },
+          {
+            month: 9,
+            dueDate: null
+          },
+          {
+            month: 10,
+            dueDate: null
+          },
+          {
+            month: 11,
+            dueDate: null
+          },
+          {
+            month: 12,
+            dueDate: null
+          }
+        ],
         type: 2,
       },
       formRules: {
@@ -191,6 +240,11 @@ export default {
             arr.push({
               month: x,
               dueDate: val[x],
+            });
+          } else {
+            arr.push({
+              month: x,
+              dueDate: null,
             });
           }
         }
