@@ -267,6 +267,22 @@ export function specialRiskQueryRiskLevel(hazard, risk) {
   })
 }
 
+// 查询危险源
+export function queryHazard() {
+  return request({
+    url: '/info_mgr/hazard_mgr/query/hazard',
+    method: 'get',
+  })
+}
+// 查询风险列表不分页
+export function queryRiskListMgr() {
+  return request({
+    url: '/info_mgr/riskList_mgr/query/list',
+    method: 'get',
+  })
+}
+
+
 // ======== 专项风险 end =======
 
 // 风险提示编号

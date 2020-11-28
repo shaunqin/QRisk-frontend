@@ -46,7 +46,7 @@
 
 <script>
 import initData from "@/mixins/initData";
-import { specialRiskFill, queryHazard, queryRiskListMgr } from "@/api/risk";
+import { specialRiskFill } from "@/api/risk";
 import handle from "../handle";
 import fillin from "../fillinDialog";
 export default {
@@ -86,7 +86,8 @@ export default {
     doFillin(row) {
       let _this = this.$refs.fillin;
       this.loading = true;
-      specialRiskFill(row.taskId).then(async (res) => {
+      specialRiskFill(row.taskId).then((res) => {
+        this.loading = false;
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
@@ -99,37 +100,12 @@ export default {
           _this.form.analysisDept = res.obj.analysisDept;
           _this.form.approvalDate = res.obj.approvalDate;
           if (res.obj.hazardVoList && res.obj.hazardVoList.length > 0) {
-            _this.form.hazardList = [...res.obj.hazardVoList];
+            _this.form.hazardList = res.obj.hazardVoList;
           }
-          await this.getHazard()
-          await this.getRiskListMgr()
-          this.loading = false;
           _this.dialog = true;
         }
       });
     },
-    async getHazard() {
-      let _this = this.$refs.fillin;
-      await queryHazard().then(res => {
-        if (res.code != "200") {
-          this.$message.error(res.msg);
-        } else {
-          _this.form.hazardList[0].hazard = res.obj[0].diskNo
-          _this.form.hazardList[0].hazards = res.obj
-        }
-      })
-    },
-    async getRiskListMgr() {
-      let _this = this.$refs.fillin;
-      await queryRiskListMgr().then(res => {
-        if (res.code != "200") {
-          this.$message.error(res.msg);
-        } else {
-          _this.form.hazardList[0].possibleRisks = res.obj[0].riskNo
-          _this.form.hazardList[0].possibleRisksList = res.obj
-        }
-      })
-    }
   },
 };
 </script>
