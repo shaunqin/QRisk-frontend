@@ -276,3 +276,54 @@ export function getRiskNoticeNo() {
     method: 'get',
   })
 }
+
+// ======= 在控风险管理 ============
+// 查询我的待办数量
+export function riskControlQueryTodoCount() {
+  return request({
+    url: `/riskControlManage/riskControlManage/query/queryTodoCount`,
+    method: 'get',
+  })
+}
+// 新增:在控风险
+export function riskControlAdd(data) {
+  return request({
+    url: `/riskControlManage/riskControlManage/add`,
+    method: 'post',
+    data
+  })
+}
+// 查询风险评价报告详情
+export function riskControlDetail(id) {
+  return request({
+    url: `/riskControlManage/riskControlManage/query/detail/${id}`,
+    method: 'get',
+  })
+}
+// 修改
+export function riskControlModify(data) {
+  return request({
+    url: `/riskControlManage/riskControlManage/modify`,
+    method: 'put',
+    data
+  })
+}
+// 删除
+export function riskControlDelete(id) {
+  return request({
+    url: `/riskControlManage/riskControlManage/delete/${id}`,
+    method: 'delete',
+  })
+}
+// 提交
+export function riskControlSubmit(id) {
+  return request({
+    url: `/riskControlManage/riskControlManage/submit/${id}`,
+    method: 'get',
+  })
+}
+
+
+
+
+// ======= 在控风险管理 end ========

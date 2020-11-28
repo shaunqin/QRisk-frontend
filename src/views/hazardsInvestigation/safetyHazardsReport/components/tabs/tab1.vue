@@ -30,7 +30,7 @@
           <el-button type="text" size="mini" @click="showHazardsStatistics(row)">查看</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="状态">
+      <el-table-column label="状态" width="100">
         <template slot-scope="{row}">
           <span v-if="row.taskType==2">
             <span v-if="row.status==1">初始化</span>
@@ -118,6 +118,7 @@ export default {
         } else {
           const { obj } = res;
           _this.form = obj;
+          _this.form.deptPath = [obj.deptPath];
           _this.form2 = obj.dueDates;
           _this.files = obj.acc;
           _this.dialog = true;

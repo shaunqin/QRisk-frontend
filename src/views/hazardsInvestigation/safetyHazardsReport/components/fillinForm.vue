@@ -3,7 +3,7 @@
     <p class="title">
       <b>{{titleForm.title}}</b>
     </p>
-    <el-form ref="titleForm" size="mini"  inline>
+    <el-form ref="titleForm" size="mini" inline>
       <el-form-item label="填表人">
         <span class="readonly">{{titleForm.reportName}}</span>
       </el-form-item>
@@ -33,7 +33,8 @@
               <el-input
                 v-model="item.hiddenName"
                 placeholder
-                style="width: 930px"
+                type="textarea"
+                rows="3"
                 :disabled="disabled"
               ></el-input>
             </el-form-item>
@@ -96,7 +97,13 @@
           />
         </el-form-item>
         <el-form-item label="监管单位">
-          <el-input v-model="item.supervisoryUnit" style="width: 140px" :disabled="disabled"></el-input>
+          <dictSelect
+            type="supervisory_unit"
+            :value="item.supervisoryUnit"
+            @change="dictChange($event,item,'supervisoryUnit')"
+            style="width: 140px"
+            :disabled="disabled"
+          />
         </el-form-item>
         <el-row class="fill-row" :gutter="16">
           <el-col :span="12">
@@ -109,14 +116,20 @@
                 :disabled="disabled"
               ></el-input>
             </el-form-item>
-            <el-form-item label="备注">
-              <el-input v-model="item.remarks" type="textarea" rows="3" :disabled="disabled"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
             <el-form-item label="治理效果验证标准">
               <el-input
                 v-model="item.verificationFollowUp"
+                type="textarea"
+                rows="3"
+                :disabled="disabled"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="等效措施">
+              <el-input
+                v-model="item.equivalentMeasures"
+                placeholder
                 type="textarea"
                 rows="3"
                 :disabled="disabled"
@@ -131,6 +144,11 @@
               ></el-input>
             </el-form-item>
           </el-col>
+          <el-col :span="24">
+            <el-form-item label="备注">
+              <el-input v-model="item.remarks" type="textarea" rows="3" :disabled="disabled"></el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
       <el-button
@@ -143,9 +161,15 @@
       <!--表格渲染-->
       <el-table :data="item.controlList" size="small" style="width: 100%" max-height="400px">
         <el-table-column type="index" width="50" />
-        <el-table-column label="等效措施">
+        <el-table-column label="整改措施">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.measures" size="mini" placeholder :disabled="disabled"></el-input>
+            <el-input
+              v-model="scope.row.measures"
+              size="mini"
+              type="textarea"
+              rows="3"
+              :disabled="disabled"
+            ></el-input>
           </template>
         </el-table-column>
         <el-table-column label="责任人">
@@ -170,12 +194,24 @@
         </el-table-column>
         <el-table-column prop="nn" label="措施实施情况跟踪">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.implementationOfMeasures" size="mini" :disabled="disabled"></el-input>
+            <el-input
+              v-model="scope.row.implementationOfMeasures"
+              size="mini"
+              type="textarea"
+              rows="3"
+              :disabled="disabled"
+            ></el-input>
           </template>
         </el-table-column>
         <el-table-column prop="oo" label="治理结果情况跟踪">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.governanceResults" size="mini" :disabled="disabled"></el-input>
+            <el-input
+              v-model="scope.row.governanceResults"
+              size="mini"
+              type="textarea"
+              rows="3"
+              :disabled="disabled"
+            ></el-input>
           </template>
         </el-table-column>
         <el-table-column label width="80" v-if="!disabled">
@@ -241,7 +277,7 @@ export default {
   },
   created() {
     this.titleForm.reportName = this.userInfo.realname;
-        this.titleForm.title = this.data.controlListName;
+    this.titleForm.title = this.data.controlListName;
   },
   mounted() {
     eventBus.$on("accept-source", (data) => {
@@ -294,6 +330,7 @@ export default {
             levels: "",
             no: res.obj,
             reasonAnalysis: "",
+            equivalentMeasures:"",
             rectificationProgress: "",
             remarks: "",
             source: "",

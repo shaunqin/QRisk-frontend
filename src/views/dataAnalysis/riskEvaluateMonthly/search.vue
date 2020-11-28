@@ -16,6 +16,7 @@
         <department
           :value="responsibleUnitList"
           :multiple="true"
+          :flat="true"
           @change="deptChange"
           style="width:500px;line-height: 18px;"
         />

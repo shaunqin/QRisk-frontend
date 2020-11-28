@@ -102,7 +102,7 @@
       </el-form>
     </el-card>
     <el-card header="单次任务部门" style="margin-top:20px" v-if="form.taskType==2">
-      <department :value="form.deptPath" @change="deptChange" style="width:400px" />
+      <department :value="form.deptPath" :multiple="true" :flat="true" :disabled="!isAdd" @change="deptChange" style="width:400px" />
     </el-card>
     <el-card header="附件上传" style="margin-top:20px">
       <eupload @success="uploadSuccess"></eupload>
@@ -152,7 +152,7 @@ export default {
         accId: [],  // 附件
         dueDate: "", // 反馈日期
         year: new Date().getFullYear().toString(), // 年份
-        deptPath: null,
+        deptPath: [],
         defaultDay: "", // 默认日期 day
       },
       formRules: {

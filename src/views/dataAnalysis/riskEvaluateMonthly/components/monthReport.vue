@@ -6,7 +6,7 @@
       <!-- 1-1 -->
       <h5 class="title-sec">1、月度关键风险状态</h5>
       <echart ref="image1" :chartData="data1_1" v-loading="loading" />
-      <el-input v-model="desc1_1" placeholder>
+      <el-input v-model="desc['1_1']" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
     </div>
@@ -24,7 +24,7 @@
         </el-table-column>
       </el-table>
       <br />
-      <el-input v-model="desc1_1" placeholder>
+      <el-input v-model="desc['1_2']" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
     </div>
@@ -32,7 +32,7 @@
     <div class="toPDF">
       <h5 class="title-sec">3、关键风险TOP3趋势</h5>
       <echart ref="image2" :chartData="data1_3" height="500px" v-loading="loading" />
-      <el-input v-model="desc1_1" placeholder>
+      <el-input v-model="desc['1_3']" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
     </div>
@@ -50,7 +50,7 @@
           <echart ref="image5" :chartData="data1_4[2]" v-loading="loading" />
         </el-col>
       </el-row>
-      <el-input v-model="desc1_1" placeholder>
+      <el-input v-model="desc['1_4']" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
     </div>
@@ -68,21 +68,27 @@
           <echart ref="image8" :chartData="data1_5[2]" height="200px" v-loading="loading" />
         </el-col>
       </el-row>
-      <el-input v-model="desc1_1" placeholder>
+      <el-input v-model="desc['1_5']" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
     </div>
     <!-- 1-6 -->
     <div class="toPDF">
       <h5 class="title-sec">6、关键风险TOP3关联危险源</h5>
-      <el-table v-loading="loading" :data="data1_6" size="mini" border :span-method="objectSpanMethod">
+      <el-table
+        v-loading="loading"
+        :data="data1_6"
+        size="mini"
+        border
+        :span-method="objectSpanMethod"
+      >
         <el-table-column label="风险" prop="risk"></el-table-column>
         <el-table-column label="危险源" prop="sourceOfRiskName"></el-table-column>
         <el-table-column label="产品" prop="product"></el-table-column>
         <el-table-column label="风险值" prop="value"></el-table-column>
       </el-table>
       <br />
-      <el-input v-model="desc1_1" placeholder>
+      <el-input v-model="desc['1_6']" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
     </div>
@@ -91,7 +97,7 @@
       <!-- 2-1 -->
       <h5 class="title-sec">1、危险源风险分布(一)</h5>
       <echart ref="image9" :chartData="data2_1" v-loading="loading" />
-      <el-input v-model="desc1_1" placeholder>
+      <el-input v-model="desc['2_1']" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
     </div>
@@ -99,7 +105,7 @@
     <div class="toPDF">
       <h5 class="title-sec">2、危险源风险分布(二)</h5>
       <echart ref="image10" :chartData="data2_2" v-loading="loading" />
-      <el-input v-model="desc1_1" placeholder>
+      <el-input v-model="desc['2_2']" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
     </div>
@@ -107,7 +113,7 @@
     <div class="toPDF">
       <h5 class="title-sec">3、危险源风险TOP3趋势</h5>
       <echart ref="image11" :chartData="data2_3" v-loading="loading" />
-      <el-input v-model="desc1_1" placeholder>
+      <el-input v-model="desc['2_3']" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
     </div>
@@ -125,7 +131,7 @@
           <echart ref="image14" :chartData="data2_4[2]" v-loading="loading" />
         </el-col>
       </el-row>
-      <el-input v-model="desc1_1" placeholder>
+      <el-input v-model="desc['2_4']" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
     </div>
@@ -143,7 +149,7 @@
           <echart ref="image17" :chartData="data2_5[2]" v-loading="loading" />
         </el-col>
       </el-row>
-      <el-input v-model="desc1_1" placeholder>
+      <el-input v-model="desc['2_5']" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
     </div>
@@ -152,7 +158,7 @@
       <!-- 3-1 -->
       <h5 class="title-sec">1、信息数据统计分布</h5>
       <echart ref="image18" :chartData="data3_1" v-loading="loading" />
-      <el-input v-model="desc1_1" placeholder>
+      <el-input v-model="desc['3_1']" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
     </div>
@@ -160,7 +166,7 @@
       <!-- 3-2 -->
       <h5 class="title-sec">2、信息数据来源统计</h5>
       <echart ref="image19" :chartData="data3_2" v-loading="loading" />
-      <el-input v-model="desc1_1" placeholder>
+      <el-input v-model="desc['3_2']" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
     </div>
@@ -168,7 +174,7 @@
       <!-- 3-3 -->
       <h5 class="title-sec">3、信息数据统计(各产品)</h5>
       <echart ref="image20" :chartData="data3_3" v-loading="loading" />
-      <el-input v-model="desc1_1" placeholder>
+      <el-input v-model="desc['3_3']" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
     </div>
@@ -176,7 +182,7 @@
       <!-- 3-4 -->
       <h5 class="title-sec">4、信息数据统计(各系统)</h5>
       <echart ref="image21" :chartData="data3_4" v-loading="loading" />
-      <el-input v-model="desc1_1" placeholder>
+      <el-input v-model="desc['3_4']" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
     </div>
@@ -184,27 +190,89 @@
       <!-- 3-5 -->
       <h5 class="title-sec">5、信息数据统计(各单位)</h5>
       <echart ref="image22" :chartData="data3_5" v-loading="loading" />
-      <el-input v-model="desc1_1" placeholder>
+      <el-input v-model="desc['3_5']" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
     </div>
     <div class="toPDF">
       <h4>四、月度点评与风险防控</h4>
-      <el-form :model="formData" size="small" inline>
-        <el-form-item label="时间">
-          <el-date-picker v-model="formData.date" style="width:150px"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="风险">
-          <el-input v-model="formData.risk" style="width:150px"></el-input>
-        </el-form-item>
-        <el-form-item label="责任单位">
-          <department
-            :value="formData.dept"
-            @change="deptChange"
-            style="width:200px;line-height: 32px;"
-          ></department>
-        </el-form-item>
+      <el-form size="mini" inline>
+        <el-row class="full-row">
+          <el-col :span="24">
+            <el-form-item label="标题">
+              <el-input v-model="formData.riskControl.title" placeholder></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-card
+          :gutter="8"
+          v-for="(item,index) in formData.riskControl.riskControlExpList"
+          :key="index"
+        >
+          <el-form-item label="风险图">
+            <el-select
+              v-model="item.riskSource"
+              placeholder
+              @change="picChange($event,item)"
+              clearable
+            >
+              <el-option
+                v-for="item in picSource"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="风险">
+            <riskSelect
+              :filterArr="imageRiskList.length>0&&!!item.riskSource?imageRiskList.find(r=>r.name==item.riskSource).children:[]"
+              :value="item.risk"
+              @change="riskChange($event,item)"
+              style="width:150px"
+            />
+          </el-form-item>
+          <el-form-item label="填报截止日期">
+            <el-date-picker
+              v-model="item.fillDeadline"
+              value-format="yyyy-MM-dd"
+              style="width:140px"
+            ></el-date-picker>
+          </el-form-item>
+          <el-form-item label="落实截止日期">
+            <el-date-picker
+              v-model="item.implementDeadline"
+              value-format="yyyy-MM-dd"
+              style="width:140px"
+            ></el-date-picker>
+          </el-form-item>
+          <el-row class="full-row">
+            <el-col :span="24">
+              <el-form-item label="责任单位">
+                <department
+                  class="mini"
+                  :value="item.deptPathList"
+                  @change="deptChange($event,item)"
+                  style="width:100%;"
+                  :multiple="true"
+                  :flat="true"
+                ></department>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" style="text-align:center">
+              <el-form-item>
+                <el-button type="danger" icon="el-icon-delete" @click="delRow(index)"></el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-card>
       </el-form>
+      <el-button
+        class="mt"
+        icon="el-icon-plus"
+        style="width:100%;border-style: dashed;"
+        @click="addRow"
+      >新增</el-button>
     </div>
     <br />
     <el-button type="primary" @click="submit" :loading="loading">提交</el-button>
@@ -213,16 +281,17 @@
 
 <script>
 import echart from "@/components/Charts";
-import { getRiskAssessmentChartData } from "@/api/risk";
+import { getRiskAssessmentChartData, riskControlAdd } from "@/api/risk";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import department from "@/components/Department";
 import { mapGetters } from "vuex";
+import riskSelect from './riskSelect'
 
 const monthString = "1月,2月,3月,4月,5月,6月,7月,8月,9月,10月,11月,12月";
 const monthxAxis = monthString.split(",");
 export default {
-  components: { echart, department },
+  components: { echart, department, riskSelect },
   data() {
     return {
       loading: false,
@@ -245,16 +314,55 @@ export default {
       data3_4: {},
       data3_5: {},
       desc4: "",
+      desc: {
+        "1_1": "", "1_2": "", "1_3": "", "1_4": "", "1_5": "", "1_6": "",
+        "2_1": "", "2_2": "", "2_3": "", "2_4": "", "2_5": "",
+        "3_1": "", "3_2": "", "3_3": "", "3_4": "", "3_5": ""
+      },
       loading: false,
-      formData: {},
+      formData: {
+        riskControl: {
+          fileId: "",
+          title: "",
+          riskControlExpList: [
+            {
+              remark: "",// 图备注
+              risk: "", // 风险
+              riskSource: "", // 图来源:1-1
+              deptPathList: [], // 部门
+              fillDeadline: "", // 填报截止日期
+              implementDeadline: "", // 落实截止日期
+            }
+          ]
+        }
+      },
       spanArr: [],
       position: 0,
+      picSource: [
+        { label: '1-1、月度关键风险状态', value: '1_1' },
+        { label: '1-2、年度关键风险状态', value: '1_2' },
+        { label: '1-3、关键风险TOP3趋势', value: '1_3' },
+        { label: '1-4、关键风险TOP3状态(各产品)', value: '1_4' },
+        { label: '1-5、关键风险TOP3状态(各单位)', value: '1_5' },
+        { label: '1-6、关键风险TOP3关联危险源', value: '1_6' },
+        // { label: '2-1、危险源风险分布(一)', value: '2_1' },
+        // { label: '2-2、危险源风险分布(二)', value: '2_2' },
+        // { label: '2-3、危险源风险TOP3趋势', value: '2_3' },
+        // { label: '2-4、危险源风险TOP3趋势(各产品)', value: '2_4' },
+        // { label: '2-5、危险源风险TOP3趋势(各单位)', value: '2_5' },
+        // { label: '3-1、信息数据统计分布', value: '3_1' },
+        // { label: '3-2、信息数据来源统计', value: '3_2' },
+        // { label: '3-3、信息数据统计(各产品)', value: '3_3' },
+        // { label: '3-4、信息数据统计(各系统)', value: '3_4' },
+        // { label: '3-5、信息数据统计(各单位)', value: '3_5' },
+      ],
+      imageRiskList: []
     };
   },
   props: {
     form: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
   },
   watch: {
@@ -277,7 +385,7 @@ export default {
   computed: {
     ...mapGetters(["resetChart"]),
   },
-  mounted() {},
+  mounted() { },
   methods: {
     getCirclePoint(num) {
       if (num <= 10) {
@@ -303,18 +411,23 @@ export default {
         };
       }
     },
-    deptChange(val) {
-      this.form.dept = val;
+    deptChange(val, item) {
+      item.deptPathList = val;
     },
     submit() {
       this.loading = true;
-      // this.$nextTick(() => {
-      //   this.exportPDF();
-      // });
-      let time = setTimeout(() => {
-        window.clearTimeout(time);
-        this.exportPDF();
-      }, 1000);
+      riskControlAdd(this.formData).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+          this.loading = false;
+        } else {
+          this.$message.success("提交成功")
+          // let time = setTimeout(() => {
+          //   window.clearTimeout(time);
+          //   this.exportPDF();
+          // }, 1000);
+        }
+      })
     },
     exportPDF() {
       let dom = document.getElementsByClassName("toPDF");
@@ -386,6 +499,10 @@ export default {
         indicator.push({ name: item.name, max: 20000, color: "#000" });
         data.push(item.num);
       });
+      this.imageRiskList.push({
+        name: "1_1",
+        children: res.map(r => r.name)
+      })
       this.data1_1 = {
         tooltip: { position: ["70%", 10] },
         radar: {
@@ -414,6 +531,10 @@ export default {
       res[0].data.map((item) => {
         columns.push(item.name);
       });
+      this.imageRiskList.push({
+        name: "1_2",
+        children: res.map(r => r.name)
+      })
       this.data1_2_columns = columns;
       this.data1_2 = res;
     },
@@ -434,6 +555,10 @@ export default {
           top: index == 0 ? "0" : index == 1 ? "30%" : "60%",
         });
       });
+      this.imageRiskList.push({
+        name: "1_3",
+        children: res.map(r => r.name)
+      })
       this.data1_3 = {
         tooltip: {
           trigger: "axis",
@@ -474,6 +599,10 @@ export default {
             },
           });
         });
+        this.imageRiskList.push({
+          name: "1_4",
+          children: res.map(r => r.name)
+        })
         this.data1_4[index] = {
           tooltip: {},
           title: { text: item.name, left: "center" },
@@ -505,6 +634,10 @@ export default {
             },
           });
         });
+        this.imageRiskList.push({
+          name: "1_5",
+          children: res.map(r => r.name)
+        })
         this.data1_5[index] = {
           tooltip: {},
           title: { text: item.name, left: "center" },
@@ -540,6 +673,10 @@ export default {
           });
         });
       });
+      this.imageRiskList.push({
+        name: "1_6",
+        children: res.map(r => r.name)
+      })
       this.data1_6 = t_data;
       this.spanArr = [];
       this.position = 0;
@@ -951,6 +1088,7 @@ export default {
     },
     init() {
       this.loading = true;
+      this.imageRiskList = [];
       getRiskAssessmentChartData(this.form)
         .then((response) => {
           try {
@@ -977,9 +1115,11 @@ export default {
               this.render3_5(res.find((r) => r.imageNo == "3-5").data); // 16
               this.$nextTick(() => {
                 this.loading = false;
+                console.log(this.imageRiskList)
               });
             } else {
               this.$message.error(response.msg);
+              this.loading = false;
             }
           } catch (e) {
             console.log(e);
@@ -989,6 +1129,31 @@ export default {
           this.loading = false;
         });
     },
+    /**图片来源切换 */
+    picChange(val, item) {
+      item.risk = "";
+      if (val) {
+        item.remark = this.desc[val];
+      } else {
+        item.remark = "";
+      }
+    },
+    addRow() {
+      this.formData.riskControl.riskControlExpList.push({
+        remark: "",// 图备注
+        risk: "", // 风险
+        riskSource: "", // 图来源:1-1
+        deptPathList: [], // 部门
+        fillDeadline: "", // 填报截止日期
+        implementDeadline: "", // 落实截止日期
+      })
+    },
+    delRow(index) {
+      this.formData.riskControl.riskControlExpList.splice(index, 1);
+    },
+    riskChange(val, item) {
+      item.risk = val;
+    }
   },
 };
 </script>
@@ -1014,5 +1179,22 @@ export default {
   /deep/ .el-table__body td {
     background: #f5f7fa;
   }
+}
+.full-row {
+  /deep/.el-form-item {
+    display: flex;
+    .el-form-item__content {
+      flex: 1;
+    }
+  }
+}
+.el-card + .el-card {
+  margin-top: 10px;
+}
+.mt {
+  margin-top: 10px;
+}
+/deep/ .vue-treeselect--append-to-body {
+  z-index: 100 !important;
 }
 </style>
