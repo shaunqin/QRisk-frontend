@@ -11,13 +11,13 @@
       <el-row class="full-row">
         <el-col :span="24">
           <el-form-item label="标题">
-            <el-input v-model="formData.riskControl.title" placeholder></el-input>
+            <el-input v-model="form.riskControl.title" placeholder></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-card
         :gutter="8"
-        v-for="(item,index) in formData.riskControl.riskControlExpList"
+        v-for="(item,index) in form.riskControl.riskControlExpList"
         :key="index"
       >
         <el-form-item label="风险">
@@ -202,7 +202,7 @@ export default {
       };
     },
     addRow() {
-      this.formData.riskControl.riskControlExpList.push({
+      this.form.riskControl.riskControlExpList.push({
         remark: "",// 图备注
         risk: "", // 风险
         riskSource: "", // 图来源:1-1
@@ -212,7 +212,7 @@ export default {
       })
     },
     delRow(index) {
-      this.formData.riskControl.riskControlExpList.splice(index, 1);
+      this.form.riskControl.riskControlExpList.splice(index, 1);
     },
     deptChange(val, item) {
       item.deptPathList = val;

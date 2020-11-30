@@ -102,21 +102,20 @@ export default {
         } else {
           const { obj } = res;
           _this.form = {
-            id: obj.id,
-            title: obj.title,
-            endTime: obj.endTime,
-            noteContent: obj.noteContent,
-            issueDept: obj.issueDept,
-            assType: obj.assType,
-            analysisTitle: obj.analysisTitle,
-            analysisNo: obj.analysisNo,
-            analysisDept: obj.analysisDept,
-            analysis: obj.analysis,
-            approval: obj.approval,
-            approvalDate: obj.approvalDate,
-            type: obj.type,
-            specialRiskAnalyses: obj.specialRiskAnalyses || [],
-            hazardList: obj.hazardVoList || []
+            riskControl: {
+              fileId: "",
+              title: obj.title,
+              riskControlExpList: [
+                {
+                  remark: "",// 图备注
+                  risk: "", // 风险
+                  riskSource: "", // 图来源:1-1
+                  deptPathList: [], // 部门
+                  fillDeadline: "", // 填报截止日期
+                  implementDeadline: "", // 落实截止日期
+                }
+              ]
+            }
           };
           _this.dialog = true;
         }
