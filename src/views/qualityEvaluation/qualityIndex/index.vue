@@ -35,6 +35,16 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="是否国航" v-if="queryForm.productValue == '1' || queryForm.productValue == '4'">
+          <el-select
+            v-model="queryForm.type"
+            placeholder
+            style="width:160px"
+          >
+            <el-option label="是" value="0"></el-option>
+            <el-option label="否" value="1"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label>
           <el-button type="success" icon="el-icon-search" @click="toQuery(queryForm)" :loading="subLoading">{{ subLoading ? "搜索中" : "搜索"}}</el-button>
           <el-button type="text" icon="el-icon-download" @click="download">生成文件</el-button>
