@@ -12,7 +12,7 @@
       <el-tab-pane label="图表" name="2">
         <charttb :form="queryForm2" />
       </el-tab-pane>
-      <el-tab-pane label="月度风险评价报告" name="3">
+      <el-tab-pane label="月度风险评价报告" name="3" v-if="monthReportEnable">
         <monthreport :form="queryForm3" />
       </el-tab-pane>
     </el-tabs>
@@ -42,7 +42,11 @@ export default {
       this.tabIndex = name;
     });
   },
-
+  computed: {
+    monthReportEnable() {
+      return this.$store.getters.monthReportEnable;
+    }
+  },
   methods: {
     ...mapMutations({
       SET_RESETCHART: 'user/SET_RESETCHART'

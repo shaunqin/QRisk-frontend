@@ -10,6 +10,7 @@ const getters = {
   checkToken: state => state.user.checkToken,
   roles: state => state.user.roles,
   permission_routes: state => state.permission.routes,
-  resetChart: state => state.user.resetChart
+  resetChart: state => state.user.resetChart,
+  monthReportEnable: state => state.user.monthReportEnable
 }
 export default getters

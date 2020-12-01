@@ -7,12 +7,12 @@
     title="处理待办"
     custom-class="big_dialog"
   >
-    <step1 v-if="step==1" :data="data" :form="form" @change="formChange" />
-    <step2 ref="step2" v-if="step==2" :data="data" :form="form" @change="formChange" />
+    <step1 v-if="step==1" :data="data" :form="form" />
+    <!-- <step2 ref="step2" v-if="step==2" :data="data" :form="form" @change="formChange" />
     <step3 ref="step3" v-if="step==3" :data="data" :form="form" @change="formChange" />
     <step4 ref="step4" v-if="step==4" :data="data" :form="form" @change="formChange" />
     <step5 ref="step5" v-if="step==5" :data="data" :form="form" @change="formChange" />
-    <hairdown ref="hairdown" :data="data" :form="form" />
+    <hairdown ref="hairdown" :data="data" :form="form" />-->
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button v-if="step==1||step==4" :loading="loading" type="primary" @click="doSubmit">确认</el-button>
@@ -25,7 +25,7 @@
         @click="doSubmit"
       >上报</el-button>
       <el-button
-        v-if="step==3"
+        v-if="step==3||step==5"
         :loading="loading"
         :disabled="!!data.deptMeasure.hiddenIssue"
         type="success"
@@ -33,21 +33,24 @@
       >下发</el-button>
     </div>
     <!-- 抄送 -->
-    <ccPerson ref="ccPerson" :deptPath="deptPath" @subCC="subCC" />
+    <!-- <ccPerson ref="ccPerson" :deptPath="deptPath" @subCC="subCC" /> -->
   </el-dialog>
 </template>
 
 <script>
-import { riskNoticeDetail, riskNoticeComplete, riskNoticeModify, validatePWD } from "@/api/risk";
+import { riskControlComplete } from "@/api/risk";
 import step1 from "./step/step1";
-import step2 from "./step/step2";
-import step3 from "./step/step3";
-import step4 from "./step/step4";
-import step5 from "./step/step5";
-import hairdown from './hairdown';
-import ccPerson from './ccPerson';
+// import step2 from "./step/step2";
+// import step3 from "./step/step3";
+// import step4 from "./step/step4";
+// import step5 from "./step/step5";
+// import hairdown from './hairdown';
+// import ccPerson from './ccPerson';
 export default {
-  components: { step1, step2, step3, step4, step5, hairdown, ccPerson },
+  components: {
+    step1,
+    //  step2, step3, step4, step5, hairdown, ccPerson 
+  },
   data() {
     return {
       loading: false,
@@ -57,7 +60,6 @@ export default {
         taskId: 0,
         formId: 0,
         processFlag: "1",
-        implementStatus: "" // 落实情况
       },
       data: {}, // 父组件赋值
       password: ""
@@ -78,39 +80,10 @@ export default {
     cancel() {
       this.resetForm();
     },
-    validatePWD() {
-      if (this.form.processFlag == "") {
-        this.$message.error("请选择同意/驳回！");
-        return;
-      }
-      if (this.form.processFlag == "1") {
-        this.$prompt('请输入密码', '', {
-          inputType: 'password',
-        }).then(({ value }) => {
-          if (!value) {
-            this.$message.error("请输入密码");
-          } else {
-            validatePWD(value).then(res => {
-              if (res.code != '200') {
-                this.$message.error(res.msg);
-              } else {
-                if (res.obj) {
-                  this.submitStep1();
-                } else {
-                  this.$message.error("密码不正确")
-                }
-              }
-            })
-          }
-        }).catch(() => { })
-      } else {
-        this.submitStep1();
-      }
-    },
     doSubmit() {
       switch (this.step) {
         case 1:
-          this.validatePWD();
+          this.submitStep1();
           break;
         case 4:
           this.judgeCC();
@@ -190,7 +163,7 @@ export default {
         return;
       }
       this.loading = true;
-      riskNoticeComplete({ ...this.form, safetyRiskNotice: this.data }).then((res) => {
+      riskControlComplete(this.form).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
@@ -242,7 +215,7 @@ export default {
       this.$refs.hairdown.dialog = true;
     },
     loadCount() {
-      this.$parent.$parent.$parent.$parent.$parent.loadCount();
+      this.$parent.$parent.$parent.$parent.loadCount();
     }
   },
 };

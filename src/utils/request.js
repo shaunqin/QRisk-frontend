@@ -6,9 +6,9 @@ import { Message } from 'element-ui'
 // create an axios instance
 const service = axios.create({
   // baseURL: `http://192.168.98.251:8999`,
-  // baseURL: `http://192.168.98.235:8999`,
-  // baseURL: `http://192.168.99.3:8999`,
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  // baseURL: `http://192.168.98.58:8999`,
+  baseURL: `http://192.168.98.131:8999`,
+  // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 600000 // request timeout
 })

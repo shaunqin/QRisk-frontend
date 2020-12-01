@@ -236,7 +236,7 @@
       <el-form-item label>
         <!-- <el-button type="success" icon="el-icon-menu"  @click="toQuery">生成报表</el-button> -->
         <el-button type="success" icon="el-icon-s-data" @click="handlerChart">生成图表</el-button>
-        <el-button type="success" icon="el-icon-tickets" @click="report">月度风险评价报告</el-button>
+        <el-button type="success" icon="el-icon-tickets" @click="report" v-if="monthReportEnable">月度风险评价报告</el-button>
       </el-form-item>
     </el-form>
     <!-- 生成图表 -->
@@ -378,6 +378,11 @@ export default {
         this.riskColor = res.obj;
       }
     });
+  },
+  computed: {
+    monthReportEnable() {
+      return this.$store.getters.monthReportEnable;
+    }
   },
   watch: {
     "form.dateType"(val) {

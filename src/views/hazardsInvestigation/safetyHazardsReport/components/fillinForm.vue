@@ -189,6 +189,7 @@
               size="mini"
               style="width:100%"
               :disabled="disabled"
+              :picker-options="{disabledDate:(date)=>new Date().getTime()>date.getTime()}"
             ></el-date-picker>
           </template>
         </el-table-column>
@@ -229,7 +230,7 @@
         <el-button type="danger" size="small" icon="el-icon-delete" @click="delRow(index)">删除</el-button>
       </div>
     </el-card>
-    <emplotee ref="emplotee" @subPerson="subPerson" />
+    <emplotee ref="emplotee" :deptName="data.deptName" @subPerson="subPerson" />
   </el-card>
 </template>
 

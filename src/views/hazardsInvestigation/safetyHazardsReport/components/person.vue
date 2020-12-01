@@ -13,9 +13,6 @@
       <el-form-item label="职编">
         <el-input v-model="queryForm.sqlUserId" style="width:100px"></el-input>
       </el-form-item>
-      <el-form-item label="部门">
-        <el-input v-model="queryForm.dept" style="width:100px"></el-input>
-      </el-form-item>
       <el-form-item label>
         <el-button type="primary" icon="el-icon-search" @click="toQuery">搜索</el-button>
       </el-form-item>
@@ -69,14 +66,13 @@ export default {
       dialog: false,
       queryForm: {
         realname: "",
-        sqlUserId: "",
-        dept: "",
+        sqlUserId: ""
       },
       item: "",
       user: ""
     };
   },
-  props: {},
+  props: ["deptName"],
   created() {
     this.init();
   },
@@ -87,7 +83,7 @@ export default {
     },
     beforeInit() {
       this.url = `/sys_mgr/staff_mgr/query/pageList/${this.page}/${this.size}`;
-      this.params = { ...this.queryForm };
+      this.params = { ...this.queryForm, deptName: this.deptName };
       return true;
     },
     cancel() {

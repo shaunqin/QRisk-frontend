@@ -332,10 +332,34 @@ export function riskControlDelete(id) {
   })
 }
 // 提交
-export function riskControlSubmit(id) {
+export function riskControlSubmit(id, data) {
   return request({
     url: `/riskControlManage/riskControlManage/submit/${id}`,
-    method: 'get',
+    method: 'put',
+    data
+  })
+}
+// 修改提交
+export function riskControlUpdateAndSubmit(data) {
+  return request({
+    url: `/riskControlManage/riskControlManage/updateAndSubmit`,
+    method: 'post',
+    data
+  })
+}
+// 查询办理详情
+export function riskControlQueryDetailTask(taskId, formId) {
+  return request({
+    url: `/riskControlManage/riskControlManage/query/${taskId}/${formId}`,
+    method: 'get'
+  })
+}
+// 处理待办
+export function riskControlComplete(data) {
+  return request({
+    url: `/riskControlManage/riskControlManage/complete/${data.taskId}`,
+    method: 'post',
+    data
   })
 }
 

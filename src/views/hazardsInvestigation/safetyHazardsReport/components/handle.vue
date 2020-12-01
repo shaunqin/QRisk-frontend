@@ -16,7 +16,7 @@
       <el-button v-if="(step==1||step==3)&&!hiddenFill" type="primary" @click="doReport">填报</el-button>
       <el-button v-if="step==2" :loading="loading" type="primary" @click="doSubmit">确认</el-button>
       <el-button
-        v-if="step==3||step==1"
+        v-if="step==1"
         :loading="loading"
         :disabled="!!data.hiddenIssue"
         type="success"

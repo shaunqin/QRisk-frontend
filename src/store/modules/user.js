@@ -23,7 +23,8 @@ const state = {
     iat: '', // 开始时间
     exp: '' // 超时时间
   },
-  resetChart: '' // 监听是否需要重新加载图表
+  resetChart: '', // 监听是否需要重新加载图表
+  monthReportEnable: false, // 角色是否有权限生成月报
 }
 
 const mutations = {
@@ -35,7 +36,12 @@ const mutations = {
     state.jwtObj = jwtObj
   },
   SET_USERINFO: (state, userInfo) => {
-    state.userInfo = userInfo
+    state.userInfo = userInfo;
+    if (userInfo.roleList.includes('SUPER_ADMIN') || userInfo.roleList.includes('ADMIN') || userInfo.roles.some(r => r.deptPath == '000003' && r.code == 'RISK_MANAGER')) {
+      state.monthReportEnable = true;
+    } else {
+      state.monthReportEnable = false;
+    }
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles

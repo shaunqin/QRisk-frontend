@@ -146,6 +146,7 @@
             size="mini"
             style="width:100%"
             :disabled="disabled"
+            :picker-options="{disabledDate:(date)=>new Date().getTime()>date.getTime()}"
           ></el-date-picker>
         </template>
       </el-table-column>
@@ -171,7 +172,7 @@
       </el-table-column>
     </el-table>
 
-    <emplotee ref="emplotee" @subPerson="subPerson" />
+    <emplotee ref="emplotee" :deptName="form.deptName" @subPerson="subPerson" />
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>

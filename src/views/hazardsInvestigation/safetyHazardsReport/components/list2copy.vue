@@ -23,11 +23,13 @@
       <el-table-column prop="sourceName" label="来源" />
       <el-table-column prop="typeName" label="类型" />
       <el-table-column prop="levelsName" label="等级" />
-      <el-table-column prop="businessName" label="涉及业务" />
-      <el-table-column prop="processName" label="涉及流程" />
+      <el-table-column prop="deptName" label="主题单位/部门" width="130px" />
+      <el-table-column prop="businessName" label="涉及业务" width="130px"  />
+      <el-table-column prop="processName" label="涉及流程" width="130px"  />
       <el-table-column prop="supervisoryUnit" label="监管单位" width="120px" show-overflow-tooltip />
-      <el-table-column prop="reasonAnalysis" label="原因分析" width="120px" show-overflow-tooltip />
-      <el-table-column label="等效措施" width="150px">
+      <el-table-column prop="reasonAnalysis" label="原因分析" width="160px" show-overflow-tooltip />
+      <el-table-column prop="equivalentMeasures" label="整改措施" width="160px" show-overflow-tooltip />
+      <el-table-column label="等效措施" width="200px">
         <template slot-scope="{ row }">
           <ul class="tab-ul">
             <li v-for="item in row.controlList" :key="item.id">{{ item.measures }}</li>
@@ -51,14 +53,14 @@
           </ul>
         </template>
       </el-table-column>
-      <el-table-column label="措施实施情况跟踪" width="160px">
+      <el-table-column label="措施实施情况跟踪" width="200px">
         <template slot-scope="{ row }">
           <ul class="tab-ul">
             <li v-for="item in row.controlList" :key="item.id">{{ item.implementationOfMeasures }}</li>
           </ul>
         </template>
       </el-table-column>
-      <el-table-column label="治理结果情况跟踪" width="160px">
+      <el-table-column label="治理结果情况跟踪" width="200px">
         <template slot-scope="{ row }">
           <ul class="tab-ul">
             <li v-for="item in row.controlList" :key="item.id">{{ item.governanceResults }}</li>
@@ -77,7 +79,7 @@
         width="120px"
         show-overflow-tooltip
       />
-      <el-table-column prop="remarks" label="备注" width="120px" show-overflow-tooltip />
+      <el-table-column prop="remarks" label="备注" width="160px" show-overflow-tooltip />
     </el-table>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>

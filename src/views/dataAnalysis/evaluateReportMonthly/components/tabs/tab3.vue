@@ -9,7 +9,7 @@
       style="width: 100%;"
       @selection-change="selectionChange"
     >
-      <el-table-column prop="no" label="编号" width="120" />
+      <el-table-column prop="no" label="编号" width="130" />
       <el-table-column prop="title" label="标题" min-width="150" show-overflow-tooltip />
       <el-table-column prop="noteContent" label="通知内容" min-width="150" show-overflow-tooltip />
       <el-table-column prop="issueDept" label="下发部门" />

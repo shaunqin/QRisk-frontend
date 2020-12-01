@@ -415,8 +415,10 @@ export default {
       item.deptPathList = val;
     },
     submit() {
-      this.loading = true;
-      riskControlAdd(this.formData).then(res => {
+      this.$loading();
+      let params = { ...this.formData, year: this.form.dateValue1, month: this.form.dateValue2 };
+      riskControlAdd(params).then(res => {
+        this.$loading().close();
         if (res.code != '200') {
           this.$message.error(res.msg);
           this.loading = false;
@@ -488,6 +490,7 @@ export default {
           if (_index == dom.length) {
             pdf.save("月度风险评价报告.pdf");
             this.loading = false;
+            this.$loading().close();
           }
         });
       });
@@ -1094,25 +1097,25 @@ export default {
           try {
             if (response.code == "200") {
               let res = response.obj;
-              this.render1_1(res.find((r) => r.imageNo == "1-1").data); // 1
-              this.render1_2(res.find((r) => r.imageNo == "1-2").data); // 2
-              this.render1_3(res.find((r) => r.imageNo == "1-3").data); // 3
-              this.render1_4(res.find((r) => r.imageNo == "1-4").data); // 4
-              this.render1_5(res.find((r) => r.imageNo == "1-5").data); // 5
-              this.render1_6(res.find((r) => r.imageNo == "1-6").data); // 6
-              this.render2_1(res.find((r) => r.imageNo == "2-1").data); // 7
-              this.render2_2(res.find((r) => r.imageNo == "2-2").data); // 8
-              this.render2_3(res.find((r) => r.imageNo == "2-3").data); // 9
-              this.render2_4(res.find((r) => r.imageNo == "2-4").data); // 10
-              this.render2_5(res.find((r) => r.imageNo == "2-5").data); // 11
-              this.render3_1(res.find((r) => r.imageNo == "3-1").data); // 12
+              this.render1_1(res.find((r) => r.imageNo == "1_1").data); // 1
+              this.render1_2(res.find((r) => r.imageNo == "1_2").data); // 2
+              this.render1_3(res.find((r) => r.imageNo == "1_3").data); // 3
+              this.render1_4(res.find((r) => r.imageNo == "1_4").data); // 4
+              this.render1_5(res.find((r) => r.imageNo == "1_5").data); // 5
+              this.render1_6(res.find((r) => r.imageNo == "1_6").data); // 6
+              this.render2_1(res.find((r) => r.imageNo == "2_1").data); // 7
+              this.render2_2(res.find((r) => r.imageNo == "2_2").data); // 8
+              this.render2_3(res.find((r) => r.imageNo == "2_3").data); // 9
+              this.render2_4(res.find((r) => r.imageNo == "2_4").data); // 10
+              this.render2_5(res.find((r) => r.imageNo == "2_5").data); // 11
+              this.render3_1(res.find((r) => r.imageNo == "3_1").data); // 12
               this.render3_2(
-                res.find((r) => r.imageNo == "3-2-1").data,
-                res.find((r) => r.imageNo == "3-2-2").data
+                res.find((r) => r.imageNo == "3_2_1").data,
+                res.find((r) => r.imageNo == "3_2_2").data
               ); // 13
-              this.render3_3(res.find((r) => r.imageNo == "3-3").data); // 14
-              this.render3_4(res.find((r) => r.imageNo == "3-4").data); // 15
-              this.render3_5(res.find((r) => r.imageNo == "3-5").data); // 16
+              this.render3_3(res.find((r) => r.imageNo == "3_3").data); // 14
+              this.render3_4(res.find((r) => r.imageNo == "3_4").data); // 15
+              this.render3_5(res.find((r) => r.imageNo == "3_5").data); // 16
               this.$nextTick(() => {
                 this.loading = false;
                 console.log(this.imageRiskList)

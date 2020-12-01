@@ -19,7 +19,7 @@
         size="mini"
         type="success"
         icon="el-icon-upload"
-        @click="submit"
+        @click="selectLeader"
         :disabled="selections.length!=1"
       >提交</el-button>
     </div>
@@ -33,7 +33,7 @@
       @selection-change="selectionChange"
     >
       <el-table-column type="selection" width="45" />
-      <el-table-column prop="no" label="编号" width="120" />
+      <el-table-column prop="no" label="编号" width="130" />
       <el-table-column prop="title" label="标题" min-width="150" show-overflow-tooltip />
       <!-- <el-table-column prop="issueDept" label="下发部门" /> -->
       <el-table-column label="拟制人">
@@ -53,6 +53,7 @@
       @current-change="pageChange"
     />
     <eform ref="form" :isAdd="isAdd" />
+    <selectEmp ref="selectEmp" @on-submit="submit" />
   </div>
 </template>
 
@@ -61,8 +62,9 @@ import initData from "@/mixins/initData";
 import eform from "../form";
 import { riskControlDetail, riskControlDelete, riskControlSubmit } from "@/api/risk";
 import { formatShortDate } from "@/utils/datetime";
+import selectEmp from '../selectEmplotee'
 export default {
-  components: { eform },
+  components: { eform,selectEmp },
   data() {
     return {
       selections: [],
@@ -103,18 +105,12 @@ export default {
           const { obj } = res;
           _this.form = {
             riskControl: {
+              id: obj.id,
               fileId: "",
               title: obj.title,
-              riskControlExpList: [
-                {
-                  remark: "",// 图备注
-                  risk: "", // 风险
-                  riskSource: "", // 图来源:1-1
-                  deptPathList: [], // 部门
-                  fillDeadline: "", // 填报截止日期
-                  implementDeadline: "", // 落实截止日期
-                }
-              ]
+              year: obj.year,
+              month: obj.month,
+              riskControlExpList: obj.riskControlExpVoList
             }
           };
           _this.dialog = true;
@@ -136,9 +132,12 @@ export default {
         })
         .catch(() => { });
     },
-    submit() {
+    selectLeader(){
+      this.$refs.selectEmp.dialog=true;
+    },
+    submit(sqlUserId) {
       let id = this.selections[0];
-      riskControlSubmit(id).then((res) => {
+      riskControlSubmit(id,{sqlUserId}).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
