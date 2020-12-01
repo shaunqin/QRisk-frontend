@@ -19,6 +19,13 @@
         </template>
       </el-table-column>
       <el-table-column prop="businessTitle" label="任务标题" show-overflow-tooltip />
+      <el-table-column prop="deptName" label="部门" show-overflow-tooltip />
+      <el-table-column prop="month" label="月份" show-overflow-tooltip />
+      <el-table-column label="上报人" width="130">
+        <template slot-scope="{row}">
+          <div>{{renderTbCol(row)}}</div>
+        </template>
+      </el-table-column>
       <el-table-column prop="createBy" label="发起人" width="130" />
       <el-table-column prop="createTime" label="发起时间" width="140" />
       <el-table-column label="操作" width="110">
@@ -83,6 +90,15 @@ export default {
         }
       });
     },
+    renderTbCol(row) {
+      if (row.fillerName && row.filler) {
+        return `${row.fillerName}[${row.filler}]`;
+      } else if (row.fillerName || row.filler) {
+        return row.fillerName ? row.fillerName : row.filler;
+      } else {
+        return ""
+      }
+    }
   },
 };
 </script>
