@@ -512,7 +512,7 @@ export const asyncRoutes = [{
     {
       path: 'qualityMonthlyReport',
       component: () => import('@/views/qualityEvaluation/qualityMonthlyReport/index'),
-      name: 'qualityMonthlyReport',
+      name: 'QualityMonthlyReport',
       hidden: true,
       meta: {
         title: 'qualityMonthlyReport'

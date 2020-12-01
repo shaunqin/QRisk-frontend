@@ -31,6 +31,45 @@
     <echarts :chartData="data1_5" v-loading="loading" />
     <h6 class="title">2、客户机队</h6>
     <echarts :chartData="data1_6" v-loading="loading" />
+    <h5 class="title-t">(三)关键指标考核</h5>
+    <h6 class="title">1、国航机队</h6>
+    <el-table
+      v-loading="loading"
+      :data="data1_7"
+      size="small"
+      :stripe="true"
+      :highlight-current-row="true"
+      style="width: 100%;"
+    >
+    <template slot="empty"><span> </span></template>
+      <el-table-column v-for="(column,index) in columns1_7" :key="index" :label="column.name">
+        <el-table-column
+          v-for="(item,iindex) in column.children"
+          :key="iindex"
+          :label="item.name"
+          :prop="item.prop"
+        />
+      </el-table-column>
+    </el-table>
+    <h6 class="title">2、客户机队</h6>
+    <el-table
+      v-loading="loading"
+      :data="data1_8"
+      size="small"
+      :stripe="true"
+      :highlight-current-row="true"
+      style="width: 100%;"
+    >
+    <template slot="empty"><span> </span></template>
+      <el-table-column v-for="(column,index) in columns1_8" :key="index" :label="column.name">
+        <el-table-column
+          v-for="(item,iindex) in column.children"
+          :key="iindex"
+          :label="item.name"
+          :prop="item.prop"
+        />
+      </el-table-column>
+    </el-table>
 
     <h4 class="title">二、定检产品</h4>
     <h5 class="title">(一)定检产品质量总体情况</h5>
@@ -47,6 +86,45 @@
     <echarts :chartData="data2_5" v-loading="loading" />
     <h6 class="title">2、客户机队</h6>
     <echarts :chartData="data2_6" v-loading="loading" />
+    <h5 class="title-t">(三)关键指标考核</h5>
+    <h6 class="title">1、国航机队</h6>
+    <el-table
+      v-loading="loading"
+      :data="data2_7"
+      size="small"
+      :stripe="true"
+      :highlight-current-row="true"
+      style="width: 100%;"
+    >
+    <template slot="empty"><span> </span></template>
+      <el-table-column v-for="(column,index) in columns2_7" :key="index" :label="column.name">
+        <el-table-column
+          v-for="(item,iindex) in column.children"
+          :key="iindex"
+          :label="item.name"
+          :prop="item.prop"
+        />
+      </el-table-column>
+    </el-table>
+    <h6 class="title">2、客户机队</h6>
+    <el-table
+      v-loading="loading"
+      :data="data2_8"
+      size="small"
+      :stripe="true"
+      :highlight-current-row="true"
+      style="width: 100%;"
+    >
+    <template slot="empty"><span> </span></template>
+      <el-table-column v-for="(column,index) in columns2_8" :key="index" :label="column.name">
+        <el-table-column
+          v-for="(item,iindex) in column.children"
+          :key="iindex"
+          :label="item.name"
+          :prop="item.prop"
+        />
+      </el-table-column>
+    </el-table>
 
     <h4 class="title">三、发动机/APU产品</h4>
     <h5 class="title">(一)发动机/APU产品质量总体情况</h5>
@@ -57,6 +135,25 @@
     <echarts :chartData="data3_2" v-loading="loading" />
     <h6 class="title">2、APU产品质量分项指标</h6>
     <echarts :chartData="data3_3" v-loading="loading" />
+    <h5 class="title-t">(三)关键指标考核</h5>
+    <el-table
+      v-loading="loading"
+      :data="data3_4"
+      size="small"
+      :stripe="true"
+      :highlight-current-row="true"
+      style="width: 100%;"
+    >
+    <template slot="empty"><span> </span></template>
+      <el-table-column v-for="(column,index) in columns3_4" :key="index" :label="column.name">
+        <el-table-column
+          v-for="(item,iindex) in column.children"
+          :key="iindex"
+          :label="item.name"
+          :prop="item.prop"
+        />
+      </el-table-column>
+    </el-table>
 
     <h4 class="title">四、附件产品</h4>
     <h5 class="title">(一)附件产品质量总体情况</h5>
@@ -65,6 +162,25 @@
     <el-input v-model="remark4_1" type="textarea" rows="4"></el-input>
     <h5 class="title-t">(二)附件产品质量分项指标</h5>
     <echarts :chartData="data4_3" v-loading="loading" />
+    <h5 class="title-t">(三)关键指标考核</h5>
+    <el-table
+      v-loading="loading"
+      :data="data4_4"
+      size="small"
+      :stripe="true"
+      :highlight-current-row="true"
+      style="width: 100%;"
+    >
+    <template slot="empty"><span> </span></template>
+      <el-table-column v-for="(column,index) in columns4_4" :key="index" :label="column.name">
+        <el-table-column
+          v-for="(item,iindex) in column.children"
+          :key="iindex"
+          :label="item.name"
+          :prop="item.prop"
+        />
+      </el-table-column>
+    </el-table>
 
     <h4 class="title">五、附件质量调查</h4>
     <el-input v-model="remark5" type="textarea" rows="4"></el-input>
@@ -72,9 +188,10 @@
 </template>
 
 <script>
-import { queryReportData } from '@/api/quality';
+import { queryReportData, queryDefaultValue } from '@/api/quality';
 import echarts from '@/components/Charts'
 export default {
+  name: 'QualityMonthlyReport',
   components: { echarts },
   data() {
     return {
@@ -91,6 +208,10 @@ export default {
       data1_4: {},
       data1_5: {},
       data1_6: {},
+      data1_7: [],
+      columns1_7: [],
+      data1_8: [],
+      columns1_8: [],
       data2_1: {},
       data2_2: {},
       data2_3: {},
@@ -98,21 +219,29 @@ export default {
       remark2_3: [],
       data2_5: {},
       data2_6: {},
+      data2_7: [],
+      columns2_7: [],
+      data2_8: [],
+      columns2_8: [],
       data3_1: {},
       remark3_1: "",
       data3_2: {},
       data3_3: {},
+      data3_4: [],
+      columns3_4: [],
       data4_1: {},
       data4_2: {},
       remark4_1: "",
       data4_3: {},
+      data4_4: [],
+      columns4_4: [],
       remark5: ""
     };
   },
   methods: {
     toQuery() {
       this.loading = true;
-      queryReportData(this.form).then(res => {
+      queryReportData(this.form).then(async res => {
         this.loading = false;
         if (res) {
           let res1_1 = res.find(r => r.sortNum == 1).list.find(r => r.sortNum == 1);
@@ -154,6 +283,13 @@ export default {
           this.seriesMore2render(res4_2, "data4_2", "line", { showLabel: true });
           let res4_3 = res.find(r => r.sortNum == 4).list.find(r => r.sortNum == 18);
           this.seriesMore2render(res4_3, "data4_3", "bar", { showLabel: true, rotate: 'no' });
+
+          await this.getTableHead('4_41_0', 'columns1_7')
+          await this.getTableHead('4_41_1', 'columns1_8')
+          await this.getTableHead('1_13_0', 'columns2_7')
+          await this.getTableHead('1_13_1', 'columns2_8')
+          await this.getTableHead('2_22', 'columns3_4')
+          await this.getTableHead('3_32', 'columns4_4')
         }
       })
     },
@@ -228,6 +364,26 @@ export default {
         series: seriesArr
       }
     },
+    async getTableHead(productValue, dataSource) {
+      let obj = {
+        setObjectName: `quality_product_index_${productValue}_monthreport_title_cn`,
+        type: 2
+      };
+      await queryDefaultValue(obj).then(res => {
+        if (res.code != '200') {
+          this.$message.error("关键指标未配置参数");
+        } else {
+          this[dataSource] = res.obj;
+        }
+      })
+
+    },
+    getTable(res, dataSource) {
+      this[dataSource] = res.obj.map(item => {
+        const obj = {...item, ...item.resultValues}
+        return obj
+      });
+    }
 
   },
 };
@@ -243,5 +399,8 @@ export default {
 }
 .title-t {
   margin: 10px 0;
+}
+/deep/ .el-table {
+  margin-bottom: 10px;
 }
 </style>

@@ -37,7 +37,7 @@
               <el-input v-model="form.analysisNo"></el-input>
             </el-form-item>
             <el-form-item label="批准">
-              <el-input v-model="form.approval"></el-input>
+              <el-input :disabled="true" v-model="form.approval"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -84,7 +84,7 @@
             <el-input v-model="item.managementProcess"></el-input>
           </el-form-item>
           <el-form-item label="危险源">
-            <el-select v-model="item.hazard" clearable placeholder="请选择危险源" style="width:130px" @change="dictChange(item.hazard,item,'hazard')">
+            <el-select v-model="item.hazard" placeholder="请选择危险源" style="width:130px" @change="dictChange(item.hazard,item,'hazard')">
               <el-option
                 v-for="item in item.hazards"
                 :key="item.diskNo"

@@ -26,7 +26,7 @@
         </el-col>
         <el-col :span="24">
           <el-form-item label="下发部门">
-            <department :value="form.issueDept" @change="deptChange($event,'issueDept')"></department>
+            <department :value="form.issueDepts" :multiple="true" @change="deptChange($event,'issueDepts')"></department>
           </el-form-item>
         </el-col>
       </el-row>
@@ -47,7 +47,7 @@
               <el-input v-model="form.analysisNo"></el-input>
             </el-form-item>
             <el-form-item label="批准">
-              <el-input v-model="form.approval"></el-input>
+              <el-input :disabled="true" v-model="form.approval"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -284,7 +284,7 @@ export default {
         title: "", // 标题
         endTime: "", // 截止日期
         noteContent: "", // 通知内容
-        issueDept: null, // 下发部门
+        issueDepts: null, // 下发部门
         assType: "", // 评估类别
         analysisTitle: "", // 分析标题
         analysisNo: "", // 分析编号
