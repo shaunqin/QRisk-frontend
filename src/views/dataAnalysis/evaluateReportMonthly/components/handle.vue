@@ -8,8 +8,8 @@
     custom-class="big_dialog"
   >
     <step1 v-if="step==1" :data="data" :form="form" />
-    <!-- <step2 ref="step2" v-if="step==2" :data="data" :form="form" @change="formChange" />
-    <step3 ref="step3" v-if="step==3" :data="data" :form="form" @change="formChange" />
+    <step2 ref="step2" v-if="step==2" :data="data" :form="form" />
+    <!-- <step3 ref="step3" v-if="step==3" :data="data" :form="form" @change="formChange" />
     <step4 ref="step4" v-if="step==4" :data="data" :form="form" @change="formChange" />
     <step5 ref="step5" v-if="step==5" :data="data" :form="form" @change="formChange" />
     <hairdown ref="hairdown" :data="data" :form="form" />-->
@@ -38,9 +38,9 @@
 </template>
 
 <script>
-import { riskControlComplete } from "@/api/risk";
+import { riskControlComplete, riskControlModify } from "@/api/risk";
 import step1 from "./step/step1";
-// import step2 from "./step/step2";
+import step2 from "./step/step2";
 // import step3 from "./step/step3";
 // import step4 from "./step/step4";
 // import step5 from "./step/step5";
@@ -48,8 +48,8 @@ import step1 from "./step/step1";
 // import ccPerson from './ccPerson';
 export default {
   components: {
-    step1,
-    //  step2, step3, step4, step5, hairdown, ccPerson 
+    step1, step2,
+    //  step3, step4, step5, hairdown, ccPerson 
   },
   data() {
     return {
@@ -137,12 +137,11 @@ export default {
     },
     doSave() {
       let _this = this.$refs.step2;
-      riskNoticeModify(_this.detailForm).then((res) => {
+      riskControlModify(_this.detailForm).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
           this.$message.success("保存成功");
-          _this.formChange = false;
         }
       });
     },
@@ -177,13 +176,8 @@ export default {
     },
     submitStep2() {
       let _this = this.$refs.step2;
-      // console.log(_this.formChange);
-      // if (_this.formChange) {
-      //   this.$message("提交前请先保存！");
-      //   return;
-      // }
       this.loading = true;
-      let params = { ...this.form, safetyRiskNotice: _this.detailForm }
+      let params = { ...this.form, ..._this.detailForm }
       riskNoticeComplete(params).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);

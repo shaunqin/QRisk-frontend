@@ -1,124 +1,126 @@
 <template>
   <div>
-    <el-form ref="form" :model="detailForm" :rules="formRules" label-width="auto">
-      <el-row :gutter="16">
-        <el-col :span="8">
-          <el-form-item label="编号" prop="no">
-            <el-input
-              v-model="detailForm.no"
-              style="width: 100%;"
-              @keyup.native="formChangeStatus"
-            />
-          </el-form-item>
-        </el-col>
+    <el-form ref="form" size="mini" inline>
+      <el-row class="full-row">
         <el-col :span="24">
-          <el-form-item label="主题" prop="title">
-            <el-input
-              v-model="detailForm.title"
-              style="width: 100%;"
-              @keyup.native="formChangeStatus"
-            />
-          </el-form-item>
-          <el-form-item label="背景" prop="background">
-            <editer ref="background" v-model="detailForm.background" v-if="dialog" />
-          </el-form-item>
-          <el-form-item label="存在的安全风险" prop="existingRisk">
-            <editer ref="existingRisk" v-model="detailForm.existingRisk"  v-if="dialog" />
+          <el-form-item label="标题">
+            <el-input v-model="detailForm.riskControl.title" placeholder></el-input>
           </el-form-item>
         </el-col>
       </el-row>
-
-      <el-form-item label="风险防范措施" class="measures">
-        <el-row
-          v-for="(item,index) in detailForm.measures"
-          :key="index"
-          style="margin-bottom: 10px;display:flex"
-          :gutter="8"
-        >
-          <el-col :span="6">
-            <department
-              :value="!item.deptPath?[]:item.deptPath.split(',')"
-              @change="deptChange($event,item)"
-              :multiple="true"
-              :limit="1"
-              :flat="true"
-              style="line-height:20px"
-            />
-          </el-col>
-          <el-col :span="5">
-            <el-date-picker
-              v-model="item.deadline"
-              value-format="yyyy-MM-dd"
-              placeholder="为空则是长期选项"
-              style="width:100%"
-              @change="formChangeStatus"
-            ></el-date-picker>
-          </el-col>
-          <el-col :span="10">
-            <el-input
-              v-model="item.content"
-              style="width: 100%;"
-              placeholder="措施内容"
-              @keyup.native="formChangeStatus"
-            />
-          </el-col>
-          <el-col :span="2">
-            <el-button type="text" icon="el-icon-delete" size="mini" @click="delRisk(index)"></el-button>
-          </el-col>
-        </el-row>
-        <el-row style="margin-top:10px">
+      <el-card
+        v-loading="cdLoading"
+        :gutter="8"
+        v-for="(item,index) in detailForm.riskControl.riskControlExpList"
+        :key="index"
+      >
+        <el-form-item label="风险图">
+          <el-select
+            v-model="item.riskSource"
+            placeholder
+            @change="picSourceChange($event,item)"
+            clearable
+          >
+            <el-option
+              v-for="item in picSource"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="风险">
+          <riskSelect
+            :filterArr="imageRiskList.length>0&&!!item.riskSource?imageRiskList.find(r=>r.name==item.riskSource).children:[]"
+            :value="item.risk"
+            @change="riskChange($event,item)"
+            style="width:150px"
+          />
+        </el-form-item>
+        <el-form-item label="填报截止日期">
+          <el-date-picker v-model="item.fillDeadline" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="落实截止日期">
+          <el-date-picker
+            v-model="item.implementDeadline"
+            value-format="yyyy-MM-dd"
+            style="width:140px"
+          ></el-date-picker>
+        </el-form-item>
+        <el-row class="full-row">
           <el-col :span="24">
-            <el-button
-              plain
-              icon="el-icon-plus"
-              style="width: 100%;border-style: dashed;"
-              @click="addRisk"
-            >添加</el-button>
+            <el-form-item label="责任单位">
+              <department
+                class="mini"
+                :value="item.deptPathList"
+                @change="deptChange($event,item)"
+                style="width:100%;"
+                :multiple="true"
+                :flat="true"
+              ></department>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="备注">
+              <el-input v-model="item.remark" placeholder></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24" style="text-align:center">
+            <el-form-item>
+              <el-button type="danger" icon="el-icon-delete" @click="delRow(index)"></el-button>
+            </el-form-item>
           </el-col>
         </el-row>
-      </el-form-item>
-      <el-form-item label="审批记录">
-        <leaderApprvalRecord :data="data.noticeComments" type="safety_risk_notice" />
-      </el-form-item>
+      </el-card>
     </el-form>
+    <el-button
+      class="mt"
+      icon="el-icon-plus"
+      style="width:100%;border-style: dashed;"
+      @click="addRow"
+    >新增</el-button>
   </div>
 </template>
 
 <script>
-import { riskNoticeAdd, riskNoticeModify, riskNoticeSubmit } from "@/api/risk";
-import department from "@/components/Department/deptByRole";
+import { getRiskAssessmentChartData } from "@/api/risk";
+import department from "@/components/Department";
 import { format } from "@/utils/datetime";
-import leaderApprvalRecord from '../leaderApprvalRecord'
-import editer from '@/components/Tinymce'
+import riskSelect from '@/views/dataAnalysis/riskEvaluateMonthly/components/riskSelect'
 export default {
-  components: { department, leaderApprvalRecord ,editer},
+  components: { department, riskSelect },
   data() {
     return {
       loading: false,
+      cdLoading: false,
       save_loading: false,
       detailForm: {
-        id: this.data.id,
-        no: this.data.no,
-        title: this.data.title,
-        background: this.data.background,
-        existingRisk: this.data.existingRisk,
-        measures: this.data.measuresVos,
+        riskControl: {
+          fileId: "",
+          title: "",
+          year: "",
+          month: "",
+          riskControlExpList: [
+            {
+              remark: "",// 图备注
+              risk: "", // 风险
+              riskSource: "", // 图来源:1-1
+              deptPathList: [], // 部门
+              fillDeadline: "", // 填报截止日期
+              implementDeadline: "", // 落实截止日期
+            }
+          ]
+        }
       },
-      formRules: {
-        no: [{ required: true, message: "编号不能为空", trigger: "blur" }],
-        title: [{ required: true, message: "主题不能为空", trigger: "blur" }],
-        background: [
-          { required: true, message: "背景不能为空", trigger: "blur" },
-        ],
-        existingRisk: [
-          {
-            required: true,
-            message: "存在的安全风险不能为空",
-            trigger: "blur",
-          },
-        ],
-      },
-      formChange: false,
+      picSource: [
+        { label: '1-1、月度关键风险状态', value: '1_1' },
+        { label: '1-2、年度关键风险状态', value: '1_2' },
+        { label: '1-3、关键风险TOP3趋势', value: '1_3' },
+        { label: '1-4、关键风险TOP3状态(各产品)', value: '1_4' },
+        { label: '1-5、关键风险TOP3状态(各单位)', value: '1_5' },
+        { label: '1-6、关键风险TOP3关联危险源', value: '1_6' }
+      ],
+      imageRiskList: []
     };
   },
   props: {
@@ -131,17 +133,9 @@ export default {
       default: () => { },
     },
   },
-  created() { },
+  created() { this.loadData(); },
   computed: {
-    _form: {
-      get() {
-        return this.form;
-      },
-      set(val) {
-        this.$emit("change", val);
-      },
-    },
-    dialog(){
+    dialog() {
       return this.$parent.$parent.dialog;
     }
   },
@@ -149,45 +143,81 @@ export default {
     data: {
       deep: true,
       handler(data) {
-        this.detailForm = {
-          id: data.id,
-          no: data.no,
-          title: data.title,
-          background: data.background,
-          existingRisk: data.existingRisk,
-          measures: data.measuresVos,
-        };
-        this.formChange = false;
+        debugger
+        this.loadData();
       },
     },
   },
   methods: {
     format,
-    addRisk() {
-      this.detailForm.measures.push({
-        content: "",
-        deadline: "",
-        deptPath: null,
-      });
+    loadData() {
+      let data = JSON.parse(JSON.stringify(this.data));
+      this.detailForm = {
+        riskControl: {
+          id: data.id,
+          fileId: "",
+          title: data.title,
+          year: data.year,
+          month: data.month,
+          riskControlExpList: data.riskControlExpVoList || []
+        }
+      }
+      this.cdLoading = true;
+      getRiskAssessmentChartData({ dateValue1: data.year, dateValue2: data.month, dateType: 2 }).then(res => {
+        this.cdLoading = false;
+        if (res.code == '200') {
+          this.imageRiskList = res.obj.map(item => {
+            return {
+              name: item.imageNo,
+              children: item.data.map(r => r.name)
+            }
+          })
+        }
+      })
     },
-    delRisk(index) {
-      this.detailForm.measures.splice(index, 1);
+    addRow() {
+      this.detailForm.riskControl.riskControlExpList.push({
+        remark: "",// 图备注
+        risk: "", // 风险
+        riskSource: "", // 图来源:1-1
+        deptPathList: [], // 部门
+        fillDeadline: "", // 填报截止日期
+        implementDeadline: "", // 落实截止日期
+      })
+    },
+    delRow(index) {
+      this.detailForm.riskControl.riskControlExpList.splice(index, 1);
     },
     deptChange(val, item) {
-      item.deptPath = val.join(",");
+      item.deptPathList = val;
     },
-    formChangeStatus() {
-      this.formChange = true;
+    riskChange(val, item) {
+      item.risk = val;
+    },
+    picSourceChange(val, item) {
+      item.risk = "";
     }
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.measures {
-  /deep/ .el-form-item__content {
-    padding: 0 4px;
+.full-row {
+  /deep/.el-form-item {
+    display: flex;
+    .el-form-item__content {
+      flex: 1;
+    }
   }
+}
+.el-card + .el-card {
+  margin-top: 10px;
+}
+.mt {
+  margin-top: 10px;
+}
+/deep/ .vue-treeselect--append-to-body {
+  z-index: 100 !important;
 }
 </style>
 
