@@ -248,7 +248,10 @@ export default {
             });
           }
         }
-        this.form.monthTasks = arr;
+        let bool = (JSON.stringify(val) == "{}")
+        if(!bool) {
+          this.form.monthTasks = arr;
+        }
       },
     },
   },
@@ -315,7 +318,56 @@ export default {
         year: "",
         defaultDay: "",
         productValue: "",
-        monthTasks: [],
+        monthTasks: [
+          {
+            month: 1,
+            dueDate: null
+          },
+          {
+            month: 2,
+            dueDate: null
+          },
+          {
+            month: 3,
+            dueDate: null
+          },
+          {
+            month: 4,
+            dueDate: null
+          },
+          {
+            month: 5,
+            dueDate: null
+          },
+          {
+            month: 6,
+            dueDate: null
+          },
+          {
+            month: 7,
+            dueDate: null
+          },
+          {
+            month: 8,
+            dueDate: null
+          },
+          {
+            month: 9,
+            dueDate: null
+          },
+          {
+            month: 10,
+            dueDate: null
+          },
+          {
+            month: 11,
+            dueDate: null
+          },
+          {
+            month: 12,
+            dueDate: null
+          }
+        ],
         type: 2,
       };
       this.form2 = {};

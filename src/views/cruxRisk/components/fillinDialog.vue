@@ -64,11 +64,11 @@
       >新增危险源</el-button>
       <el-card shadow="never" v-for="(item,index) in form.hazardList" :key="index">
         <el-form size="mini" inline label-width="70px" :disabled="formEnable">
-          <el-form-item label="系统">
+          <el-form-item label="产品">
             <dict-select
-              :value="item.system"
-              type="system"
-              @change="dictChange($event,item,'system')"
+              :value="item.product"
+              type="product"
+              @change="dictChange($event,item,'product')"
               style="width:130px"
             />
           </el-form-item>
@@ -255,7 +255,7 @@ export default {
               },
             ],
             subSystem: "", // 子系统
-            system: "", //系统
+            product: "", //系统
           },
         ],
       },
@@ -330,7 +330,7 @@ export default {
               },
             ],
             subSystem: "",
-            system: "",
+            product: "",
           },
         ],
       };
@@ -356,7 +356,7 @@ export default {
           },
         ],
         subSystem: "",
-        system: "",
+        product: "",
       });
     },
     delHazard(index) {

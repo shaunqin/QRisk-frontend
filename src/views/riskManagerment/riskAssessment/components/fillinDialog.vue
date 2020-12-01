@@ -64,11 +64,11 @@
       >新增危险源</el-button>
       <el-card shadow="never" v-for="(item,index) in form.hazardList" :key="index">
         <el-form size="mini" inline label-width="70px" :disabled="formEnable">
-          <el-form-item label="系统">
+          <el-form-item label="产品">
             <dict-select
-              :value="item.system"
-              type="system"
-              @change="dictChange($event,item,'system')"
+              :value="item.product"
+              type="product"
+              @change="dictChange($event,item,'product')"
               style="width:130px"
             />
           </el-form-item>
@@ -93,12 +93,6 @@
                 >
               </el-option>
             </el-select>
-            <!-- <dict-select
-              :value="item.hazard"
-              type="hazard"
-              @change="dictChange($event,item,'hazard')"
-              style="width:130px"
-            /> -->
           </el-form-item>
           <el-form-item label="可能导致的风险" label-width="115px">
             <el-select v-model="item.possibleRisks" clearable placeholder="请选择可能导致的风险" style="width:130px" @change="dictChange(item.possibleRisks,item,'possibleRisks')">
@@ -110,11 +104,6 @@
                 >
               </el-option>
             </el-select>
-            <!-- <dict-select
-              :value="item.possibleRisks"
-              type="risk"
-              @change="dictChange($event,item,'possibleRisks')"
-            /> -->
           </el-form-item>
           <el-form-item label="可能性">
             <dict-select
@@ -275,7 +264,7 @@ export default {
               },
             ],
             subSystem: "", // 子系统
-            system: "", //系统
+            product: "", //产品
           },
         ],
       },
@@ -353,7 +342,7 @@ export default {
               },
             ],
             subSystem: "",
-            system: "",
+            product: "",
           },
         ],
       };
@@ -379,7 +368,7 @@ export default {
           },
         ],
         subSystem: "",
-        system: "",
+        product: "",
       });
     },
     delHazard(index) {
@@ -397,7 +386,6 @@ export default {
       item.specialRiskMeasureList.splice(index, 1);
     },
     dictChange(val, item, key) {
-      console.log(val, item, key)
       item[key] = val;
       if (key == 'hazard' || key == 'possibleRisks') {
         this.queryRiskLevel(item.hazard, item.possibleRisks, item);

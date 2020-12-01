@@ -75,12 +75,12 @@
           </el-col>
         </el-row>
         <el-table :data="form.specialRiskAnalyses" size="mini" max-height="500">
-          <el-table-column label="系统" min-width="130">
+          <el-table-column label="产品" min-width="130">
             <template slot-scope="{row}">
               <dictSelect
-                type="system"
-                :value="row.system"
-                @change="dictChange($event,row,'system')"
+                type="product"
+                :value="row.product"
+                @change="dictChange($event,row,'product')"
               />
             </template>
           </el-table-column>
@@ -160,11 +160,11 @@
         <el-button type="primary" size="mini" @click="addHazard" style="margin-bottom:10px">新增危险源</el-button>
         <el-card shadow="never" v-for="(item,index) in form.hazardList" :key="index">
           <el-form size="mini" inline label-width="70px">
-            <el-form-item label="系统">
+            <el-form-item label="产品">
               <dict-select
-                :value="item.system"
-                type="system"
-                @change="dictChange($event,item,'system')"
+                :value="item.product"
+                type="product"
+                @change="dictChange($event,item,'product')"
                 style="width:130px"
               />
             </el-form-item>
@@ -176,46 +176,68 @@
                 style="width:130px"
               />
             </el-form-item>
-            <el-form-item label="可能性">
-              <dict-select
-                :value="item.possibility"
-                type="probability_level"
-                @change="dictChange($event,item,'possibility')"
-                style="width:130px"
-              />
-            </el-form-item>
-            <el-form-item label="严重性">
-              <dict-select
-                :value="item.seriousness"
-                type="severity_level_matrix_graph"
-                @change="dictChange($event,item,'seriousness')"
-              />
-            </el-form-item>
-            <el-form-item label="风险等级">
-              <dict-select
-                :value="item.riskLevel"
-                type="risk_level"
-                @change="dictChange($event,item,'riskLevel')"
-                style="width:130px"
-              />
-            </el-form-item>
             <el-form-item label="管理流程">
-              <el-input v-model="item.managementProcess"></el-input>
-            </el-form-item>
+            <el-input v-model="item.managementProcess"></el-input>
+          </el-form-item>
+          <el-form-item label="危险源">
+            <el-select v-model="item.hazard" placeholder="请选择危险源" style="width:130px" @change="dictChange(item.hazard,item,'hazard')">
+              <el-option
+                v-for="item in item.hazards"
+                :key="item.diskNo"
+                :label="item.diskName"
+                :value="item.diskNo"
+                >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="可能导致的风险" label-width="115px">
+            <el-select v-model="item.possibleRisks" clearable placeholder="请选择可能导致的风险" style="width:130px" @change="dictChange(item.possibleRisks,item,'possibleRisks')">
+              <el-option
+                v-for="item in item.possibleRisksList"
+                :key="item.riskNo"
+                :label="item.riskName"
+                :value="item.riskNo"
+                >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="可能性">
+            <dict-select
+              :value="item.possibility"
+              type="probability_level"
+              @change="dictChange($event,item,'possibility')"
+              style="width:130px"
+              :disabled="true"
+            />
+          </el-form-item>
+          <el-form-item label="严重性">
+            <dict-select
+              :value="item.seriousness"
+              type="severity_level_matrix_graph"
+              @change="dictChange($event,item,'seriousness')"
+              :disabled="true"
+            />
+          </el-form-item>
+          <el-form-item label="风险等级">
+            <dict-select
+              :value="item.riskLevel"
+              type="risk_level"
+              @change="dictChange($event,item,'riskLevel')"
+              style="width:130px"
+              :disabled="true"
+            />
+          </el-form-item>
             <el-row :gutter="16" class="fill-row">
               <el-col :span="12">
-                <el-form-item label="问题描述">
-                  <el-input v-model="item.hazardSource" type="textarea" rows="3"></el-input>
-                </el-form-item>
-                <el-form-item label="根原因分析">
-                  <el-input v-model="item.rootCauseAnalysis" type="textarea" rows="3"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="可能导致的风险">
-                  <el-input v-model="item.possibleRisks" type="textarea" rows="3"></el-input>
-                </el-form-item>
-              </el-col>
+              <el-form-item label="危险源描述">
+                <el-input v-model="item.hazardSource" type="textarea" rows="3"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="根原因分析">
+                <el-input v-model="item.rootCauseAnalysis" type="textarea" rows="3"></el-input>
+              </el-form-item>
+            </el-col>
             </el-row>
           </el-form>
           <!-- 风险表格 -->
@@ -270,7 +292,7 @@
 </template>
 
 <script>
-import { specialRiskAdd, specialRiskModify } from "@/api/risk";
+import { specialRiskAdd, specialRiskModify, specialRiskQueryRiskLevel } from "@/api/risk";
 import department from "@/components/Department";
 import dictSelect from '@/components/common/dictSelect'
 
@@ -295,7 +317,7 @@ export default {
         type: "1", // 类别,1:通知,2:评估
         specialRiskAnalyses: [
           {
-            system: "",  // 系统
+            product: "",  // 产品
             subSystem: "", // 子系统
             managementProcess: "", // 管理流程
             reponsibleUnit: null, // 责任单位
@@ -313,11 +335,14 @@ export default {
           {
             hazardSource: "",
             managementProcess: "",
-            possibility: "",
-            possibleRisks: "",
-            riskLevel: "",
+            hazards: [], // 危险源列表
+            hazard: "", // 危险源
+            possibility: "1",
+            possibleRisks: "", // 可能导致的风险
+            possibleRisksList: [], // 可能导致的风险列表
+            riskLevel: "1",
             rootCauseAnalysis: "",
-            seriousness: "",
+            seriousness: "1",
             specialRiskMeasureList: [
               {
                 completion: "",
@@ -326,7 +351,7 @@ export default {
                 reponsibleDept: null
               }],
             subSystem: "",
-            system: ""
+            product: ""
           }
         ],
       },
@@ -422,7 +447,7 @@ export default {
     },
     addCol() {
       this.form.specialRiskAnalyses.push({
-        system: "",  // 系统
+        product: "",  // 产品
         subSystem: "", // 子系统
         managementProcess: "", // 管理流程
         reponsibleUnit: null, // 责任单位
@@ -439,12 +464,16 @@ export default {
     delCol(index) {
       this.form.specialRiskAnalyses.splice(index, 1);
     },
-    dictChange(val, row, key) {
-      row[key] = val;
+    dictChange(val, item, key) {
+      item[key] = val;
+      if (key == 'hazard' || key == 'possibleRisks') {
+        this.queryRiskLevel(item.hazard, item.possibleRisks, item);
+      }
     },
     addHazard() {
       this.form.hazardList.push({
         hazardSource: "",
+        hazard: "",
         managementProcess: "",
         possibility: "",
         possibleRisks: "",
@@ -459,7 +488,7 @@ export default {
             reponsibleDept: null
           }],
         subSystem: "",
-        system: ""
+        product: ""
       });
     },
     delHazard(index) {
@@ -478,6 +507,18 @@ export default {
     },
     srmDeptChange(val, row) {
       row.reponsibleDept = val;
+    },
+    /**查询风险 */
+    queryRiskLevel(hazard, risk, item) {
+      if (!!hazard && !!risk) {
+        specialRiskQueryRiskLevel(hazard, risk).then(res => {
+          if (res.code == '200') {
+            item.possibility = res.obj.possibility;
+            item.seriousness = res.obj.seriousness;
+            item.riskLevel = res.obj.riskLevel;
+          }
+        })
+      }
     }
   }
 };

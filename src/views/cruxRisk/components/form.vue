@@ -75,12 +75,12 @@
           </el-col>
         </el-row>
         <el-table :data="form.specialRiskAnalyses" size="mini" max-height="500">
-          <el-table-column label="系统" min-width="130">
+          <el-table-column label="产品" min-width="130">
             <template slot-scope="{row}">
               <dictSelect
-                type="system"
-                :value="row.system"
-                @change="dictChange($event,row,'system')"
+                type="product"
+                :value="row.product"
+                @change="dictChange($event,row,'product')"
               />
             </template>
           </el-table-column>
@@ -160,11 +160,11 @@
         <el-button type="primary" size="mini" @click="addHazard" style="margin-bottom:10px">新增危险源</el-button>
         <el-card shadow="never" v-for="(item,index) in form.hazardList" :key="index">
           <el-form size="mini" inline label-width="70px">
-            <el-form-item label="系统">
+            <el-form-item label="产品">
               <dict-select
-                :value="item.system"
-                type="system"
-                @change="dictChange($event,item,'system')"
+                :value="item.product"
+                type="product"
+                @change="dictChange($event,item,'product')"
                 style="width:130px"
               />
             </el-form-item>
@@ -295,7 +295,7 @@ export default {
         type: "1", // 类别,1:通知,2:评估
         specialRiskAnalyses: [
           {
-            system: "",  // 系统
+            product: "",
             subSystem: "", // 子系统
             managementProcess: "", // 管理流程
             reponsibleUnit: null, // 责任单位
@@ -326,7 +326,7 @@ export default {
                 reponsibleDept: null
               }],
             subSystem: "",
-            system: ""
+            product: ""
           }
         ],
       },
@@ -422,7 +422,7 @@ export default {
     },
     addCol() {
       this.form.specialRiskAnalyses.push({
-        system: "",  // 系统
+        product: "",
         subSystem: "", // 子系统
         managementProcess: "", // 管理流程
         reponsibleUnit: null, // 责任单位
@@ -459,7 +459,7 @@ export default {
             reponsibleDept: null
           }],
         subSystem: "",
-        system: ""
+        product: ""
       });
     },
     delHazard(index) {

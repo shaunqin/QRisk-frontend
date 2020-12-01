@@ -37,11 +37,11 @@
         <el-table-column prop="reasonAnalysis" label="原因分析" width="120px" show-overflow-tooltip />
         <el-table-column
           prop="equivalentMeasures"
-          label="整改措施"
+          label="等效措施"
           width="160px"
           show-overflow-tooltip
         />
-        <el-table-column label="等效措施" width="150px">
+        <el-table-column label="整改措施" width="150px">
           <template slot-scope="{ row }" show-overflow-tooltip>
             <ul class="tab-ul">
               <li v-for="item in row.controlList" :key="item.id">

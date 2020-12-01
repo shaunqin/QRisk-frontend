@@ -34,7 +34,7 @@
         <el-form-item label="批准">{{data.approval}}</el-form-item>
         <el-form-item label="批准日期">{{formatShortDate(data.approvalDate)}}</el-form-item>
         <el-table :data="data.specialRiskAnalyses" size="mini" max-height="500">
-          <el-table-column label="系统" prop="systemName" />
+          <el-table-column label="产品" prop="productName" />
           <el-table-column label="子系统" prop="subSystemName" />
           <el-table-column label="管理流程" prop="managementProcess" />
           <el-table-column label="责任单位" prop="reponsibleUnitName" />
@@ -56,7 +56,7 @@
     <!-- 危险源 -->
     <el-card header="危险源" key="hazardVoList" v-if="data.type=='2'">
       <el-table :data="data.hazardVoList" size="mini">
-        <el-table-column label="系统" prop="systemName" />
+        <el-table-column label="产品" prop="productName" />
         <el-table-column label="子系统" prop="subSystemName" />
         <el-table-column label="可能性" prop="possibilityName" />
         <el-table-column label="严重性" prop="seriousnessName" />
