@@ -182,10 +182,10 @@
           <el-form-item label="危险源">
             <el-select v-model="item.hazard" placeholder="请选择危险源" style="width:130px" @change="dictChange(item.hazard,item,'hazard')">
               <el-option
-                v-for="item in item.hazards"
-                :key="item.diskNo"
-                :label="item.diskName"
-                :value="item.diskNo"
+                v-for="childItem in hazards"
+                :key="childItem.diskNo"
+                :label="childItem.diskName"
+                :value="childItem.diskNo"
                 >
               </el-option>
             </el-select>
@@ -193,10 +193,10 @@
           <el-form-item label="可能导致的风险" label-width="115px">
             <el-select v-model="item.possibleRisks" clearable placeholder="请选择可能导致的风险" style="width:130px" @change="dictChange(item.possibleRisks,item,'possibleRisks')">
               <el-option
-                v-for="item in item.possibleRisksList"
-                :key="item.riskNo"
-                :label="item.riskName"
-                :value="item.riskNo"
+                v-for="childItem in possibleRisksList"
+                :key="childItem.riskNo"
+                :label="childItem.riskName"
+                :value="childItem.riskNo"
                 >
               </el-option>
             </el-select>
@@ -335,11 +335,9 @@ export default {
           {
             hazardSource: "",
             managementProcess: "",
-            hazards: [], // 危险源列表
             hazard: "", // 危险源
             possibility: "1",
             possibleRisks: "", // 可能导致的风险
-            possibleRisksList: [], // 可能导致的风险列表
             riskLevel: "1",
             rootCauseAnalysis: "",
             seriousness: "1",
@@ -355,6 +353,8 @@ export default {
           }
         ],
       },
+      hazards: [], // 危险源列表
+      possibleRisksList: [], // 可能导致的风险列表
       formRules: {
         title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
       },
@@ -435,8 +435,39 @@ export default {
         approval: "", // 批准
         approvalDate: "", // 批准日期
         type: "1", // 类别,1:通知,2:评估
-        specialRiskAnalyses: [],
-        hazardList: [],
+        specialRiskAnalyses: [{
+            product: "",  // 产品
+            subSystem: "", // 子系统
+            managementProcess: "", // 管理流程
+            reponsibleUnit: null, // 责任单位
+            post: "", // 岗位
+            processHuman: "", // 人
+            processMachine: "", // 机
+            processMaterial: "", // 料
+            processRegulation: "", // 法
+            processEnvironment: "", // 环
+            input: "", // 输入
+            output: "", // 输出
+          }],
+        hazardList: [{
+            hazardSource: "",
+            managementProcess: "",
+            hazard: "", // 危险源
+            possibility: "1",
+            possibleRisks: "", // 可能导致的风险
+            riskLevel: "1",
+            rootCauseAnalysis: "",
+            seriousness: "1",
+            specialRiskMeasureList: [
+              {
+                completion: "",
+                controlMeasure: "",
+                deadline: "",
+                reponsibleDept: null
+              }],
+            subSystem: "",
+            product: ""
+          }],
       };
     },
     deptChange(val, key) {
@@ -473,13 +504,13 @@ export default {
     addHazard() {
       this.form.hazardList.push({
         hazardSource: "",
-        hazard: "",
+        hazard: this.hazards[0].diskNo,
         managementProcess: "",
-        possibility: "",
-        possibleRisks: "",
-        riskLevel: "",
+        possibility: "1",
+        possibleRisks: this.possibleRisksList[0].riskNo,
+        riskLevel: "1",
         rootCauseAnalysis: "",
-        seriousness: "",
+        seriousness: "1",
         specialRiskMeasureList: [
           {
             completion: "",

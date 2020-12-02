@@ -86,10 +86,10 @@
           <el-form-item label="危险源">
             <el-select v-model="item.hazard" placeholder="请选择危险源" style="width:130px" @change="dictChange(item.hazard,item,'hazard')">
               <el-option
-                v-for="item in item.hazards"
-                :key="item.diskNo"
-                :label="item.diskName"
-                :value="item.diskNo"
+                v-for="childItem in hazards"
+                :key="childItem.diskNo"
+                :label="childItem.diskName"
+                :value="childItem.diskNo"
                 >
               </el-option>
             </el-select>
@@ -97,10 +97,10 @@
           <el-form-item label="可能导致的风险" label-width="115px">
             <el-select v-model="item.possibleRisks" clearable placeholder="请选择可能导致的风险" style="width:130px" @change="dictChange(item.possibleRisks,item,'possibleRisks')">
               <el-option
-                v-for="item in item.possibleRisksList"
-                :key="item.riskNo"
-                :label="item.riskName"
-                :value="item.riskNo"
+                v-for="childItem in possibleRisksList"
+                :key="childItem.riskNo"
+                :label="childItem.riskName"
+                :value="childItem.riskNo"
                 >
               </el-option>
             </el-select>
@@ -245,13 +245,11 @@ export default {
         approvalDate: "",
         hazardList: [
           {
-            hazards: [], // 危险源列表
             hazard: "", // 危险源
             hazardSource: "", // 危险源描述
             managementProcess: "", // 管理流程
             possibility: "", // 可能性
             possibleRisks: "", // 可能导致的风险
-            possibleRisksList: [], // 可能导致的风险列表
             riskLevel: "", // 风险等级
             rootCauseAnalysis: "", // 根原因分析
             seriousness: "", // 严重性
@@ -268,6 +266,8 @@ export default {
           },
         ],
       },
+      hazards: [], // 危险源列表
+      possibleRisksList: [], // 可能导致的风险列表
       data: {}, // 父级赋值
       formId: null,
     };
@@ -322,14 +322,12 @@ export default {
         approvalDate: "",
         hazardList: [
           {
-            hazards: [],
             hazard: "",
             diskNo: "",
             hazardSource: "",
             managementProcess: "",
             possibility: "",
             possibleRisks: "",
-            possibleRisksList: [],
             riskLevel: "",
             rootCauseAnalysis: "",
             seriousness: "",
@@ -351,14 +349,14 @@ export default {
     },
     addHazard() {
       this.form.hazardList.push({
-        hazard: "",
+        hazard: this.hazards[0].diskNo,
         hazardSource: "",
         managementProcess: "",
-        possibility: "",
-        possibleRisks: "",
-        riskLevel: "",
+        possibility: "1",
+        possibleRisks: this.possibleRisksList[0].riskNo,
+        riskLevel: "1",
         rootCauseAnalysis: "",
-        seriousness: "",
+        seriousness: "1",
         specialRiskMeasureList: [
           {
             completion: "",

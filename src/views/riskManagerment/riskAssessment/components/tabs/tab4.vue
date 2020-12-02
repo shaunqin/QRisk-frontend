@@ -120,7 +120,7 @@ export default {
           this.$message.error(res.msg);
         } else {
           _this.form.hazardList[0].hazard = res.obj[0].diskNo
-          _this.form.hazardList[0].hazards = res.obj
+          _this.hazards = res.obj
         }
       })
     },
@@ -131,7 +131,7 @@ export default {
           this.$message.error(res.msg);
         } else {
           _this.form.hazardList[0].possibleRisks = res.obj[0].riskNo
-          _this.form.hazardList[0].possibleRisksList = res.obj
+          _this.possibleRisksList = res.obj
         }
       })
     }
