@@ -26,6 +26,11 @@
           <div>{{renderTbCol(row)}}</div>
         </template>
       </el-table-column>
+      <el-table-column prop="taskTime" label="任务时间" width="140">
+        <template slot-scope="{row}">
+          <div>{{formatDate(row.taskTime)}}</div>
+        </template>
+      </el-table-column>
       <el-table-column prop="createBy" label="发起人" width="130" />
       <el-table-column prop="createTime" label="发起时间" width="140" />
       <el-table-column label="操作" width="110">
@@ -51,6 +56,7 @@
 <script>
 import initData from "@/mixins/initData";
 import { queryHazards } from "@/api/hazards";
+import { format } from "@/utils/datetime"
 import handle from "../handle";
 export default {
   mixins: [initData],
@@ -89,6 +95,9 @@ export default {
           _this.dialog = true;
         }
       });
+    },
+    formatDate(time) {
+      return format(time)
     },
     renderTbCol(row) {
       if (row.fillerName && row.filler) {

@@ -46,7 +46,7 @@
 
 <script>
 import initData from "@/mixins/initData";
-import { specialRiskFill, queryHazard, queryRiskListMgr } from "@/api/risk";
+import { specialRiskFill, queryRiskListMgr } from "@/api/risk";
 import handle from "../handle";
 import fillin from "../fillinDialog";
 export default {
@@ -106,23 +106,11 @@ export default {
               return item
             })
           }
-          await this.getHazard()
           await this.getRiskListMgr()
           this.loading = false;
           _this.dialog = true;
         }
       });
-    },
-    async getHazard() {
-      let _this = this.$refs.fillin;
-      await queryHazard().then(res => {
-        if (res.code != "200") {
-          this.$message.error(res.msg);
-        } else {
-          _this.form.hazardList[0].hazard = res.obj[0].diskNo
-          _this.hazards = res.obj
-        }
-      })
     },
     async getRiskListMgr() {
       let _this = this.$refs.fillin;

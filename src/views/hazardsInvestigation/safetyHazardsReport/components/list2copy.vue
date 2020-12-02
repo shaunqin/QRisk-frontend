@@ -110,6 +110,10 @@ export default {
       this.resetForm();
     },
     doSubmit() {
+      if(this.selections.length == 0) {
+        this.$message.error('请在表格中选择所需复制的内容');
+        return
+      }
       eventBus.$emit("accept-source", this.selections);
       this.resetForm();
     },

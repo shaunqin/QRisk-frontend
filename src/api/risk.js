@@ -198,9 +198,9 @@ export function specialRiskDelete(id) {
   })
 }
 // 提交
-export function specialRiskSubmit(id) {
+export function specialRiskSubmit(id, sqlUserId) {
   return request({
-    url: `/risk_mgr/special_risk_notice_mgr/submit/${id}`,
+    url: `/risk_mgr/special_risk_notice_mgr/submit/${id}/${sqlUserId}`,
     method: 'get'
   })
 }

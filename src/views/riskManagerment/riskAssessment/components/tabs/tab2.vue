@@ -54,12 +54,14 @@
       @current-change="pageChange"
     />
     <eform ref="form" :isAdd="isAdd" />
+    <selectEmplotee ref="selectEmplotee" @on-submit="doSubmit" />
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
 import eform from "../form";
+import selectEmplotee from "../selectEmplotee";
 import {
   specialRiskDetail,
   specialRiskDelete,
@@ -67,7 +69,7 @@ import {
 } from "@/api/risk";
 import { formatShortDate } from "@/utils/datetime";
 export default {
-  components: { eform },
+  components: { eform, selectEmplotee },
   data() {
     return {
       selections: [],
@@ -143,8 +145,17 @@ export default {
         .catch(() => { });
     },
     submit() {
+      let _this = this.$refs.selectEmplotee;
+      _this.dialog = true;
+    },
+    doSubmit(sqlUserId) {
+      this.chooseAndSubmit(sqlUserId)
+    },
+    chooseAndSubmit(sqlUserId) {
+      console.log(sqlUserId)
       let id = this.selections[0];
-      specialRiskSubmit(id).then((res) => {
+      console.log('id', id)
+      specialRiskSubmit(id, sqlUserId).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
@@ -152,7 +163,7 @@ export default {
           this.init();
         }
       });
-    },
+    }
   },
 };
 </script>

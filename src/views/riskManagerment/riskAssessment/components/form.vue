@@ -44,7 +44,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="编号">
-              <el-input v-model="form.analysisNo"></el-input>
+              <el-input :disabled="true" v-model="form.analysisNo"></el-input>
             </el-form-item>
             <el-form-item label="批准">
               <el-input :disabled="true" v-model="form.approval"></el-input>
@@ -111,39 +111,39 @@
           <el-table-column label="流程要素">
             <el-table-column label="人" min-width="130">
               <template slot-scope="{row}">
-                <el-input v-model="row.processHuman" placeholder></el-input>
+                <el-input v-model="row.processHuman" type="textarea" rows="1" placeholder></el-input>
               </template>
             </el-table-column>
             <el-table-column label="机" min-width="130">
               <template slot-scope="{row}">
-                <el-input v-model="row.processMachine" placeholder></el-input>
+                <el-input v-model="row.processMachine" type="textarea" rows="1" placeholder></el-input>
               </template>
             </el-table-column>
             <el-table-column label="料" min-width="130">
               <template slot-scope="{row}">
-                <el-input v-model="row.processMaterial" placeholder></el-input>
+                <el-input v-model="row.processMaterial" type="textarea" rows="1" placeholder></el-input>
               </template>
             </el-table-column>
             <el-table-column label="法" min-width="130">
               <template slot-scope="{row}">
-                <el-input v-model="row.processRegulation" placeholder></el-input>
+                <el-input v-model="row.processRegulation" type="textarea" rows="1" placeholder></el-input>
               </template>
             </el-table-column>
             <el-table-column label="环" min-width="130">
               <template slot-scope="{row}">
-                <el-input v-model="row.processEnvironment" placeholder></el-input>
+                <el-input v-model="row.processEnvironment" type="textarea" rows="1" placeholder></el-input>
               </template>
             </el-table-column>
           </el-table-column>
           <el-table-column label="流程分析">
             <el-table-column label="输入" min-width="130">
               <template slot-scope="{row}">
-                <el-input v-model="row.input" placeholder></el-input>
+                <el-input v-model="row.input" type="textarea" rows="1" placeholder></el-input>
               </template>
             </el-table-column>
             <el-table-column label="输出" min-width="130">
               <template slot-scope="{row}">
-                <el-input v-model="row.output" placeholder></el-input>
+                <el-input v-model="row.output" type="textarea" rows="1" placeholder></el-input>
               </template>
             </el-table-column>
           </el-table-column>
@@ -179,10 +179,42 @@
             <el-form-item label="管理流程">
             <el-input v-model="item.managementProcess"></el-input>
           </el-form-item>
+          <el-form-item label="危险源层级一" label-width="115px">
+            <el-select
+              clearable
+              v-model="item.riskLevel1"
+              placeholder="请选择层级一"
+              style="width: 130px"
+              @change="chooseRiskLevel1(item.riskLevel1, item)"
+            >
+              <el-option
+                v-for="item in riskLevel1List"
+                :key="item.key"
+                :label="item.name"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="危险源层级二" label-width="115px">
+            <el-select
+              clearable
+              v-model="item.riskLevel2"
+              placeholder="请选择层级二"
+              style="width: 130px;"
+              @change="chooseRiskLevel2(item.riskLevel2, item)"
+            >
+              <el-option
+                v-for="item in riskLevel2List"
+                :key="item.key"
+                :label="item.name"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="危险源">
             <el-select v-model="item.hazard" placeholder="请选择危险源" style="width:130px" @change="dictChange(item.hazard,item,'hazard')">
               <el-option
-                v-for="childItem in hazards"
+                v-for="childItem in hazardList"
                 :key="childItem.diskNo"
                 :label="childItem.diskName"
                 :value="childItem.diskNo"
@@ -207,7 +239,6 @@
               type="probability_level"
               @change="dictChange($event,item,'possibility')"
               style="width:130px"
-              :disabled="true"
             />
           </el-form-item>
           <el-form-item label="严重性">
@@ -215,7 +246,6 @@
               :value="item.seriousness"
               type="severity_level_matrix_graph"
               @change="dictChange($event,item,'seriousness')"
-              :disabled="true"
             />
           </el-form-item>
           <el-form-item label="风险等级">
@@ -224,7 +254,6 @@
               type="risk_level"
               @change="dictChange($event,item,'riskLevel')"
               style="width:130px"
-              :disabled="true"
             />
           </el-form-item>
             <el-row :gutter="16" class="fill-row">
@@ -293,6 +322,8 @@
 
 <script>
 import { specialRiskAdd, specialRiskModify, specialRiskQueryRiskLevel } from "@/api/risk";
+import { queryDictByName } from "@/api/dict";
+import { queryHazardList } from "@/api/standard";
 import department from "@/components/Department";
 import dictSelect from '@/components/common/dictSelect'
 
@@ -335,6 +366,8 @@ export default {
           {
             hazardSource: "",
             managementProcess: "",
+            riskLevel1: "", //危险源层级1
+            riskLevel2: "", //危险源层级2
             hazard: "", // 危险源
             possibility: "1",
             possibleRisks: "", // 可能导致的风险
@@ -353,7 +386,10 @@ export default {
           }
         ],
       },
-      hazards: [], // 危险源列表
+      riskLevel1List: [],
+      riskLevel2List: [],
+      totalhazardList: [], // 全部危险源
+      hazardList: [], // 危险源
       possibleRisksList: [], // 可能导致的风险列表
       formRules: {
         title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
@@ -366,7 +402,18 @@ export default {
       required: true
     }
   },
-  created() { },
+  created() {
+    // 危险源
+    queryHazardList().then((res) => {
+      this.totalhazardList = res.obj;
+      // 危险源层级
+      queryDictByName("hazard_source").then((response) => {
+        this.riskLevel1List = response.obj[0].children;
+        this.form.hazardList[0].riskLevel1 = this.riskLevel1List[0].value
+        this.chooseRiskLevel1(this.form.hazardList[0].riskLevel1, this.form.hazardList[0])
+      });
+    });
+  },
   methods: {
     cancel() {
       this.resetForm();
@@ -453,6 +500,8 @@ export default {
             hazardSource: "",
             managementProcess: "",
             hazard: "", // 危险源
+            riskLevel1: "", //危险源层级1
+            riskLevel2: "", //危险源层级2
             possibility: "1",
             possibleRisks: "", // 可能导致的风险
             riskLevel: "1",
@@ -504,7 +553,9 @@ export default {
     addHazard() {
       this.form.hazardList.push({
         hazardSource: "",
-        hazard: this.hazards[0].diskNo,
+        riskLevel1: this.riskLevel1List[0] ? this.riskLevel1List[0].value : "", //危险源层级1
+        riskLevel2: this.riskLevel2List[0] ? this.riskLevel2List[0].value : "", //危险源层级2
+        hazard: this.hazardList[0] ? this.hazardList[0].diskNo : "",
         managementProcess: "",
         possibility: "1",
         possibleRisks: this.possibleRisksList[0].riskNo,
@@ -550,7 +601,24 @@ export default {
           }
         })
       }
-    }
+    },
+    chooseRiskLevel1(val, item) {
+      if (this.riskLevel1List.length > 0) {
+          let list = this.riskLevel1List.filter((r) => r.value == val);
+          if (list && list.length > 0) {
+            this.riskLevel2List = list[0].children;
+          }
+          item.riskLevel2 = this.riskLevel2List[0].value
+          this.chooseRiskLevel2(item.riskLevel2, item)
+        }
+    },
+    chooseRiskLevel2(val, item) {
+      let list = this.totalhazardList.filter((r) => r.cateValue == val);
+      if (list && list.length > 0) {
+        this.hazardList = list;
+      }
+      item.hazard = this.hazardList[0] ? this.hazardList[0].diskNo : ""
+    },
   }
 };
 </script>
