@@ -79,6 +79,12 @@
       <el-form-item label="监管单位">
         <el-input v-model="form.supervisoryUnit" style="width: 140px" :disabled="disabled"></el-input>
       </el-form-item>
+        <el-form-item label="整改进展">
+          <el-select v-model="form.rectificationProgress" placeholder style="width: 140px">
+            <el-option label="正在整改" value="正在整改"></el-option>
+            <el-option label="关闭" value="关闭"></el-option>
+          </el-select>
+        </el-form-item>
       <el-row class="fill-row" :gutter="16">
         <el-col :span="12">
           <el-form-item label="原因分析">
@@ -90,11 +96,6 @@
               :disabled="disabled"
             ></el-input>
           </el-form-item>
-          <el-form-item label="备注">
-            <el-input v-model="form.remarks" type="textarea" rows="3" :disabled="disabled"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
           <el-form-item label="治理效果验证标准">
             <el-input
               v-model="form.verificationFollowUp"
@@ -103,13 +104,19 @@
               :disabled="disabled"
             ></el-input>
           </el-form-item>
-          <el-form-item label="整改进展">
-            <el-input
-              v-model="form.rectificationProgress"
-              type="textarea"
-              rows="3"
-              :disabled="disabled"
-            ></el-input>
+        </el-col>
+        <el-col :span="12">
+            <el-form-item label="等效措施">
+              <el-input
+                v-model="form.equivalentMeasures"
+                placeholder
+                type="textarea"
+                rows="3"
+                :disabled="disabled"
+              ></el-input>
+            </el-form-item>
+          <el-form-item label="备注">
+            <el-input v-model="form.remarks" type="textarea" rows="3" :disabled="disabled"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
