@@ -20,11 +20,11 @@
       </el-row>
       <el-form-item label="适用范围">{{data.applyScope}}</el-form-item>
       <el-form-item label="主题">{{data.title}}</el-form-item>
-      <el-form-item label="安全风险">
-        <span style="white-space: pre-wrap;">{{data.existingRisk}}</span>
-      </el-form-item>
       <el-form-item label="背景">
-        <span style="white-space: pre-wrap;">{{data.background}}</span>
+        <span v-html="data.background" style="white-space: pre-wrap;"></span>
+      </el-form-item>
+      <el-form-item label="安全风险">
+        <span v-html="data.existingRisk" style="white-space: pre-wrap;"></span>
       </el-form-item>
       <el-form-item label="风险防范" v-if="data.measuresVos!=null">
         <ul class="measuresVos">
