@@ -32,7 +32,7 @@
       </el-row>
 
       <!-- 系统和工作分析记录表 -->
-      <el-card header="系统和工作分析记录表" key="1" v-if="form.assType==1||form.assType==2">
+      <el-card header="系统和工作分析记录表" key="1" v-if="form.type==2">
         <el-row :gutter="8">
           <el-col :span="8">
             <el-form-item label="标题">

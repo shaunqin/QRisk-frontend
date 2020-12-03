@@ -4,7 +4,7 @@
       <el-col :span="3">
         <div class="next-menu">
           <router-link
-            :to="'/riskManagerment/page/riskAssessment?type='+item.type"
+            :to="'/riskManagerment/page/riskAssessment?assType='+item.type"
             class="next-menu-item pan-btn blue-btn"
             v-for="item in options"
             :key="item.name"
@@ -78,10 +78,10 @@
             <tab1 v-if="tabIndex=='1'" :assessmentType="assessmentType" :queryForm="queryForm" />
           </el-tab-pane>
           <el-tab-pane name="2" label="草稿">
-            <tab2 v-if="tabIndex=='2'" :queryForm="queryForm" />
+            <tab2 v-if="tabIndex=='2'" :assessmentType="assessmentType" :queryForm="queryForm" />
           </el-tab-pane>
           <el-tab-pane name="3" label="我拟制的">
-            <tab3 v-if="tabIndex=='3'" :queryForm="queryForm" />
+            <tab3 v-if="tabIndex=='3'" :assessmentType="assessmentType" :queryForm="queryForm" />
           </el-tab-pane>
           <el-tab-pane name="4">
             <el-badge slot="label" :value="count" class="item" :hidden="!count">
@@ -121,7 +121,7 @@ export default {
         { name: "全员风险", type: 6 },
         { name: "其他评估", type: 7 },
       ],
-      assessmentType: this.$route.query.type || "",
+      assessmentType: this.$route.query.assType || "",
       tabIndex: "1",
       count: 0,
       queryForm: {},
@@ -133,7 +133,7 @@ export default {
   },
   watch: {
     $route(route) {
-      this.assessmentType = route.query.type;
+      this.assessmentType = route.query.assType;
     },
     date(val) {
       if (val) {

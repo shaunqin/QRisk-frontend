@@ -48,13 +48,16 @@ export default {
   mounted() {
     this.init();
   },
-  props: ["queryForm"],
+  props: ["assessmentType", "queryForm"],
   watch: {
     queryForm: {
       deep: true,
       handler() {
         this.init();
       }
+    },
+    assessmentType(val) {
+      this.init()
     }
   },
   methods: {
@@ -62,6 +65,7 @@ export default {
     beforeInit() {
       this.url = `/risk_mgr/special_risk_notice_mgr/query/myIssued/${this.page}/${this.size}`;
       this.params = { ...this.queryForm };
+      this.params.assType = this.assessmentType
       return true;
     },
     // 选择切换

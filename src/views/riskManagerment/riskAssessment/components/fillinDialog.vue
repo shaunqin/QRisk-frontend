@@ -21,28 +21,32 @@
       </el-form>
     </el-card>
 
-    <el-card header="危险源">
-      <el-form size="mini" label-width="80px">
-        <el-row :gutter="16">
+    <!-- 系统和工作分析记录表 -->
+      <el-card header="系统和工作分析记录表" key="1">
+        <el-form size="mini" label-width="80px">
+        <el-row :gutter="8">
           <el-col :span="8">
             <el-form-item label="标题">
               <el-input v-model="form.analysisTitle"></el-input>
+            </el-form-item>
+            <el-form-item label="编号">
+              <el-input :disabled="true" v-model="form.analysisNo"></el-input>
             </el-form-item>
             <el-form-item label="分析人">
               <el-input v-model="form.analysis"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="编号">
-              <el-input :disabled="true" v-model="form.analysisNo"></el-input>
-            </el-form-item>
+          <el-form-item label="识别单位">
+            <department class="mini" :value="form.identificationUnit" @change="ideUnitChange"></department>
+          </el-form-item>
             <el-form-item label="批准">
               <el-input :disabled="true" v-model="form.approval"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="识别单位">
-              <department class="mini" :value="form.identificationUnit" @change="ideUnitChange"></department>
+            <el-form-item label="分析单位">
+              <department :value="form.analysisDept" @change="deptAnalysisChange($event,'analysisDept')"></department>
             </el-form-item>
             <el-form-item label="批准日期">
               <el-date-picker
@@ -53,8 +57,101 @@
             </el-form-item>
           </el-col>
         </el-row>
-      </el-form>
+        </el-form>
+        <el-row>
+          <el-col :span="24">
+            <el-button
+              class="mb-10"
+              type="info"
+              size="mini"
+              icon="el-icon-plus"
+              @click="addCol"
+            >新增一行</el-button>
+          </el-col>
+        </el-row>
+        <el-table :data="form.specialRiskAnalyses" size="mini" max-height="500">
+          <el-table-column label="产品" min-width="130">
+            <template slot-scope="{row}">
+              <dictSelect
+                type="product"
+                :value="row.product"
+                @change="dictChange($event,row,'product')"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column label="子系统" width="130">
+            <template slot-scope="{row}">
+              <dictSelect
+                type="system"
+                :value="row.subSystem"
+                @change="dictChange($event,row,'subSystem')"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column label="管理流程" min-width="130">
+            <template slot-scope="{row}">
+              <el-input v-model="row.managementProcess" placeholder></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="责任单位" min-width="200">
+            <template slot-scope="{row}">
+              <department :value="row.reponsibleUnit" @change="deptChangeOnTb($event,row)"></department>
+            </template>
+          </el-table-column>
+          <el-table-column label="岗位" min-width="130">
+            <template slot-scope="{row}">
+              <el-input v-model="row.post" placeholder></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="流程要素">
+            <el-table-column label="人" min-width="130">
+              <template slot-scope="{row}">
+                <el-input v-model="row.processHuman" type="textarea" rows="1" placeholder></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="机" min-width="130">
+              <template slot-scope="{row}">
+                <el-input v-model="row.processMachine" type="textarea" rows="1" placeholder></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="料" min-width="130">
+              <template slot-scope="{row}">
+                <el-input v-model="row.processMaterial" type="textarea" rows="1" placeholder></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="法" min-width="130">
+              <template slot-scope="{row}">
+                <el-input v-model="row.processRegulation" type="textarea" rows="1" placeholder></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="环" min-width="130">
+              <template slot-scope="{row}">
+                <el-input v-model="row.processEnvironment" type="textarea" rows="1" placeholder></el-input>
+              </template>
+            </el-table-column>
+          </el-table-column>
+          <el-table-column label="流程分析">
+            <el-table-column label="输入" min-width="130">
+              <template slot-scope="{row}">
+                <el-input v-model="row.input" type="textarea" rows="1" placeholder></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="输出" min-width="130">
+              <template slot-scope="{row}">
+                <el-input v-model="row.output" type="textarea" rows="1" placeholder></el-input>
+              </template>
+            </el-table-column>
+          </el-table-column>
+          <el-table-column label fixed="right" width="80">
+            <template slot-scope="{$index}">
+              <el-button type="danger" size="small" icon="el-icon-delete" @click="delAnalysesCol($index)"></el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-card>
 
+
+    <el-card header="危险源">
       <el-button
         :disabled="formEnable"
         type="primary"
@@ -274,6 +371,21 @@ export default {
         approval: "",
         identificationUnit: null,
         approvalDate: "",
+        analysisDept: "",
+        specialRiskAnalyses: [{
+            product: "",  // 产品
+            subSystem: "", // 子系统
+            managementProcess: "", // 管理流程
+            reponsibleUnit: null, // 责任单位
+            post: "", // 岗位
+            processHuman: "", // 人
+            processMachine: "", // 机
+            processMaterial: "", // 料
+            processRegulation: "", // 法
+            processEnvironment: "", // 环
+            input: "", // 输入
+            output: "", // 输出
+          }],
         hazardList: [
           {
             riskLevel1: "", //危险源层级1
@@ -366,6 +478,21 @@ export default {
         approval: "",
         identificationUnit: null,
         approvalDate: "",
+        analysisDept: "",
+        specialRiskAnalyses: [{
+            product: "",  // 产品
+            subSystem: "", // 子系统
+            managementProcess: "", // 管理流程
+            reponsibleUnit: null, // 责任单位
+            post: "", // 岗位
+            processHuman: "", // 人
+            processMachine: "", // 机
+            processMaterial: "", // 料
+            processRegulation: "", // 法
+            processEnvironment: "", // 环
+            input: "", // 输入
+            output: "", // 输出
+          }],
         hazardList: [
           {
             hazard: "",
@@ -394,6 +521,26 @@ export default {
       };
       this.data = {};
       this.formId = null;
+    },
+    
+    addCol() {
+      this.form.specialRiskAnalyses.push({
+        product: "",  // 产品
+        subSystem: "", // 子系统
+        managementProcess: "", // 管理流程
+        reponsibleUnit: null, // 责任单位
+        post: "", // 岗位
+        processHuman: "", // 人
+        processMachine: "", // 机
+        processMaterial: "", // 料
+        processRegulation: "", // 法
+        processEnvironment: "", // 环
+        input: "", // 输入
+        output: "", // 输出
+      });
+    },
+    delAnalysesCol(index) {
+      this.form.specialRiskAnalyses.splice(index, 1);
     },
     addHazard() {
       this.form.hazardList.push({
@@ -443,6 +590,12 @@ export default {
     },
     deptChange(val, row) {
       row.reponsibleDept = val;
+    },
+    deptAnalysisChange(val, key) {
+      this.form[key] = val;
+    },
+    deptChangeOnTb(val, row) {
+      row.reponsibleUnit = val;
     },
     ideUnitChange(val) {
       this.form.identificationUnit = val;

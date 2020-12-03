@@ -80,11 +80,12 @@ export default {
       return true;
     },
     subHandle(row) {
+      let _this = this.$refs.handle;
+      _this.dialogLoading = true
       queryHazards(row.taskId, row.formId).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
-          let _this = this.$refs.handle;
           _this.data = res.obj;
           _this.form.taskId = row.taskId;
           _this.form.formId = row.formId;
@@ -93,6 +94,9 @@ export default {
           }
           _this.form.implementStatus = res.obj.deptMeasure ? (res.obj.deptMeasure.implementStatus || "") : "";
           _this.dialog = true;
+          setTimeout(() => {
+            _this.dialogLoading = false
+          }, 500);
         }
       });
     },

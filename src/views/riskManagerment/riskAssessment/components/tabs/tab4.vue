@@ -106,6 +106,9 @@ export default {
               return item
             })
           }
+          if(res.obj.specialRiskAnalyses &&  res.obj.specialRiskAnalyses.length > 0) {
+            _this.form.specialRiskAnalyses = [...res.obj.specialRiskAnalyses]
+          }
           await this.getRiskListMgr()
           this.loading = false;
           _this.dialog = true;

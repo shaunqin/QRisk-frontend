@@ -76,13 +76,16 @@ export default {
     };
   },
   mixins: [initData],
-  props: ["queryForm"],
+  props: ["assessmentType", "queryForm"],
   watch: {
     queryForm: {
       deep: true,
       handler() {
         this.init();
       }
+    },
+    assessmentType(val) {
+      this.init()
     }
   },
   mounted() {
@@ -93,6 +96,7 @@ export default {
     beforeInit() {
       this.url = `/risk_mgr/special_risk_notice_mgr/query/draft/${this.page}/${this.size}`;
       this.params = { ...this.queryForm };
+      this.params.assType = this.assessmentType
       return true;
     },
     // 选择切换
