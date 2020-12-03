@@ -10,12 +10,14 @@
       </el-table-column>
       <el-table-column label="附件预览" width="120">
         <template slot-scope="{row}">
+          <div v-for="(item, index) in row.accessory" :key="index">
           <el-link
             type="primary"
-            v-if="row.accessory!=null"
-            :href="getUrl(row.accessory.filePath)"
+            v-if="item!=null"
+            :href="getUrl(item.filePath)"
             target="_blank"
-          >{{row.accessory.originFileName}}</el-link>
+          >{{item.originFileName}}</el-link>
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="状态" width="100">

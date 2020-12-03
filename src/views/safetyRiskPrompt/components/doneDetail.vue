@@ -44,12 +44,14 @@
 
           <el-table-column label="预览附件" min-width="120">
             <template slot-scope="{row}">
-              <el-link
-                type="primary"
-                v-if="row.accessory!=null"
-                :href="getUrl(row.accessory.filePath)"
-                target="_blank"
-              >{{row.accessory.originFileName}}</el-link>
+              <div v-for="(item, index) in row.accessory" :key="index">
+                <el-link
+                  type="primary"
+                  v-if="item!=null"
+                  :href="getUrl(item.filePath)"
+                  target="_blank"
+                >{{item.originFileName}}</el-link>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="办理人" width="80">

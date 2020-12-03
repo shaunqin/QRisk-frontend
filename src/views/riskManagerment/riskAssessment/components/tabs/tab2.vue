@@ -152,10 +152,11 @@ export default {
       this.chooseAndSubmit(sqlUserId)
     },
     chooseAndSubmit(sqlUserId) {
-      console.log(sqlUserId)
       let id = this.selections[0];
-      console.log('id', id)
-      specialRiskSubmit(id, sqlUserId).then((res) => {
+      const params = {
+        staffno: sqlUserId
+      }
+      specialRiskSubmit(id, params).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {

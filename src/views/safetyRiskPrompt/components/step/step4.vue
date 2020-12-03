@@ -34,25 +34,27 @@
           <el-table-column label="经办人" prop="implementStatus">
             <template slot-scope="{row}">{{row.fillerName}}[{{row.filler}}]</template>
           </el-table-column>
-          <el-table-column label="附件" width="100">
+          <el-table-column label="附件" width="100" v-if="!data.hiddenFill">
             <template slot-scope="{row}">
-              <upload :id="row.id" @success="success($event,row)" />
+              <upload :id="row.id" :multiple="true" @success="success($event,row)" />
             </template>
           </el-table-column>
-          <el-table-column label="预览附件" width="150">
-            <template slot-scope="{row}">
-              <el-link
-                type="primary"
-                v-if="accessory.filePath==null&&row.accessory!=null"
-                :href="getUrl(row.accessory.filePath)"
-                target="_blank"
-              >{{row.accessory.originFileName}}</el-link>
-              <el-link
-                type="primary"
-                v-show="accessory!=null"
-                :href="getUrl(accessory.filePath)"
-                target="_blank"
-              >{{accessory.originFileName}}</el-link>
+          <el-table-column label="预览" width="200">
+            <template slot-scope="{row}" v-if="row">
+              <div v-for="(item, index) in accessory" :key="index">
+                <el-link
+                  type="primary"
+                  v-show="item!=null"
+                  :href="getUrl(item?item.filePath:'')"
+                  target="_blank"
+                >{{item?item.originFileName:''}}</el-link>
+                <el-popconfirm
+                  title="确定删除该附件吗？"
+                  @onConfirm="del(item)"
+                >
+                <i class="el-icon-delete" style="cursor: pointer;" slot="reference"></i>
+                </el-popconfirm>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -69,12 +71,13 @@
 </template>
 
 <script>
+import { delUpload } from "@/api/upload"
 import upload from "../upload";
 export default {
   components: { upload },
   data() {
     return {
-      accessory: {}
+      accessory: this.data.deptMeasure ? this.data.deptMeasure.accessory : [],
     };
   },
   props: {
@@ -100,14 +103,25 @@ export default {
   mounted() { },
   methods: {
     success(res, row) {
-      console.log(res);
-      this.accessory = {
+      const data = {
+        id: res.obj.id,
         filePath: res.obj.filePath,
         originFileName: res.obj.originFileName
       }
+      this.accessory.push(data)
     },
     getUrl(url) {
       return process.env.VUE_APP_BASE_API + url;
+    },
+    del(item) {
+      delUpload(item.id).then(res => {
+        if(res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          this.$message.success("删除成功！");
+          this.accessory.splice(this.accessory.indexOf(this.accessory.find(function(element){ return element.id === item.id; })), 1)
+        }
+      })
     },
   },
 };

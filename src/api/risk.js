@@ -198,10 +198,11 @@ export function specialRiskDelete(id) {
   })
 }
 // 提交
-export function specialRiskSubmit(id, sqlUserId) {
+export function specialRiskSubmit(id, params) {
   return request({
-    url: `/risk_mgr/special_risk_notice_mgr/submit/${id}/${sqlUserId}`,
-    method: 'get'
+    url: `/risk_mgr/special_risk_notice_mgr/submit/${id}`,
+    method: 'get',
+    params
   })
 }
 // 填报
