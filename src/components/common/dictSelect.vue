@@ -1,6 +1,6 @@
 <template>
   <el-select
-    clearable
+    :clearable="clearable"
     v-model="_value"
     :placeholder="placeholder"
     style="width: 100%;"
@@ -35,7 +35,11 @@ export default {
     disabled: {
       type: Boolean,
       default: false
-    }
+    },
+    clearable: {
+      type: Boolean,
+      default: true
+    },
   },
   computed: {
     _value: {

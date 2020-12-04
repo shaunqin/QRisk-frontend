@@ -70,6 +70,7 @@
     />
     <task ref="task" :is-add="isAdd" />
     <hazardsList ref="hazardsList" :taskId="taskId" :type="type" />
+    <hazardsStatistics ref="hazardsStatistics"></hazardsStatistics>
   </div>
 </template>
 
@@ -78,9 +79,10 @@ import { detail, cancelHiddenDanger, deleteHiddenDanger } from "@/api/hazards";
 import task from '../task';
 import initData from "@/mixins/initData";
 import hazardsList from '../hazardsList/list'
+import hazardsStatistics from '../hazardsStatistics/form'
 export default {
   mixins: [initData],
-  components: { task, hazardsList },
+  components: { task, hazardsList, hazardsStatistics },
   data() {
     return {
       taskId: "",
@@ -129,6 +131,9 @@ export default {
       this.taskId = row.id;
       this.type = row.taskType;
       this.$refs.hazardsList.dialog = true;
+    },
+    showHazardsStatistics(row) {
+      this.$refs.hazardsStatistics.dialog = true;
     },
     subCancel(row) {
       this.$confirm("确认取消任务吗？").then(() => {

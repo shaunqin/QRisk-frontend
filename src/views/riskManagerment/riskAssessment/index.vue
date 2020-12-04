@@ -13,6 +13,7 @@
         </div>
       </el-col>
       <el-col :span="21">
+        <el-scrollbar class="page-scrollbar" wrap-class="scrollbar-wrapper">
         <div class="head-container">
           <el-form :model="form" size="mini" inline v-if="tabIndex==1||tabIndex==2||tabIndex==3">
             <el-form-item label="编号">
@@ -93,6 +94,7 @@
             <tab5 v-if="tabIndex=='5'" :queryForm="queryForm" />
           </el-tab-pane>
         </el-tabs>
+        </el-scrollbar>
       </el-col>
     </el-row>
   </div>

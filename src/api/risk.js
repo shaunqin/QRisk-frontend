@@ -368,3 +368,24 @@ export function riskControlComplete(data) {
 
 
 // ======= 在控风险管理 end ========
+
+// =========  风险措施管控  ==============
+// 查询对应风险评价报告
+export function getEvalReport(params) {
+  return request({
+    url: '/risk_mgr/riskMeasureControl_mgr/getEvalReport',
+    method: 'get',
+    params
+  })
+}
+
+// 通知对应用户执行待办事项
+export function notifyUser(params) {
+  return request({
+    url: '/risk_mgr/riskMeasureControl_mgr/notifyUser',
+    method: 'get',
+    params
+  })
+}
+
+// ======= 风险措施管控 end ========

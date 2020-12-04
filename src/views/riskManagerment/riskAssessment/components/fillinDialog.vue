@@ -53,6 +53,7 @@
                 v-model="form.approvalDate"
                 value-format="yyyy-MM-dd"
                 style="width:100%"
+                :disabled="true"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -236,6 +237,7 @@
           </el-form-item>
           <el-form-item label="可能性">
             <dict-select
+              :clearable="false"
               :value="item.possibility"
               type="probability_level"
               @change="dictChange($event,item,'possibility')"
@@ -244,6 +246,7 @@
           </el-form-item>
           <el-form-item label="严重性">
             <dict-select
+              :clearable="false"
               :value="item.seriousness"
               type="severity_level_matrix_graph"
               @change="dictChange($event,item,'seriousness')"
@@ -255,16 +258,17 @@
               type="risk_level"
               @change="dictChange($event,item,'riskLevel')"
               style="width:130px"
+              :disabled="true"
             />
           </el-form-item>
           <el-row :gutter="16" class="fill-row">
             <el-col :span="12">
-              <el-form-item label="危险源描述">
+              <el-form-item label="危险源描述" label-width="115px">
                 <el-input v-model="item.hazardSource" type="textarea" rows="3"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="根原因分析">
+              <el-form-item label="根原因分析" label-width="115px">
                 <el-input v-model="item.rootCauseAnalysis" type="textarea" rows="3"></el-input>
               </el-form-item>
             </el-col>
@@ -584,9 +588,12 @@ export default {
     },
     dictChange(val, item, key) {
       item[key] = val;
-      if (key == 'hazard' || key == 'possibleRisks') {
-        this.queryRiskLevel(item.hazard, item.possibleRisks, item);
+      if (key == 'possibility' || key == 'seriousness') {
+        this.queryRiskLevel(item.possibility, item.seriousness, item);
       }
+      /* if (key == 'hazard' || key == 'possibleRisks') {
+        this.queryRiskLevel(item.hazard, item.possibleRisks, item);
+      } */
     },
     deptChange(val, row) {
       row.reponsibleDept = val;
@@ -605,9 +612,9 @@ export default {
       if (!!hazard && !!risk) {
         specialRiskQueryRiskLevel(hazard, risk).then(res => {
           if (res.code == '200') {
-            item.possibility = res.obj.possibility;
-            item.seriousness = res.obj.seriousness;
-            item.riskLevel = res.obj.riskLevel;
+            /* item.possibility = res.obj.possibility;
+            item.seriousness = res.obj.seriousness; */
+            item.riskLevel = `${res.obj}`;
           }
         })
       }
