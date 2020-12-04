@@ -150,6 +150,7 @@ export default {
     },
     submit() {
       let _this = this.$refs.selectEmplotee;
+      _this.id = this.selections[0];
       _this.dialog = true;
     },
     doSubmit(sqlUserId) {

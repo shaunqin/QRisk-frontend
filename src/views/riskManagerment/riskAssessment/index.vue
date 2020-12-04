@@ -88,7 +88,7 @@
             <el-badge slot="label" :value="count" class="item" :hidden="!count">
               <span>待办</span>
             </el-badge>
-            <tab4 v-if="tabIndex=='4'" :queryForm="queryForm" />
+            <tab4 v-if="tabIndex=='4'" :assessmentType="assessmentType" :queryForm="queryForm" />
           </el-tab-pane>
           <el-tab-pane name="5" label="已办">
             <tab5 v-if="tabIndex=='5'" :queryForm="queryForm" />
