@@ -40,12 +40,14 @@
         <span style="white-space: pre-wrap;">{{form.implementStatus}}</span>
       </el-form-item>
       <el-form-item label="附件">
-        <template v-if="form.accessory!=null">
+        <template v-if="form.accessory ? form.accessory.length!=0 : false">
+          <div v-for="(item, index) in form.accessory" :key="index">
           <el-link
             type="primary"
-            :href="getUrl(form.accessory.filePath)"
+            :href="getUrl(item.filePath)"
             target="_blank"
-          >{{form.accessory.originFileName}}</el-link>
+          >{{item.originFileName}}</el-link>
+          </div>
         </template>
         <span v-else>未上传附件</span>
       </el-form-item>

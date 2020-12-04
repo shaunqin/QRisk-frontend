@@ -60,7 +60,7 @@ import initData from "@/mixins/initData";
 import { formatShortDate } from "@/utils/datetime";
 import eform from "../form";
 import edetail from "../detail";
-import { specialRiskDetail, queryHazard, queryRiskListMgr } from "@/api/risk";
+import { specialRiskDetail, queryRiskListMgr } from "@/api/risk";
 export default {
   components: { eform, edetail },
   mixins: [initData],
@@ -79,6 +79,9 @@ export default {
       handler() {
         this.init();
       }
+    },
+    assessmentType(val) {
+      this.init()
     }
   },
   methods: {
@@ -86,6 +89,7 @@ export default {
     beforeInit() {
       this.url = `/risk_mgr/special_risk_notice_mgr/query/pageList/${this.page}/${this.size}`;
       this.params = { ...this.queryForm };
+      this.params.assType = this.assessmentType
       return true;
     },
     // 选择切换
@@ -105,7 +109,6 @@ export default {
       let _this = this.$refs.form;
       _this.form.assType = this.assessmentType;
       _this.form.type = "2"; // 评估
-      await this.getHazard()
       await this.getRiskListMgr()
       _this.dialog = true;
     },
@@ -123,17 +126,6 @@ export default {
     pdfUrl(row) {
       return `${process.env.VUE_APP_BASE_API}${row.pdfUrl}`
     },
-    async getHazard() {
-      let _this = this.$refs.form;
-      await queryHazard().then(res => {
-        if (res.code != "200") {
-          this.$message.error(res.msg);
-        } else {
-          _this.form.hazardList[0].hazard = res.obj[0].diskNo
-          _this.form.hazardList[0].hazards = res.obj
-        }
-      })
-    },
     async getRiskListMgr() {
       let _this = this.$refs.form;
       await queryRiskListMgr().then(res => {
@@ -141,7 +133,7 @@ export default {
           this.$message.error(res.msg);
         } else {
           _this.form.hazardList[0].possibleRisks = res.obj[0].riskNo
-          _this.form.hazardList[0].possibleRisksList = res.obj
+          _this.possibleRisksList = res.obj
         }
       })
     }

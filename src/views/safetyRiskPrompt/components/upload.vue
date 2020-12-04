@@ -2,7 +2,7 @@
   <div class="upload-container">
     <el-upload
       :data="dataObj"
-      :multiple="false"
+      :multiple="multiple"
       :show-file-list="false"
       class="image-uploader"
       :action="apiurl"
@@ -33,6 +33,10 @@ export default {
       type: String,
       default: "",
     },
+    multiple: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     apiurl() {

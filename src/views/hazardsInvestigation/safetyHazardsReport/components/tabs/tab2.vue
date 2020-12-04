@@ -26,6 +26,11 @@
           <div>{{renderTbCol(row)}}</div>
         </template>
       </el-table-column>
+      <el-table-column prop="taskTime" label="任务时间" width="140">
+        <template slot-scope="{row}">
+          <div>{{formatDate(row.taskTime)}}</div>
+        </template>
+      </el-table-column>
       <el-table-column prop="createBy" label="发起人" width="130" />
       <el-table-column prop="createTime" label="发起时间" width="140" />
       <el-table-column label="操作" width="110">
@@ -51,6 +56,7 @@
 <script>
 import initData from "@/mixins/initData";
 import { queryHazards } from "@/api/hazards";
+import { format } from "@/utils/datetime"
 import handle from "../handle";
 export default {
   mixins: [initData],
@@ -74,11 +80,12 @@ export default {
       return true;
     },
     subHandle(row) {
+      let _this = this.$refs.handle;
+      _this.dialogLoading = true
       queryHazards(row.taskId, row.formId).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
-          let _this = this.$refs.handle;
           _this.data = res.obj;
           _this.form.taskId = row.taskId;
           _this.form.formId = row.formId;
@@ -87,8 +94,14 @@ export default {
           }
           _this.form.implementStatus = res.obj.deptMeasure ? (res.obj.deptMeasure.implementStatus || "") : "";
           _this.dialog = true;
+          setTimeout(() => {
+            _this.dialogLoading = false
+          }, 500);
         }
       });
+    },
+    formatDate(time) {
+      return format(time)
     },
     renderTbCol(row) {
       if (row.fillerName && row.filler) {

@@ -4,6 +4,7 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
+    v-loading="dialogLoading"
     title="处理待办"
     custom-class="big_dialog"
   >
@@ -52,6 +53,7 @@ export default {
     return {
       loading: false,
       dialog: false,
+      dialogLoading: false,
       form: {
         comment: "", // 驳回备注
         taskId: 0,

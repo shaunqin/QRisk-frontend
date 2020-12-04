@@ -7,6 +7,13 @@
     title="编辑清单"
     custom-class="big_dialog"
   >
+    <h1 class="headTitle">安全生产隐患排查情况统计表</h1>
+    <div class="headTime">(20XX年1月1日--X月X日)</div>
+    <el-form :model="form" size="small" inline>
+      <el-form-item label="填报单位/部门：" prop="dd">
+      {{form.dd}}
+      </el-form-item>
+    </el-form>
     <!--表格渲染-->
     <el-table :data="form.array" size="small" style="width: 100%">
       <el-table-column label="排查治理隐患单位" prop="year"></el-table-column>
@@ -278,6 +285,16 @@ export default {
 
 
 <style lang="scss" scoped>
+.headTitle {
+  text-align: center;
+}
+.headTime {
+  text-align: center;
+  font-size: 20px;
+}
+/deep/ .el-dialog__body {
+  padding-top: 0;
+}
 /deep/ .noborder {
   border-bottom: none;
   position: relative;

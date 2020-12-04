@@ -46,9 +46,10 @@
 
 <script>
 import initData from "@/mixins/initData";
-import { specialRiskFill, queryHazard, queryRiskListMgr } from "@/api/risk";
+import { specialRiskFill, queryRiskListMgr } from "@/api/risk";
 import handle from "../handle";
 import fillin from "../fillinDialog";
+import { formatShortDate } from '@/utils/datetime'
 export default {
   mixins: [initData],
   components: { handle, fillin },
@@ -96,33 +97,25 @@ export default {
           _this.form.analysis = res.obj.analysis;
           _this.form.analysisNo = res.obj.analysisNo;
           _this.form.approval = res.obj.approval;
+          _this.form.identificationUnit = res.obj.identificationUnit;
           _this.form.analysisDept = res.obj.analysisDept;
-          _this.form.approvalDate = res.obj.approvalDate ? res.obj.approvalDate+'' : res.obj.approvalDate;
+          _this.form.approvalDate = formatShortDate(res.obj.approvalDate);
           if (res.obj.hazardVoList && res.obj.hazardVoList.length > 0) {
             _this.form.hazardList = res.obj.hazardVoList.map(item => {
               item.specialRiskMeasureList.map(childItem => {
-                childItem.deadline = `${childItem.deadline}`
+                childItem.deadline = formatShortDate(childItem.deadline)
               })
               return item
             })
           }
-          await this.getHazard()
+          if(res.obj.specialRiskAnalyses &&  res.obj.specialRiskAnalyses.length > 0) {
+            _this.form.specialRiskAnalyses = [...res.obj.specialRiskAnalyses]
+          }
           await this.getRiskListMgr()
           this.loading = false;
           _this.dialog = true;
         }
       });
-    },
-    async getHazard() {
-      let _this = this.$refs.fillin;
-      await queryHazard().then(res => {
-        if (res.code != "200") {
-          this.$message.error(res.msg);
-        } else {
-          _this.form.hazardList[0].hazard = res.obj[0].diskNo
-          _this.form.hazardList[0].hazards = res.obj
-        }
-      })
     },
     async getRiskListMgr() {
       let _this = this.$refs.fillin;
@@ -131,7 +124,7 @@ export default {
           this.$message.error(res.msg);
         } else {
           _this.form.hazardList[0].possibleRisks = res.obj[0].riskNo
-          _this.form.hazardList[0].possibleRisksList = res.obj
+          _this.possibleRisksList = res.obj
         }
       })
     }

@@ -29,7 +29,7 @@
           </el-col>
         </el-row>
         <el-form-item label="编号">{{data.analysisNo}}</el-form-item>
-        <el-form-item label="分析人">{{data.analysisName}}</el-form-item>
+        <el-form-item label="分析人">{{data.analysis}}</el-form-item>
         <el-form-item label="分析单位">{{data.analysisDeptName}}</el-form-item>
         <el-form-item label="批准">{{data.approval}}</el-form-item>
         <el-form-item label="批准日期">{{formatShortDate(data.approvalDate)}}</el-form-item>
@@ -64,7 +64,7 @@
         <el-table-column label="管理流程" prop="managementProcess" />
         <el-table-column label="问题描述" prop="hazardSource" />
         <el-table-column label="根原因分析" prop="rootCauseAnalysis" width="140" show-overflow-tooltip />
-        <el-table-column label="可能导致的风险" prop="possibleRisks" width="160" show-overflow-tooltip />
+        <el-table-column label="可能导致的风险" prop="possibleRisksName" width="160" show-overflow-tooltip />
         <el-table-column label="风险控制措施" width="160" show-overflow-tooltip>
           <template slot-scope="{row}">
             <ul class="tab-ul">
@@ -92,7 +92,7 @@
         <el-table-column label="风险完成期限" width="160" show-overflow-tooltip>
           <template slot-scope="{row}">
             <ul class="tab-ul">
-              <li v-for="item in row.specialRiskMeasureList" :key="item.id">{{item.deadline}}</li>
+              <li v-for="item in row.specialRiskMeasureList" :key="item.id">{{formatShortDate(item.deadline)}}</li>
             </ul>
           </template>
         </el-table-column>
