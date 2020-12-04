@@ -9,10 +9,10 @@
   >
     <step1 v-if="step==1" :data="data" :form="form" />
     <step2 ref="step2" v-if="step==2" :data="data" :form="form" />
-    <!-- <step3 ref="step3" v-if="step==3" :data="data" :form="form" @change="formChange" />
-    <step4 ref="step4" v-if="step==4" :data="data" :form="form" @change="formChange" />
-    <step5 ref="step5" v-if="step==5" :data="data" :form="form" @change="formChange" />
-    <hairdown ref="hairdown" :data="data" :form="form" />-->
+    <step3 ref="step3" v-if="step==3" :data="data" :form="form" />
+    <step4 ref="step4" v-if="step==4" :data="data" :form="form" />
+    <step5 ref="step5" v-if="step==5" :data="data" :form="form" />
+    <hairdown ref="hairdown" :data="data" :form="form" />
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button v-if="step==1||step==4" :loading="loading" type="primary" @click="doSubmit">确认</el-button>
@@ -25,15 +25,15 @@
         @click="doSubmit"
       >上报</el-button>
       <el-button
-        v-if="step==3||step==5"
+        v-if="step==3"
         :loading="loading"
-        :disabled="!!data.deptMeasure.hiddenIssue"
+        :disabled="!!data.hiddenIssue"
         type="success"
         @click="doHairdown"
       >下发</el-button>
     </div>
     <!-- 抄送 -->
-    <!-- <ccPerson ref="ccPerson" :deptPath="deptPath" @subCC="subCC" /> -->
+    <ccPerson ref="ccPerson" :deptPath="deptPath" @subCC="subCC" />
   </el-dialog>
 </template>
 
@@ -41,16 +41,13 @@
 import { riskControlComplete, riskControlModify } from "@/api/risk";
 import step1 from "./step/step1";
 import step2 from "./step/step2";
-// import step3 from "./step/step3";
-// import step4 from "./step/step4";
-// import step5 from "./step/step5";
-// import hairdown from './hairdown';
-// import ccPerson from './ccPerson';
+import step3 from "./step/step3";
+import step4 from "./step/step4";
+import step5 from "./step/step5";
+import hairdown from './hairdown';
+import ccPerson from './ccPerson';
 export default {
-  components: {
-    step1, step2,
-    //  step3, step4, step5, hairdown, ccPerson 
-  },
+  components: { step1, step2, step3, step4, step5, hairdown, ccPerson },
   data() {
     return {
       loading: false,
@@ -60,6 +57,7 @@ export default {
         taskId: 0,
         formId: 0,
         processFlag: "1",
+        riskControlRisk: [], // 风险措施
       },
       data: {}, // 父组件赋值
       password: ""
@@ -73,7 +71,7 @@ export default {
       return this.data.hiddenFill;
     },
     deptPath() {
-      return this.data.deptMeasure ? this.data.deptMeasure.deptPath : ""
+      return this.data.deptRisk ? this.data.deptRisk.deptPath : ""
     }
   },
   methods: {
@@ -123,7 +121,7 @@ export default {
         return;
       }
       this.loading = true;
-      riskNoticeComplete({ ...this.form, ...params }).then((res) => {
+      riskControlComplete({ ...this.form, ...params }).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
@@ -178,7 +176,7 @@ export default {
       let _this = this.$refs.step2;
       this.loading = true;
       let params = { ...this.form, ..._this.detailForm }
-      riskNoticeComplete(params).then((res) => {
+      riskControlComplete(params).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
@@ -191,9 +189,9 @@ export default {
       });
     },
     submitStep3() {
-      this.form.processFlag = "4";
+      // this.form.processFlag = "4";
       this.loading = true;
-      riskNoticeComplete(this.form).then((res) => {
+      riskControlComplete(this.form).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {

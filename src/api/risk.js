@@ -362,8 +362,21 @@ export function riskControlComplete(data) {
     data
   })
 }
-
-
+// 单位下发风险评价报告
+export function riskControlIssue(data) {
+  return request({
+    url: `/riskControlManage/riskControlManage/issue/${data.id}`,
+    method: 'post',
+    data
+  })
+}
+// 查询已办详情
+export function riskControlHasDoneDetail(taskId, formId) {
+  return request({
+    url: `/riskControlManage/riskControlManage/query/hasDoneDetail/${taskId}/${formId}`,
+    method: 'get'
+  })
+}
 
 
 // ======= 在控风险管理 end ========

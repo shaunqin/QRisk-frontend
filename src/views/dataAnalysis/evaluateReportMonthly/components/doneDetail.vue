@@ -1,5 +1,12 @@
 <template>
-  <div>
+  <el-dialog
+    :append-to-body="true"
+    :close-on-click-modal="false"
+    :before-close="cancel"
+    :visible.sync="dialog"
+    title="已办详情"
+    custom-class="big_dialog"
+  >
     <el-form ref="form" size="small" label-width="auto">
       <el-row :gutter="16">
         <el-col :span="8">
@@ -24,97 +31,79 @@
           <el-table-column label="落实截止日期">
             <template slot-scope="{row}">{{formatShortDate(row.implementDeadline)}}</template>
           </el-table-column>
+          <el-table-column label="填报措施" min-width="150">
+            <template slot-scope="{row}">
+              <span v-if="!row.riskControlRiskVoList">-</span>
+              <ul class="ul-risk" v-else>
+                <li v-for="item in row.riskControlRiskVoList" :key="item.id">{{item.riskMeasures}}</li>
+              </ul>
+            </template>
+          </el-table-column>
         </el-table>
+      </el-form-item>
+      <!-- 审批记录 -->
+      <el-form-item label="审批记录" key="apprvalRecord" v-if="noticeComments.length>0">
+        <apprvalRecord :data="noticeComments" />
       </el-form-item>
       <!-- 下发措施 -->
       <el-form-item key="childRisk" label="下发措施" v-if="childRisk.length>0">
         <childRisk :data="childRisk" />
       </el-form-item>
-      <el-form-item label="措施填报">
-        <el-row
-          v-for="(item,index) in form.riskControlRisk"
-          :key="index"
-          :gutter="16"
-          class="cus-row"
-        >
-          <el-col :span="6">
-            <el-select size="mini" v-model="item.riskId" placeholder="请选择风险" style="width:100%">
-              <el-option v-for="r in riskList" :key="r.value" :label="r.label" :value="r.value"></el-option>
-            </el-select>
-          </el-col>
-          <el-col :span="16">
-            <el-input size="mini" v-model="item.riskMeasures" placeholder="请填写措施"></el-input>
-          </el-col>
-          <el-col :span="2">
-            <el-button type="danger" size="mini" icon="el-icon-delete" @click="delRow(index)"></el-button>
-          </el-col>
-        </el-row>
-        <el-button class="add-btn" size="mini" icon="el-icon-plus" @click="addRow">新增</el-button>
-      </el-form-item>
     </el-form>
-  </div>
+    <div slot="footer" class="dialog-footer">
+      <el-button type="text" @click="cancel">取消</el-button>
+      <el-button type="primary" @click="doSubmit">确认</el-button>
+    </div>
+  </el-dialog>
 </template>
 
 <script>
 import { formatShortDate } from '@/utils/datetime'
-import childRisk from '../childRisk'
+import childRisk from './childRisk'
+import apprvalRecord from './apprvalRecord'
 export default {
-  components: { childRisk },
+  components: { childRisk, apprvalRecord },
   data() {
     return {
       dialog: false,
-      loading: false,
+      data: {}
     };
   },
-  props: {
-    data: {
-      type: Object,
-      default: () => { },
-    },
-    form: {
-      type: Object,
-      default: () => { },
-    },
-  },
   computed: {
-    riskList() {
-      return this.data.riskControlExpVoList.map(item => {
-        return {
-          label: item.riskName,
-          value: item.id
-        }
-      })
-    },
     childRisk() {
       if (this.data.childRiskControlExpVoList) {
         return this.data.childRiskControlExpVoList;
       }
       return []
     },
+    noticeComments() {
+      if (this.data.noticeComments) {
+        return this.data.noticeComments;
+      } else {
+        return []
+      }
+    }
   },
   mounted() { },
   methods: {
     formatShortDate,
-    addRow() {
-      this.form.riskControlRisk.push({
-        riskId: "",
-        riskMeasures: ""
-      })
+    cancel() {
+      this.resetForm();
     },
-    delRow(index) {
-      this.form.riskControlRisk.splice(index, 1);
+    doSubmit() {
+      this.resetForm();
+    },
+    resetForm() {
+      this.dialog = false;
     }
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.cus-row {
-  margin: 0 !important;
-  margin-bottom: 4px !important;
-}
-.add-btn {
-  border-style: dashed;
-  margin: 0 8px;
+.ul-risk {
+  list-style: decimal;
+  text-align: left;
+  margin: 0;
 }
 </style>

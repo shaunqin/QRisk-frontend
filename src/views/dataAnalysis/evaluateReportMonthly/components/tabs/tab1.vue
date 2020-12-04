@@ -11,7 +11,7 @@
       @selection-change="selectionChange"
     >
       <el-table-column type="selection" width="45" />
-      <el-table-column prop="no" label="编号" width="120" />
+      <el-table-column prop="no" label="编号" width="130" />
       <el-table-column label="标题" min-width="150" show-overflow-tooltip>
         <template slot-scope="{row}">
           <el-button type="text" size="mini" @click="detail(row)">{{row.title}}</el-button>

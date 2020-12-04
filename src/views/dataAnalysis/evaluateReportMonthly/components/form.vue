@@ -98,7 +98,7 @@
 
 <script>
 import { riskControlModify, riskControlUpdateAndSubmit, getRiskAssessmentChartData } from "@/api/risk";
-import department from "@/components/Department/deptByRole";
+import department from "@/components/Department";
 import { format } from "@/utils/datetime";
 import riskSelect from '@/views/dataAnalysis/riskEvaluateMonthly/components/riskSelect'
 import selectEmp from './selectEmplotee'

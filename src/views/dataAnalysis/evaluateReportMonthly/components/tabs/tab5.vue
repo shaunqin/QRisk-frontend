@@ -14,7 +14,7 @@
           <el-tag type="success">{{row.businessName}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="任务名称" width="180">
+      <el-table-column prop="name" label="任务名称" width="260">
         <template slot-scope="{row}">
           <el-tag type="warning">{{row.name}}</el-tag>
         </template>
@@ -37,17 +37,17 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-    <!-- <edetail ref="edetail" /> -->
+    <edetail ref="edetail" />
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
 import { format } from "@/utils/datetime";
-import { specialRiskGasDoneDetail } from '@/api/risk';
-// import edetail from '../detail'
+import { riskControlHasDoneDetail } from '@/api/risk';
+import edetail from '../doneDetail'
 export default {
-  // components: { edetail },
+  components: { edetail },
   mixins: [initData],
   props: ["queryForm"],
   mounted() {
@@ -74,7 +74,7 @@ export default {
       this.$emit("selectionChange", { selections: selections });
     },
     detail(row) {
-      specialRiskGasDoneDetail(row.taskId, row.formId).then(res => {
+      riskControlHasDoneDetail(row.taskId, row.formId).then(res => {
         if (res.code != '200') {
           this.$message.error(res.msg);
         } else {

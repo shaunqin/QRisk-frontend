@@ -2,65 +2,64 @@
   <div>
     <el-form ref="form" size="small" label-width="auto">
       <el-row :gutter="16">
-        <el-col :span="12">
+        <el-col :span="8">
           <el-form-item label="编号">{{data.no}}</el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="拟制人">{{data.issuerName}}[{{data.issuer}}]</el-form-item>
+        <el-col :span="8">
+          <el-form-item label="年份">{{`${data.year}-${data.month}`}}</el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="拟制人">{{data.issueName}}[{{data.issuer}}]</el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="适用范围">{{data.applyScope}}</el-form-item>
-      <el-form-item label="主题">{{data.title}}</el-form-item>
-      <el-form-item label="背景">
-        <span style="white-space: pre-wrap;display: block;overflow: auto;" v-html="data.background"></span>
-      </el-form-item>
-       <el-form-item label="安全风险">
-        <span style="white-space: pre-wrap;display: block;overflow: auto;" v-html="data.existingRisk"></span>
-      </el-form-item>
-      <el-form-item label="风险防范">
-        <el-table :data="deptMeasure" size="mini">
-          <el-table-column label="截止日期" prop="deadline" width="100" />
-          <el-table-column label="措施内容" prop="content" width="200" show-overflow-tooltip />
-          <el-table-column label="落实情况" min-width="200">
-            <template slot-scope="{row}" v-show="!!row">
-              <el-input
-                v-model="form.comment"
-                placeholder="请输入落实情况"
-                type="textarea"
-                rows="3"
-                :disabled="!!data.hiddenFill"
-              ></el-input>
-            </template>
+      <el-form-item label="标题">{{data.title}}</el-form-item>
+      <el-form-item label="风险措施">
+        <el-table :data="data.riskControlExpVoList" size="mini">
+          <el-table-column label="下发单位" prop="deptPathCn" />
+          <el-table-column label="风险" prop="riskName" />
+          <el-table-column label="备注" prop="remark" />
+          <el-table-column label="填报截止日期">
+            <template slot-scope="{row}">{{formatShortDate(row.fillDeadline)}}</template>
           </el-table-column>
-          <el-table-column label="附件" width="100" v-if="!data.hiddenFill">
-            <template slot-scope="{row}">
-              <upload :id="row.id" @success="success($event,row)" />
-            </template>
-          </el-table-column>
-          <el-table-column label="预览" width="150">
-            <template slot-scope="{row}" v-if="row">
-              <el-link
-                type="primary"
-                v-show="accessory!=null"
-                :href="getUrl(accessory?accessory.filePath:'')"
-                target="_blank"
-              >{{accessory?accessory.originFileName:''}}</el-link>
-            </template>
+          <el-table-column label="落实截止日期">
+            <template slot-scope="{row}">{{formatShortDate(row.implementDeadline)}}</template>
           </el-table-column>
         </el-table>
       </el-form-item>
-      <el-form-item label="已下发措施" v-if="data.childMeasures!=null">
-        <childMeasures :data="data.childMeasures" />
+      <!-- 下发措施 -->
+      <el-form-item key="childRisk" label="下发措施" v-if="childRisk.length>0">
+       <childRisk :data="childRisk" />
+      </el-form-item>
+      <el-form-item label="措施填报">
+        <el-row
+          v-for="(item,index) in form.riskControlRisk"
+          :key="index"
+          :gutter="16"
+          class="cus-row"
+        >
+          <el-col :span="6">
+            <el-select size="mini" v-model="item.riskId" placeholder="请选择风险" style="width:100%">
+              <el-option v-for="r in riskList" :key="r.value" :label="r.label" :value="r.value"></el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="16">
+            <el-input size="mini" v-model="item.riskMeasures" placeholder="请填写措施"></el-input>
+          </el-col>
+          <el-col :span="2">
+            <el-button type="danger" size="mini" icon="el-icon-delete" @click="delRow(index)"></el-button>
+          </el-col>
+        </el-row>
+        <el-button class="add-btn" size="mini" icon="el-icon-plus" @click="addRow">新增</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
-import upload from "../upload";
-import childMeasures from '../childMeasures'
+import { formatShortDate } from '@/utils/datetime';
+import childRisk from '../childRisk'
 export default {
-  components: { upload, childMeasures },
+  components: { childRisk },
   data() {
     return {
       accessory: {},
@@ -78,22 +77,34 @@ export default {
     },
   },
   computed: {
-    deptMeasure() {
-      return [{ ...this.data.deptMeasure }]
-    }
-  },
-  watch: {
-    data: {
-      deep: true,
-      handler(val) {
-        this.form.comment = val.summary;
+    riskList() {
+      return this.data.riskControlExpVoList.map(item => {
+        return {
+          label: item.riskName,
+          value: item.id
+        }
+      })
+    },
+    childRisk() {
+      if (this.data.childRiskControlExpVoList) {
+        return this.data.childRiskControlExpVoList;
       }
-    }
+      return []
+    },
   },
+  // watch: {
+  //   data: {
+  //     deep: true,
+  //     handler(val) {
+  //       this.form.comment = val.summary;
+  //     }
+  //   }
+  // },
   created() {
-    this.form.comment = this.data.summary;
+    // this.form.comment = this.data.summary;
   },
   methods: {
+    formatShortDate,
     success(res, row) {
       console.log(res);
       this.accessory = {
@@ -104,14 +115,26 @@ export default {
     getUrl(url) {
       return process.env.VUE_APP_BASE_API + url;
     },
+    addRow() {
+      this.form.riskControlRisk.push({
+        riskId: "",
+        riskMeasures: ""
+      })
+    },
+    delRow(index) {
+      this.form.riskControlRisk.splice(index, 1);
+    }
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.measuresVos {
-  margin: 0;
-  list-style-type: decimal;
-  padding-inline-start: 20px;
+.cus-row {
+  margin: 0 !important;
+  margin-bottom: 4px !important;
+}
+.add-btn {
+  border-style: dashed;
+  margin: 0 8px;
 }
 </style>

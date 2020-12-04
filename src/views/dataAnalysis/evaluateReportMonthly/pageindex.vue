@@ -50,7 +50,7 @@ export default {
 <style lang="scss" scoped>
 @import "~@/styles/variables.scss";
 .riskManagement-container {
-  padding: 20px 0 0 20px;
+  padding: 15px 0 0 20px;
   .index-menu {
     min-height: calc(100vh - 90px);
     border: 1px solid #ccc;

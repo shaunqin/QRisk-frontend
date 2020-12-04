@@ -175,6 +175,13 @@ export default {
     },
     resetForm() {
       this.dialog = false;
+      this.form = {
+        comment: "", // 驳回备注
+        taskId: 0,
+        formId: 0,
+        processFlag: "1",
+        implementStatus: "" // 落实情况
+      }
     },
     formChange(form) {
       console.log(form);

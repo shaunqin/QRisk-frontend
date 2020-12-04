@@ -7,6 +7,11 @@
             <el-input v-model="detailForm.riskControl.title" placeholder></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="24">
+          <el-form-item label="审批记录" key="noticeComments" v-if="noticeComments.length>0">
+            <apprvalRecord :data="noticeComments" />
+          </el-form-item>
+        </el-col>
       </el-row>
       <el-card
         v-loading="cdLoading"
@@ -86,9 +91,10 @@
 import { getRiskAssessmentChartData } from "@/api/risk";
 import department from "@/components/Department";
 import { format } from "@/utils/datetime";
-import riskSelect from '@/views/dataAnalysis/riskEvaluateMonthly/components/riskSelect'
+import riskSelect from '@/views/dataAnalysis/riskEvaluateMonthly/components/riskSelect';
+import apprvalRecord from '../apprvalRecord'
 export default {
-  components: { department, riskSelect },
+  components: { department, riskSelect, apprvalRecord },
   data() {
     return {
       loading: false,
@@ -135,8 +141,12 @@ export default {
   },
   created() { this.loadData(); },
   computed: {
-    dialog() {
-      return this.$parent.$parent.dialog;
+    noticeComments() {
+      if (this.data.noticeComments) {
+        return this.data.noticeComments;
+      } else {
+        return []
+      }
     }
   },
   watch: {

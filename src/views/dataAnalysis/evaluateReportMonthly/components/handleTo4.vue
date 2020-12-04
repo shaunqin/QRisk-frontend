@@ -7,7 +7,7 @@
     title="处理待办"
     custom-class="big_dialog"
   >
-    <step4 ref="step4" v-if="step==4" :data="data" :form="form" @change="formChange" />
+    <step4 ref="step4" v-if="step==4" :data="data" :form="form" />
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button v-if="step==1||step==4" :loading="loading" type="primary" @click="doSubmit">确认</el-button>
@@ -18,9 +18,8 @@
 </template>
 
 <script>
-import { riskNoticeDetail, riskNoticeComplete, riskNoticeModify, validatePWD } from "@/api/risk";
+import { riskControlComplete, riskControlModify } from "@/api/risk";
 import step4 from "./step/step4";
-import hairdown from './hairdown';
 import ccPerson from './ccPerson';
 export default {
   components: { step4, ccPerson },
@@ -33,22 +32,12 @@ export default {
         taskId: 0,
         formId: 0,
         processFlag: "1",
-        implementStatus: "" // 落实情况
+        riskControlRisk: [], // 风险措施
       },
       data: {}, // 父组件赋值
       password: "",
       parentTaskId: ""
     };
-  },
-  props: {
-    isSecChild: {
-      type: Boolean,
-      default: false
-    },
-    source: {
-      type: String,
-      default: ''
-    }
   },
   computed: {
     step() {
@@ -58,16 +47,12 @@ export default {
       return this.data.hiddenFill;
     },
     deptPath() {
-      return this.data.deptMeasure ? this.data.deptMeasure.deptPath : ""
+      return this.data.deptRisk ? this.data.deptRisk.deptPath : ""
     }
   },
   methods: {
     cancel() {
       this.resetForm();
-    },
-    formChange(form) {
-      console.log(form);
-      this.form = form;
     },
     doSubmit() {
       switch (this.step) {
@@ -102,41 +87,22 @@ export default {
         return;
       }
       this.loading = true;
-      riskNoticeComplete({ ...this.form, ...params }).then((res) => {
+      riskControlComplete({ ...this.form, ...params }).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
           this.$message.success("操作成功");
           this.resetForm();
-          // 办理页面弹出办理
-          if (this.isSecChild) {
-            // 刷新父页面-已下发措施
-            if (this.source == 'myIssued') {
-              this.$parent.$parent.$parent.$parent.$parent.$parent.detail({ id: this.form.formId });
-            }
-            else {
-              this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.subHandle({ taskId: this.parentTaskId, formId: this.form.formId });
-            }
-          } else {
-            this.$parent.init();
-            this.loadCount();
-          }
+          this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.subHandle({ taskId: this.parentTaskId, formId: this.form.formId });
         }
         this.loading = false;
       });
     },
     resetForm() {
       this.dialog = false;
-      this.form = {
-        comment: "", // 驳回备注
-        taskId: 0,
-        formId: 0,
-        processFlag: "1",
-        implementStatus: "" // 落实情况
-      };
     },
     loadCount() {
-      this.$parent.$parent.$parent.$parent.$parent.loadCount();
+      this.$parent.$parent.$parent.$parent.loadCount();
     }
   },
 };

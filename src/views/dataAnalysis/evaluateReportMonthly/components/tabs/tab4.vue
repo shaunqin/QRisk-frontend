@@ -13,7 +13,7 @@
           <el-tag type="success">{{row.businessName}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="任务名称" width="180">
+      <el-table-column prop="name" label="任务名称" width="260">
         <template slot-scope="{row}">
           <el-tag type="warning">{{row.name}}</el-tag>
         </template>
@@ -67,7 +67,9 @@ export default {
       return true;
     },
     subHandle(row) {
+      this.loading = true;
       riskControlQueryDetailTask(row.taskId, row.formId).then((res) => {
+        this.loading = false;
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
@@ -75,6 +77,9 @@ export default {
           _this.data = res.obj;
           _this.form.taskId = row.taskId;
           _this.form.formId = res.obj.id;
+          if (res.obj.riskVoList && res.obj.riskVoList.length > 0) {
+            _this.form.riskControlRisk = res.obj.riskVoList;
+          }
           _this.dialog = true;
         }
       });

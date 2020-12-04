@@ -115,7 +115,7 @@ export default {
         comment: "", // 驳回备注
         taskId: 0,
         formId: 0,
-        processFlag: "",
+        processFlag: "1",
         sqlUserId: "",
         hiddenDangerList: []
       };
