@@ -13,11 +13,11 @@
           <el-tag type="success">{{row.businessName}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="任务名称" width="260">
+      <!-- <el-table-column prop="name" label="任务名称" width="260">
         <template slot-scope="{row}">
           <el-tag type="warning">{{row.name}}</el-tag>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column prop="businessTitle" label="任务标题" show-overflow-tooltip />
       <el-table-column prop="deptName" label="部门" show-overflow-tooltip />
       <el-table-column prop="month" label="月份" show-overflow-tooltip />
@@ -74,7 +74,7 @@ export default {
       return true;
     },
     detail(row) {
-      queryHasDoneDetail(row.taskId, row.formId).then((res) => {
+      queryHasDoneDetail(row.formId).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {

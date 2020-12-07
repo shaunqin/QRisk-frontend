@@ -13,14 +13,16 @@
           <el-tag type="success">{{row.businessName}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="任务名称" min-width="250">
-        <template slot-scope="{row}">
-          <el-tag type="warning">{{row.name}}</el-tag>
-        </template>
+      <el-table-column prop="title" label="主题" min-width="300" show-overflow-tooltip />
+      <el-table-column prop="dept" label="部门" min-width="140" show-overflow-tooltip />
+      <el-table-column prop="content" label="措施内容" min-width="300" show-overflow-tooltip />
+      <el-table-column label="填报人">
+        <template slot-scope="{row}">{{renderColum(row)}}</template>
       </el-table-column>
-      <el-table-column prop="businessTitle" label="主题" min-width="300" show-overflow-tooltip />
       <el-table-column prop="createBy" label="发起人" width="120" />
-      <el-table-column prop="createTime" label="发起时间" width="140" />
+      <el-table-column label="发起时间" width="140" >
+        <template slot-scope="{row}">{{formatShortDate(row.createTime)}}</template>
+      </el-table-column>
       <el-table-column label width="100">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="detail(row)">查看详情</el-button>
@@ -42,7 +44,7 @@
 
 <script>
 import initData from "@/mixins/initData";
-import { format } from "@/utils/datetime";
+import { format, formatShortDate } from "@/utils/datetime";
 import { riskNoticeDoneDetail } from '@/api/risk';
 import doneDetail from './doneDetail'
 export default {
@@ -61,6 +63,7 @@ export default {
     }
   },
   methods: {
+    formatShortDate,
     beforeInit() {
       this.url = `/riskmgr_mgr/safety_risk_notice_mgr/query/hasDone/${this.page}/${this.size}`;
       this.params = { ...this.queryForm };
@@ -68,7 +71,7 @@ export default {
     },
     detail(row) {
       this.loading = true;
-      riskNoticeDoneDetail(row.taskId, row.formId).then(res => {
+      riskNoticeDoneDetail(row.formId).then(res => {
         this.loading = false;
         if (res.code != '200') {
           this.$message.error(res.msg);
@@ -79,6 +82,17 @@ export default {
         }
       })
     },
+    renderColum(row) {
+      if(row.filler && row.fillerName) {
+        return `${row.fillerName}[${row.filler}]`
+      } else if (row.filler) {
+        return `${row.filler}`
+      } else if (row.fillerName) {
+        return `${row.fillerName}`
+      } else {
+        return ""
+      }
+    }
   },
 };
 </script>

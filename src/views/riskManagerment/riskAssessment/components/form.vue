@@ -38,14 +38,17 @@
             <el-form-item label="标题">
               <el-input v-model="form.analysisTitle"></el-input>
             </el-form-item>
+            <el-form-item label="编号">
+              <el-input :disabled="true" v-model="form.analysisNo"></el-input>
+            </el-form-item>
             <el-form-item label="分析人">
               <el-input v-model="form.analysis"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="编号">
-              <el-input :disabled="true" v-model="form.analysisNo"></el-input>
-            </el-form-item>
+          <el-form-item label="识别单位">
+            <department :value="form.identificationUnit" @change="deptChange($event,'identificationUnit')"></department>
+          </el-form-item>
             <el-form-item label="批准">
               <el-input :disabled="true" v-model="form.approval"></el-input>
             </el-form-item>
@@ -59,6 +62,7 @@
                 v-model="form.approvalDate"
                 value-format="yyyy-MM-dd"
                 style="width:100%"
+                :disabled="true"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -341,6 +345,7 @@ export default {
         endTime: "", // 截止日期
         noteContent: "", // 通知内容
         issueDepts: null, // 下发部门
+        identificationUnit: null, // 识别单位
         assType: "", // 评估类别
         analysisTitle: "", // 分析标题
         analysisNo: "", // 分析编号

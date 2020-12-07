@@ -42,7 +42,7 @@
             <li
               v-for="item in row.controlList"
               :key="item.id"
-            >{{ `${item.realname}[${item.responsiblePerson}]` }}</li>
+            >{{ item.responsiblePerson }}</li>
           </ul>
         </template>
       </el-table-column>
