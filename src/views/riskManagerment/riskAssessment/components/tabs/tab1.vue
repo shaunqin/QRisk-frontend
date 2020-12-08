@@ -15,6 +15,7 @@
         @click="addAssessment"
         :disabled="!assessmentType"
       >新建评估</el-button>
+      <el-button type="primary" size="mini" @click="newAdd">新建</el-button>
     </div>
     <!--表格渲染-->
     <el-table
@@ -52,6 +53,7 @@
     />
     <edetail ref="detail" />
     <eform ref="form" :is-add="isAdd"></eform>
+    <formSp ref="formSp" />
   </div>
 </template>
 
@@ -60,9 +62,10 @@ import initData from "@/mixins/initData";
 import { formatShortDate } from "@/utils/datetime";
 import eform from "../form";
 import edetail from "../detail";
+import formSp from '../formSp'
 import { specialRiskDetail, queryRiskListMgr } from "@/api/risk";
 export default {
-  components: { eform, edetail },
+  components: { eform, edetail, formSp },
   mixins: [initData],
   data() {
     return {
@@ -136,6 +139,9 @@ export default {
           _this.possibleRisksList = res.obj
         }
       })
+    },
+    newAdd() {
+      this.$refs.formSp.dialog = true;
     }
   },
 };
