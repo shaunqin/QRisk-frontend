@@ -16,7 +16,7 @@
       <el-table-column label="任务类型">
         <template slot-scope="{row}">
           <span v-if="row.taskType==1">年度任务</span>
-          <span v-if="row.taskType==2">月度任务</span>
+          <span v-if="row.taskType==2">单次任务</span>
         </template>
       </el-table-column>
       <el-table-column prop="dueDate" label="反馈时间" />
@@ -49,7 +49,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200px" align="center" fixed="right">
+      <el-table-column label="操作" width="200px" align="center" fixed="right" v-if="showOpera">
         <template slot-scope="scope">
           <el-button-group>
             <el-button size="mini" icon="el-icon-edit" @click="edit(scope.row)"></el-button>
@@ -69,13 +69,13 @@
       @current-change="pageChange"
     />
     <task ref="task" :is-add="isAdd" />
-    <hazardsList ref="hazardsList" :taskId="taskId" :type="type" />
+    <hazardsList ref="hazardsList" :taskId="taskId" :type="type" :showOpera="showOpera" />
     <hazardsStatistics ref="hazardsStatistics"></hazardsStatistics>
   </div>
 </template>
 
 <script>
-import { detail, cancelHiddenDanger, deleteHiddenDanger } from "@/api/hazards";
+import { detail, cancelHiddenDanger, deleteHiddenDanger, hasOperatePerms } from "@/api/hazards";
 import task from '../task';
 import initData from "@/mixins/initData";
 import hazardsList from '../hazardsList/list'
@@ -86,8 +86,18 @@ export default {
   data() {
     return {
       taskId: "",
-      type: ""
+      type: "",
+      showOpera: true,
     }
+  },
+  created() {
+    hasOperatePerms().then(res => {
+      if(res.code != "200") {
+        this.$message.error(res.msg);
+      } else {
+        this.showOpera = res.obj
+      }
+    })
   },
   mounted() {
     this.init();

@@ -110,7 +110,7 @@
           show-overflow-tooltip
         />
         <el-table-column prop="remarks" label="备注" width="120px" show-overflow-tooltip />
-        <el-table-column label="操作" fixed="right" width="100">
+        <el-table-column label="操作" fixed="right" width="100" v-if="showOpera">
           <template slot-scope="{ row }">
             <el-button type="success" icon="el-icon-document-copy" size="mini" @click="copy(row)"></el-button>
           </template>
@@ -126,7 +126,7 @@
         @current-change="pageChange"
       />
     </el-card>
-    <el-card header="我填报的">
+    <el-card header="Ameco安全隐患管控清单">
       <el-button
         class="mb"
         size="mini"
@@ -134,7 +134,7 @@
         icon="el-icon-download"
         @click="doExport(1)"
       >导出</el-button>
-      <mine ref="mine" :taskId="taskId" :type="type" @edit="edit" />
+      <mine ref="mine" :taskId="taskId" :type="type" :showOpera="showOpera" @edit="edit" />
     </el-card>
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="cancel">取消</el-button>
@@ -160,7 +160,7 @@ export default {
       data: [],
     };
   },
-  props: ["taskId", "type"],
+  props: ["taskId", "type", "showOpera"],
   created() {
     // this.init()
   },

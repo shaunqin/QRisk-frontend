@@ -23,7 +23,7 @@
       <el-table-column prop="createTime" label="发起时间" width="140" />
       <el-table-column label="操作" width="150">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="doFillin(row)">填报</el-button>
+          <!-- <el-button type="primary" size="mini" @click="doFillin(row)">填报</el-button> -->
           <el-button type="primary" size="mini" @click="subHandle(row)">办理</el-button>
         </template>
       </el-table-column>
@@ -72,14 +72,26 @@ export default {
       return true;
     },
     subHandle(row) {
+      this.loading = true;
       specialRiskFill(row.taskId).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
           let _this = this.$refs.handle;
-          _this.data = res.obj;
+          _this.assessmentType = this.assessmentType;
+          _this.data = res.obj
+          _this.data.approvalDate = formatShortDate(res.obj.approvalDate);
+          if (res.obj.hazardVoList && res.obj.hazardVoList.length > 0) {
+            _this.data.hazardList = res.obj.hazardVoList.map(item => {
+              item.specialRiskMeasureList.map(childItem => {
+                childItem.deadline = formatShortDate(childItem.deadline)
+              })
+              return item
+            })
+          } else { _this.data.hazardList = [] }
           _this.form.taskId = row.taskId;
           _this.form.formId = res.obj.id;
+          this.loading = false;
           _this.dialog = true;
         }
       });

@@ -7,41 +7,45 @@
     title="处理待办"
     custom-class="big_dialog"
   >
-    <step1 v-if="step==1" :data="data" :form="form" />
-    <step2 ref="step2" v-if="step==2" :data="data" :form="form" />
-    <step3 ref="step3" v-if="step==3" :data="data" :form="form" />
-    <step4 ref="step4" v-if="step==4" :data="data" :form="form" />
-    <step5 ref="step5" v-if="step==5" :data="data" :form="form" />
-    <step6 ref="step6" v-if="step==6" :data="data" :form="form" />
+    <step1 v-if="step==1" :data="data" :form="form" :assessmentType="assessmentType" />
+    <step2 ref="step2" v-if="step==2" :data="data" :form="form" :assessmentType="assessmentType" />
+    <step3 ref="step3" v-if="step==3" :data="data" :form="form" :assessmentType="assessmentType" />
+    <step4 ref="step4" v-if="step==4" :data="data" :form="form" :assessmentType="assessmentType" />
+    <step5 ref="step5" v-if="step==5" :data="data" :form="form" :assessmentType="assessmentType" />
+    <step6 ref="step6" v-if="step==6" :data="data" :form="form" :assessmentType="assessmentType" />
     <hairdown ref="hairdown" :data="data" :form="form" />
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
+      <el-button :loading="loading" type="warning" @click="doSubmitSave">暂存</el-button>
       <el-button
-        v-if="step==1||step==3||step==5"
+        v-if="step==1||step==2||step==3||step==5||step==6"
         :loading="loading"
         type="primary"
         @click="doSubmit"
-      >上报</el-button>
-      <el-button v-if="step==1||step==4" :loading="hdLoading" type="success" @click="doHairdown">下发</el-button>
-      <el-button v-if="step==2||step==6" :loading="loading" type="primary" @click="doSubmit">确定</el-button>
+      >提交</el-button>
+      <el-button v-if="step==1 && data.hiddenIssue||step==4 && data.hiddenIssue" :loading="hdLoading" type="success" @click="doHairdown">下发</el-button>
+      <!-- <el-button v-if="step==2||step==6" :loading="loading" type="primary" @click="doSubmit">确定</el-button> -->
     </div>
+    <!-- 风险评价报告 -->
+    <report ref="reportRef" :formId="formId" />
     <!-- 抄送 -->
     <ccPerson ref="ccPerson" :deptPath="deptPath" @subCC="subCC" />
   </el-dialog>
 </template>
 
 <script>
-import { specialRiskComplete } from "@/api/risk";
+import { specialRiskComplete, specialRiskSaveHazard } from "@/api/risk";
 import step1 from "./step/step1";
 import step2 from "./step/step2";
 import step3 from "./step/step3";
 import step4 from "./step/step4";
 import step5 from "./step/step5";
 import step6 from "./step/step6";
-import hairdown from './hairdown'
-import ccPerson from './ccPerson'
+import hairdown from './hairdown';
+import ccPerson from './ccPerson';
+import report from "./report";
 export default {
-  components: { step1, step2, step3, step4, step5, step6, hairdown,ccPerson },
+  components: { step1, step2, step3, step4, step5, step6, hairdown, ccPerson, report },
   data() {
     return {
       loading: false,
@@ -56,7 +60,9 @@ export default {
         pathAndDeadLines: [] // 下发部门
       },
       data: {}, // 父组件赋值
-      password: ""
+      password: "",
+      assessmentType: "",
+      formId: ""
     };
   },
   computed: {
@@ -114,7 +120,8 @@ export default {
     },
     submitStep1() {
       this.loading = true;
-      specialRiskComplete({ ...this.form, processFlag: "" }).then((res) => {
+      const commentModel = { ...this.form, processFlag: "" }
+      specialRiskSaveHazard({ ...this.data, commentModel }).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
@@ -168,7 +175,7 @@ export default {
       }
     },
     loadCount() {
-      this.$parent.$parent.$parent.$parent.$parent.$parent.loadCount();
+      this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.loadCount();
     },
     judgeCC() {
       // 领导审核同意
@@ -194,7 +201,8 @@ export default {
         return;
       }
       this.loading = true;
-      specialRiskComplete({ ...this.form, ...params }).then((res) => {
+      const commentModel = { ...this.form, ...params }
+      specialRiskSaveHazard({...this.data, commentModel }).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
@@ -202,6 +210,24 @@ export default {
           this.resetForm();
           this.$parent.init();
           this.loadCount();
+        }
+        this.loading = false;
+      });
+    },
+    doSubmitSave() {
+      this.loading = true;
+      specialRiskSaveHazard(this.data).then((res) => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          if (res.obj) {
+            this.formId = this.data.id;
+            this.$refs.reportRef.dialog = true;
+          } else {
+            this.$message.success("填报成功");
+            this.$parent.init();
+            this.resetForm();
+          }
         }
         this.loading = false;
       });

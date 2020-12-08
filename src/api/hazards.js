@@ -136,3 +136,11 @@ export function exportList(type, params) {
         params
     })
 }
+
+// 判断是否有操作权限
+export const hasOperatePerms = () => {
+    return request({
+        url: '/riskmgr_mgr/hidden_danger/hasOperatePerms',
+        method: 'get',
+    })
+}

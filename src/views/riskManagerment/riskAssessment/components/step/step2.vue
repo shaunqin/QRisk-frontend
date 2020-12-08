@@ -1,6 +1,6 @@
 <template>
   <div>
-    <info :data="data" form="form" />
+    <info :data="data" form="form" :assessmentType="assessmentType" />
     <el-card>
       <el-radio-group v-model="form.processFlag">
         <el-radio label="1">同意</el-radio>
@@ -18,7 +18,7 @@ export default {
   components: {
     info,
   },
-  props: ["data", "form"],
+  props: ["data", "form", "assessmentType"],
   methods: {
     formatShortDate,
   }

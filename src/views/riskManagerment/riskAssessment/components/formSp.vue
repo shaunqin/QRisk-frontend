@@ -39,9 +39,16 @@
       <el-table-column label="ID" prop="ID" />
       <el-table-column label="可能性" width="110">
         <template slot-scope="{row}">
-          <el-select v-model="row.possibility" placeholder>
+          <!-- <el-select v-model="row.possibility" placeholder>
             <el-option label="可能性" value="可能性"></el-option>
-          </el-select>
+          </el-select> -->
+          <dict-select
+              :clearable="false"
+              :value="row.possibility"
+              type="probability_level"
+              @change="dictChange($event,row,'possibility')"
+              style="width:130px"
+            />
         </template>
       </el-table-column>
       <el-table-column label="严重性" prop="seriousness" />
@@ -65,7 +72,9 @@
       <el-table-column label="控制状态" width="110">
         <template slot-scope="{row}">
           <el-select v-model="row.controlState">
-            <el-option label="控制状态" value="控制状态"></el-option>
+            <el-option label="未控制" value="1"></el-option>
+            <el-option label="控制中" value="2"></el-option>
+            <el-option label="关闭" value="3"></el-option>
           </el-select>
         </template>
       </el-table-column>
@@ -79,8 +88,9 @@
 
 <script>
 import department from '@/components/Department'
+import dictSelect from "@/components/common/dictSelect";
 export default {
-  components: { department },
+  components: { department, dictSelect },
   data() {
     return {
       loading: false,
@@ -129,6 +139,9 @@ export default {
   methods: {
     deptChange(val) {
       this.form.dept = val;
+    },
+    dictChange(val, item, key) {
+      item[key] = val;
     },
     respChange(val, row) {
       row.responsible = val;

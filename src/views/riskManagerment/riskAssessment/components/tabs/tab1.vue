@@ -1,21 +1,21 @@
 <template>
   <div>
     <div class="head-container">
-      <el-button
+      <!-- <el-button
         size="mini"
         type="success"
         icon="el-icon-plus"
         :disabled="!assessmentType"
         @click="add"
-      >新建通知</el-button>
+      >新建通知</el-button> -->
       <el-button
         size="mini"
         type="success"
         icon="el-icon-plus"
         @click="addAssessment"
         :disabled="!assessmentType"
-      >新建评估</el-button>
-      <el-button type="primary" size="mini" @click="newAdd">新建</el-button>
+      >新建</el-button>
+      <!-- <el-button type="primary" size="mini" @click="newAdd">新建</el-button> -->
     </div>
     <!--表格渲染-->
     <el-table
@@ -27,8 +27,8 @@
       @selection-change="selectionChange"
     >
       <el-table-column type="selection" width="45" />
-      <el-table-column prop="no" label="编号" width="120" />
-      <el-table-column label="标题" min-width="150" show-overflow-tooltip>
+      <el-table-column prop="no" label="编号" width="140" />
+      <el-table-column label="标题" min-width="140" show-overflow-tooltip>
         <template slot-scope="{row}">
           <el-button type="text" size="mini" @click="detail(row)">{{row.title}}</el-button>
         </template>
@@ -100,20 +100,24 @@ export default {
       this.selections = selections;
       this.$emit("selectionChange", { selections: selections });
     },
-    add() {
+    /* add() {
       this.isAdd = true;
       let _this = this.$refs.form;
       _this.form.assType = this.assessmentType;
       _this.form.type = "1"; // 通知
       _this.dialog = true;
-    },
+    }, */
     async addAssessment() {
-      this.isAdd = true;
-      let _this = this.$refs.form;
-      _this.form.assType = this.assessmentType;
-      _this.form.type = "2"; // 评估
-      await this.getRiskListMgr()
-      _this.dialog = true;
+      if(this.assessmentType == '4') {
+        this.$refs.formSp.dialog = true;
+      } else {
+        this.isAdd = true;
+        let _this = this.$refs.form;
+        _this.form.assType = this.assessmentType;
+        _this.form.type = "1";
+        await this.getRiskListMgr()
+        _this.dialog = true;
+      }
     },
     detail(row) {
       specialRiskDetail(row.id).then((res) => {
