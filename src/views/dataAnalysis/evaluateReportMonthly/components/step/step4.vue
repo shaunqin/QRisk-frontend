@@ -18,6 +18,12 @@
           <el-table-column label="下发单位" prop="deptPathCn" />
           <el-table-column label="风险" prop="riskName" />
           <el-table-column label="备注" prop="remark" />
+          <el-table-column
+            v-if="fillRiskMeasuresEnable"
+            label="落实情况"
+            prop="implementationMeasures"
+            min-width="200"
+          />
           <el-table-column label="填报截止日期">
             <template slot-scope="{row}">{{formatShortDate(row.fillDeadline)}}</template>
           </el-table-column>
@@ -26,10 +32,8 @@
           </el-table-column>
           <el-table-column label="填报措施" min-width="150">
             <template slot-scope="{row}">
-              <span v-if="!row.riskControlRiskVoList">-</span>
-              <ul class="ul-risk" v-else>
-                <li v-for="item in row.riskControlRiskVoList" :key="item.id">{{item.riskMeasures}}</li>
-              </ul>
+              <span v-if="!row.riskMeasures">-</span>
+              <span v-else>{{row.riskMeasures}}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -53,6 +57,15 @@ export default {
     return {
       accessory: {}
     };
+  },
+  computed: {
+    fillRiskMeasuresEnable() {
+      try {
+        return this.data.deptRisk.tag == '1'
+      } catch (e) {
+        return false
+      }
+    },
   },
   props: {
     data: {

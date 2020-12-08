@@ -135,6 +135,7 @@ export default {
     },
     tabIndex() {
       this.form = {};
+      this.date = "";
       this.toQuery();
     }
   },

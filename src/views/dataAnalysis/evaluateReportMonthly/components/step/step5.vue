@@ -18,11 +18,22 @@
           <el-table-column label="下发单位" prop="deptPathCn" />
           <el-table-column label="风险" prop="riskName" />
           <el-table-column label="备注" prop="remark" />
+          <el-table-column v-if="fillRiskMeasuresEnable" label="落实情况" min-width="200">
+            <template slot-scope="{row}">
+              <el-input v-model="measuresObj[row.id]" type="textarea" rows="3"></el-input>
+            </template>
+          </el-table-column>
           <el-table-column label="填报截止日期">
             <template slot-scope="{row}">{{formatShortDate(row.fillDeadline)}}</template>
           </el-table-column>
           <el-table-column label="落实截止日期">
             <template slot-scope="{row}">{{formatShortDate(row.implementDeadline)}}</template>
+          </el-table-column>
+          <el-table-column label="填报措施" min-width="150">
+            <template slot-scope="{row}">
+              <span v-if="!row.riskMeasures">-</span>
+              <span v-else>{{row.riskMeasures}}</span>
+            </template>
           </el-table-column>
         </el-table>
       </el-form-item>
@@ -30,7 +41,10 @@
       <el-form-item key="childRisk" label="下发措施" v-if="childRisk.length>0">
         <childRisk :data="childRisk" />
       </el-form-item>
-      <el-form-item label="措施填报">
+      <el-form-item key="apprvalRecord" label="审批记录" v-if="riskComment.length>0">
+        <apprvalRecord :data="riskComment" />
+      </el-form-item>
+      <el-form-item label="措施填报" v-if="!fillRiskMeasuresEnable">
         <el-row
           v-for="(item,index) in form.riskControlRisk"
           :key="index"
@@ -58,12 +72,14 @@
 <script>
 import { formatShortDate } from '@/utils/datetime'
 import childRisk from '../childRisk'
+import apprvalRecord from '../apprvalRecord'
 export default {
-  components: { childRisk },
+  components: { childRisk, apprvalRecord },
   data() {
     return {
       dialog: false,
       loading: false,
+      measuresObj: {}
     };
   },
   props: {
@@ -91,8 +107,42 @@ export default {
       }
       return []
     },
+    riskComment() {
+      if (this.data.deptRisk && this.data.deptRisk.riskComment) {
+        return this.data.deptRisk.riskComment
+      }
+      return []
+    },
+    fillRiskMeasuresEnable() {
+      try {
+        return this.data.deptRisk.tag == '1'
+      } catch (e) {
+        return false
+      }
+    },
   },
-  mounted() { },
+  watch: {
+    measuresObj: {
+      deep: true,
+      handler(val) {
+        let arr = [];
+        for (let x in val) {
+          arr.push({
+            measuresId: x,
+            implementationMeasures: val[x]
+          })
+        }
+        this.form.riskControlMeasures = arr;
+      }
+    }
+  },
+  created() {
+    let obj = {};
+    this.data.riskControlExpVoList.map(item => {
+      obj[item.id] = item.implementationMeasures || "";
+    })
+    this.measuresObj = obj;
+  },
   methods: {
     formatShortDate,
     addRow() {

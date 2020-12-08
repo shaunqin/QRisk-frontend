@@ -4,6 +4,45 @@
       <el-table-column label="部门" prop="deptPathCn" />
       <el-table-column label="风险" prop="riskName" />
       <el-table-column label="备注" prop="remark" />
+      <el-table-column label="办理人" width="80">
+        <template slot-scope="{row}">
+          <span v-if="!row.reviewerInfo">-</span>
+          <el-popover v-else placement="left">
+            <el-table size="mini" :data="row.reviewerInfo" style="width:600px">
+              <el-table-column label="任务名称" prop="taskName" />
+              <el-table-column label="角色">
+                <template slot-scope="{row}">
+                  <span v-if="!row.groupName">-</span>
+                  <span v-else>{{row.groupName}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="候选人">
+                <template slot-scope="{row}">
+                  <span v-if="!row.groupName">-</span>
+                  <span v-else>{{row.users}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="分配人">
+                <template slot-scope="{row}">
+                  <span v-if="!row.groupName">{{row.name}}</span>
+                  <span v-else>-</span>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-button type="text" slot="reference">详细</el-button>
+          </el-popover>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" width="80">
+        <template slot-scope="{row}">
+          <span v-if="row.status==0">待处理</span>
+          <span v-else-if="row.status==1">已下发</span>
+          <span v-else-if="row.status==2">已上报</span>
+          <span v-else-if="row.status==3">同意</span>
+          <span v-else-if="row.status==4">驳回</span>
+          <span v-else>-</span>
+        </template>
+      </el-table-column>
       <el-table-column label="填报措施">
         <template slot-scope="{row}">
           <span v-if="!row.riskControlRiskVoList">-</span>
@@ -67,7 +106,7 @@ export default {
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       //表格合并行
-      if (columnIndex === 4) {
+      if (columnIndex === 6) {
         const _row = this.spanArr[rowIndex];
         const _col = _row > 0 ? 1 : 0;
         return {

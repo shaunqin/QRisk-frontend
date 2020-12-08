@@ -18,6 +18,11 @@
           <el-table-column label="下发单位" prop="deptPathCn" />
           <el-table-column label="风险" prop="riskName" />
           <el-table-column label="备注" prop="remark" />
+          <el-table-column v-if="fillRiskMeasuresEnable" label="落实情况" min-width="200">
+            <template slot-scope="{row}">
+              <el-input v-model="measuresObj[row.id]" type="textarea" rows="3"></el-input>
+            </template>
+          </el-table-column>
           <el-table-column label="填报截止日期">
             <template slot-scope="{row}">{{formatShortDate(row.fillDeadline)}}</template>
           </el-table-column>
@@ -28,9 +33,9 @@
       </el-form-item>
       <!-- 下发措施 -->
       <el-form-item key="childRisk" label="下发措施" v-if="childRisk.length>0">
-       <childRisk :data="childRisk" />
+        <childRisk :data="childRisk" />
       </el-form-item>
-      <el-form-item label="措施填报">
+      <el-form-item label="措施填报" v-if="!hiddenFill&&!fillRiskMeasuresEnable">
         <el-row
           v-for="(item,index) in form.riskControlRisk"
           :key="index"
@@ -63,7 +68,8 @@ export default {
   data() {
     return {
       accessory: {},
-      summary: ""
+      summary: "",
+      measuresObj: {}
     };
   },
   props: {
@@ -91,17 +97,39 @@ export default {
       }
       return []
     },
+    hiddenFill() {
+      return this.data.hiddenFill;
+    },
+    fillRiskMeasuresEnable() {
+      try {
+        return this.data.deptRisk.tag == '1'
+      } catch (e) {
+        return false
+      }
+    },
   },
-  // watch: {
-  //   data: {
-  //     deep: true,
-  //     handler(val) {
-  //       this.form.comment = val.summary;
-  //     }
-  //   }
-  // },
+  watch: {
+    measuresObj: {
+      deep: true,
+      handler(val) {
+        let arr = [];
+        for (let x in val) {
+          arr.push({
+            measuresId: x,
+            implementationMeasures: val[x]
+          })
+        }
+        this.form.riskControlMeasures = arr;
+      }
+    }
+  },
   created() {
     // this.form.comment = this.data.summary;
+    let obj = {};
+    this.data.riskControlExpVoList.map(item => {
+      obj[item.id] = item.implementationMeasures || "";
+    })
+    this.measuresObj = obj;
   },
   methods: {
     formatShortDate,

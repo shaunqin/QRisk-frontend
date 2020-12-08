@@ -58,6 +58,7 @@ export default {
         formId: 0,
         processFlag: "1",
         riskControlRisk: [], // 风险措施
+        riskControlMeasures: [], // 落实情况
       },
       data: {}, // 父组件赋值
       password: ""
