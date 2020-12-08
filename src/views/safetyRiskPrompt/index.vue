@@ -17,7 +17,7 @@
               style="width:220px"
             />
           </el-form-item>
-          <el-form-item label="发布日期">
+          <el-form-item label="发布日期" v-if="tabIndex==1">
             <el-date-picker
               v-model="date"
               unlink-panels
