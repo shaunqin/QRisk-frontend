@@ -53,7 +53,7 @@ import { formatShortDate } from '@/utils/datetime'
 export default {
   mixins: [initData],
   components: { handle, fillin },
-  props: ["queryForm"],
+  props: ["assessmentType", "queryForm"],
   mounted() {
     this.init();
   },
@@ -91,6 +91,7 @@ export default {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
+          _this.assessmentType = this.assessmentType;
           _this.data = res.obj;
           _this.form.id = res.obj.id;
           _this.form.analysisTitle = res.obj.analysisTitle;

@@ -123,9 +123,9 @@ export function riskNoticeIssue(data) {
   })
 }
 // 查询已办详情
-export function riskNoticeDoneDetail(taskId, formId) {
+export function riskNoticeDoneDetail(formId) {
   return request({
-    url: `/riskmgr_mgr/safety_risk_notice_mgr/query/hasDoneDetail/${taskId}/${formId}`,
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/query/hasDoneDetail/${formId}`,
     method: 'get'
   })
 }

@@ -22,7 +22,7 @@
     </el-card>
 
     <!-- 系统和工作分析记录表 -->
-      <el-card header="系统和工作分析记录表" key="1">
+      <el-card header="系统和工作分析记录表" v-if="assessmentType == '1' || assessmentType == '2'">
         <el-form size="mini" label-width="80px">
         <el-row :gutter="8">
           <el-col :span="8">
@@ -153,6 +153,42 @@
 
 
     <el-card header="危险源">
+      <el-form size="mini" label-width="80px"  v-if="assessmentType != '1' && assessmentType != '2'">
+        <el-row :gutter="8">
+          <el-col :span="8">
+            <el-form-item label="标题">
+              <el-input v-model="form.analysisTitle"></el-input>
+            </el-form-item>
+            <el-form-item label="编号">
+              <el-input :disabled="true" v-model="form.analysisNo"></el-input>
+            </el-form-item>
+            <el-form-item label="分析人">
+              <el-input v-model="form.analysis"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+          <el-form-item label="识别单位">
+            <department class="mini" :value="form.identificationUnit" @change="ideUnitChange"></department>
+          </el-form-item>
+            <el-form-item label="批准">
+              <el-input :disabled="true" v-model="form.approval"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="分析单位">
+              <department :value="form.analysisDept" @change="deptAnalysisChange($event,'analysisDept')"></department>
+            </el-form-item>
+            <el-form-item label="批准日期">
+              <el-date-picker
+                v-model="form.approvalDate"
+                value-format="yyyy-MM-dd"
+                style="width:100%"
+                :disabled="true"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        </el-form>
       <el-button
         :disabled="formEnable"
         type="primary"
@@ -286,7 +322,7 @@
           <el-table-column type="index" width="50" />
           <el-table-column label="控制措施">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.controlMeasure" :disabled="riskEnable" type="textarea" rows="1"></el-input>
+              <el-input v-model="scope.row.controlMeasure" :disabled="riskEnable" type="textarea" rows="3"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="责任单位">
@@ -422,6 +458,7 @@ export default {
       possibleRisksList: [], // 可能导致的风险列表
       data: {}, // 父级赋值
       formId: null,
+      assessmentType: null, 
     };
   },
   computed: {

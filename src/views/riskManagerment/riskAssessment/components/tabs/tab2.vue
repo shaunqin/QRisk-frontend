@@ -66,6 +66,7 @@ import {
   specialRiskDetail,
   specialRiskDelete,
   specialRiskSubmit,
+  queryRiskListMgr,
 } from "@/api/risk";
 import { formatShortDate } from "@/utils/datetime";
 export default {
@@ -107,7 +108,7 @@ export default {
       this.isAdd = false;
       let id = this.selections[0];
       let _this = this.$refs.form;
-      specialRiskDetail(id).then((res) => {
+      specialRiskDetail(id).then(async (res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
@@ -115,7 +116,7 @@ export default {
           _this.form = {
             id: obj.id,
             title: obj.title,
-            endTime: obj.endTime,
+            endTime: formatShortDate(obj.endTime),
             noteContent: obj.noteContent,
             issueDept: obj.issueDept,
             assType: obj.assType,
@@ -124,11 +125,34 @@ export default {
             analysisDept: obj.analysisDept,
             analysis: obj.analysis,
             approval: obj.approval,
-            approvalDate: obj.approvalDate,
-            type: obj.type,
-            specialRiskAnalyses: obj.specialRiskAnalyses || [],
-            hazardList: obj.hazardVoList || []
+            approvalDate: formatShortDate(obj.approvalDate),
+            type: obj.type
           };
+          if (obj.hazardVoList && obj.hazardVoList.length > 0) {
+            _this.form.hazardList = obj.hazardVoList.map(item => {
+              item.specialRiskMeasureList.map(childItem => {
+                childItem.deadline = formatShortDate(childItem.deadline)
+              })
+              return item
+            })
+          } else { _this.form.hazardList = [] }
+          if(obj.specialRiskAnalyses &&  obj.specialRiskAnalyses.length > 0) {
+            _this.form.specialRiskAnalyses = [...obj.specialRiskAnalyses]
+          } else { _this.form.specialRiskAnalyses = [{
+            product: "",  // 产品
+            subSystem: "", // 子系统
+            managementProcess: "", // 管理流程
+            reponsibleUnit: null, // 责任单位
+            post: "", // 岗位
+            processHuman: "", // 人
+            processMachine: "", // 机
+            processMaterial: "", // 料
+            processRegulation: "", // 法
+            processEnvironment: "", // 环
+            input: "", // 输入
+            output: "", // 输出
+          }] }
+          await this.getRiskListMgr()
           _this.dialog = true;
         }
       });
@@ -150,6 +174,7 @@ export default {
     },
     submit() {
       let _this = this.$refs.selectEmplotee;
+      _this.id = this.selections[0];
       _this.dialog = true;
     },
     doSubmit(sqlUserId) {
@@ -168,6 +193,40 @@ export default {
           this.init();
         }
       });
+    },
+    async getRiskListMgr() {
+      let _this = this.$refs.form;
+      await queryRiskListMgr().then(res => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          if(_this.form.hazardList.length == 0) {
+            _this.form.hazardList.push({
+              hazardSource: "",
+              managementProcess: "",
+              riskLevel1: "", //危险源层级1
+              riskLevel2: "", //危险源层级2
+              hazard: "", // 危险源
+              possibility: "1",
+              possibleRisks: "", // 可能导致的风险
+              riskLevel: "1",
+              rootCauseAnalysis: "",
+              seriousness: "1",
+              specialRiskMeasureList: [
+                {
+                  completion: "",
+                  controlMeasure: "",
+                  deadline: formatShortDate(null),
+                  reponsibleDept: null
+                }],
+              subSystem: "",
+              product: ""
+            })
+          }
+          _this.form.hazardList[0].possibleRisks = res.obj[0].riskNo
+          _this.possibleRisksList = res.obj
+        }
+      })
     }
   },
 };

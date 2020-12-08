@@ -19,6 +19,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="businessTitle" label="主题" min-width="300" show-overflow-tooltip />
+      <el-table-column prop="content" label="措施内容" min-width="300" show-overflow-tooltip />
       <el-table-column prop="createBy" label="发起人" width="120" />
       <el-table-column prop="createTime" label="发起时间" width="140" />
       <el-table-column label="操作" width="110">

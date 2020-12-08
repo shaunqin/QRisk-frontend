@@ -90,3 +90,10 @@ export const queryEmploteeAll = () => {
     method: 'get',
   })
 }
+// 查询下一操作人
+export const queryNextOperator = (noteId) => {
+  return request({
+    url: `/risk_mgr/special_risk_notice_mgr/query/nextOperator/${noteId}`,
+    method: 'get'
+  })
+}

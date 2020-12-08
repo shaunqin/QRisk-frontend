@@ -77,7 +77,18 @@
         />
       </el-form-item>
       <el-form-item label="监管单位">
-        <el-input v-model="form.supervisoryUnit" style="width: 140px" :disabled="disabled"></el-input>
+        <el-input placeholder="请输入内容" v-model="form.supervisoryUnit" class="input-with-select" :disabled="disabled">
+            <template slot="append">
+              <dictSelect
+                type="supervisory_unit"
+                :value="form.supervisoryUnit"
+                @change="dictChange($event,form,'supervisoryUnit')"
+                style="width: 38px"
+                :clearable="false"
+                :disabled="disabled"
+              />
+            </template>
+          </el-input>
       </el-form-item>
         <el-form-item label="整改进展">
           <el-select v-model="form.rectificationProgress" placeholder style="width: 140px">
@@ -138,11 +149,16 @@
       </el-table-column>
       <el-table-column label="责任人">
         <template slot-scope="{row}">
-          <el-button
+          <el-input
+              v-model="row.responsiblePerson"
+              size="mini"
+              :disabled="disabled"
+            ></el-input>
+          <!-- <el-button
             :disabled="disabled"
             type="text"
             @click="PersonClick(row)"
-          >{{!!row.realname?`${row.realname}[${row.responsiblePerson}]`:'请选择'}}</el-button>
+          >{{!!row.realname?`${row.realname}[${row.responsiblePerson}]`:'请选择'}}</el-button> -->
         </template>
       </el-table-column>
       <el-table-column label="整改时限">
@@ -272,5 +288,8 @@ export default {
 }
 .el-select-dropdown {
   z-index: 99999999999999 !important;
+}
+/deep/ .el-input-group__prepend {
+  padding: 0 10px;
 }
 </style>

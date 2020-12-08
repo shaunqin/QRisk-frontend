@@ -97,13 +97,18 @@
           />
         </el-form-item>
         <el-form-item label="监管单位">
-          <dictSelect
-            type="supervisory_unit"
-            :value="item.supervisoryUnit"
-            @change="dictChange($event,item,'supervisoryUnit')"
-            style="width: 140px"
-            :disabled="disabled"
-          />
+          <el-input placeholder="请输入内容" v-model="item.supervisoryUnit" class="input-with-select" :disabled="disabled">
+            <template slot="append">
+              <dictSelect
+                type="supervisory_unit"
+                :value="item.supervisoryUnit"
+                @change="dictChange($event,item,'supervisoryUnit')"
+                style="width: 38px"
+                :clearable="false"
+                :disabled="disabled"
+              />
+            </template>
+          </el-input>
         </el-form-item>
         <el-form-item label="整改进展">
           <el-select v-model="item.rectificationProgress" placeholder style="width: 140px">
@@ -170,11 +175,11 @@
         </el-table-column>
         <el-table-column label="责任人">
           <template slot-scope="{row}">
-            <el-button
+            <el-input
+              v-model="row.responsiblePerson"
+              size="mini"
               :disabled="disabled"
-              type="text"
-              @click="PersonClick(row)"
-            >{{!!row.realname?`${row.realname}[${row.responsiblePerson}]`:'请选择'}}</el-button>
+            ></el-input>
           </template>
         </el-table-column>
         <el-table-column label="整改时限">
@@ -223,7 +228,7 @@
         </el-table-column>
       </el-table>
       <div class="del" v-if="!disabled">
-        <el-button type="danger" size="small" icon="el-icon-delete" @click="delRow(index)">删除</el-button>
+        <el-button type="danger" size="small" icon="el-icon-delete" @click="delRow(index, item.no)">删除</el-button>
       </div>
     </el-card>
     <emplotee ref="emplotee" :deptName="data.deptName" @subPerson="subPerson" />
@@ -235,7 +240,7 @@ import { mapGetters } from "vuex";
 import { formatShortDate } from '@/utils/datetime'
 import dictSelect from '@/components/common/dictSelect'
 import emplotee from './person'
-import { getNo } from '@/api/hazards'
+import { getNo, deleteNo } from '@/api/hazards'
 import { eventBus } from '@/utils/eventBus'
 
 export default {
@@ -339,8 +344,14 @@ export default {
       })
 
     },
-    delRow(index) {
-      this.fillinData.splice(index, 1);
+    delRow(index, No) {
+      deleteNo(No).then(res => {
+        if(res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          this.fillinData.splice(index, 1);
+        }
+      })
     },
     addItemRow(item) {
       item.controlList.push({
@@ -399,5 +410,8 @@ export default {
   .el-textarea__inner {
     color: #000;
   }
+}
+/deep/ .el-input-group__prepend {
+  padding: 0 10px;
 }
 </style>

@@ -58,6 +58,13 @@ export const getNo = (deptPath) => {
         method: 'get',
     })
 }
+// 删除编号
+export const deleteNo = (deleteNo) => {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/deleteNo/${deleteNo}`,
+        method: 'delete',
+    })
+}
 // 查看管控清单详情
 export const queryControlListDetail = (monthTaskId) => {
     return request({
@@ -67,9 +74,9 @@ export const queryControlListDetail = (monthTaskId) => {
 }
 
 // 查询已办详情
-export const queryHasDoneDetail = (taskId, formId) => {
+export const queryHasDoneDetail = (formId) => {
     return request({
-        url: `/riskmgr_mgr/hidden_danger/query/hasDoneDetail/${taskId}/${formId}`,
+        url: `/riskmgr_mgr/hidden_danger/query/hasDoneDetail/${formId}`,
         method: 'get',
     })
 }
