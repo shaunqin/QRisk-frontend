@@ -11,12 +11,24 @@
       <el-row :gutter="16">
         <el-col :span="8">
           <el-form-item label="编号" prop="no">
-            <el-input v-model="form.no" style="width: 100%;" disabled />
+            <el-input v-model="form.no" style="width: 100%" disabled />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12" v-if="isAdd">
+          <el-form-item label="发起单位">
+            <el-select v-model="form.deptPath">
+              <el-option
+                v-for="item in deptList"
+                :key="item.deptPath"
+                :label="item.deptNameCn"
+                :value="item.deptPath"
+              ></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="24">
           <el-form-item label="主题" prop="title">
-            <el-input v-model="form.title" style="width: 100%;" />
+            <el-input v-model="form.title" style="width: 100%" />
           </el-form-item>
           <el-form-item label="背景" prop="background">
             <editer ref="background" v-model="form.background" v-if="dialog" />
@@ -28,44 +40,44 @@
       </el-row>
 
       <el-form-item label="风险防范措施">
-        <el-card v-for="(item,index) in form.measures" :key="index" style="margin-bottom: 10px;">
+        <el-card v-for="(item, index) in form.measures" :key="index" style="margin-bottom: 10px">
           <div>
             <department
-              :value="!item.deptPath?[]:item.deptPath.split(',')"
-              @change="deptChange($event,item)"
+              :value="!item.deptPath ? [] : item.deptPath.split(',')"
+              @change="deptChange($event, item)"
               :multiple="true"
-              style="line-height:20px"
+              style="line-height: 20px"
             />
           </div>
-          <div style="display:flex;margin-top:10px">
-            <div style="flex:1;">
+          <div style="display: flex; margin-top: 10px">
+            <div style="flex: 1">
               <el-input
                 v-model="item.content"
-                style="width: 100%;"
+                style="width: 100%"
                 placeholder="措施内容"
                 type="textarea"
                 rows="3"
               />
             </div>
-            <div style="width:180px;margin:0 10px">
+            <div style="width: 180px; margin: 0 10px">
               <el-date-picker
                 v-model="item.deadline"
                 value-format="yyyy-MM-dd"
                 placeholder="为空则是长期选项"
-                style="width:100%"
+                style="width: 100%"
               ></el-date-picker>
             </div>
-            <div style="width:55px">
+            <div style="width: 55px">
               <el-button type="danger" icon="el-icon-delete" size="mini" @click="delRisk(index)"></el-button>
             </div>
           </div>
         </el-card>
-        <el-row style="margin-top:10px">
+        <el-row style="margin-top: 10px">
           <el-col :span="24">
             <el-button
               plain
               icon="el-icon-plus"
-              style="width: 100%;border-style: dashed;"
+              style="width: 100%; border-style: dashed"
               @click="addRisk"
             >添加</el-button>
           </el-col>
@@ -82,11 +94,11 @@
 </template>
 
 <script>
-import { riskNoticeAdd, riskNoticeModify, riskNoticeSaveandSubmit, riskNoticeUpdateandSubmit } from "@/api/risk";
+import { riskNoticeAdd, riskNoticeModify, riskNoticeSaveandSubmit, riskNoticeUpdateandSubmit, } from "@/api/risk";
 import department from "@/components/Department/deptByRole";
 import { format } from "@/utils/datetime";
-import selectEmplotee from './selectEmplotee'
-import editer from '@/components/Tinymce'
+import selectEmplotee from "./selectEmplotee";
+import editer from "@/components/Tinymce";
 export default {
   components: { department, selectEmplotee, editer },
   data() {
@@ -100,22 +112,16 @@ export default {
         background: "",
         existingRisk: "",
         measures: [],
+        deptPath: '',
       },
       roleSelect: [],
       formRules: {
         no: [{ required: true, message: "编号不能为空", trigger: "blur" }],
         title: [{ required: true, message: "主题不能为空", trigger: "blur" }],
-        background: [
-          { required: true, message: "背景不能为空", trigger: "blur" },
-        ],
-        existingRisk: [
-          {
-            required: true,
-            message: "存在的安全风险不能为空",
-            trigger: "blur",
-          },
-        ],
+        background: [{ required: true, message: "背景不能为空", trigger: "blur" }],
+        existingRisk: [{ required: true, message: "存在的安全风险不能为空", trigger: "blur" },],
       },
+      deptList: [],
     };
   },
   props: {
@@ -124,7 +130,6 @@ export default {
       required: true,
     },
   },
-  created() { },
   methods: {
     format,
     cancel() {
@@ -226,11 +231,9 @@ export default {
     },
     editerChange(val, key) {
       this.form[key] = val;
-    }
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
-
+<style lang="scss" scoped></style>

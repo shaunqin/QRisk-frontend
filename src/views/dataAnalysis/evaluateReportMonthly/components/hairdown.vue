@@ -52,7 +52,7 @@ export default {
     data: {
       deep: true,
       handler(newData) {
-        this.measureId = newData.id;
+        this.measureId = newData.deptRisk ? newData.deptRisk.id : "";
       }
     }
   },

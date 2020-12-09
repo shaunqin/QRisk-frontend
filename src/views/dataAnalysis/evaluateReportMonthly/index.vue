@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="head-container"></div>
     <el-tabs v-model="tabIndex">
-      <el-tab-pane name="1" label="已下发">
+      <el-tab-pane name="1" label="全部">
         <tab1 v-if="tabIndex=='1'" :queryForm="queryForm" />
       </el-tab-pane>
       <el-tab-pane name="2" label="草稿">

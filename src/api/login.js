@@ -22,3 +22,12 @@ export const reFreshToken = () => {
     method: 'get'
   })
 }
+
+// token登录
+export const tokenLogin = (data) => {
+  return request({
+    url: '/sys_mgr/sign_in_token',
+    method: 'post',
+    data
+  })
+}

@@ -47,6 +47,11 @@ export const constantRoutes = [{
   hidden: true
 },
 {
+  path: '/tokenLogin',
+  component: () => import('@/views/login/tokenLogin'),
+  hidden: true
+},
+{
   path: '/auth-redirect',
   component: () => import('@/views/login/auth-redirect'),
   hidden: true

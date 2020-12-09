@@ -6,25 +6,24 @@
       :data="data"
       size="small"
       :highlight-current-row="true"
-      style="width: 100%;"
+      style="width: 100%"
       @selection-change="selectionChange"
     >
       <el-table-column prop="no" label="编号" width="130" />
       <el-table-column prop="title" label="标题" min-width="150" show-overflow-tooltip />
-      <el-table-column prop="noteContent" label="通知内容" min-width="150" show-overflow-tooltip />
-      <el-table-column prop="issueDept" label="下发部门" />
+      <el-table-column prop="deptPathCn" label="下发部门" />
       <el-table-column label="拟制人">
-        <template slot-scope="{row}">{{row.issueName}}[{{row.staffno}}]</template>
+        <template slot-scope="{ row }">{{ row.issueName }}[{{ row.issuer }}]</template>
       </el-table-column>
-          <el-table-column label="发布日期" width="100">
-        <template slot-scope="{row}">{{formatShortDate(row.createDate)}}</template>
+      <el-table-column label="发布日期" width="100">
+        <template slot-scope="{ row }">{{ formatShortDate(row.createTime) }}</template>
       </el-table-column>
     </el-table>
     <!--分页组件-->
     <el-pagination
       :total="total"
       :current-page="page"
-      style="margin-top: 8px;text-align: right"
+      style="margin-top: 8px; text-align: right"
       layout="total, prev, pager, next, sizes"
       @size-change="sizeChange"
       @current-change="pageChange"
@@ -42,8 +41,7 @@ export default {
   // components: { edetail },
   mixins: [initData],
   data() {
-    return {
-    };
+    return {};
   },
   mounted() {
     this.init();
@@ -54,8 +52,8 @@ export default {
       deep: true,
       handler() {
         this.init();
-      }
-    }
+      },
+    },
   },
   methods: {
     formatShortDate,
@@ -70,7 +68,7 @@ export default {
       this.$emit("selectionChange", { selections: selections });
     },
     detail(row) {
-      riskNoticeSubDetail(row.id).then(res => {
+      riskNoticeSubDetail(row.id).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
@@ -78,14 +76,13 @@ export default {
           _this.form = res.obj;
           _this.dialog = true;
         }
-      })
+      });
     },
     pdfUrl(row) {
-      return `${process.env.VUE_APP_BASE_API}${row.pdfUrl}`
-    }
+      return `${process.env.VUE_APP_BASE_API}${row.pdfUrl}`;
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

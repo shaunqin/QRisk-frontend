@@ -17,13 +17,12 @@
           <el-button type="text" size="mini" @click="detail(row)">{{row.title}}</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="noteContent" label="通知内容" min-width="150" show-overflow-tooltip />
-      <el-table-column prop="issueDept" label="下发部门" />
+      <el-table-column prop="deptPathCn" label="下发部门" />
       <el-table-column label="拟制人">
-        <template slot-scope="{row}">{{row.issueName}}[{{row.staffno}}]</template>
+        <template slot-scope="{row}">{{row.issueName}}[{{row.issuer}}]</template>
       </el-table-column>
       <el-table-column label="发布日期" width="100">
-        <template slot-scope="{row}">{{formatShortDate(row.createDate)}}</template>
+        <template slot-scope="{row}">{{formatShortDate(row.createTime)}}</template>
       </el-table-column>
     </el-table>
     <!--分页组件-->

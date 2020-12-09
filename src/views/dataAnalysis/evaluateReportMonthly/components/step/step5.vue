@@ -29,12 +29,6 @@
           <el-table-column label="落实截止日期">
             <template slot-scope="{row}">{{formatShortDate(row.implementDeadline)}}</template>
           </el-table-column>
-          <el-table-column label="填报措施" min-width="150">
-            <template slot-scope="{row}">
-              <span v-if="!row.riskMeasures">-</span>
-              <span v-else>{{row.riskMeasures}}</span>
-            </template>
-          </el-table-column>
         </el-table>
       </el-form-item>
       <!-- 下发措施 -->

@@ -90,7 +90,7 @@
         </el-form>
       </div>
       <el-tabs v-model="tabIndex">
-        <el-tab-pane label="已下发" name="1" v-if="!onlyLeader">
+        <el-tab-pane label="全部" name="1" v-if="!onlyLeader">
           <tab1 v-if="tabIndex==1" :queryForm="queryForm" />
         </el-tab-pane>
         <el-tab-pane label="草稿" name="2" v-if="!onlyLeader">

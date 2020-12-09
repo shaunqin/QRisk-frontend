@@ -1,5 +1,5 @@
 // const jwt = require('jsonwebtoken')
-import { login, logout } from '@/api/login'
+import { login, logout, tokenLogin } from '@/api/login'
 import { findCurrentUser } from '@/api/emplotee'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
@@ -155,7 +155,27 @@ const actions = {
       commit('SET_TOKEN', token)
       resolve()
     })
-  }
+  },
+  tokenLogin({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      tokenLogin(data).then(response => {
+        if (!response || response.ok === false || response.code != '200') {
+          commit('SET_TOKEN', '')
+          commit('SET_ROLES', [])
+          removeToken('Token')
+          resetRouter()
+          resolve(false)
+        }
+        // 本地token验证通过
+        if (response.obj) {
+          commit('SET_TOKEN', response.obj)
+        }
+        resolve(true)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
 }
 
 export default {

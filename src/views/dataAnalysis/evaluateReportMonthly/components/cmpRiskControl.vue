@@ -1,30 +1,36 @@
 <template>
   <div>
     <el-table :data="data" size="mini" :span-method="objectSpanMethod" border>
-      <el-table-column label="部门" prop="deptPathCn" />
+      <el-table-column label="下发单位" prop="deptPathCn" />
       <el-table-column label="风险" prop="riskName" />
       <el-table-column label="备注" prop="remark" />
-      <el-table-column label="办理人" width="80">
-        <template slot-scope="{row}">
+      <el-table-column label="填报截止日期">
+        <template slot-scope="{ row }">{{ formatShortDate(row.fillDeadline) }}</template>
+      </el-table-column>
+      <el-table-column label="落实截止日期">
+        <template slot-scope="{ row }">{{ formatShortDate(row.implementDeadline) }}</template>
+      </el-table-column>
+      <el-table-column label="办理人" width="100">
+        <template slot-scope="{ row }">
           <span v-if="!row.reviewerInfo">-</span>
           <el-popover v-else placement="left">
-            <el-table size="mini" :data="row.reviewerInfo" style="width:600px">
+            <el-table size="mini" :data="row.reviewerInfo" style="width: 600px">
               <el-table-column label="任务名称" prop="taskName" />
               <el-table-column label="角色">
-                <template slot-scope="{row}">
+                <template slot-scope="{ row }">
                   <span v-if="!row.groupName">-</span>
-                  <span v-else>{{row.groupName}}</span>
+                  <span v-else>{{ row.groupName }}</span>
                 </template>
               </el-table-column>
               <el-table-column label="候选人">
-                <template slot-scope="{row}">
+                <template slot-scope="{ row }">
                   <span v-if="!row.groupName">-</span>
-                  <span v-else>{{row.users}}</span>
+                  <span v-else>{{ row.users }}</span>
                 </template>
               </el-table-column>
               <el-table-column label="分配人">
-                <template slot-scope="{row}">
-                  <span v-if="!row.groupName">{{row.name}}</span>
+                <template slot-scope="{ row }">
+                  <span v-if="!row.groupName">{{ row.name }}</span>
                   <span v-else>-</span>
                 </template>
               </el-table-column>
@@ -43,36 +49,21 @@
           <span v-else>-</span>
         </template>
       </el-table-column>
-      <el-table-column label="填报措施">
-        <template slot-scope="{row}">
+      <el-table-column label="填报措施" min-width="150">
+        <template slot-scope="{ row }">
           <span v-if="!row.riskControlRiskVoList">-</span>
           <ul class="ul-risk" v-else>
-            <li v-for="item in row.riskControlRiskVoList" :key="item.id">{{item.riskMeasures}}</li>
+            <li v-for="item in row.riskControlRiskVoList" :key="item.id">{{ item.riskMeasures }}</li>
           </ul>
         </template>
       </el-table-column>
-      <el-table-column label="填报人">
-        <template slot-scope="{row}">
-          <span v-if="row.filler">{{row.fillerName}}[{{row.filler}}]</span>
-          <span v-else>-</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="80">
-        <template slot-scope="{row}">
-          <span v-if="!row.reviewing">-</span>
-          <el-button v-else type="primary" size="mini" @click="subHandle(row)">办理</el-button>
-        </template>
-      </el-table-column>
     </el-table>
-    <ehandle ref="ehandle" />
   </div>
 </template>
 
 <script>
-import ehandle from './handleTo4'
-import { riskControlQueryDetailTask } from '@/api/risk'
+import { formatShortDate } from '@/utils/datetime'
 export default {
-  components: { ehandle },
   data() {
     return {
       spanArr: [],
@@ -92,6 +83,7 @@ export default {
     }
   },
   methods: {
+    formatShortDate,
     getRowSpan(data) {
       this.spanArr = [];
       this.position = 0;
@@ -112,7 +104,7 @@ export default {
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       //表格合并行
-      if (columnIndex === 0 || columnIndex === 3 || columnIndex === 4 || columnIndex === 6 || columnIndex === 7) {
+      if (column.label == '下发单位' || column.label == '办理人' || column.label == '状态') {
         const _row = this.spanArr[rowIndex];
         const _col = _row > 0 ? 1 : 0;
         return {
@@ -121,25 +113,6 @@ export default {
         };
       }
     },
-    subHandle(row) {
-      this.loading = true;
-      riskControlQueryDetailTask(row.taskId, row.formId).then((res) => {
-        this.loading = false;
-        if (res.code != "200") {
-          this.$message.error(res.msg);
-        } else {
-          let _this = this.$refs.ehandle;
-          _this.data = res.obj;
-          _this.form.taskId = row.taskId;
-          _this.form.formId = res.obj.id;
-          _this.parentTaskId = row.parentTaskId;
-          if (res.obj.riskVoList && res.obj.riskVoList.length > 0) {
-            _this.form.riskControlRisk = res.obj.riskVoList;
-          }
-          _this.dialog = true;
-        }
-      });
-    }
   },
 }
 </script>

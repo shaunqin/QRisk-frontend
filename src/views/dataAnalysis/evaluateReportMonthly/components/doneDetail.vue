@@ -10,43 +10,25 @@
     <el-form ref="form" size="small" label-width="auto">
       <el-row :gutter="16">
         <el-col :span="8">
-          <el-form-item label="编号">{{data.no}}</el-form-item>
+          <el-form-item label="编号">{{ data.no }}</el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="年份">{{`${data.year}-${data.month}`}}</el-form-item>
+          <el-form-item label="年份">{{ `${data.year}-${data.month}` }}</el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="拟制人">{{data.issueName}}[{{data.issuer}}]</el-form-item>
+          <el-form-item label="拟制人">{{ data.issueName }}[{{ data.issuer }}]</el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="标题">{{data.title}}</el-form-item>
+      <el-form-item label="标题">{{ data.title }}</el-form-item>
       <el-form-item label="风险措施">
-        <el-table :data="data.riskControlExpVoList" size="mini">
-          <el-table-column label="下发单位" prop="deptPathCn" />
-          <el-table-column label="风险" prop="riskName" />
-          <el-table-column label="备注" prop="remark" />
-          <el-table-column label="填报截止日期">
-            <template slot-scope="{row}">{{formatShortDate(row.fillDeadline)}}</template>
-          </el-table-column>
-          <el-table-column label="落实截止日期">
-            <template slot-scope="{row}">{{formatShortDate(row.implementDeadline)}}</template>
-          </el-table-column>
-          <el-table-column label="填报措施" min-width="150">
-            <template slot-scope="{row}">
-              <span v-if="!row.riskControlRiskVoList">-</span>
-              <ul class="ul-risk" v-else>
-                <li v-for="item in row.riskControlRiskVoList" :key="item.id">{{item.riskMeasures}}</li>
-              </ul>
-            </template>
-          </el-table-column>
-        </el-table>
+        <cmpRiskControl :data="data.riskControlExpVoList" />
       </el-form-item>
       <!-- 审批记录 -->
-      <el-form-item label="审批记录" key="apprvalRecord" v-if="noticeComments.length>0">
+      <el-form-item label="审批记录" key="apprvalRecord" v-if="noticeComments.length > 0">
         <apprvalRecord :data="noticeComments" />
       </el-form-item>
       <!-- 下发措施 -->
-      <el-form-item key="childRisk" label="下发措施" v-if="childRisk.length>0">
+      <el-form-item key="childRisk" label="下发措施" v-if="childRisk.length > 0">
         <childRisk :data="childRisk" />
       </el-form-item>
     </el-form>
@@ -58,15 +40,16 @@
 </template>
 
 <script>
-import { formatShortDate } from '@/utils/datetime'
-import childRisk from './childRisk'
-import apprvalRecord from './apprvalRecord'
+import { formatShortDate } from "@/utils/datetime";
+import childRisk from "./childRisk";
+import apprvalRecord from "./apprvalRecord";
+import cmpRiskControl from './cmpRiskControl'
 export default {
-  components: { childRisk, apprvalRecord },
+  components: { childRisk, apprvalRecord, cmpRiskControl },
   data() {
     return {
       dialog: false,
-      data: {}
+      data: {},
     };
   },
   computed: {
@@ -74,15 +57,15 @@ export default {
       if (this.data.childRiskControlExpVoList) {
         return this.data.childRiskControlExpVoList;
       }
-      return []
+      return [];
     },
     noticeComments() {
       if (this.data.noticeComments) {
         return this.data.noticeComments;
       } else {
-        return []
+        return [];
       }
-    }
+    },
   },
   mounted() { },
   methods: {
@@ -95,7 +78,7 @@ export default {
     },
     resetForm() {
       this.dialog = false;
-    }
+    },
   },
 };
 </script>

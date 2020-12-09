@@ -164,6 +164,13 @@ export function queryFillCC(deptPath) {
     }
   })
 }
+// 发起单位
+export function queryRiskMgrDept() {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/query/riskMgrDepts`,
+    method: 'get',
+  })
+}
 // =========  风险提示 end ==============
 
 // ======== 专项风险 =======

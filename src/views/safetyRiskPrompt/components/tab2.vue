@@ -116,6 +116,7 @@ export default {
             background: obj.background,
             existingRisk: obj.existingRisk,
             measures: obj.measuresVos,
+            deptPath: obj.deptPath
           };
           _this.id = obj.id;
           _this.dialog = true;
