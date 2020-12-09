@@ -29,44 +29,37 @@
             <department :value="form.issueDepts" :multiple="true" @change="deptChange($event,'issueDepts')"></department>
           </el-form-item>
         </el-col>
-      </el-row>
-
-      <!-- 系统和工作分析记录表 -->
-      <el-card header="系统和工作分析记录表" key="1" v-if="form.type==2">
-        <el-row :gutter="8">
-          <el-col :span="8">
-            <el-form-item label="标题">
-              <el-input v-model="form.analysisTitle"></el-input>
-            </el-form-item>
-            <el-form-item label="编号">
-              <el-input :disabled="true" v-model="form.analysisNo"></el-input>
-            </el-form-item>
-            <el-form-item label="分析人">
-              <el-input v-model="form.analysis"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-          <el-form-item label="识别单位">
-            <department :value="form.identificationUnit" @change="deptChange($event,'identificationUnit')"></department>
+        <el-col :span="24">
+          <el-form-item label="附件">
+            <eupload @success="success"></eupload>
+            <span v-for="(item, index) in form.file" :key="index">
+                <el-link
+                  type="primary"
+                  v-show="item!=null"
+                  :href="getUrl(item?item.filePath:'')"
+                  target="_blank"
+                >{{item?item.originFileName:''}}</el-link>
+                <el-popconfirm
+                  title="确定删除该附件吗？"
+                  @onConfirm="del(item)"
+                >
+                <i class="el-icon-delete" style="cursor: pointer; margin-right: 10px;" slot="reference"></i>
+                </el-popconfirm>
+              </span>
           </el-form-item>
-            <el-form-item label="批准">
-              <el-input :disabled="true" v-model="form.approval"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="分析单位">
-              <department :value="form.analysisDept" @change="deptChange($event,'analysisDept')"></department>
-            </el-form-item>
-            <el-form-item label="批准日期">
-              <el-date-picker
-                v-model="form.approvalDate"
-                value-format="yyyy-MM-dd"
-                style="width:100%"
-                :disabled="true"
-              ></el-date-picker>
-            </el-form-item>
-          </el-col>
-        </el-row>
+        </el-col>
+        <el-col :span="24" v-if="isAdd">
+          <el-form-item label="类型">
+            <el-select v-model="form.type" placeholder="请选择活动区域">
+              <el-option label="通知" value="1"></el-option>
+              <el-option label="评估" value="2"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <!-- 系统和工作分析记录表 -->
+      <el-card header="系统和工作分析记录表" key="1" v-if="form.type==2 && (assessmentType == '1' || assessmentType == '2') || !isAdd && (assessmentType == '1' || assessmentType == '2')">
+        
         <el-row>
           <el-col :span="24">
             <el-button
@@ -79,13 +72,11 @@
           </el-col>
         </el-row>
         <el-table :data="form.specialRiskAnalyses" size="mini" max-height="500">
-          <el-table-column label="产品" min-width="130">
+          <el-table-column label="系统" min-width="130">
             <template slot-scope="{row}">
-              <dictSelect
-                type="product"
-                :value="row.product"
-                @change="dictChange($event,row,'product')"
-              />
+              <el-select v-model="row.product" placeholder="请选择系统" clearable>
+              <el-option label="维修工程" value="维修工程"></el-option>
+            </el-select>
             </template>
           </el-table-column>
           <el-table-column label="子系统" width="130">
@@ -160,17 +151,48 @@
       </el-card>
 
       <!-- 危险源清单 -->
-      <el-card header="危险源" key="2" style="margin-top:20px" v-if="form.type=='2'">
+      <el-card header="危险源" key="2" style="margin-top:20px" v-if="form.type=='2' || !isAdd">
+        <el-row :gutter="8">
+          <el-col :span="8">
+            <el-form-item label="标题">
+              <el-input v-model="form.analysisTitle"></el-input>
+            </el-form-item>
+            <el-form-item label="编号">
+              <el-input :disabled="true" v-model="form.analysisNo"></el-input>
+            </el-form-item>
+            <el-form-item label="分析人">
+              <el-input v-model="form.analysis"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+          <el-form-item label="识别单位">
+            <department :value="form.identificationUnit" @change="deptChange($event,'identificationUnit')"></department>
+          </el-form-item>
+            <el-form-item label="批准">
+              <el-input :disabled="true" v-model="form.approval"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="分析单位">
+              <department :value="form.analysisDept" @change="deptChange($event,'analysisDept')"></department>
+            </el-form-item>
+            <el-form-item label="批准日期">
+              <el-date-picker
+                v-model="form.approvalDate"
+                value-format="yyyy-MM-dd"
+                style="width:100%"
+                :disabled="true"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-button type="primary" size="mini" @click="addHazard" style="margin-bottom:10px">新增危险源</el-button>
         <el-card shadow="never" v-for="(item,index) in form.hazardList" :key="index">
           <el-form size="mini" inline label-width="70px">
-            <el-form-item label="产品">
-              <dict-select
-                :value="item.product"
-                type="product"
-                @change="dictChange($event,item,'product')"
-                style="width:130px"
-              />
+            <el-form-item label="系统">
+              <el-select v-model="item.product" style="width:130px" placeholder="请选择系统" clearable>
+              <el-option label="维修工程" value="维修工程"></el-option>
+            </el-select>
             </el-form-item>
             <el-form-item label="子系统">
               <dict-select
@@ -328,14 +350,16 @@
 </template>
 
 <script>
+import { delUpload } from "@/api/upload";
 import { specialRiskAdd, specialRiskModify, specialRiskQueryRiskLevel } from "@/api/risk";
 import { queryDictByName } from "@/api/dict";
 import { queryHazardList } from "@/api/standard";
 import department from "@/components/Department";
 import dictSelect from '@/components/common/dictSelect'
+import eupload from "@/components/Upload/index";
 
 export default {
-  components: { department, dictSelect },
+  components: { department, dictSelect, eupload },
   data() {
     return {
       loading: false,
@@ -391,8 +415,9 @@ export default {
               }],
             subSystem: "",
             product: ""
-          }
+          },
         ],
+        file: []
       },
       riskLevel1List: [],
       riskLevel2List: [],
@@ -402,6 +427,7 @@ export default {
       formRules: {
         title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
       },
+      assessmentType: "",
     };
   },
   props: {
@@ -481,7 +507,7 @@ export default {
         title: "", // 标题
         endTime: "", // 截止日期
         noteContent: "", // 通知内容
-        issueDept: null, // 下发部门
+        issueDepts: null, // 下发部门
         assType: "", // 评估类别
         analysisTitle: "", // 分析标题
         analysisNo: "", // 分析编号
@@ -525,6 +551,7 @@ export default {
             subSystem: "",
             product: ""
           }],
+        file: []
       };
     },
     deptChange(val, key) {
@@ -629,6 +656,27 @@ export default {
         this.hazardList = list;
       }
       item.hazard = this.hazardList[0] ? this.hazardList[0].diskNo : ""
+    },
+    success(res) {
+      if(res.code != '200') {
+        this.$message.error(res.msg);
+      } else {
+        this.form.file = this.form.file ? this.form.file : []
+        this.form.file.push(res.obj)
+      }
+    },
+    getUrl(url) {
+      return process.env.VUE_APP_BASE_API + url;
+    },
+    del(item) {
+      delUpload(item.id).then(res => {
+        if(res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          this.$message.success("删除成功！");
+          this.form.file.splice(this.form.file.indexOf(this.form.file.find(function(element){ return element.id === item.id; })), 1)
+        }
+      })
     },
   }
 };

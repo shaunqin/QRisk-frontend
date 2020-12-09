@@ -256,32 +256,34 @@ export default {
           this.seriesMore2render(res1_5, "data1_5", "bar", { showLabel: true });
           let res1_6 = res.find(r => r.sortNum == 1).list.find(r => r.sortNum == 6);
           this.seriesMore2render(res1_6, "data1_6", "bar", { showLabel: true });
+          /* let res1_7 = res.find(r => r.sortNum == 1).list.find(r => r.sortNum == 7);
+          this.data1_7 = [...res1_7.data] */
 
-          let res2_1 = res.find(r => r.sortNum == 2).list.find(r => r.sortNum == 7);
+          let res2_1 = res.find(r => r.sortNum == 2).list.find(r => r.sortNum == 9);
           this.series2render(res2_1, "data2_1", "line", { title: '公司近十二个月产品质量趋势' });
-          let res2_2 = res.find(r => r.sortNum == 2).list.find(r => r.sortNum == 8);
+          let res2_2 = res.find(r => r.sortNum == 2).list.find(r => r.sortNum == 10);
           this.seriesMore2render(res2_2, "data2_2", "bar");
-          let res2_3 = res.find(r => r.sortNum == 2).list.find(r => r.sortNum == 9);
+          let res2_3 = res.find(r => r.sortNum == 2).list.find(r => r.sortNum == 11);
           this.seriesMore2render(res2_3, "data2_3", "line", { showLabel: true, showRemark: true, remarkKey: "remark2_3" });
-          let res2_4 = res.find(r => r.sortNum == 2).list.find(r => r.sortNum == 10);
+          let res2_4 = res.find(r => r.sortNum == 2).list.find(r => r.sortNum == 12);
           this.seriesMore2render(res2_4, "data2_4", "bar", { rotate: 'no' });
-          let res2_5 = res.find(r => r.sortNum == 2).list.find(r => r.sortNum == 11);
+          let res2_5 = res.find(r => r.sortNum == 2).list.find(r => r.sortNum == 13);
           this.seriesMore2render(res2_5, "data2_5", "bar", { showLabel: true });
-          let res2_6 = res.find(r => r.sortNum == 2).list.find(r => r.sortNum == 12);
+          let res2_6 = res.find(r => r.sortNum == 2).list.find(r => r.sortNum == 14);
           this.seriesMore2render(res2_6, "data2_6", "bar", { showLabel: true });
 
-          let res3_1 = res.find(r => r.sortNum == 3).list.find(r => r.sortNum == 13);
+          let res3_1 = res.find(r => r.sortNum == 3).list.find(r => r.sortNum == 17);
           this.seriesMore2render(res3_1, "data3_1", "line", { showLabel: true });
-          let res3_2 = res.find(r => r.sortNum == 3).list.find(r => r.sortNum == 14);
+          let res3_2 = res.find(r => r.sortNum == 3).list.find(r => r.sortNum == 18);
           this.seriesMore2render(res3_2, "data3_2", "bar", { showLabel: true });
-          let res3_3 = res.find(r => r.sortNum == 3).list.find(r => r.sortNum == 15);
+          let res3_3 = res.find(r => r.sortNum == 3).list.find(r => r.sortNum == 19);
           this.seriesMore2render(res3_3, "data3_3", "bar", { showLabel: true });
 
-          let res4_1 = res.find(r => r.sortNum == 4).list.find(r => r.sortNum == 16);
+          let res4_1 = res.find(r => r.sortNum == 4).list.find(r => r.sortNum == 21);
           this.series2render(res4_1, "data4_1", "line", { title: '近十二个月公司平均趋势' });
-          let res4_2 = res.find(r => r.sortNum == 4).list.find(r => r.sortNum == 17);
+          let res4_2 = res.find(r => r.sortNum == 4).list.find(r => r.sortNum == 22);
           this.seriesMore2render(res4_2, "data4_2", "line", { showLabel: true });
-          let res4_3 = res.find(r => r.sortNum == 4).list.find(r => r.sortNum == 18);
+          let res4_3 = res.find(r => r.sortNum == 4).list.find(r => r.sortNum == 23);
           this.seriesMore2render(res4_3, "data4_3", "bar", { showLabel: true, rotate: 'no' });
 
           await this.getTableHead('4_41_0', 'columns1_7')

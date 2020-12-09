@@ -82,7 +82,7 @@
         show-overflow-tooltip
       />
       <el-table-column prop="remarks" label="备注" width="120px" show-overflow-tooltip />
-      <el-table-column label="操作" fixed="right" width="130">
+      <el-table-column label="操作" fixed="right" width="130" v-if="showOpera">
         <template slot-scope="{row}">
           <el-button type="danger" size="mini" icon="el-icon-delete" @click="subDelete(row.id)"></el-button>
           <el-button type="primary" size="mini" icon="el-icon-edit" @click="edit(row)"></el-button>
@@ -99,7 +99,7 @@ import { deleteHiddenDanger } from "@/api/hazards";
 
 export default {
   mixins: [initData],
-  props: ["taskId", "type"],
+  props: ["taskId", "type", "showOpera"],
   watch: {
     taskId() {
       if (!!this.taskId) {
