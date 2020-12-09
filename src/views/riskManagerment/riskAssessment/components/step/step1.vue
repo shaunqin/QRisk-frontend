@@ -408,6 +408,9 @@
               <el-table-column label="分配人" width="135">
                 <template slot-scope="{row}">{{row.name||"-"}}</template>
               </el-table-column>
+              <el-table-column label="分配时间" width="135">
+                <template slot-scope="{row}">{{formatShortDate(row.createTime) || "-"}}</template>
+              </el-table-column>
               <el-table-column label="角色">
                 <template slot-scope="{row}">{{row.groupName||"-"}}</template>
               </el-table-column>

@@ -64,7 +64,7 @@
       </el-form>
     </el-card>
     <!-- 危险源 -->
-    <el-card header="危险源" key="hazardVoList" v-if="data.type=='2'">
+    <el-card header="危险源" key="hazardVoList">
       <el-table :data="data.hazardVoList" size="mini">
         <el-table-column label="系统" prop="productName" />
         <el-table-column label="子系统" prop="subSystemName" />
@@ -114,6 +114,9 @@
         <el-table-column label="任务名称" prop="taskName"></el-table-column>
         <el-table-column label="分配人" width="135">
           <template slot-scope="{row}">{{row.name||"-"}}</template>
+        </el-table-column>
+        <el-table-column label="分配时间" width="135">
+          <template slot-scope="{row}">{{formatShortDate(row.createTime) || "-"}}</template>
         </el-table-column>
         <el-table-column label="角色">
           <template slot-scope="{row}">{{row.groupName||"-"}}</template>

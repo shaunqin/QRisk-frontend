@@ -113,6 +113,7 @@ export default {
           this.$message.error(res.msg);
         } else {
           const { obj } = res;
+          _this.assessmentType = this.assessmentType;
           _this.form = {
             id: obj.id,
             title: obj.title,

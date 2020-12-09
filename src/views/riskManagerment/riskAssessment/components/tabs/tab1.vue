@@ -113,6 +113,7 @@ export default {
       } else {
         this.isAdd = true;
         let _this = this.$refs.form;
+        _this.assessmentType = this.assessmentType;
         _this.form.assType = this.assessmentType;
         _this.form.type = "1";
         await this.getRiskListMgr()

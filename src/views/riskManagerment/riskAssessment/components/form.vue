@@ -58,41 +58,8 @@
         </el-col>
       </el-row>
       <!-- 系统和工作分析记录表 -->
-      <el-card header="系统和工作分析记录表" key="1" v-if="form.type==2 || !isAdd">
-        <el-row :gutter="8">
-          <el-col :span="8">
-            <el-form-item label="标题">
-              <el-input v-model="form.analysisTitle"></el-input>
-            </el-form-item>
-            <el-form-item label="编号">
-              <el-input :disabled="true" v-model="form.analysisNo"></el-input>
-            </el-form-item>
-            <el-form-item label="分析人">
-              <el-input v-model="form.analysis"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-          <el-form-item label="识别单位">
-            <department :value="form.identificationUnit" @change="deptChange($event,'identificationUnit')"></department>
-          </el-form-item>
-            <el-form-item label="批准">
-              <el-input :disabled="true" v-model="form.approval"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="分析单位">
-              <department :value="form.analysisDept" @change="deptChange($event,'analysisDept')"></department>
-            </el-form-item>
-            <el-form-item label="批准日期">
-              <el-date-picker
-                v-model="form.approvalDate"
-                value-format="yyyy-MM-dd"
-                style="width:100%"
-                :disabled="true"
-              ></el-date-picker>
-            </el-form-item>
-          </el-col>
-        </el-row>
+      <el-card header="系统和工作分析记录表" key="1" v-if="form.type==2 && (assessmentType == '1' || assessmentType == '2') || !isAdd && (assessmentType == '1' || assessmentType == '2')">
+        
         <el-row>
           <el-col :span="24">
             <el-button
@@ -185,6 +152,40 @@
 
       <!-- 危险源清单 -->
       <el-card header="危险源" key="2" style="margin-top:20px" v-if="form.type=='2' || !isAdd">
+        <el-row :gutter="8">
+          <el-col :span="8">
+            <el-form-item label="标题">
+              <el-input v-model="form.analysisTitle"></el-input>
+            </el-form-item>
+            <el-form-item label="编号">
+              <el-input :disabled="true" v-model="form.analysisNo"></el-input>
+            </el-form-item>
+            <el-form-item label="分析人">
+              <el-input v-model="form.analysis"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+          <el-form-item label="识别单位">
+            <department :value="form.identificationUnit" @change="deptChange($event,'identificationUnit')"></department>
+          </el-form-item>
+            <el-form-item label="批准">
+              <el-input :disabled="true" v-model="form.approval"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="分析单位">
+              <department :value="form.analysisDept" @change="deptChange($event,'analysisDept')"></department>
+            </el-form-item>
+            <el-form-item label="批准日期">
+              <el-date-picker
+                v-model="form.approvalDate"
+                value-format="yyyy-MM-dd"
+                style="width:100%"
+                :disabled="true"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-button type="primary" size="mini" @click="addHazard" style="margin-bottom:10px">新增危险源</el-button>
         <el-card shadow="never" v-for="(item,index) in form.hazardList" :key="index">
           <el-form size="mini" inline label-width="70px">
@@ -426,6 +427,7 @@ export default {
       formRules: {
         title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
       },
+      assessmentType: "",
     };
   },
   props: {
