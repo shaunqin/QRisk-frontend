@@ -16,6 +16,16 @@
           <el-col :span="24">
             <el-form-item label="标题">{{data.title}}</el-form-item>
             <el-form-item label="通知内容">{{data.noteContent}}</el-form-item>
+            <el-form-item label="附件">
+            <span v-for="(item, index) in data.file" :key="index">
+                <el-link
+                  type="primary"
+                  v-show="item!=null"
+                  :href="getUrl(item?item.filePath:'')"
+                  target="_blank"
+                >{{item?item.originFileName:''}}</el-link>
+              </span>
+          </el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -29,12 +39,12 @@
           </el-col>
         </el-row>
         <el-form-item label="编号">{{data.analysisNo}}</el-form-item>
-        <el-form-item label="分析人">{{data.analysisName}}</el-form-item>
+        <el-form-item label="分析人">{{data.analysis}}</el-form-item>
         <el-form-item label="分析单位">{{data.analysisDeptName}}</el-form-item>
         <el-form-item label="批准">{{data.approval}}</el-form-item>
         <el-form-item label="批准日期">{{formatShortDate(data.approvalDate)}}</el-form-item>
         <el-table :data="data.specialRiskAnalyses" size="mini" max-height="500">
-          <el-table-column label="产品" prop="productName" />
+          <el-table-column label="系统" prop="productName" />
           <el-table-column label="子系统" prop="subSystemName" />
           <el-table-column label="管理流程" prop="managementProcess" />
           <el-table-column label="责任单位" prop="reponsibleUnitName" />
@@ -54,9 +64,13 @@
       </el-form>
     </el-card>
     <!-- 危险源 -->
-    <el-card header="危险源" key="hazardVoList" v-if="data.type=='2'">
+    <el-card key="hazardVoList" class="chead">
+      <div slot="header" class="hslot">
+        <span>危险源</span>
+        <el-button type="text" icon="el-icon-tickets" @click="showReport">风险报告</el-button>
+      </div>
       <el-table :data="data.hazardVoList" size="mini">
-        <el-table-column label="产品" prop="productName" />
+        <el-table-column label="系统" prop="productName" />
         <el-table-column label="子系统" prop="subSystemName" />
         <el-table-column label="可能性" prop="possibilityName" />
         <el-table-column label="严重性" prop="seriousnessName" />
@@ -64,7 +78,7 @@
         <el-table-column label="管理流程" prop="managementProcess" />
         <el-table-column label="问题描述" prop="hazardSource" />
         <el-table-column label="根原因分析" prop="rootCauseAnalysis" width="140" show-overflow-tooltip />
-        <el-table-column label="可能导致的风险" prop="possibleRisks" width="160" show-overflow-tooltip />
+        <el-table-column label="可能导致的风险" prop="possibleRisksName" width="160" show-overflow-tooltip />
         <el-table-column label="风险控制措施" width="160" show-overflow-tooltip>
           <template slot-scope="{row}">
             <ul class="tab-ul">
@@ -92,7 +106,7 @@
         <el-table-column label="风险完成期限" width="160" show-overflow-tooltip>
           <template slot-scope="{row}">
             <ul class="tab-ul">
-              <li v-for="item in row.specialRiskMeasureList" :key="item.id">{{item.deadline}}</li>
+              <li v-for="item in row.specialRiskMeasureList" :key="item.id">{{formatShortDate(item.deadline)}}</li>
             </ul>
           </template>
         </el-table-column>
@@ -104,6 +118,9 @@
         <el-table-column label="任务名称" prop="taskName"></el-table-column>
         <el-table-column label="分配人" width="135">
           <template slot-scope="{row}">{{row.name||"-"}}</template>
+        </el-table-column>
+        <el-table-column label="分配时间" width="135">
+          <template slot-scope="{row}">{{formatShortDate(row.createTime) || "-"}}</template>
         </el-table-column>
         <el-table-column label="角色">
           <template slot-scope="{row}">{{row.groupName||"-"}}</template>
@@ -125,27 +142,41 @@
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="cancel">取消</el-button>
     </div>
+    
+    <report ref="report" :formId="formId" :disabled="true" @change="formIdChange" />
   </el-dialog>
 </template>
 
 <script>
 import { formatShortDate } from '@/utils/datetime'
 import apprvalRecord from "./apprvalRecord";
+import report from "./report";
 export default {
-  components: { apprvalRecord },
+  components: { apprvalRecord, report },
   data() {
     return {
+      formId: "",
       dialog: false,
       data: {}
     }
   },
   methods: {
     formatShortDate,
+    showReport() {
+      this.formId = this.data.id;
+      // this.$refs.report.dialog = true;
+    },
     cancel() {
       this.resetForm();
     },
     resetForm() {
       this.dialog = false;
+    },
+    getUrl(url) {
+      return process.env.VUE_APP_BASE_API + url;
+    },
+    formIdChange(val) {
+      this.formId = val;
     },
   }
 }
@@ -183,6 +214,16 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+}
+.chead {
+  /deep/ .el-card__header {
+    padding: 5px 20px;
+  }
+  .hslot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 </style>

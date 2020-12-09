@@ -291,7 +291,7 @@ export default {
         } else {
           if (res.obj) {
             this.formId = this.data.id;
-            this.$refs.report.dialog = true;
+            // this.$refs.report.dialog = true;
           } else {
             this.$message.success("填报成功");
             this.$parent.init();

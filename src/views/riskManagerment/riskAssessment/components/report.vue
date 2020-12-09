@@ -122,7 +122,11 @@ export default {
         return this.formId;
       },
       set(val) {
+        if(!this.form || this.form.length == 0) {
+        this.$emit("change", "");
+        } else {
         this.$emit("change", val);
+        }
       },
     },
   },
@@ -132,6 +136,14 @@ export default {
         this.loadData(val);
       }
     },
+    form: {
+      handler: function (val) {
+        if(val && val.length != 0) {
+          this.dialog = true
+        }
+      },
+      deep: true
+    }
   },
   methods: {
     formatShortDate,
@@ -160,7 +172,12 @@ export default {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
+          this._formId = "";
           this.form = res.obj;
+          if(!this.form || this.form.length == 0) {
+            this.$message.error("风险评价报告未生成！");
+            this.dialog = false;
+          }
         }
       });
     },

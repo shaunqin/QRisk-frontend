@@ -53,7 +53,7 @@
     />
     <edetail ref="detail" />
     <eform ref="form" :is-add="isAdd"></eform>
-    <formSp ref="formSp" />
+    <formSp ref="formSp" :is-add="isAdd" />
   </div>
 </template>
 
@@ -62,7 +62,7 @@ import initData from "@/mixins/initData";
 import { formatShortDate } from "@/utils/datetime";
 import eform from "../form";
 import edetail from "../detail";
-import formSp from '../formSp'
+import formSp from '../formSp';
 import { specialRiskDetail, queryRiskListMgr } from "@/api/risk";
 export default {
   components: { eform, edetail, formSp },
@@ -109,6 +109,7 @@ export default {
     }, */
     async addAssessment() {
       if(this.assessmentType == '4') {
+        this.isAdd = true;
         this.$refs.formSp.dialog = true;
       } else {
         this.isAdd = true;

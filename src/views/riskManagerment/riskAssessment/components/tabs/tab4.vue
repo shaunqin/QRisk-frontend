@@ -13,15 +13,21 @@
           <el-tag type="success">{{row.businessName}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="任务名称" width="180">
+      <el-table-column prop="name" label="流程状态" width="180">
         <template slot-scope="{row}">
           <el-tag type="warning">{{row.name}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="businessTitle" label="任务标题" show-overflow-tooltip />
+      <el-table-column prop="assignor" label="分配人" width="130" />
+      <el-table-column label="分配时间" width="140">
+        <template slot-scope="{row}">
+          {{format(row.assignorTime)}}
+        </template>
+      </el-table-column>
       <el-table-column prop="createBy" label="发起人" width="130" />
       <el-table-column prop="createTime" label="发起时间" width="140" />
-      <el-table-column label="操作" width="150">
+      <el-table-column label="操作" width="100" fixed="right">
         <template slot-scope="{row}">
           <!-- <el-button type="primary" size="mini" @click="doFillin(row)">填报</el-button> -->
           <el-button type="primary" size="mini" @click="subHandle(row)">办理</el-button>
@@ -49,7 +55,7 @@ import initData from "@/mixins/initData";
 import { specialRiskFill, queryRiskListMgr } from "@/api/risk";
 import handle from "../handle";
 import fillin from "../fillinDialog";
-import { formatShortDate } from '@/utils/datetime'
+import { format, formatShortDate } from '@/utils/datetime'
 export default {
   mixins: [initData],
   components: { handle, fillin },
@@ -66,6 +72,7 @@ export default {
     }
   },
   methods: {
+    format,
     beforeInit() {
       this.url = `/risk_mgr/special_risk_notice_mgr/query/queryTodo/${this.page}/${this.size}`;
       this.params = { ...this.queryForm };
@@ -80,6 +87,8 @@ export default {
           let _this = this.$refs.handle;
           _this.assessmentType = this.assessmentType;
           _this.data = res.obj
+          _this.data.endTime = formatShortDate(res.obj.endTime)
+          _this.data.issueDepts = []
           _this.data.approvalDate = formatShortDate(res.obj.approvalDate);
           if (res.obj.hazardVoList && res.obj.hazardVoList.length > 0) {
             _this.data.hazardList = res.obj.hazardVoList.map(item => {

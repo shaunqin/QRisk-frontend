@@ -7,6 +7,63 @@
     title="详情"
     custom-class="big_dialog"
   >
+  <div v-if="assessmentType=='4'">
+    <el-form size="mini" label-width="auto">
+      <el-form-item label="标题" prop="data.title">
+        {{data.title}}
+      </el-form-item>
+      <el-row :gutter="16">
+        <el-col :span="12">
+          <el-form-item label="下发部门" prop="data.issueDeptName">
+            {{data.issueDeptName}}
+          </el-form-item>
+          <el-form-item label="批准" prop="data.approval">
+            {{data.approval}}
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="分析人" prop="data.analysis">
+            {{data.analysis}}
+          </el-form-item>
+          <el-form-item label="截止日期" prop="data.endTime">
+            {{data.endTime}}
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+    <el-table :data="data.hazardVoList" size="mini" :span-method="objectSpanMethod" border height="550">
+      <el-table-column label="系统" prop="product" />
+      <el-table-column label="子系统" prop="subSystem" />
+      <el-table-column label="管理流程" prop="managementProcess" />
+      <el-table-column label="危险源描述" prop="hazardSource" min-width="300" show-overflow-tooltip />
+      <el-table-column label="危险源" prop="hazardSources" min-width="200" show-overflow-tooltip />
+      <el-table-column label="ID" prop="hazard" />
+      <el-table-column label="可能性" width="110" prop="possibility">
+      </el-table-column>
+      <el-table-column label="严重性" prop="seriousness" />
+      <el-table-column label="可能导致的风险" prop="possibleRisks" min-width="140">
+      </el-table-column>
+      <el-table-column label="风险等级" prop="riskLevel" />
+      <el-table-column label="根原因分析" width="200" prop="rootCauseAnalysis">
+      </el-table-column>
+      <el-table-column label="控制措施" min-width="200">
+        <template slot-scope="{row}">
+          {{row.specialRiskMeasureList[0].controlMeasure}}
+        </template>
+      </el-table-column>
+      <el-table-column label="责任单位" width="160">
+        <template slot-scope="{row}">
+          {{row.specialRiskMeasureList[0].reponsibleDept}}
+        </template>
+      </el-table-column>
+      <el-table-column label="控制状态" width="110">
+        <template slot-scope="{row}">
+          {{row.specialRiskMeasureList[0].completion}}
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
+  <div v-else>
     <el-card header="详细信息">
       <el-form size="small" label-width="80px" class="info" inline>
         <el-form-item label="编号">{{data.no}}</el-form-item>
@@ -64,7 +121,11 @@
       </el-form>
     </el-card>
     <!-- 危险源 -->
-    <el-card header="危险源" key="hazardVoList">
+    <el-card key="hazardVoList" class="chead">
+      <div slot="header" class="hslot">
+        <span>危险源</span>
+        <el-button type="text" icon="el-icon-tickets" @click="showReport">风险报告</el-button>
+      </div>
       <el-table :data="data.hazardVoList" size="mini">
         <el-table-column label="系统" prop="productName" />
         <el-table-column label="子系统" prop="subSystemName" />
@@ -108,6 +169,7 @@
         </el-table-column>
       </el-table>
     </el-card>
+    </div>
 
     <el-card header="办理人" key="reviewerInfo" v-if="data.reviewerInfo&&data.reviewerInfo.length>0">
       <el-table :data="data.reviewerInfo" size="mini">
@@ -138,22 +200,32 @@
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="cancel">取消</el-button>
     </div>
+    
+    <report ref="report" :formId="formId" :disabled="true" @change="formIdChange" />
   </el-dialog>
 </template>
 
 <script>
 import { formatShortDate } from '@/utils/datetime'
 import apprvalRecord from "./apprvalRecord";
+import report from "./report";
 export default {
-  components: { apprvalRecord },
+  components: { apprvalRecord, report },
   data() {
     return {
+      formId: "",
       dialog: false,
-      data: {}
+      data: {},
+      assessmentType: "",
+      spanArr: [25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     }
   },
   methods: {
     formatShortDate,
+    showReport() {
+      this.formId = this.data.id;
+      // this.$refs.report.dialog = true;
+    },
     cancel() {
       this.resetForm();
     },
@@ -162,6 +234,20 @@ export default {
     },
     getUrl(url) {
       return process.env.VUE_APP_BASE_API + url;
+    },
+    formIdChange(val) {
+      this.formId = val;
+    },
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      //表格合并行
+      if (columnIndex === 0 || columnIndex === 1 || columnIndex === 2) {
+        const _row = this.spanArr[rowIndex];
+        const _col = _row > 0 ? 1 : 0;
+        return {
+          rowspan: _row,
+          colspan: _col
+        };
+      }
     },
   }
 }
@@ -199,6 +285,16 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+}
+.chead {
+  /deep/ .el-card__header {
+    padding: 5px 20px;
+  }
+  .hslot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 </style>

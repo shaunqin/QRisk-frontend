@@ -1,5 +1,92 @@
 <template>
-  <div>
+<div>
+  <div v-if="assessmentType=='4'">
+    <el-form size="mini" label-width="auto">
+      <el-form-item label="标题">
+        <el-input v-model="data.title"></el-input>
+      </el-form-item>
+      <el-row :gutter="16">
+        <el-col :span="12">
+          <el-form-item label="下发部门">
+            <department :value="data.issueDepts" :multiple="true" @change="deptChange($event, data, 'issueDepts')" />
+          </el-form-item>
+          <el-form-item label="批准">
+            <el-input v-model="data.approval"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="分析人">
+            <el-input v-model="data.analysis"></el-input>
+          </el-form-item>
+          <el-form-item label="截止日期">
+            <el-date-picker v-model="data.endTime" value-format="yyyy-MM-dd" placeholder style="width: 100%"></el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+    <el-table :data="data.hazardList" size="mini" :span-method="objectSpanMethod" border height="550">
+      <el-table-column label="系统" prop="product" />
+      <el-table-column label="子系统" prop="subSystem" />
+      <el-table-column label="管理流程" prop="managementProcess" />
+      <el-table-column label="危险源描述" prop="hazardSource" min-width="300" show-overflow-tooltip />
+      <el-table-column label="危险源" prop="hazardSources" min-width="200" show-overflow-tooltip />
+      <el-table-column label="ID" prop="hazard" />
+      <el-table-column label="可能性" width="110">
+        <template slot-scope="{row}">
+          <!-- <el-select v-model="row.possibility" placeholder>
+            <el-option label="可能性" value="可能性"></el-option>
+          </el-select> -->
+          <dict-select
+              :clearable="false"
+              :value="row.possibility"
+              type="probability_level"
+              @change="dictChange($event,row,'possibility')"
+              style="width:90px"
+            />
+        </template>
+      </el-table-column>
+      <el-table-column label="严重性" prop="seriousness" />
+      <el-table-column label="可能导致的风险" prop="possibleRisks" min-width="140">
+        <template slot-scope="{row}">
+          <el-select v-model="row.possibleRisks" style="width:120px" :disabled="true">
+              <el-option
+                v-for="childItem in possibleRisksList"
+                :key="childItem.riskNo"
+                :label="childItem.riskName"
+                :value="childItem.riskNo"
+                >
+              </el-option>
+            </el-select>
+        </template>
+      </el-table-column>
+      <el-table-column label="风险等级" prop="riskLevel" />
+      <el-table-column label="根原因分析" width="200">
+        <template slot-scope="{row}">
+          <el-input v-model="row.rootCauseAnalysis" placeholder></el-input>
+        </template>
+      </el-table-column>
+      <el-table-column label="控制措施" min-width="200">
+        <template slot-scope="{row}">
+          <el-input v-model="row.specialRiskMeasureList[0].controlMeasure" placeholder></el-input>
+        </template>
+      </el-table-column>
+      <el-table-column label="责任单位" width="160">
+        <template slot-scope="{row}">
+          <department :value="row.specialRiskMeasureList[0].reponsibleDept" @change="respChange($event,row)" />
+        </template>
+      </el-table-column>
+      <el-table-column label="控制状态" width="110">
+        <template slot-scope="{row}">
+          <el-select v-model="row.specialRiskMeasureList[0].completion">
+            <el-option label="未控制" value="1"></el-option>
+            <el-option label="控制中" value="2"></el-option>
+            <el-option label="关闭" value="3"></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
+  <div v-else>
     <el-card header="详细信息">
       <el-form size="small" label-width="80px" class="info" inline>
         <el-form-item label="编号">{{data.no}}</el-form-item>
@@ -24,14 +111,11 @@
             <el-form-item label="编号">
               <el-input :disabled="true" v-model="data.analysisNo"></el-input>
             </el-form-item>
+          </el-col>
+          <el-col :span="8">
             <el-form-item label="分析人">
               <el-input v-model="data.analysis"></el-input>
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
-          <el-form-item label="识别单位">
-            <department class="mini" :value="data.identificationUnit" @change="ideUnitChange"></department>
-          </el-form-item>
             <el-form-item label="批准">
               <el-input :disabled="true" v-model="data.approval"></el-input>
             </el-form-item>
@@ -156,14 +240,11 @@
             <el-form-item label="编号">
               <el-input :disabled="true" v-model="data.analysisNo"></el-input>
             </el-form-item>
+          </el-col>
+          <el-col :span="8">
             <el-form-item label="分析人">
               <el-input :disabled="formEnable" v-model="data.analysis"></el-input>
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
-          <el-form-item label="识别单位">
-            <department class="mini" :value="data.identificationUnit" @change="ideUnitChange" :disabled="formEnable"></department>
-          </el-form-item>
             <el-form-item label="批准">
               <el-input :disabled="true" v-model="data.approval"></el-input>
             </el-form-item>
@@ -320,7 +401,7 @@
             <template slot-scope="scope">
               <department
                 :value="scope.row.reponsibleDept"
-                @change="deptChange($event,scope.row)"
+                @change="deptChange($event, scope.row, 'reponsibleDept')"
                 :disabled="riskEnable"
               />
             </template>
@@ -329,7 +410,7 @@
             <template slot-scope="scope">
               <el-select v-model="scope.row.completion" :disabled="completionEnable">
                 <el-option label="未控制" value="1"></el-option>
-                <el-option label="控制中" value="2"></el-option>
+                <el-option label="在控" value="2"></el-option>
                 <el-option label="关闭" value="3"></el-option>
               </el-select>
             </template>
@@ -367,7 +448,9 @@
         </div>
       </el-card>
     </el-card>
-    <!-- <el-card
+    <report ref="report" :formId="formId" :disabled="true" @change="formIdChange" />
+  </div>
+  <!-- <el-card
       header="已下发通知"
       key="measures"
     >
@@ -438,15 +521,14 @@
       </el-table-column>
     </el-table>
     </el-card> -->
-    <el-card
+  <el-card
       header="审批记录"
       key="noticeComments"
       v-if="data.noticeComments&&data.noticeComments.length>0"
     >
       <apprvalRecord :data="data.noticeComments" />
     </el-card>
-    <report ref="report" :formId="formId" :disabled="true" @change="formIdChange" />
-  </div>
+</div>
 </template>
 
 <script>
@@ -470,6 +552,7 @@ export default {
       totalhazardList: [], // 全部危险源
       hazardList: [], // 危险源
       possibleRisksList: [], // 可能导致的风险列表
+      spanArr: [25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     };
   },
   props: ["data", "form", "assessmentType"],
@@ -509,7 +592,7 @@ export default {
     formatShortDate,
     showReport() {
       this.formId = this.data.id;
-      this.$refs.report.dialog = true;
+      // this.$refs.report.dialog = true;
     },
     formIdChange(val) {
       this.formId = val;
@@ -547,7 +630,7 @@ export default {
         seriousness: "1",
         specialRiskMeasureList: [
           {
-            completion: "",
+            completion: "2",
             controlMeasure: "",
             deadline: "",
             reponsibleDept: null,
@@ -562,10 +645,11 @@ export default {
     },
     delHazard(index) {
       this.data.hazardList.splice(index, 1);
+      this.$forceUpdate();
     },
     addRow(item) {
       item.specialRiskMeasureList.push({
-        completion: "",
+        completion: "2",
         controlMeasure: "",
         deadline: "",
         reponsibleDept: null,
@@ -573,6 +657,7 @@ export default {
     },
     delCol(index, item) {
       item.specialRiskMeasureList.splice(index, 1);
+      this.$forceUpdate();
     },
     dictChange(val, item, key) {
       item[key] = val;
@@ -584,17 +669,21 @@ export default {
         this.queryRiskLevel(item.hazard, item.possibleRisks, item);
       } */
     },
-    deptChange(val, row) {
-      row.reponsibleDept = val;
+    deptChange(val, row, key) {
+      row[key] = val;
+      this.$forceUpdate();
     },
     deptAnalysisChange(val, key) {
       this.data[key] = val;
+      this.$forceUpdate();
     },
     deptChangeOnTb(val, row) {
       row.reponsibleUnit = val;
+      this.$forceUpdate();
     },
     ideUnitChange(val) {
       this.data.identificationUnit = val;
+      this.$forceUpdate();
     },
     /**查询风险 */
     queryRiskLevel(hazard, risk, item) {
@@ -604,6 +693,7 @@ export default {
             /* item.possibility = res.obj.possibility;
             item.seriousness = res.obj.seriousness; */
             item.riskLevel = `${res.obj}`;
+            this.$forceUpdate();
           }
         })
       }
@@ -624,6 +714,18 @@ export default {
         this.hazardList = list;
       }
       item.hazard = this.hazardList[0] ? this.hazardList[0].diskNo : ""
+      this.$forceUpdate();
+    },
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      //表格合并行
+      if (columnIndex === 0 || columnIndex === 1 || columnIndex === 2) {
+        const _row = this.spanArr[rowIndex];
+        const _col = _row > 0 ? 1 : 0;
+        return {
+          rowspan: _row,
+          colspan: _col
+        };
+      }
     },
   },
 };

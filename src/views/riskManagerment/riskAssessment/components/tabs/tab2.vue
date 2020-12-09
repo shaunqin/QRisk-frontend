@@ -54,6 +54,7 @@
       @current-change="pageChange"
     />
     <eform ref="form" :isAdd="isAdd" />
+    <formSp ref="formSp" :isAdd="isAdd" />
     <selectEmplotee ref="selectEmplotee" @on-submit="doSubmit" />
   </div>
 </template>
@@ -61,6 +62,7 @@
 <script>
 import initData from "@/mixins/initData";
 import eform from "../form";
+import formSp from '../formSp';
 import selectEmplotee from "../selectEmplotee";
 import {
   specialRiskDetail,
@@ -70,7 +72,7 @@ import {
 } from "@/api/risk";
 import { formatShortDate } from "@/utils/datetime";
 export default {
-  components: { eform, selectEmplotee },
+  components: { eform, selectEmplotee, formSp },
   data() {
     return {
       selections: [],
@@ -108,57 +110,69 @@ export default {
       this.isAdd = false;
       let id = this.selections[0];
       let _this = this.$refs.form;
+      let _that = this.$refs.formSp;
       specialRiskDetail(id).then(async (res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
           const { obj } = res;
-          _this.assessmentType = this.assessmentType;
-          _this.form = {
-            id: obj.id,
-            title: obj.title,
-            endTime: formatShortDate(obj.endTime),
-            noteContent: obj.noteContent,
-            issueDept: obj.issueDept,
-            identificationUnit: obj.identificationUnit,
-            assType: obj.assType,
-            analysisTitle: obj.analysisTitle,
-            analysisNo: obj.analysisNo,
-            analysisDept: obj.analysisDept,
-            analysis: obj.analysis,
-            approval: obj.approval,
-            approvalDate: formatShortDate(obj.approvalDate),
-            type: obj.type
-          };
-          if (obj.hazardVoList && obj.hazardVoList.length > 0) {
-            _this.form.hazardList = obj.hazardVoList.map(item => {
-              item.specialRiskMeasureList.map(childItem => {
-                childItem.deadline = formatShortDate(childItem.deadline)
+          if(this.assessmentType == '4') {
+            _that.assessmentType = this.assessmentType;
+            _that.form = { ...obj }
+            _that.form.endTime = formatShortDate(obj.endTime)
+            _that.form.issueDepts = []
+            if (obj.hazardVoList && obj.hazardVoList.length > 0) {
+              _that.list = [...obj.hazardVoList]
+            } else { _that.list = [] }
+            _that.dialog = true;
+          } else {
+            _this.assessmentType = this.assessmentType;
+            _this.form = {
+              id: obj.id,
+              title: obj.title,
+              endTime: formatShortDate(obj.endTime),
+              noteContent: obj.noteContent,
+              issueDept: obj.issueDept,
+              identificationUnit: obj.identificationUnit,
+              assType: obj.assType,
+              analysisTitle: obj.analysisTitle,
+              analysisNo: obj.analysisNo,
+              analysisDept: obj.analysisDept,
+              analysis: obj.analysis,
+              approval: obj.approval,
+              approvalDate: formatShortDate(obj.approvalDate),
+              type: obj.type
+            };
+            if (obj.hazardVoList && obj.hazardVoList.length > 0) {
+              _this.form.hazardList = obj.hazardVoList.map(item => {
+                item.specialRiskMeasureList.map(childItem => {
+                  childItem.deadline = formatShortDate(childItem.deadline)
+                })
+                return item
               })
-              return item
-            })
-          } else { _this.form.hazardList = [] }
-          if (obj.file && obj.file.length > 0) {
-            _this.form.file = [...obj.file]
-          } else { _this.form.file = [] }
-          if(obj.specialRiskAnalyses &&  obj.specialRiskAnalyses.length > 0) {
-            _this.form.specialRiskAnalyses = [...obj.specialRiskAnalyses]
-          } else { _this.form.specialRiskAnalyses = [{
-            product: "",  // 产品
-            subSystem: "", // 子系统
-            managementProcess: "", // 管理流程
-            reponsibleUnit: null, // 责任单位
-            post: "", // 岗位
-            processHuman: "", // 人
-            processMachine: "", // 机
-            processMaterial: "", // 料
-            processRegulation: "", // 法
-            processEnvironment: "", // 环
-            input: "", // 输入
-            output: "", // 输出
-          }] }
-          await this.getRiskListMgr()
-          _this.dialog = true;
+            } else { _this.form.hazardList = [] }
+            if (obj.file && obj.file.length > 0) {
+              _this.form.file = [...obj.file]
+            } else { _this.form.file = [] }
+            if(obj.specialRiskAnalyses &&  obj.specialRiskAnalyses.length > 0) {
+              _this.form.specialRiskAnalyses = [...obj.specialRiskAnalyses]
+            } else { _this.form.specialRiskAnalyses = [{
+              product: "",  // 产品
+              subSystem: "", // 子系统
+              managementProcess: "", // 管理流程
+              reponsibleUnit: null, // 责任单位
+              post: "", // 岗位
+              processHuman: "", // 人
+              processMachine: "", // 机
+              processMaterial: "", // 料
+              processRegulation: "", // 法
+              processEnvironment: "", // 环
+              input: "", // 输入
+              output: "", // 输出
+            }] }
+            await this.getRiskListMgr()
+            _this.dialog = true;
+          }
         }
       });
     },

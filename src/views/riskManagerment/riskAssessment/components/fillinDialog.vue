@@ -32,14 +32,11 @@
             <el-form-item label="编号">
               <el-input :disabled="true" v-model="form.analysisNo"></el-input>
             </el-form-item>
+          </el-col>
+          <el-col :span="8">
             <el-form-item label="分析人">
               <el-input v-model="form.analysis"></el-input>
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
-          <el-form-item label="识别单位">
-            <department class="mini" :value="form.identificationUnit" @change="ideUnitChange"></department>
-          </el-form-item>
             <el-form-item label="批准">
               <el-input :disabled="true" v-model="form.approval"></el-input>
             </el-form-item>
@@ -162,14 +159,11 @@
             <el-form-item label="编号">
               <el-input :disabled="true" v-model="form.analysisNo"></el-input>
             </el-form-item>
+          </el-col>
+          <el-col :span="8">
             <el-form-item label="分析人">
               <el-input v-model="form.analysis"></el-input>
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
-          <el-form-item label="识别单位">
-            <department class="mini" :value="form.identificationUnit" @change="ideUnitChange"></department>
-          </el-form-item>
             <el-form-item label="批准">
               <el-input :disabled="true" v-model="form.approval"></el-input>
             </el-form-item>

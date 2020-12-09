@@ -3,7 +3,7 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
-    title="新增"
+    :title="isAdd ? '新增' : '编辑'"
     custom-class="big_dialog"
   >
     <el-form size="mini" label-width="auto">
@@ -12,19 +12,19 @@
       </el-form-item>
       <el-row :gutter="16">
         <el-col :span="12">
-          <el-form-item label="部门">
-            <department :value="form.dept" @change="deptChange" />
+          <el-form-item label="下发部门">
+            <department :value="form.issueDepts" :multiple="true" @change="deptChange" />
           </el-form-item>
           <el-form-item label="批准">
-            <el-input v-model="form.pizhun"></el-input>
+            <el-input v-model="form.approval"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="分析人">
-            <el-input v-model="form.fenxir"></el-input>
+            <el-input v-model="form.analysis"></el-input>
           </el-form-item>
-          <el-form-item label="日期">
-            <el-date-picker v-model="form.date" value-format="yyyy-MM-dd" placeholder style="width: 100%"></el-date-picker>
+          <el-form-item label="截止日期">
+            <el-date-picker v-model="form.endTime" value-format="yyyy-MM-dd" placeholder style="width: 100%"></el-date-picker>
           </el-form-item>
         </el-col>
       </el-row>
@@ -32,9 +32,9 @@
     <el-table :data="list" size="mini" :span-method="objectSpanMethod" border height="550">
       <el-table-column label="系统" prop="product" />
       <el-table-column label="子系统" prop="subSystem" />
-      <el-table-column label="管理流程" prop="management" />
-      <el-table-column label="危险源描述" prop="hazardSource" min-width="300" />
-      <el-table-column label="危险源" prop="hazardSources" min-width="200" />
+      <el-table-column label="管理流程" prop="managementProcess" />
+      <el-table-column label="危险源描述" prop="hazardSource" min-width="300" show-overflow-tooltip />
+      <el-table-column label="危险源" prop="hazardSources" min-width="200" show-overflow-tooltip />
       <el-table-column label="ID" prop="hazard" />
       <el-table-column label="可能性" width="110">
         <template slot-scope="{row}">
@@ -72,17 +72,17 @@
       </el-table-column>
       <el-table-column label="控制措施" min-width="200">
         <template slot-scope="{row}">
-          <el-input v-model="row.controlMeasure" placeholder></el-input>
+          <el-input v-model="row.specialRiskMeasureList[0].controlMeasure" placeholder></el-input>
         </template>
       </el-table-column>
       <el-table-column label="责任单位" width="160">
         <template slot-scope="{row}">
-          <department :value="row.reponsibleDept" @change="respChange($event,row)" />
+          <department :value="row.specialRiskMeasureList[0].reponsibleDept" @change="respChange($event,row)" />
         </template>
       </el-table-column>
       <el-table-column label="控制状态" width="110">
         <template slot-scope="{row}">
-          <el-select v-model="row.completion">
+          <el-select v-model="row.specialRiskMeasureList[0].completion">
             <el-option label="未控制" value="1"></el-option>
             <el-option label="控制中" value="2"></el-option>
             <el-option label="关闭" value="3"></el-option>
@@ -100,9 +100,15 @@
 <script>
 import department from '@/components/Department'
 import dictSelect from "@/components/common/dictSelect";
-import { queryRiskListMgr } from "@/api/risk";
+import { specialRiskAdd, specialRiskModify, queryRiskListMgr } from "@/api/risk";
 export default {
   components: { department, dictSelect },
+  props: {
+    isAdd: {
+      type: Boolean,
+      required: true
+    }
+  },
   data() {
     return {
       loading: false,
@@ -110,31 +116,31 @@ export default {
       possibleRisksList: [],
       form: {},
       list: [
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '开航信息、适用机型、考察需求提供不及时、不准确', hazardSources: '未按规定传递信息', hazard: 'J4-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '前期对当地航站维修资源了解不到位', hazardSources: '其他', hazard: 'T2-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '机务考察组织实施不及时', hazardSources: '其他', hazard: 'T2-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '航站当地易发生台风和雪霜天气', hazardSources: '恶劣天气', hazard: 'T2-01', possibility: '', seriousness: '4', possibleRisks: 'C09', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地机场通用工具设备不足（如：轮档、安全锥', hazardSources: '工具设备资源不足', hazard: 'J2-02', possibility: '', seriousness: '4', possibleRisks: 'C09', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方机务维修工作基本工具不能满足要求', hazardSources: '工具设备资源不足', hazard: 'J2-02', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方机务维修工作梯不满足要求', hazardSources: '工具设备资源不足', hazard: 'J2-03', possibility: '', seriousness: '4', possibleRisks: 'C09', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方机务维修拖把不满足要求', hazardSources: '工具设备资源不足', hazard: 'J2-04', possibility: '', seriousness: '3', possibleRisks: 'A02', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方特种车辆不足', hazardSources: '工具设备资源不足', hazard: 'J2-05', possibility: '', seriousness: '4', possibleRisks: 'C09', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方无航材存放条件', hazardSources: '不能满足存储要求', hazard: 'F1-02', possibility: '', seriousness: '2', possibleRisks: '', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方无法提供机库', hazardSources: '不能满足工作要求', hazard: 'F1-03', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '航材配备不能及时到位', hazardSources: '工作所需器材准备不足', hazard: 'J2-03', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '油料配备不能及时到位', hazardSources: '工作所需器材准备不足', hazard: 'J2-03', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '工具设备配备不能及时到位', hazardSources: '工具设备资源不足', hazard: 'J2-02', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地无除防冰能力（如适用）', hazardSources: '其他', hazard: 'T2-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方没有符合资格要求的勤务、维修、放行人员', hazardSources: '人员资质不满足工作要求', hazard: 'H1-01', possibility: '', seriousness: '4', possibleRisks: 'C13', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方勤务、维修、放行人员人员数量不足', hazardSources: '合格的维修人员数量不足', hazard: 'J2-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方机务人员无或欠缺执飞机型相关维修放行经验', hazardSources: '缺少相关工作经验', hazard: 'H3-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方维修、放行人员未授权，勤务人员未声明', hazardSources: '人员资质不满足工作要求', hazard: 'H1-01', possibility: '', seriousness: '4', possibleRisks: 'C13', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '人员培训不能及时完成', hazardSources: '未按规定开展各类人员培训/复训', hazard: 'I2-01', possibility: '', seriousness: '4', possibleRisks: 'C13', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方欠缺相关机务管理程序', hazardSources: '其他', hazard: 'T2-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '机务协议未及时签署', hazardSources: '其他', hazard: 'T2-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地无可用工作单', hazardSources: '未按规定分发文件', hazard: 'C1-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地手册不能接近（获取）', hazardSources: '相关技术文件准备不足', hazard: 'J2-04', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
-        { product: '维修工程', subSystem: '维修计划和控制', management: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '航站维修资源需求执行情况未确认', hazardSources: '未按规定执行运行支持工作', hazard: 'L1-35', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', controlMeasure: '', reponsibleDept: null, completion: '' },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '开航信息、适用机型、考察需求提供不及时、不准确', hazardSources: '未按规定传递信息', hazard: 'J4-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '前期对当地航站维修资源了解不到位', hazardSources: '其他', hazard: 'T2-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '机务考察组织实施不及时', hazardSources: '其他', hazard: 'T2-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '航站当地易发生台风和雪霜天气', hazardSources: '恶劣天气', hazard: 'T2-01', possibility: '', seriousness: '4', possibleRisks: 'C09', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地机场通用工具设备不足（如：轮档、安全锥', hazardSources: '工具设备资源不足', hazard: 'J2-02', possibility: '', seriousness: '4', possibleRisks: 'C09', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方机务维修工作基本工具不能满足要求', hazardSources: '工具设备资源不足', hazard: 'J2-02', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方机务维修工作梯不满足要求', hazardSources: '工具设备资源不足', hazard: 'J2-03', possibility: '', seriousness: '4', possibleRisks: 'C09', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方机务维修拖把不满足要求', hazardSources: '工具设备资源不足', hazard: 'J2-04', possibility: '', seriousness: '3', possibleRisks: 'A02', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方特种车辆不足', hazardSources: '工具设备资源不足', hazard: 'J2-05', possibility: '', seriousness: '4', possibleRisks: 'C09', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方无航材存放条件', hazardSources: '不能满足存储要求', hazard: 'F1-02', possibility: '', seriousness: '2', possibleRisks: '', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方无法提供机库', hazardSources: '不能满足工作要求', hazard: 'F1-03', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '航材配备不能及时到位', hazardSources: '工作所需器材准备不足', hazard: 'J2-03', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '油料配备不能及时到位', hazardSources: '工作所需器材准备不足', hazard: 'J2-03', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '工具设备配备不能及时到位', hazardSources: '工具设备资源不足', hazard: 'J2-02', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地无除防冰能力（如适用）', hazardSources: '其他', hazard: 'T2-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方没有符合资格要求的勤务、维修、放行人员', hazardSources: '人员资质不满足工作要求', hazard: 'H1-01', possibility: '', seriousness: '4', possibleRisks: 'C13', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方勤务、维修、放行人员人员数量不足', hazardSources: '合格的维修人员数量不足', hazard: 'J2-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方机务人员无或欠缺执飞机型相关维修放行经验', hazardSources: '缺少相关工作经验', hazard: 'H3-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方维修、放行人员未授权，勤务人员未声明', hazardSources: '人员资质不满足工作要求', hazard: 'H1-01', possibility: '', seriousness: '4', possibleRisks: 'C13', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '人员培训不能及时完成', hazardSources: '未按规定开展各类人员培训/复训', hazard: 'I2-01', possibility: '', seriousness: '4', possibleRisks: 'C13', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方欠缺相关机务管理程序', hazardSources: '其他', hazard: 'T2-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '机务协议未及时签署', hazardSources: '其他', hazard: 'T2-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地无可用工作单', hazardSources: '未按规定分发文件', hazard: 'C1-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地手册不能接近（获取）', hazardSources: '相关技术文件准备不足', hazard: 'J2-04', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '航站维修资源需求执行情况未确认', hazardSources: '未按规定执行运行支持工作', hazard: 'L1-35', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
       ],
       spanArr: [25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     }
@@ -152,13 +158,13 @@ export default {
   },
   methods: {
     deptChange(val) {
-      this.form.dept = val;
+      this.form.issueDepts = val;
     },
     dictChange(val, item, key) {
       item[key] = val;
     },
     respChange(val, row) {
-      row.reponsibleDept = val;
+      row.specialRiskMeasureList[0].reponsibleDept = val;
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       //表格合并行
@@ -175,7 +181,50 @@ export default {
       this.resetForm();
     },
     doSubmit() {
-      this.resetForm();
+      this.loading = true;
+      if (this.isAdd) {
+        this.doAdd()
+      } else this.doModify()
+    },
+    doAdd() {
+      const params = {...this.form, hazardList: this.list, type: '2'}
+      specialRiskAdd(params)
+        .then(res => {
+          if (res.code === "200") {
+            this.$message({
+              message: "添加成功",
+              type: "success"
+            });
+            this.resetForm();
+            this.$parent.init();
+          } else {
+            this.$message.error(res.msg);
+          }
+          this.loading = false;
+        })
+        .catch(err => {
+          this.loading = false;
+        });
+    },
+    doModify() {
+      const params = {...this.form, hazardList: this.list}
+      specialRiskModify(params)
+        .then(res => {
+          if (res.code === "200") {
+            this.$message({
+              message: "修改成功",
+              type: "success"
+            });
+            this.resetForm();
+            this.$parent.init();
+          } else {
+            this.$message.error(res.msg);
+          }
+          this.loading = false;
+        })
+        .catch(err => {
+          this.loading = false;
+        });
     },
     resetForm() {
       this.dialog = false;

@@ -14,15 +14,21 @@
           <el-tag type="success">{{row.businessName}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="任务名称" width="180">
+      <el-table-column prop="name" label="流程状态" width="180">
         <template slot-scope="{row}">
           <el-tag type="warning">{{row.name}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="businessTitle" label="任务标题" show-overflow-tooltip />
+      <el-table-column prop="informant" label="填报人" width="130" />
+      <el-table-column label="填报时间" width="140">
+        <template slot-scope="{row}">
+          {{format(row.informantTime)}}
+        </template>
+      </el-table-column>
       <el-table-column prop="createBy" label="发起人" width="130" />
       <el-table-column prop="createTime" label="发起时间" width="140" />
-      <el-table-column label width="100">
+      <el-table-column label width="100" fixed="right">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="detail(row)">查看详情</el-button>
         </template>
@@ -43,13 +49,13 @@
 
 <script>
 import initData from "@/mixins/initData";
-import { format } from "@/utils/datetime";
+import { format, formatShortDate } from "@/utils/datetime";
 import { specialRiskGasDoneDetail } from '@/api/risk';
 import edetail from '../detail'
 export default {
   components: { edetail },
   mixins: [initData],
-  props: ["queryForm"],
+  props: ["queryForm", "assessmentType"],
   mounted() {
     this.init();
   },
@@ -80,6 +86,8 @@ export default {
         } else {
           let _this = this.$refs.edetail;
           _this.data = res.obj;
+          _this.data.endTime = formatShortDate(res.obj.endTime)
+          _this.assessmentType = this.assessmentType
           _this.dialog = true;
         }
       })

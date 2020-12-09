@@ -91,7 +91,7 @@
             <tab4 v-if="tabIndex=='4'" :assessmentType="assessmentType" :queryForm="queryForm" />
           </el-tab-pane>
           <el-tab-pane name="5" label="已办">
-            <tab5 v-if="tabIndex=='5'" :queryForm="queryForm" />
+            <tab5 v-if="tabIndex=='5'" :assessmentType="assessmentType" :queryForm="queryForm" />
           </el-tab-pane>
         </el-tabs>
         </el-scrollbar>
@@ -119,7 +119,6 @@ export default {
         { name: "变革管理", type: 2 },
         { name: "维修能力", type: 3 },
         { name: "航站审定", type: 4 },
-        { name: "关键风险", type: 5 },
         { name: "全员风险", type: 6 },
         { name: "其他评估", type: 7 },
       ],
