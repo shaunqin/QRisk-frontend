@@ -9,8 +9,8 @@
       style="width: 100%;"
       @selection-change="selectionChange"
     >
-      <el-table-column prop="no" label="编号" width="120" />
-      <el-table-column prop="title" label="标题" min-width="150" show-overflow-tooltip />
+      <el-table-column prop="no" label="编号" width="140" />
+      <el-table-column prop="title" label="标题" min-width="140" show-overflow-tooltip />
       <el-table-column prop="noteContent" label="通知内容" min-width="150" show-overflow-tooltip />
       <el-table-column prop="issueDept" label="下发部门" />
       <el-table-column label="拟制人">
@@ -62,6 +62,7 @@ export default {
     beforeInit() {
       this.url = `/risk_mgr/special_risk_notice_mgr/query/myIssued/${this.page}/${this.size}`;
       this.params = { ...this.queryForm };
+      this.params.assType = '5'
       return true;
     },
     // 选择切换

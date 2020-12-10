@@ -60,8 +60,8 @@
             </el-form-item>
           </el-form>
         </div>
-        <tab1 v-if="tabIndex=='1'" :queryForm="queryForm" />
-        <!-- <el-tabs v-model="tabIndex">
+        <!-- <tab1 v-if="tabIndex=='1'" :queryForm="queryForm" /> -->
+        <el-tabs v-model="tabIndex">
           <el-tab-pane name="1" label="已下发">
             <tab1 v-if="tabIndex=='1'" :queryForm="queryForm" />
           </el-tab-pane>
@@ -80,20 +80,20 @@
           <el-tab-pane name="5" label="已办">
             <tab5 v-if="tabIndex=='5'" :queryForm="queryForm" />
           </el-tab-pane>
-        </el-tabs> -->
+        </el-tabs>
   </div>
 </template>
 
 <script>
 import tab1 from './components/tabs/tab1';
-// import tab2 from './components/tabs/tab2';
-// import tab3 from './components/tabs/tab3';
-// import tab4 from './components/tabs/tab4';
-// import tab5 from './components/tabs/tab5';
+import tab2 from './components/tabs/tab2';
+import tab3 from './components/tabs/tab3';
+import tab4 from './components/tabs/tab4';
+import tab5 from './components/tabs/tab5';
 import { specialRiskQueryTodoCount } from '@/api/risk'
 import department from '@/components/Department'
 export default {
-  components: { tab1, department },
+  components: { tab1, tab2, tab3, tab4, tab5, department },
   data() {
     return {
       selections: [],
@@ -117,10 +117,13 @@ export default {
         this.form.endTime = "";
       }
     },
-    tabIndex() {
+    tabIndex(val) {
       this.form = {};
       this.date = "";
       this.toQuery();
+      if(val == '4') {
+        this.loadCount()
+      }
     }
   },
   created() {
@@ -131,7 +134,10 @@ export default {
       this.queryForm = Object.assign({}, this.form);
     },
     loadCount() {
-      specialRiskQueryTodoCount().then(res => {
+      const params = {
+        assType: '5'
+      }
+      specialRiskQueryTodoCount(params).then(res => {
         if (res.code != '200') {
           this.$message.error(res.msg);
         } else {

@@ -1,19 +1,13 @@
 <template>
   <div>
-    <!-- <div class="head-container">
-      <el-button
-        size="mini"
-        type="success"
-        icon="el-icon-plus"
-        @click="add"
-      >新建通知</el-button>
+    <div class="head-container">
       <el-button
         size="mini"
         type="success"
         icon="el-icon-plus"
         @click="addAssessment"
-      >新建评估</el-button>
-    </div> -->
+      >新建</el-button>
+    </div>
     <!--表格渲染-->
     <el-table
       v-loading="loading"
@@ -24,8 +18,8 @@
       @selection-change="selectionChange"
     >
       <el-table-column type="selection" width="45" />
-      <el-table-column prop="no" label="编号" width="120" />
-      <el-table-column label="标题" min-width="150" show-overflow-tooltip>
+      <el-table-column prop="no" label="编号" width="140" />
+      <el-table-column label="标题" min-width="140" show-overflow-tooltip>
         <template slot-scope="{row}">
           <el-button type="text" size="mini" @click="detail(row)">{{row.title}}</el-button>
         </template>
@@ -58,7 +52,7 @@ import initData from "@/mixins/initData";
 import { formatShortDate } from "@/utils/datetime";
 import eform from "../form";
 import edetail from "../detail";
-import { specialRiskDetail } from "@/api/risk";
+import { specialRiskDetail, queryRiskListMgr } from "@/api/risk";
 export default {
   components: { eform, edetail },
   mixins: [initData],
@@ -77,13 +71,14 @@ export default {
       handler() {
         this.init();
       }
-    }
+    },
   },
   methods: {
     formatShortDate,
     beforeInit() {
       this.url = `/risk_mgr/special_risk_notice_mgr/query/pageList/${this.page}/${this.size}`;
       this.params = { ...this.queryForm };
+      this.params.assType = '5'
       return true;
     },
     // 选择切换
@@ -91,18 +86,12 @@ export default {
       this.selections = selections;
       this.$emit("selectionChange", { selections: selections });
     },
-    add() {
+    async addAssessment() {
       this.isAdd = true;
       let _this = this.$refs.form;
-      _this.form.assType = 5;
-      _this.form.type = "1"; // 通知
-      _this.dialog = true;
-    },
-    addAssessment() {
-      this.isAdd = true;
-      let _this = this.$refs.form;
-      _this.form.assType = 5;
-      _this.form.type = "2"; // 评估
+      _this.form.assType = '5';
+      _this.form.type = "1";
+      await this.getRiskListMgr()
       _this.dialog = true;
     },
     detail(row) {
@@ -118,7 +107,18 @@ export default {
     },
     pdfUrl(row) {
       return `${process.env.VUE_APP_BASE_API}${row.pdfUrl}`
-    }
+    },
+    async getRiskListMgr() {
+      let _this = this.$refs.form;
+      await queryRiskListMgr().then(res => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          _this.form.hazardList[0].possibleRisks = res.obj[0].riskNo
+          _this.possibleRisksList = res.obj
+        }
+      })
+    },
   },
 };
 </script>

@@ -250,10 +250,11 @@ export function specialRiskGasDoneDetail(taskId, formId) {
   })
 }
 // 待办数量
-export function specialRiskQueryTodoCount() {
+export function specialRiskQueryTodoCount(params) {
   return request({
     url: `/risk_mgr/special_risk_notice_mgr/query/queryTodoCount`,
     method: 'get',
+    params
   })
 }
 // 查询对应风险评价报告

@@ -1,5 +1,92 @@
 <template>
-  <div>
+<div>
+  <div v-if="assessmentType=='4'">
+    <el-form size="mini" label-width="auto">
+      <el-form-item label="标题">
+        <el-input v-model="data.title"></el-input>
+      </el-form-item>
+      <el-row :gutter="16">
+        <el-col :span="12">
+          <el-form-item label="下发部门">
+            <department :value="data.issueDepts" :multiple="true" @change="deptChange($event, data, 'issueDepts')" />
+          </el-form-item>
+          <el-form-item label="批准">
+            <el-input v-model="data.approval"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="分析人">
+            <el-input v-model="data.analysis"></el-input>
+          </el-form-item>
+          <el-form-item label="截止日期">
+            <el-date-picker v-model="data.endTime" value-format="yyyy-MM-dd" placeholder style="width: 100%"></el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+    <el-table :data="list" size="mini" :span-method="objectSpanMethod" border height="550">
+      <el-table-column label="系统" prop="product" />
+      <el-table-column label="子系统" prop="subSystem" />
+      <el-table-column label="管理流程" prop="managementProcess" />
+      <el-table-column label="危险源描述" prop="hazardSource" min-width="300" show-overflow-tooltip />
+      <el-table-column label="危险源" prop="hazardSources" min-width="200" show-overflow-tooltip />
+      <el-table-column label="ID" prop="hazard" />
+      <el-table-column label="可能性" width="110">
+        <template slot-scope="{row}">
+          <!-- <el-select v-model="row.possibility" placeholder>
+            <el-option label="可能性" value="可能性"></el-option>
+          </el-select> -->
+          <dict-select
+              :clearable="false"
+              :value="row.possibility"
+              type="probability_level"
+              @change="dictChange($event,row,'possibility')"
+              style="width:90px"
+            />
+        </template>
+      </el-table-column>
+      <el-table-column label="严重性" prop="seriousness" />
+      <el-table-column label="可能导致的风险" prop="possibleRisks" min-width="140">
+        <template slot-scope="{row}">
+          <el-select v-model="row.possibleRisks" style="width:120px" :disabled="true">
+              <el-option
+                v-for="childItem in possibleRisksList"
+                :key="childItem.riskNo"
+                :label="childItem.riskName"
+                :value="childItem.riskNo"
+                >
+              </el-option>
+            </el-select>
+        </template>
+      </el-table-column>
+      <el-table-column label="风险等级" prop="riskLevel" />
+      <el-table-column label="根原因分析" width="200">
+        <template slot-scope="{row}">
+          <el-input v-model="row.rootCauseAnalysis" placeholder></el-input>
+        </template>
+      </el-table-column>
+      <el-table-column label="控制措施" min-width="200">
+        <template slot-scope="{row}">
+          <el-input v-model="row.specialRiskMeasureList[0].controlMeasure" placeholder></el-input>
+        </template>
+      </el-table-column>
+      <el-table-column label="责任单位" width="160">
+        <template slot-scope="{row}">
+          <department :value="row.specialRiskMeasureList[0].reponsibleDept" @change="respChange($event,row)" />
+        </template>
+      </el-table-column>
+      <el-table-column label="控制状态" width="110">
+        <template slot-scope="{row}">
+          <el-select v-model="row.specialRiskMeasureList[0].completion">
+            <el-option label="未控制" value="1"></el-option>
+            <el-option label="控制中" value="2"></el-option>
+            <el-option label="关闭" value="3"></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
+  <div v-else>
     <el-card header="详细信息">
       <el-form size="small" label-width="80px" class="info" inline>
         <el-form-item label="编号">{{data.no}}</el-form-item>
@@ -24,14 +111,11 @@
             <el-form-item label="编号">
               <el-input :disabled="true" v-model="data.analysisNo"></el-input>
             </el-form-item>
+          </el-col>
+          <el-col :span="8">
             <el-form-item label="分析人">
               <el-input v-model="data.analysis"></el-input>
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
-          <el-form-item label="识别单位">
-            <department class="mini" :value="data.identificationUnit" @change="ideUnitChange"></department>
-          </el-form-item>
             <el-form-item label="批准">
               <el-input :disabled="true" v-model="data.approval"></el-input>
             </el-form-item>
@@ -156,14 +240,11 @@
             <el-form-item label="编号">
               <el-input :disabled="true" v-model="data.analysisNo"></el-input>
             </el-form-item>
+          </el-col>
+          <el-col :span="8">
             <el-form-item label="分析人">
               <el-input :disabled="formEnable" v-model="data.analysis"></el-input>
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
-          <el-form-item label="识别单位">
-            <department class="mini" :value="data.identificationUnit" @change="ideUnitChange" :disabled="formEnable"></department>
-          </el-form-item>
             <el-form-item label="批准">
               <el-input :disabled="true" v-model="data.approval"></el-input>
             </el-form-item>
@@ -320,7 +401,7 @@
             <template slot-scope="scope">
               <department
                 :value="scope.row.reponsibleDept"
-                @change="deptChange($event,scope.row)"
+                @change="deptChange($event, scope.row, 'reponsibleDept')"
                 :disabled="riskEnable"
               />
             </template>
@@ -329,7 +410,7 @@
             <template slot-scope="scope">
               <el-select v-model="scope.row.completion" :disabled="completionEnable">
                 <el-option label="未控制" value="1"></el-option>
-                <el-option label="控制中" value="2"></el-option>
+                <el-option label="在控" value="2"></el-option>
                 <el-option label="关闭" value="3"></el-option>
               </el-select>
             </template>
@@ -367,7 +448,9 @@
         </div>
       </el-card>
     </el-card>
-    <!-- <el-card
+    <report ref="report" :formId="formId" :disabled="true" @change="formIdChange" />
+  </div>
+  <!-- <el-card
       header="已下发通知"
       key="measures"
     >
@@ -438,15 +521,14 @@
       </el-table-column>
     </el-table>
     </el-card> -->
-    <el-card
+  <el-card
       header="审批记录"
       key="noticeComments"
       v-if="data.noticeComments&&data.noticeComments.length>0"
     >
       <apprvalRecord :data="data.noticeComments" />
     </el-card>
-    <report ref="report" :formId="formId" :disabled="true" @change="formIdChange" />
-  </div>
+</div>
 </template>
 
 <script>
@@ -470,6 +552,34 @@ export default {
       totalhazardList: [], // 全部危险源
       hazardList: [], // 危险源
       possibleRisksList: [], // 可能导致的风险列表
+      listArr: [
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '开航信息、适用机型、考察需求提供不及时、不准确', hazardSources: '未按规定传递信息', hazard: 'J4-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '前期对当地航站维修资源了解不到位', hazardSources: '其他', hazard: 'T2-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '机务考察组织实施不及时', hazardSources: '其他', hazard: 'T2-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '航站当地易发生台风和雪霜天气', hazardSources: '恶劣天气', hazard: 'T2-01', possibility: '', seriousness: '4', possibleRisks: 'C09', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地机场通用工具设备不足（如：轮档、安全锥', hazardSources: '工具设备资源不足', hazard: 'J2-02', possibility: '', seriousness: '4', possibleRisks: 'C09', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方机务维修工作基本工具不能满足要求', hazardSources: '工具设备资源不足', hazard: 'J2-02', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方机务维修工作梯不满足要求', hazardSources: '工具设备资源不足', hazard: 'J2-03', possibility: '', seriousness: '4', possibleRisks: 'C09', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方机务维修拖把不满足要求', hazardSources: '工具设备资源不足', hazard: 'J2-04', possibility: '', seriousness: '3', possibleRisks: 'A02', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方特种车辆不足', hazardSources: '工具设备资源不足', hazard: 'J2-05', possibility: '', seriousness: '4', possibleRisks: 'C09', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方无航材存放条件', hazardSources: '不能满足存储要求', hazard: 'F1-02', possibility: '', seriousness: '2', possibleRisks: '', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方无法提供机库', hazardSources: '不能满足工作要求', hazard: 'F1-03', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '航材配备不能及时到位', hazardSources: '工作所需器材准备不足', hazard: 'J2-03', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '油料配备不能及时到位', hazardSources: '工作所需器材准备不足', hazard: 'J2-03', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '工具设备配备不能及时到位', hazardSources: '工具设备资源不足', hazard: 'J2-02', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地无除防冰能力（如适用）', hazardSources: '其他', hazard: 'T2-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方没有符合资格要求的勤务、维修、放行人员', hazardSources: '人员资质不满足工作要求', hazard: 'H1-01', possibility: '', seriousness: '4', possibleRisks: 'C13', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方勤务、维修、放行人员人员数量不足', hazardSources: '合格的维修人员数量不足', hazard: 'J2-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方机务人员无或欠缺执飞机型相关维修放行经验', hazardSources: '缺少相关工作经验', hazard: 'H3-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方维修、放行人员未授权，勤务人员未声明', hazardSources: '人员资质不满足工作要求', hazard: 'H1-01', possibility: '', seriousness: '4', possibleRisks: 'C13', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '人员培训不能及时完成', hazardSources: '未按规定开展各类人员培训/复训', hazard: 'I2-01', possibility: '', seriousness: '4', possibleRisks: 'C13', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地代理方欠缺相关机务管理程序', hazardSources: '其他', hazard: 'T2-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '机务协议未及时签署', hazardSources: '其他', hazard: 'T2-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地无可用工作单', hazardSources: '未按规定分发文件', hazard: 'C1-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '当地手册不能接近（获取）', hazardSources: '相关技术文件准备不足', hazard: 'J2-04', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+        { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '航站维修资源需求执行情况未确认', hazardSources: '未按规定执行运行支持工作', hazard: 'L1-35', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: ''}] },
+      ],
+      spanArr: [25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     };
   },
   props: ["data", "form", "assessmentType"],
@@ -486,6 +596,18 @@ export default {
     completionEnable() {
       return this.data.step != 5 && this.data.step != 6;
     },
+    list() {
+      const arr = this.listArr.map((item, index) => {
+        console.log(item.possibility, this.data.hazardVoList[index])
+        item.possibility = this.data.hazardVoList[index].possibility
+        item.rootCauseAnalysis = this.data.hazardVoList[index].rootCauseAnalysis
+        item.specialRiskMeasureList[0].controlMeasure = this.data.hazardVoList[index].specialRiskMeasureList[0].controlMeasure
+        item.specialRiskMeasureList[0].reponsibleDept = this.data.hazardVoList[index].specialRiskMeasureList[0].reponsibleDept
+        item.specialRiskMeasureList[0].completion = this.data.hazardVoList[index].specialRiskMeasureList[0].completion
+        return item
+      })
+      return arr
+    }
   },
   created() {
     // 危险源层级
@@ -509,7 +631,7 @@ export default {
     formatShortDate,
     showReport() {
       this.formId = this.data.id;
-      this.$refs.report.dialog = true;
+      // this.$refs.report.dialog = true;
     },
     formIdChange(val) {
       this.formId = val;
@@ -547,7 +669,7 @@ export default {
         seriousness: "1",
         specialRiskMeasureList: [
           {
-            completion: "",
+            completion: "2",
             controlMeasure: "",
             deadline: "",
             reponsibleDept: null,
@@ -562,10 +684,11 @@ export default {
     },
     delHazard(index) {
       this.data.hazardList.splice(index, 1);
+      this.$forceUpdate();
     },
     addRow(item) {
       item.specialRiskMeasureList.push({
-        completion: "",
+        completion: "2",
         controlMeasure: "",
         deadline: "",
         reponsibleDept: null,
@@ -573,6 +696,7 @@ export default {
     },
     delCol(index, item) {
       item.specialRiskMeasureList.splice(index, 1);
+      this.$forceUpdate();
     },
     dictChange(val, item, key) {
       item[key] = val;
@@ -584,17 +708,21 @@ export default {
         this.queryRiskLevel(item.hazard, item.possibleRisks, item);
       } */
     },
-    deptChange(val, row) {
-      row.reponsibleDept = val;
+    deptChange(val, row, key) {
+      row[key] = val;
+      this.$forceUpdate();
     },
     deptAnalysisChange(val, key) {
       this.data[key] = val;
+      this.$forceUpdate();
     },
     deptChangeOnTb(val, row) {
       row.reponsibleUnit = val;
+      this.$forceUpdate();
     },
     ideUnitChange(val) {
       this.data.identificationUnit = val;
+      this.$forceUpdate();
     },
     /**查询风险 */
     queryRiskLevel(hazard, risk, item) {
@@ -604,6 +732,7 @@ export default {
             /* item.possibility = res.obj.possibility;
             item.seriousness = res.obj.seriousness; */
             item.riskLevel = `${res.obj}`;
+            this.$forceUpdate();
           }
         })
       }
@@ -624,6 +753,18 @@ export default {
         this.hazardList = list;
       }
       item.hazard = this.hazardList[0] ? this.hazardList[0].diskNo : ""
+      this.$forceUpdate();
+    },
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      //表格合并行
+      if (columnIndex === 0 || columnIndex === 1 || columnIndex === 2) {
+        const _row = this.spanArr[rowIndex];
+        const _col = _row > 0 ? 1 : 0;
+        return {
+          rowspan: _row,
+          colspan: _col
+        };
+      }
     },
   },
 };

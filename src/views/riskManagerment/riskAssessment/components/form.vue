@@ -14,9 +14,9 @@
             <el-input v-model="form.title"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="12">
           <el-form-item label="截止日期">
-            <el-date-picker v-model="form.endTime" value-format="yyyy-MM-dd"></el-date-picker>
+            <el-date-picker v-model="form.endTime" value-format="yyyy-MM-dd" style="width: 100%;"></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -26,7 +26,7 @@
         </el-col>
         <el-col :span="24">
           <el-form-item label="下发部门">
-            <department :value="form.issueDepts" :multiple="true" @change="deptChange($event,'issueDepts')"></department>
+            <deptByRole :value="form.issueDepts" :multiple="true" @change="deptChange($event,'issueDepts')"></deptByRole>
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -160,14 +160,11 @@
             <el-form-item label="编号">
               <el-input :disabled="true" v-model="form.analysisNo"></el-input>
             </el-form-item>
+          </el-col>
+          <el-col :span="8">
             <el-form-item label="分析人">
               <el-input v-model="form.analysis"></el-input>
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
-          <el-form-item label="识别单位">
-            <department :value="form.identificationUnit" @change="deptChange($event,'identificationUnit')"></department>
-          </el-form-item>
             <el-form-item label="批准">
               <el-input :disabled="true" v-model="form.approval"></el-input>
             </el-form-item>
@@ -354,12 +351,13 @@ import { delUpload } from "@/api/upload";
 import { specialRiskAdd, specialRiskModify, specialRiskQueryRiskLevel } from "@/api/risk";
 import { queryDictByName } from "@/api/dict";
 import { queryHazardList } from "@/api/standard";
-import department from "@/components/Department";
+import department from "@/components/Department/index";
+import deptByRole from "@/components/Department/deptByRole";
 import dictSelect from '@/components/common/dictSelect'
 import eupload from "@/components/Upload/index";
 
 export default {
-  components: { department, dictSelect, eupload },
+  components: { department, deptByRole, dictSelect, eupload },
   data() {
     return {
       loading: false,

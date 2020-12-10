@@ -2,6 +2,7 @@
   <div>
     <div class="head-container">
       <el-button
+        v-if="showOpera"
         class="filter-item"
         size="mini"
         type="success"
