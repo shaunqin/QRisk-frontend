@@ -72,6 +72,7 @@ export default {
     beforeInit() {
       this.url = `/risk_mgr/special_risk_notice_mgr/query/hasDone/${this.page}/${this.size}`;
       this.params = { ...this.queryForm };
+      this.params.assType = '5';
       return true;
     },
     // 选择切换

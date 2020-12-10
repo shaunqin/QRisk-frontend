@@ -69,6 +69,9 @@ export default {
       handler() {
         this.init();
       }
+    },
+    assessmentType(val) {
+      this.init()
     }
   },
   methods: {
@@ -76,6 +79,7 @@ export default {
     beforeInit() {
       this.url = `/risk_mgr/special_risk_notice_mgr/query/queryTodo/${this.page}/${this.size}`;
       this.params = { ...this.queryForm };
+      this.params.assType = this.assessmentType;
       return true;
     },
     subHandle(row) {

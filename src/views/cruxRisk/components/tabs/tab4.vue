@@ -76,6 +76,7 @@ export default {
     beforeInit() {
       this.url = `/risk_mgr/special_risk_notice_mgr/query/queryTodo/${this.page}/${this.size}`;
       this.params = { ...this.queryForm };
+      this.params.assType = '5';
       return true;
     },
     subHandle(row) {

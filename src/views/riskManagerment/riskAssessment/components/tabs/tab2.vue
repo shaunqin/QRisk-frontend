@@ -122,8 +122,15 @@ export default {
             _that.form.endTime = formatShortDate(obj.endTime)
             _that.form.issueDepts = []
             if (obj.hazardVoList && obj.hazardVoList.length > 0) {
-              _that.list = [...obj.hazardVoList]
-            } else { _that.list = [] }
+              // _that.list = [...obj.hazardVoList]
+              _that.list.map((item, index) => {
+                item.possibility = obj.hazardVoList[index].possibility
+                item.rootCauseAnalysis = obj.hazardVoList[index].rootCauseAnalysis
+                item.specialRiskMeasureList[0].controlMeasure = obj.hazardVoList[index].specialRiskMeasureList[0].controlMeasure
+                item.specialRiskMeasureList[0].reponsibleDept = obj.hazardVoList[index].specialRiskMeasureList[0].reponsibleDept
+                item.specialRiskMeasureList[0].completion = obj.hazardVoList[index].specialRiskMeasureList[0].completion
+              })
+            }
             _that.dialog = true;
           } else {
             _this.assessmentType = this.assessmentType;

@@ -145,10 +145,16 @@ export default {
         this.form.endTime = "";
       }
     },
-    tabIndex() {
+    tabIndex(val) {
       this.form = {};
       this.date = "";
       this.toQuery();
+      if(val == '4') {
+        this.loadCount()
+      }
+    },
+    assessmentType(val) {
+      this.loadCount()
     }
   },
   created() {
@@ -159,7 +165,10 @@ export default {
       this.queryForm = Object.assign({}, this.form);
     },
     loadCount() {
-      specialRiskQueryTodoCount().then(res => {
+      const params = {
+        assType: this.assessmentType
+      }
+      specialRiskQueryTodoCount(params).then(res => {
         if (res.code != '200') {
           this.$message.error(res.msg);
         } else {
