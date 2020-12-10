@@ -17,9 +17,10 @@
     filterable
     style="width:100%"
     clearable
+    v-loading="loading"
   >
-    <el-checkbox v-model="checkAll" @change="ckChange">全选</el-checkbox>
-    <el-divider></el-divider>
+    <el-checkbox v-if="multiple" v-model="checkAll" @change="ckChange">全选</el-checkbox>
+    <el-divider v-if="multiple"></el-divider>
     <el-option
       v-for="item in options"
       :key="item.deptId"
@@ -37,6 +38,7 @@ export default {
   components: { Treeselect },
   data() {
     return {
+      loading: false,
       options: [],
       treeData: [],
       checkAll: false
@@ -79,7 +81,9 @@ export default {
   },
   created() {
     let form = !!this.measureId ? { id: this.measureId } : {}
+    this.loading = true;
     queryDepts(this.url, form).then((res) => {
+      this.loading = false;
       this.options = res.obj;
     });
   },

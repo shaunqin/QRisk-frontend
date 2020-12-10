@@ -7,54 +7,151 @@
     title="详情"
     custom-class="big_dialog"
   >
-    <el-card header="基本信息">
-      <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="auto">
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="任务名称" prop="aa">{{form.aa}}</el-form-item>
-            <el-form-item label="年度">
-              {{form.dd}}
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="编号" prop="bb">
-              {{form.bb}}
-            </el-form-item>
-            <el-form-item label="反馈日期">
-              {{form.ee}}
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="时间">
-              {{form.cc}}
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-    </el-card>
-    <el-card header="隐患清单" style="margin-top:20px">
-      <!--表格渲染-->
-      <el-table :data="data" size="small" style="width: 100%;" max-height="400px">
-        <el-table-column type="index" width="50" />
-        <el-table-column prop="aa" label="隐患名称" />
-        <el-table-column prop="bb" label="发现时间"  />
-        <el-table-column prop="cc" label="来源"  />
-        <el-table-column prop="dd" label="等级" />
-        <el-table-column prop="ee" label="主体单位" />
-        <el-table-column prop="ff" label="涉及业务" />
-        <el-table-column prop="gg" label="涉及流程"/>
-        <el-table-column prop="hh" label="监管单位"/>
-        <el-table-column prop="ii" label="原因分析" />
-        <el-table-column prop="jj" label="等效措施" />
-        <el-table-column prop="kk" label="责任人" />
-        <el-table-column prop="ll" label="整改时限"/>
-        <el-table-column prop="mm" label="验证标准" />
-        <el-table-column prop="nn" label="措施实施情况跟踪" />
-        <el-table-column prop="oo" label="治理结果情况跟踪" />
-        <el-table-column prop="pp" label="整改进展" />
-        <el-table-column prop="qq" label="备注" />
-      </el-table>
-    </el-card>
+    <el-form ref="form" size="mini" inline label-width="80px">
+      <el-row class="fill-row">
+        <el-col :span="24">
+          <el-form-item label="隐患名称">
+            <el-input
+              v-model="data.hiddenName"
+              placeholder
+              type="textarea"
+              rows="3"
+              :disabled="disabled"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-form-item label="编号">
+        <el-input v-model="data.no" style="width: 140px" disabled></el-input>
+      </el-form-item>
+      <el-form-item label="发现时间">
+        <el-date-picker
+          v-model="data.findTime"
+          value-format="yyyy-MM-dd"
+          style="width: 140px"
+          :disabled="disabled"
+        ></el-date-picker>
+      </el-form-item>
+      <el-form-item label="来源">
+        <dictSelect
+          type="data_source"
+          :value="data.source"
+          @change="dictChange($event,item,'source')"
+          style="width: 140px"
+          :disabled="disabled"
+        />
+      </el-form-item>
+      <el-form-item label="类型">
+        <dictSelect
+          type="hazard_source"
+          :value="data.type"
+          @change="dictChange($event,item,'type')"
+          style="width: 140px"
+          :disabled="disabled"
+        />
+      </el-form-item>
+      <el-form-item label="等级">
+        <dictSelect
+          type="hidden_danger_level"
+          :value="data.levels"
+          @change="dictChange($event,item,'levels')"
+          style="width: 140px"
+          :disabled="disabled"
+        />
+      </el-form-item>
+      <el-form-item label="涉及业务">
+        <dictSelect
+          type="product"
+          :value="data.involveBusiness"
+          @change="dictChange($event,item,'involveBusiness')"
+          style="width: 140px"
+          :disabled="disabled"
+        />
+      </el-form-item>
+      <el-form-item label="涉及流程">
+        <dictSelect
+          type="system"
+          :value="data.involveProcess"
+          @change="dictChange($event,item,'involveProcess')"
+          style="width: 140px"
+          :disabled="disabled"
+        />
+      </el-form-item>
+      <el-form-item label="监管单位">
+        <el-input
+          placeholder="请输入内容"
+          v-model="data.supervisoryUnit"
+          class="input-with-select"
+          :disabled="disabled"
+        >
+          <template slot="append">
+            <dictSelect
+              type="supervisory_unit"
+              :value="data.supervisoryUnit"
+              @change="dictChange($event,item,'supervisoryUnit')"
+              style="width: 38px"
+              :clearable="false"
+              :disabled="disabled"
+            />
+          </template>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="整改进展">
+        <el-select
+          v-model="data.rectificationProgress"
+          placeholder
+          style="width: 140px"
+          :disabled="disabled"
+        >
+          <el-option label="正在整改" value="正在整改"></el-option>
+          <el-option label="关闭" value="关闭"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-row class="fill-row" :gutter="16">
+        <el-col :span="12">
+          <el-form-item label="原因分析">
+            <el-input
+              v-model="data.reasonAnalysis"
+              placeholder
+              type="textarea"
+              rows="3"
+              :disabled="disabled"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="治理效果验证标准">
+            <el-input
+              v-model="data.verificationFollowUp"
+              type="textarea"
+              rows="3"
+              :disabled="disabled"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="等效措施">
+            <el-input
+              v-model="data.equivalentMeasures"
+              placeholder
+              type="textarea"
+              rows="3"
+              :disabled="disabled"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="备注">
+            <el-input v-model="data.remarks" type="textarea" rows="3" :disabled="disabled"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+    <!--表格渲染-->
+    <el-table :data="data.controlList" size="small" style="width: 100%" max-height="400px">
+      <el-table-column type="index" width="50" />
+      <el-table-column label="整改措施" prop="measures"></el-table-column>
+      <el-table-column label="责任人" prop="responsiblePerson"></el-table-column>
+      <el-table-column label="整改时限" prop="deadline"></el-table-column>
+      <el-table-column label="措施实施情况跟踪" prop="implementationOfMeasures"></el-table-column>
+      <el-table-column label="治理结果情况跟踪" prop="governanceResults"></el-table-column>
+    </el-table>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
@@ -63,181 +160,47 @@
 </template>
 
 <script>
-import { add, modify } from "@/api/emplotee.js";
-
+import dictSelect from '@/components/common/dictSelect'
 export default {
+  components: { dictSelect },
   data() {
     return {
       loading: false,
       dialog: false,
-      form: {
-        aa: "",
-        bb: "",
-        cc: "",
-        dd: "",
-        ee: ""
-      },
-      roleSelect: [],
-      formRules: {
-        aa: [{ required: true, message: "请填写名称", trigger: "blur" }],
-        bb: [{ required: true, message: "请填写名称", trigger: "blur" }]
-      },
-      data: [],
-      form2: {}
+      disabled: true,
+      data: {},
     };
   },
   props: {},
-  created() {
-    this.data = [
-      {
-        aa: "方案制定存在缺陷",
-        bb: "2020-02-22",
-        cc: "数据分析",
-        dd: "3",
-        ee: "上海",
-        ff: "维修",
-        gg: "开发",
-        hh: "上海",
-        ii: "方案制定",
-        jj: "重新制定",
-        kk: "admin",
-        ll: "3",
-        mm: "符合规范",
-        nn: "跟踪状态",
-        oo: "跟踪状态",
-        pp: "待完成",
-        qq: "备注信息"
-      }
-    ];
-  },
   methods: {
     cancel() {
       this.resetForm();
     },
     doSubmit() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          // this.loading = true;
-          // if (this.isAdd) {
-          //   this.doAdd()
-          // } else this.doModify()
-
-          this.dialog = false;
-          this.$message({
-            message: "添加成功",
-            type: "success"
-          });
-          this.resetForm();
-        }
-      });
-    },
-    doAdd() {
-      // this.delwithRoleList()
-      const data = this.roleSelect;
-      let arr = [];
-      for (let i = 0; i < data.length; i++) {
-        let obj = {
-          id: ""
-        };
-        obj.id = data[i];
-        arr.push(obj);
-      }
-      this.form.roleList = arr;
-      add(this.form)
-        .then(res => {
-          if (res.code === "200") {
-            this.$message({
-              message: "添加成功",
-              type: "success"
-            });
-          } else {
-            this.$message.error(res.msg);
-          }
-          this.resetForm();
-          this.loading = false;
-          this.$parent.init();
-        })
-        .catch(err => {
-          this.loading = false;
-        });
-    },
-    doModify() {
-      modify(this.form)
-        .then(res => {
-          if (res.code === "200") {
-            this.$message({
-              message: "修改成功",
-              type: "success"
-            });
-          } else {
-            this.$message.error(res.msg);
-          }
-          this.resetForm();
-          this.loading = false;
-          this.$parent.init();
-        })
-        .catch(err => {
-          this.loading = false;
-        });
+      this.resetForm();
     },
     resetForm() {
       this.dialog = false;
-      this.$refs["form"].resetFields();
-      this.form = {
-        aa: "",
-        bb: "",
-        cc: "",
-        dd: "",
-        ee: ""
-      };
-      this.roleSelect = [];
     },
-    roleChange(e) {
-      if (e.length <= 1) {
-        this.form.roleList = e[0];
-      }
-      let arr = [];
-      for (let i = 0; i < e.length; i++) {
-        let obj = {
-          id: ""
-        };
-        obj.id = e[i];
-        arr.push(obj);
-      }
-      this.form.roleList = arr;
+    dictChange(val, row, key) {
+      row[key] = val;
     },
-    addRow(e) {
-      this.data.push({
-        aa: "",
-        bb: "",
-        cc: "",
-        dd: "",
-        ee: "",
-        ff: "",
-        gg: "",
-        hh: "",
-        ii: "",
-        jj: "",
-        kk: "",
-        ll: "",
-        mm: "",
-        nn: "",
-        oo: "",
-        pp: "",
-        qq: ""
-      });
-    }
   }
 };
 </script>
 
 
 <style lang="scss" scoped>
-
-.roleSelect {
-  width: 370px;
+.fill-row {
+  /deep/ .el-form-item {
+    display: flex;
+    .el-form-item__content {
+      flex: 1;
+    }
+  }
 }
-.el-select-dropdown {
-  z-index: 99999999999999 !important;
+/deep/ .is-disabled .el-input__inner,
+/deep/ .is-disabled .el-textarea__inner {
+  color: #000;
 }
 </style>

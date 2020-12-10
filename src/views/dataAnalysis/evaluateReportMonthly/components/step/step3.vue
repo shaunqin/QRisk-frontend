@@ -42,13 +42,33 @@
           :gutter="16"
           class="cus-row"
         >
-          <el-col :span="6">
+          <el-col :span="4">
             <el-select size="mini" v-model="item.riskId" placeholder="请选择风险" style="width:100%">
               <el-option v-for="r in riskList" :key="r.value" :label="r.label" :value="r.value"></el-option>
             </el-select>
           </el-col>
-          <el-col :span="16">
+          <el-col :span="8">
             <el-input size="mini" v-model="item.riskMeasures" placeholder="请填写措施"></el-input>
+          </el-col>
+          <el-col :span="6">
+            <department
+              class="mini"
+              :value="item.respDeptList"
+              @change="deptChange($event,item)"
+              style="width:100%"
+              :multiple="true"
+              :flat="true"
+              :path="data.deptRisk.deptPath"
+              :defaultExpand="Infinity"
+            />
+          </el-col>
+          <el-col :span="4">
+            <el-date-picker
+              size="mini"
+              v-model="item.deadline"
+              value-format="yyyy-MM-dd"
+              style="width:100%"
+            ></el-date-picker>
           </el-col>
           <el-col :span="2">
             <el-button type="danger" size="mini" icon="el-icon-delete" @click="delRow(index)"></el-button>
@@ -63,8 +83,9 @@
 <script>
 import { formatShortDate } from '@/utils/datetime';
 import childRisk from '../childRisk'
+import department from '@/components/Department'
 export default {
-  components: { childRisk },
+  components: { childRisk, department },
   data() {
     return {
       accessory: {},
@@ -146,11 +167,17 @@ export default {
     addRow() {
       this.form.riskControlRisk.push({
         riskId: "",
-        riskMeasures: ""
+        riskMeasures: "",
+        respDeptList: [],
+        deadline: "",
+
       })
     },
     delRow(index) {
       this.form.riskControlRisk.splice(index, 1);
+    },
+    deptChange(val, item) {
+      item.respDeptList = val;
     }
   },
 };

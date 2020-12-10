@@ -171,6 +171,13 @@ export function queryRiskMgrDept() {
     method: 'get',
   })
 }
+// 查询树形下发措施
+export function queryIssueTreeData(measureId) {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/treeData/${measureId}`,
+    method: 'get',
+  })
+}
 // =========  风险提示 end ==============
 
 // ======== 专项风险 =======
@@ -385,7 +392,6 @@ export function riskControlHasDoneDetail(taskId, formId) {
     method: 'get'
   })
 }
-
 
 // ======= 在控风险管理 end ========
 

@@ -52,10 +52,11 @@ export const findCurrentUser = () => {
   })
 }
 // 查询部门
-export const queryDepartmentTree = () => {
+export const queryDepartmentTree = (params) => {
   return request({
     url: `/sys_mgr/department_mgr/query/tree`,
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 // 查询部门 根据角色

@@ -144,3 +144,11 @@ export const hasOperatePerms = () => {
         method: 'get',
     })
 }
+
+// 隐患在控详情
+export const getHiddenControlDetail = (id) => {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/getControl/${id}`,
+        method: 'get',
+    })
+}

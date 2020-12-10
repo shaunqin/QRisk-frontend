@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-table :data="data" size="mini">
-      <el-table-column label="截止日期" prop="deadline" width="100" />
+    <el-table v-loading="tbLoading" :data="data" size="mini">
       <el-table-column label="下发部门" prop="deptName" width="110" show-overflow-tooltip />
+      <el-table-column label="截止日期" prop="deadline" width="100" />
       <el-table-column label="措施内容" prop="content" />
       <el-table-column label="落实情况" prop="implementStatus" />
       <el-table-column label="上报人" width="120">
@@ -11,12 +11,12 @@
       <el-table-column label="附件预览" width="120">
         <template slot-scope="{row}">
           <div v-for="(item, index) in row.accessory" :key="index">
-          <el-link
-            type="primary"
-            v-if="item!=null"
-            :href="getUrl(item.filePath)"
-            target="_blank"
-          >{{item.originFileName}}</el-link>
+            <el-link
+              type="primary"
+              v-if="item!=null"
+              :href="getUrl(item.filePath)"
+              target="_blank"
+            >{{item.originFileName}}</el-link>
           </div>
         </template>
       </el-table-column>
@@ -64,17 +64,29 @@
           <el-button v-else type="primary" size="mini" @click="doHandle(row)">办理</el-button>
         </template>
       </el-table-column>
+      <el-table-column label="下发记录">
+        <template slot-scope="{row}">
+          <el-button size="mini" type="primary" @click="issueRecord(row)">查询</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <ehandle ref="ehandle" :isSecChild="true" :source="source" />
+    <cmdIssue ref="cmdIssue" />
   </div>
 </template>
 
 <script>
 import leaderApprvalRecord from "./leaderApprvalRecord";
 import ehandle from "./handleTo4";
-import { riskNoticeQueryTask } from "@/api/risk";
+import { riskNoticeQueryTask, queryIssueTreeData } from "@/api/risk";
+import cmdIssue from './cmdIssueTreeTable'
 export default {
-  components: { leaderApprvalRecord, ehandle },
+  components: { leaderApprvalRecord, ehandle, cmdIssue },
+  data() {
+    return {
+      tbLoading: false
+    }
+  },
   props: {
     data: {
       type: Array,
@@ -111,6 +123,19 @@ export default {
         }
       });
     },
+    issueRecord(row) {
+      this.tbLoading = true;
+      queryIssueTreeData(row.id).then(res => {
+        this.tbLoading = false;
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          let _this = this.$refs.cmdIssue;
+          _this.data = res.obj;
+          _this.dialog = true;
+        }
+      })
+    }
   },
 };
 </script>

@@ -34,19 +34,17 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-    <!-- <edetail ref="detail" />
-    <eform ref="form" :is-add="isAdd"></eform> -->
+    <edetail ref="detail" />
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
 import { formatShortDate } from "@/utils/datetime";
-// import eform from "../form";
-// import edetail from "../detail";
-import { specialRiskDetail } from "@/api/risk";
+import edetail from "../detail";
+import { riskControlDetail } from "@/api/risk";
 export default {
-  // components: { eform, edetail },
+  components: { edetail },
   mixins: [initData],
   data() {
     return {
@@ -85,7 +83,9 @@ export default {
       _this.dialog = true;
     },
     detail(row) {
-      specialRiskDetail(row.id).then((res) => {
+      this.loading = true;
+      riskControlDetail(row.id).then((res) => {
+        this.loading = false;
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {

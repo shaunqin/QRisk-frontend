@@ -1,9 +1,10 @@
 <template>
   <treeselect
+    v-loading="loading"
     v-model="selectValue"
     :options="options"
     :normalizer="normalizer"
-    :default-expand-level="1"
+    :default-expand-level="defaultExpand"
     :disabled="disabled"
     :multiple="multiple"
     :limit="limit"
@@ -23,6 +24,7 @@ export default {
     return {
       options: [],
       treeData: [],
+      loading: false
     };
   },
   computed: {
@@ -56,9 +58,21 @@ export default {
       type: Boolean,
       default: false,
     },
+    path: {
+      type: String,
+      default: ""
+    },
+    defaultExpand: {
+      type: Number,
+      default: 1
+    }
   },
   created() {
-    queryDepartmentTree().then((res) => {
+    let params = {};
+    if (this.path) params = { path: this.path };
+    this.loading = true;
+    queryDepartmentTree(params).then((res) => {
+      this.loading = false;
       this.options = res.obj;
     });
   },
@@ -91,6 +105,9 @@ export default {
     .vue-treeselect__placeholder {
       line-height: 30px;
     }
+  }
+  /deep/ .vue-treeselect__multi-value {
+    line-height: 18px;
   }
 }
 </style>
