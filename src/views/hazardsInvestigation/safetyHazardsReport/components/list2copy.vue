@@ -24,8 +24,8 @@
       <el-table-column prop="typeName" label="类型" />
       <el-table-column prop="levelsName" label="等级" />
       <el-table-column prop="deptName" label="主题单位/部门" width="130px" />
-      <el-table-column prop="businessName" label="涉及业务" width="130px"  />
-      <el-table-column prop="processName" label="涉及流程" width="130px"  />
+      <el-table-column prop="businessName" label="涉及业务" width="130px" />
+      <el-table-column prop="processName" label="涉及流程" width="130px" />
       <el-table-column prop="supervisoryUnit" label="监管单位" width="120px" show-overflow-tooltip />
       <el-table-column prop="reasonAnalysis" label="原因分析" width="160px" show-overflow-tooltip />
       <el-table-column prop="equivalentMeasures" label="等效措施" width="160px" show-overflow-tooltip />
@@ -39,10 +39,7 @@
       <el-table-column label="责任人" width="150px">
         <template slot-scope="{ row }">
           <ul class="tab-ul">
-            <li
-              v-for="item in row.controlList"
-              :key="item.id"
-            >{{ item.responsiblePerson }}</li>
+            <li v-for="item in row.controlList" :key="item.id">{{ item.responsiblePerson }}</li>
           </ul>
         </template>
       </el-table-column>
@@ -83,7 +80,7 @@
     </el-table>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
-      <el-button :loading="loading" type="primary" @click="doSubmit">复制</el-button>
+      <el-button v-if="!readonly" :loading="loading" type="primary" @click="doSubmit">复制</el-button>
     </div>
   </el-dialog>
 </template>
@@ -101,7 +98,12 @@ export default {
       selections: []
     };
   },
-  props: {},
+  props: {
+    readonly: {
+      type: Boolean,
+      default: false
+    }
+  },
   created() {
   },
   methods: {
@@ -110,7 +112,7 @@ export default {
       this.resetForm();
     },
     doSubmit() {
-      if(this.selections.length == 0) {
+      if (this.selections.length == 0) {
         this.$message.error('请在表格中选择所需复制的内容');
         return
       }

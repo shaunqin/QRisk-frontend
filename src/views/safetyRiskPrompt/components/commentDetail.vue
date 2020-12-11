@@ -24,10 +24,10 @@
       <el-form-item label="适用范围">{{form.applyScope}}</el-form-item>
       <el-form-item label="主题">{{form.title}}</el-form-item>
       <el-form-item label="背景">
-        <span style="white-space: pre-wrap;display: block;overflow: auto;" v-html="form.background"></span>
+        <htmlContent :html="form.background" />
       </el-form-item>
       <el-form-item label="安全风险">
-        <span style="white-space: pre-wrap;display: block;overflow: auto;" v-html="form.existingRisk"></span>
+        <htmlContent :html="form.existingRisk" />
       </el-form-item>
       <el-form-item label="风险防范" v-if="form.measuresVos!=null">
         <ul class="measuresVos">
@@ -42,11 +42,11 @@
       <el-form-item label="附件">
         <template v-if="form.accessory ? form.accessory.length!=0 : false">
           <div v-for="(item, index) in form.accessory" :key="index">
-          <el-link
-            type="primary"
-            :href="getUrl(item.filePath)"
-            target="_blank"
-          >{{item.originFileName}}</el-link>
+            <el-link
+              type="primary"
+              :href="getUrl(item.filePath)"
+              target="_blank"
+            >{{item.originFileName}}</el-link>
           </div>
         </template>
         <span v-else>未上传附件</span>
@@ -60,7 +60,11 @@
 </template>
 
 <script>
+import htmlContent from '@/components/common/htmlContent'
 export default {
+  components: {
+    htmlContent
+  },
   data() {
     return {
       loading: false,

@@ -8,11 +8,6 @@
       :highlight-current-row="true"
       style="width: 100%;"
     >
-      <el-table-column prop="businessName" label="流程名称" min-width="220">
-        <template slot-scope="{row}">
-          <el-tag type="success">{{row.businessName}}</el-tag>
-        </template>
-      </el-table-column>
       <el-table-column prop="title" label="主题" min-width="300" show-overflow-tooltip />
       <el-table-column prop="dept" label="部门" min-width="140" show-overflow-tooltip />
       <el-table-column prop="content" label="措施内容" min-width="300" show-overflow-tooltip />
@@ -20,12 +15,17 @@
         <template slot-scope="{row}">{{renderColum(row)}}</template>
       </el-table-column>
       <el-table-column prop="createBy" label="发起人" width="120" />
-      <el-table-column label="发起时间" width="140" >
+      <el-table-column label="发起时间" width="140">
         <template slot-scope="{row}">{{formatShortDate(row.createTime)}}</template>
       </el-table-column>
       <el-table-column label width="100">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="detail(row)">查看详情</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label width="80">
+        <template slot-scope="{ row }" v-if="row.pdfUrl != null">
+          <el-link type="primary" :href="pdfUrl(row)" target="_blank">查看PDF</el-link>
         </template>
       </el-table-column>
     </el-table>
@@ -83,7 +83,7 @@ export default {
       })
     },
     renderColum(row) {
-      if(row.filler && row.fillerName) {
+      if (row.filler && row.fillerName) {
         return `${row.fillerName}[${row.filler}]`
       } else if (row.filler) {
         return `${row.filler}`
@@ -92,7 +92,10 @@ export default {
       } else {
         return ""
       }
-    }
+    },
+    pdfUrl(row) {
+      return `${process.env.VUE_APP_BASE_API}${row.pdfUrl}`;
+    },
   },
 };
 </script>

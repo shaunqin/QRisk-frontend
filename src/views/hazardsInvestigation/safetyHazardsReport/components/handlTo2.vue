@@ -20,14 +20,12 @@
 
 <script>
 import { hazardsComplete, } from "@/api/hazards";
-import step1 from "./step/step1";
 import step2 from "./step/step2";
-import step3 from "./step/step3";
 import hairdown from './hairdown'
 import ccPerson from './ccPerson';
 
 export default {
-  components: { step1, hairdown, step2, step3, ccPerson },
+  components: { hairdown, step2, ccPerson },
   data() {
     return {
       loading: false,
@@ -104,7 +102,7 @@ export default {
           this.$message.success("操作成功");
           this.resetForm();
           // 刷新父页面-已下发措施
-          this.$parent.$parent.$parent.$parent.subHandle({ taskId: this.parentTaskId, formId: this.form.formId });
+          this.$parent.$parent.$parent.$parent.$parent.$parent.subHandle({ taskId: this.parentTaskId, formId: this.form.formId });
         }
         this.loading = false;
       });

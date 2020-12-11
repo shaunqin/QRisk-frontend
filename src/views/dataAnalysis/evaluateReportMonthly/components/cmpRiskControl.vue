@@ -57,6 +57,22 @@
           </ul>
         </template>
       </el-table-column>
+      <el-table-column label="截止日期" width="110">
+        <template slot-scope="{ row }">
+          <span v-if="!row.riskControlRiskVoList">-</span>
+          <ul class="ul-risk" v-else>
+            <li v-for="item in row.riskControlRiskVoList" :key="item.id">{{ item.deadline }}</li>
+          </ul>
+        </template>
+      </el-table-column>
+      <el-table-column label="部门" min-width="120">
+        <template slot-scope="{ row }">
+          <span v-if="!row.riskControlRiskVoList">-</span>
+          <ul class="ul-risk" v-else>
+            <li v-for="item in row.riskControlRiskVoList" :key="item.id">{{ item.respDeptName }}</li>
+          </ul>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>

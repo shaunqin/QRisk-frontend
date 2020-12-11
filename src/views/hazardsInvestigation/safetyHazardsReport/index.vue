@@ -30,10 +30,11 @@
         </el-form-item>
         <el-form-item label>
           <el-button type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
+          <el-button type="success" icon="el-icon-search" @click="reset">重置</el-button>
         </el-form-item>
       </el-form>
       <el-form :model="form" size="mini" inline v-else>
-        <el-form-item label="任务名称">
+        <el-form-item label="流程状态">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="发起人">
@@ -50,6 +51,7 @@
         </el-form-item>
         <el-form-item label>
           <el-button type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
+          <el-button type="success" icon="el-icon-search" @click="reset">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -107,6 +109,7 @@ export default {
   watch: {
     tabIndex() {
       this.form = {};
+      this.date = "";
       this.toQuery();
     },
     date(val) {
@@ -131,6 +134,11 @@ export default {
           this.count = res.obj;
         }
       })
+    },
+    reset() {
+      this.form = {};
+      this.date = "";
+      this.toQuery();
     }
   },
 };

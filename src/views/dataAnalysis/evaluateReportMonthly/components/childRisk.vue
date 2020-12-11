@@ -51,7 +51,23 @@
           </ul>
         </template>
       </el-table-column>
-      <el-table-column label="填报人">
+      <el-table-column label="截止日期" width="110">
+        <template slot-scope="{ row }">
+          <span v-if="!row.riskControlRiskVoList">-</span>
+          <ul class="ul-risk" v-else>
+            <li v-for="item in row.riskControlRiskVoList" :key="item.id">{{ item.deadline }}</li>
+          </ul>
+        </template>
+      </el-table-column>
+      <el-table-column label="部门" min-width="120">
+        <template slot-scope="{ row }">
+          <span v-if="!row.riskControlRiskVoList">-</span>
+          <ul class="ul-risk" v-else>
+            <li v-for="item in row.riskControlRiskVoList" :key="item.id">{{ item.respDeptName }}</li>
+          </ul>
+        </template>
+      </el-table-column>
+      <el-table-column label="填报人" width="120">
         <template slot-scope="{row}">
           <span v-if="row.filler">{{row.fillerName}}[{{row.filler}}]</span>
           <span v-else>-</span>
@@ -112,7 +128,7 @@ export default {
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       //表格合并行
-      if (columnIndex === 0 || columnIndex === 3 || columnIndex === 4 || columnIndex === 6 || columnIndex === 7) {
+      if (columnIndex === 0 || columnIndex === 3 || columnIndex === 4 || columnIndex === 8 || columnIndex === 9) {
         const _row = this.spanArr[rowIndex];
         const _col = _row > 0 ? 1 : 0;
         return {

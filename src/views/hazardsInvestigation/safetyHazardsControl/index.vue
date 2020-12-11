@@ -1,8 +1,7 @@
 <template>
   <div class="app-container">
     <div class="head-container">
-      <el-button type="success" icon="el-icon-s-data" size="mini">生成报表</el-button>
-      <!-- <el-button type="success" icon="el-icon-s-data" size="mini">生成局方报表</el-button> -->
+      <esearch ref="search" />
     </div>
     <!--表格渲染-->
     <el-table v-loading="loading" :data="data" size="small" :stripe="true" style="width: 100%;">
@@ -41,8 +40,9 @@
 import initData from "@/mixins/initData";
 import detail from "./components/detail";
 import { getHiddenControlDetail } from '@/api/hazards'
+import esearch from './components/search'
 export default {
-  components: { detail },
+  components: { detail, esearch },
   mixins: [initData],
   data() {
     return {
@@ -57,14 +57,10 @@ export default {
   methods: {
     beforeInit() {
       this.url = `/riskmgr_mgr/hidden_danger/getMyControlList/${this.page}/${this.size}`;
+      let _this = this.$refs.search;
+      if (_this)
+        this.params = _this.form;
       return true;
-    },
-    toQuery(name) {
-      if (!name) {
-        this.page = 1;
-        this.init();
-        return;
-      }
     },
     detail(id) {
       getHiddenControlDetail(id).then(res => {

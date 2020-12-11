@@ -12,10 +12,10 @@
       <el-form-item label="适用范围">{{data.applyScope}}</el-form-item>
       <el-form-item label="主题">{{data.title}}</el-form-item>
       <el-form-item label="背景">
-        <span style="white-space: pre-wrap;display: block;overflow: auto;" v-html="data.background"></span>
+        <htmlContent :html="data.background" />
       </el-form-item>
-       <el-form-item label="安全风险">
-        <span style="white-space: pre-wrap;display: block;overflow: auto;" v-html="data.existingRisk"></span>
+      <el-form-item label="安全风险">
+        <htmlContent :html="data.existingRisk" />
       </el-form-item>
       <el-form-item label="风险防范">
         <el-table :data="deptMeasure" size="mini">
@@ -46,11 +46,8 @@
                   :href="getUrl(item?item.filePath:'')"
                   target="_blank"
                 >{{item?item.originFileName:''}}</el-link>
-                <el-popconfirm
-                  title="确定删除该附件吗？"
-                  @onConfirm="del(item)"
-                >
-                <i class="el-icon-delete" style="cursor: pointer;" slot="reference"></i>
+                <el-popconfirm title="确定删除该附件吗？" @onConfirm="del(item)">
+                  <i class="el-icon-delete" style="cursor: pointer;" slot="reference"></i>
                 </el-popconfirm>
               </div>
             </template>
@@ -68,8 +65,9 @@
 import { delUpload } from "@/api/upload"
 import upload from "../upload";
 import childMeasures from '../childMeasures'
+import htmlContent from '@/components/common/htmlContent'
 export default {
-  components: { upload, childMeasures },
+  components: { upload, childMeasures, htmlContent },
   data() {
     return {
       accessory: this.data.deptMeasure ? this.data.deptMeasure.accessory : [],
@@ -117,11 +115,11 @@ export default {
     },
     del(item) {
       delUpload(item.id).then(res => {
-        if(res.code != '200') {
+        if (res.code != '200') {
           this.$message.error(res.msg);
         } else {
           this.$message.success("删除成功！");
-          this.accessory.splice(this.accessory.indexOf(this.accessory.find(function(element){ return element.id === item.id; })), 1)
+          this.accessory.splice(this.accessory.indexOf(this.accessory.find(function (element) { return element.id === item.id; })), 1)
         }
       })
     },

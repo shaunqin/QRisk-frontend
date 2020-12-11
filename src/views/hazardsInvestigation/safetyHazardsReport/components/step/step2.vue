@@ -34,36 +34,6 @@
         </el-form-item>
       </el-form>
     </el-card>
-    <el-card header="下发任务" key="childTask" v-if="childTask.length>0">
-      <el-table :data="childTask" size="mini">
-        <el-table-column prop="deptName" label="部门" />
-        <el-table-column label="填报日期">
-          <template slot-scope="{row}">
-            <span>{{formatShortDate(row.fillDate)}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="填报人">
-          <template slot-scope="{row}">
-            <span v-if="row.filler!=null">{{row.fillerName}}[{{row.filler}}]</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="状态">
-          <template slot-scope="{row}">
-            <span v-if="row.status==2">待办</span>
-            <span v-if="row.status==3">待办</span>
-            <span v-if="row.status==4">已填报</span>
-            <span v-if="row.status==5">通过</span>
-            <span v-if="row.status==6">驳回</span>
-            <span v-if="row.status==7">取消</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="管控清单" width="100">
-          <template slot-scope="{row}">
-            <el-button type="info" size="mini" @click="showList(row)">查看</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-card>
 
     <fillinForm ref="fillinForm" :disabled="disabled" :data="data" />
     <el-card>
@@ -125,7 +95,6 @@ export default {
   methods: {
     formatShortDate,
     format,
-    showList(row) { },
     loadData() {
       this.$refs.fillinForm.fillinData = this.data.deptControlList.hiddenDangerControlList;
       this.$refs.fillinForm.titleForm.reportName = this.data.deptControlList.fillerName;

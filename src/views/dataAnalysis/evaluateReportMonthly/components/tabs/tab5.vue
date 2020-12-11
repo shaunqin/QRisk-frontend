@@ -9,19 +9,9 @@
       style="width: 100%;"
       @selection-change="selectionChange"
     >
-      <el-table-column prop="businessName" label="流程名称" width="200">
-        <template slot-scope="{row}">
-          <el-tag type="success">{{row.businessName}}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column prop="name" label="任务名称" width="260">
-        <template slot-scope="{row}">
-          <el-tag type="warning">{{row.name}}</el-tag>
-        </template>
-      </el-table-column>
       <el-table-column prop="businessTitle" label="任务标题" show-overflow-tooltip />
-      <el-table-column prop="createBy" label="发起人" width="130" />
-      <el-table-column prop="createTime" label="发起时间" width="140" />
+      <el-table-column prop="createBy" label="发起人"  />
+      <el-table-column prop="createTime" label="发起时间"  />
       <el-table-column label width="100">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="detail(row)">查看详情</el-button>

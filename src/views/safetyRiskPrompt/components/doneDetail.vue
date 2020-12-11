@@ -19,10 +19,10 @@
       <el-form-item label="适用范围">{{data.applyScope}}</el-form-item>
       <el-form-item label="主题">{{data.title}}</el-form-item>
       <el-form-item label="背景">
-        <span style="white-space: pre-wrap;display: block;overflow: auto;" v-html="data.background"></span>
+        <htmlContent :html="data.background" />
       </el-form-item>
       <el-form-item label="安全风险">
-        <span style="white-space: pre-wrap;display: block;overflow: auto;" v-html="data.existingRisk"></span>
+        <htmlContent :html="data.existingRisk" />
       </el-form-item>
       <el-form-item label="风险防范" v-if="data.measuresVos!=null">
         <ul class="measuresVos">
@@ -115,8 +115,9 @@
 import { format } from '@/utils/datetime'
 import childMeasures from './childMeasures'
 import leaderApprvalRecord from './leaderApprvalRecord'
+import htmlContent from '@/components/common/htmlContent'
 export default {
-  components: { childMeasures, leaderApprvalRecord },
+  components: { childMeasures, leaderApprvalRecord, htmlContent },
   data() {
     return {
       dialog: false,

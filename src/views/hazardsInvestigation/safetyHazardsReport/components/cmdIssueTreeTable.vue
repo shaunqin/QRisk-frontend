@@ -14,45 +14,36 @@
       default-expand-all
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column label="部门" prop="deptName" width="200" align="left" show-overflow-tooltip />
-      <el-table-column label="截止日期">
-        <template slot-scope="{row}">{{row.data.deadline}}</template>
-      </el-table-column>
-      <el-table-column label="措施内容">
-        <template slot-scope="{row}">{{row.data.content}}</template>
-      </el-table-column>
-      <el-table-column label="落实情况">
-        <template slot-scope="{row}">{{row.data.impl}}</template>
+      <el-table-column prop="deptName" label="部门" align="left" />
+      <el-table-column label="填报日期">
+        <template slot-scope="{row}">
+          <span>{{formatShortDate(row.fillDate)}}</span>
+        </template>
       </el-table-column>
       <el-table-column label="下发人" prop="issuer" width="130" />
       <el-table-column label="上报人" prop="filler" width="130" />
-      <el-table-column label="附件预览">
+      <el-table-column label="状态">
         <template slot-scope="{row}">
-          <div v-for="(item, index) in row.data.files" :key="index">
-            <el-link
-              type="primary"
-              v-if="item!=null"
-              :href="getUrl(item.filePath)"
-              target="_blank"
-            >{{item.originFileName}}</el-link>
-          </div>
+          <span v-if="row.status==2">待办</span>
+          <span v-if="row.status==3">待办</span>
+          <span v-if="row.status==4">已填报</span>
+          <span v-if="row.status==5">通过</span>
+          <span v-if="row.status==6">驳回</span>
+          <span v-if="row.status==7">取消</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" width="80">
+      <el-table-column label="管控清单" width="100">
         <template slot-scope="{row}">
-          <span v-if="row.status==0">待填</span>
-          <span v-if="row.status==1">待填</span>
-          <span v-if="row.status==2">待审核</span>
-          <span v-if="row.status==3">通过</span>
-          <span v-if="row.status==4">驳回</span>
+          <span v-if="row.status==2||row.status==3">-</span>
+          <el-button v-else type="info" size="mini" @click="showList(row)">查看</el-button>
         </template>
       </el-table-column>
       <el-table-column label="办理人" width="80">
         <template slot-scope="{row}">
           <div v-if="row.reviewerInfo.length==0">-</div>
           <el-popover v-else placement="left" width="1000">
-            <el-button type="text" size="mini" slot="reference">详情</el-button>
-            <el-table :data="row.reviewerInfo">
+            <el-button type="text" slot="reference">详情</el-button>
+            <el-table :data="row.reviewerInfo" size="mini">
               <el-table-column label="任务名称" prop="taskName"></el-table-column>
               <el-table-column label="分配人" width="135">
                 <template slot-scope="{row}">{{row.name||"-"}}</template>
@@ -67,12 +58,12 @@
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column label="审批记录" width="100">
+      <el-table-column label="审批记录" width="80">
         <template slot-scope="{row}">
           <div v-if="row.comments.length==0">-</div>
           <el-popover v-else placement="left" width="1000">
-            <el-button type="text" size="mini" slot="reference">详情</el-button>
-            <leaderApprvalRecord :data="row.comments" type="safety_measures" />
+            <el-button type="text" slot="reference">详情</el-button>
+            <approvalRecord :data="row.comments" />
           </el-popover>
         </template>
       </el-table-column>
@@ -81,13 +72,17 @@
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button type="primary" @click="doSubmit">确认</el-button>
     </div>
+    <list2copy ref="list2copy" :readonly="true" />
   </el-dialog>
 </template>
 
 <script>
-import leaderApprvalRecord from "./leaderApprvalRecord";
+import approvalRecord from "./approvalRecord";
+import { formatShortDate } from '@/utils/datetime'
+import { queryControlListDetail, } from '@/api/hazards'
+import list2copy from './list2copy'
 export default {
-  components: { leaderApprvalRecord },
+  components: { approvalRecord, list2copy },
   data() {
     return {
       dialog: false,
@@ -95,6 +90,7 @@ export default {
     }
   },
   methods: {
+    formatShortDate,
     cancel() {
       this.resetForm();
     },
@@ -106,6 +102,17 @@ export default {
     },
     getUrl(url) {
       return process.env.VUE_APP_BASE_API + url;
+    },
+    showList(row) {
+      queryControlListDetail(row.id).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          let _this = this.$refs.list2copy;
+          _this.tbSource = res.obj.hiddenDangerControlList;
+          _this.dialog = true;
+        }
+      })
     },
   },
 }

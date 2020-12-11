@@ -35,80 +35,22 @@
       </el-form>
     </el-card>
     <el-card header="下发任务" key="childTask" v-if="childTask.length>0">
-      <el-table :data="childTask" size="mini">
-        <el-table-column prop="deptName" label="部门" />
-        <el-table-column label="填报日期">
-          <template slot-scope="{row}">
-            <span>{{formatShortDate(row.fillDate)}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="填报人">
-          <template slot-scope="{row}">
-            <span v-if="row.filler!=null">{{row.fillerName}}[{{row.filler}}]</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="状态">
-          <template slot-scope="{row}">
-            <span v-if="row.status==2">待办</span>
-            <span v-if="row.status==3">待办</span>
-            <span v-if="row.status==4">已填报</span>
-            <span v-if="row.status==5">通过</span>
-            <span v-if="row.status==6">驳回</span>
-            <span v-if="row.status==7">取消</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="管控清单" width="100">
-          <template slot-scope="{row}">
-            <el-button type="info" size="mini" @click="showList(row)">查看</el-button>
-          </template>
-        </el-table-column>
-        <el-table-column label="办理人">
-          <template slot-scope="{row}">
-            <div v-if="row.reviewerInfo==null">-</div>
-            <el-popover v-else placement="left" width="1000">
-              <el-button type="text" slot="reference">详情</el-button>
-              <el-table :data="row.reviewerInfo" size="mini">
-                <el-table-column label="任务名称" prop="taskName"></el-table-column>
-                <el-table-column label="分配人" width="135">
-                  <template slot-scope="{row}">{{row.name||"-"}}</template>
-                </el-table-column>
-                <el-table-column label="角色">
-                  <template slot-scope="{row}">{{row.groupName||"-"}}</template>
-                </el-table-column>
-                <el-table-column label="候选人">
-                  <template slot-scope="{row}">{{row.users||"-"}}</template>
-                </el-table-column>
-              </el-table>
-            </el-popover>
-          </template>
-        </el-table-column>
-        <el-table-column label="审批记录" width="80">
-          <template slot-scope="{row}">
-            <div v-if="row.comments==null">-</div>
-            <el-popover v-else placement="left" width="1000">
-              <el-button type="text" slot="reference">详情</el-button>
-              <approvalRecord :data="row.comments" />
-            </el-popover>
-          </template>
-        </el-table-column>
-      </el-table>
+      <childTask :data="childTask" :hiddenField="['审核']" />
     </el-card>
     <el-card header="审批记录" key="comments" v-if="comments.length>0">
       <approvalRecord :data="comments" />
     </el-card>
     <fillinForm ref="fillinForm" :data="data" />
-    <list2copy ref="list2copy" />
   </div>
 </template>
 
 <script>
 import { formatShortDate, format } from '@/utils/datetime'
 import fillinForm from '../fillinForm'
-import { queryControlListDetail } from '@/api/hazards'
-import list2copy from '../list2copy'
 import approvalRecord from '../approvalRecord'
+import childTask from '../childTask'
 export default {
-  components: { fillinForm, list2copy, approvalRecord },
+  components: { fillinForm, approvalRecord, childTask },
   data() {
     return {
       baseApi: process.env.VUE_APP_BASE_API
@@ -145,21 +87,12 @@ export default {
       }
     },
   },
-  mounted() { this.loadData(); },
+  mounted() { 
+    this.loadData();
+   },
   methods: {
     formatShortDate,
     format,
-    showList(row) {
-      queryControlListDetail(row.taskId).then(res => {
-        if (res.code != '200') {
-          this.$message.error(res.msg);
-        } else {
-          let _this = this.$refs.list2copy;
-          _this.tbSource = res.obj.hiddenDangerControlList;
-          _this.dialog = true;
-        }
-      })
-    },
     loadData() {
       this.$refs.fillinForm.fillinData = this.data.deptControlList.hiddenDangerControlList;
       this.$refs.fillinForm.titleForm.reportName = this.data.deptControlList.fillerName;

@@ -19,13 +19,10 @@
       <el-form-item label="适用范围">{{form.applyScope}}</el-form-item>
       <el-form-item label="主题">{{form.title}}</el-form-item>
       <el-form-item label="背景">
-        <span style="white-space: pre-wrap;display: block;overflow: auto;" v-html="form.background"></span>
+        <htmlContent :html="form.background" />
       </el-form-item>
       <el-form-item label="安全风险">
-        <span
-          style="white-space: pre-wrap;display: block;overflow: auto;"
-          v-html="form.existingRisk"
-        ></span>
+        <htmlContent :html="form.existingRisk" />
       </el-form-item>
       <el-form-item label="风险防范" v-if="form.measuresVos!=null">
         <ul class="measuresVos">
@@ -68,8 +65,9 @@
 import { riskNoticeDetail } from "@/api/risk";
 import childMeasures from './childMeasures'
 import leaderApprvalRecord from './leaderApprvalRecord'
+import htmlContent from '@/components/common/htmlContent'
 export default {
-  components: { childMeasures, leaderApprvalRecord },
+  components: { childMeasures, leaderApprvalRecord, htmlContent },
   data() {
     return {
       loading: false,

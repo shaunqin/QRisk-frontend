@@ -86,7 +86,14 @@
     </el-form>
     <selectEmplotee ref="selectEmplotee" @on-submit="doSubmit" />
     <div slot="footer" class="dialog-footer">
-      <el-button type="text" @click="cancel">取消</el-button>
+      <el-link
+        v-if="form.pdf&&form.pdf.filePath"
+        :href="getUrl(form.pdf.filePath)"
+        target="_blank"
+        type="primary"
+        :underline="false"
+      >查看PDF<i class="el-icon-view el-icon--right"></i> </el-link>
+      <el-button type="info" @click="cancel">取消</el-button>
       <el-button :loading="save_loading" type="success" @click="doSave">保存</el-button>
       <el-button :loading="loading" type="primary" @click="handleEmp">提交</el-button>
     </div>
@@ -232,6 +239,9 @@ export default {
     editerChange(val, key) {
       this.form[key] = val;
     },
+    getUrl(url) {
+      return process.env.VUE_APP_BASE_API + url;
+    }
   },
 };
 </script>

@@ -152,3 +152,19 @@ export const getHiddenControlDetail = (id) => {
         method: 'get',
     })
 }
+// 隐患在控导出
+export const hiddenControlExport = (params) => {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/exportMyControlList`,
+        method: 'get',
+        params
+    })
+}
+
+// 查询所有下发任务
+export const queryIssueTreeData = (monthTaskId) => {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/treeData/${monthTaskId}`,
+        method: 'get',
+    })
+}

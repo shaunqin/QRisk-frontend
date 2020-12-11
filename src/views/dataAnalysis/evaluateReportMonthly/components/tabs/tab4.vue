@@ -8,12 +8,7 @@
       :highlight-current-row="true"
       style="width: 100%;"
     >
-      <el-table-column prop="businessName" label="流程名称" width="200">
-        <template slot-scope="{row}">
-          <el-tag type="success">{{row.businessName}}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column prop="name" label="任务名称" width="260">
+      <el-table-column prop="name" label="流程状态" width="260">
         <template slot-scope="{row}">
           <el-tag type="warning">{{row.name}}</el-tag>
         </template>

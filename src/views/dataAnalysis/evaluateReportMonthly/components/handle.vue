@@ -25,7 +25,7 @@
         @click="doSubmit"
       >上报</el-button>
       <el-button
-        v-if="step==3"
+        v-if="step==3&&!data.hiddenIssue"
         :loading="loading"
         :disabled="!!data.hiddenIssue"
         type="success"
