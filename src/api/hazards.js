@@ -168,3 +168,11 @@ export const queryIssueTreeData = (monthTaskId) => {
         method: 'get',
     })
 }
+// 导出历史管控清单
+export function exportHistoryList(params) {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/exportDeptYearControlList`,
+        method: 'get',
+        params
+    })
+}

@@ -153,7 +153,6 @@ export default {
     data: {
       deep: true,
       handler(data) {
-        debugger
         this.loadData();
       },
     },
@@ -165,7 +164,7 @@ export default {
       this.detailForm = {
         riskControl: {
           id: data.id,
-          fileId: "",
+          fileId: data.fileId,
           title: data.title,
           year: data.year,
           month: data.month,

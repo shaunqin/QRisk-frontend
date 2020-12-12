@@ -64,7 +64,7 @@ import { riskControlDetail, riskControlDelete, riskControlSubmit } from "@/api/r
 import { formatShortDate } from "@/utils/datetime";
 import selectEmp from '../selectEmplotee'
 export default {
-  components: { eform,selectEmp },
+  components: { eform, selectEmp },
   data() {
     return {
       selections: [],
@@ -106,7 +106,7 @@ export default {
           _this.form = {
             riskControl: {
               id: obj.id,
-              fileId: "",
+              fileId: obj.fileId,
               title: obj.title,
               year: obj.year,
               month: obj.month,
@@ -132,12 +132,12 @@ export default {
         })
         .catch(() => { });
     },
-    selectLeader(){
-      this.$refs.selectEmp.dialog=true;
+    selectLeader() {
+      this.$refs.selectEmp.dialog = true;
     },
     submit(sqlUserId) {
       let id = this.selections[0];
-      riskControlSubmit(id,{sqlUserId}).then((res) => {
+      riskControlSubmit(id, { sqlUserId }).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {

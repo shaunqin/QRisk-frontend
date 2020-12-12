@@ -5,11 +5,16 @@
         <el-col :span="8">
           <el-form-item label="编号">{{data.no}}</el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="年份">{{`${data.year}-${data.month}`}}</el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="拟制人">{{data.issueName}}[{{data.issuer}}]</el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item label-width="0">
+            <el-link type="primary" target="_blank" :href="baseUrl+data.filePath">查看PDF</el-link>
+          </el-form-item>
         </el-col>
       </el-row>
       <el-form-item label="标题">{{data.title}}</el-form-item>
@@ -81,7 +86,8 @@ export default {
   data() {
     return {
       spanArr: [],
-      position: 0
+      position: 0,
+      baseUrl: process.env.VUE_APP_BASE_API,
     };
   },
   computed: {

@@ -8,7 +8,7 @@
         <el-form-item label="任务类型">
           <el-select v-model="form.taskType" style="width:130px" clearable>
             <el-option label="年度任务" value="1"></el-option>
-            <el-option label="月度任务" value="2"></el-option>
+            <el-option label="单词任务" value="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="反馈时间">

@@ -10,13 +10,7 @@
     <el-card header="全部列表">
       <search style="matgin-bottom:8px" />
       <!--表格渲染-->
-      <el-table
-        v-loading="loading"
-        :data="data"
-        size="small"
-        style="width: 100%"
-        max-height="400px"
-      >
+      <el-table v-loading="loading" :data="data" size="small" style="width: 100%">
         <el-table-column prop="month" label="月份" width="60px" />
         <el-table-column label="填报人" width="120px">
           <template slot-scope="{row}">{{ `${row.fillerName}[${row.filler}]` }}</template>
@@ -55,10 +49,7 @@
         <el-table-column label="责任人" width="150px">
           <template slot-scope="{ row }">
             <ul class="tab-ul">
-              <li
-                v-for="item in row.controlList"
-                :key="item.id"
-              >{{ item.responsiblePerson }}</li>
+              <li v-for="item in row.controlList" :key="item.id">{{ item.responsiblePerson }}</li>
             </ul>
           </template>
         </el-table-column>
@@ -109,11 +100,6 @@
           show-overflow-tooltip
         />
         <el-table-column prop="remarks" label="备注" width="120px" show-overflow-tooltip />
-        <el-table-column label="操作" fixed="right" width="100" v-if="showOpera">
-          <template slot-scope="{ row }">
-            <el-button type="success" icon="el-icon-document-copy" size="mini" @click="copy(row)"></el-button>
-          </template>
-        </el-table-column>
       </el-table>
       <!--分页组件-->
       <el-pagination
@@ -125,16 +111,6 @@
         @current-change="pageChange"
       />
     </el-card>
-    <el-card header="Ameco安全隐患管控清单">
-      <el-button
-        class="mb"
-        size="mini"
-        type="primary"
-        icon="el-icon-download"
-        @click="doExport(1)"
-      >导出</el-button>
-      <mine ref="mine" :taskId="taskId" :type="type" :showOpera="showOpera" @edit="edit" />
-    </el-card>
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="cancel">取消</el-button>
     </div>
@@ -144,14 +120,13 @@
 
 <script>
 import initData from '@/mixins/initData'
-import { copyHiddenDanger, exportList } from "@/api/hazards";
+import { copyHiddenDanger, exportHistoryList } from "@/api/hazards";
 import eform from "./form";
 import { formatShortDate } from '@/utils/datetime'
-import mine from './mine'
-import search from './search'
+import search from './search2'
 
 export default {
-  components: { eform, mine, search },
+  components: { eform, search },
   mixins: [initData],
   data() {
     return {
@@ -159,7 +134,7 @@ export default {
       data: [],
     };
   },
-  props: ["taskId", "type", "showOpera"],
+  props: ["taskId", "type"],
   created() {
     // this.init()
   },
@@ -173,7 +148,8 @@ export default {
   methods: {
     formatShortDate,
     beforeInit() {
-      this.url = `/riskmgr_mgr/hidden_danger/query/subControlList/${this.page}/${this.size}/${this.taskId}/${this.type}`;
+      this.url = `/riskmgr_mgr/hidden_danger/queryDeptYearControlList/${this.page}/${this.size}`;
+      this.params = { ...this.params, taskId: this.taskId }
       return true
     },
     cancel() {
@@ -183,23 +159,6 @@ export default {
       this.dialog = false;
       this.$parent.taskId = "";
     },
-    copy(row) {
-      this.$confirm("确定复制吗？").then(() => {
-        copyHiddenDanger(row.id).then(res => {
-          if (res.code != '200') {
-            this.$message.error(res.msg);
-          } else {
-            this.$message.success("复制成功！")
-            this.$refs.mine.init();
-          }
-        })
-      }).catch(() => { })
-    },
-    edit(row) {
-      let _this = this.$refs.form;
-      _this.form = row;
-      _this.dialog = true;
-    },
     doExport(listType) {
       let params = {};
       if (listType == 1) {
@@ -208,7 +167,7 @@ export default {
         params = { ...this.params, taskId: this.taskId, type: this.type };
       }
       this.$loading();
-      exportList(listType, params).then(res => {
+      exportHistoryList(params).then(res => {
         this.$loading().close();
         if (res.code != '200') {
           this.$message.error(res.obj);

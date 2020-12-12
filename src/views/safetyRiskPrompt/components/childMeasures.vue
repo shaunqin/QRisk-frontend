@@ -36,14 +36,14 @@
             <el-button type="text" size="mini" slot="reference">详情</el-button>
             <el-table :data="row.reviewerInfo">
               <el-table-column label="任务名称" prop="taskName"></el-table-column>
-              <el-table-column label="分配人" width="135">
-                <template slot-scope="{row}">{{row.name||"-"}}</template>
-              </el-table-column>
               <el-table-column label="角色">
                 <template slot-scope="{row}">{{row.groupName||"-"}}</template>
               </el-table-column>
-              <el-table-column label="候选人">
-                <template slot-scope="{row}">{{row.users||"-"}}</template>
+              <el-table-column label="办理人">
+                <template slot-scope="{row}">{{row.users||row.name||"-"}}</template>
+              </el-table-column>
+              <el-table-column label="下发时间">
+                <template slot-scope="{row}">{{format(row.createTime)}}</template>
               </el-table-column>
             </el-table>
           </el-popover>
@@ -80,6 +80,7 @@ import leaderApprvalRecord from "./leaderApprvalRecord";
 import ehandle from "./handleTo4";
 import { riskNoticeQueryTask, queryIssueTreeData } from "@/api/risk";
 import cmdIssue from './cmdIssueTreeTable'
+import { format } from '@/utils/datetime'
 export default {
   components: { leaderApprvalRecord, ehandle, cmdIssue },
   data() {
@@ -98,6 +99,7 @@ export default {
     }
   },
   methods: {
+    format,
     getUrl(url) {
       return process.env.VUE_APP_BASE_API + url;
     },

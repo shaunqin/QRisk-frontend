@@ -1,9 +1,6 @@
 <template>
   <div>
     <el-form class="search" :model="form" size="mini" inline>
-      <el-form-item label="主体单位">
-        <department class="mini" :value="form.deptPath" @change="deptChange" style="width:200px" />
-      </el-form-item>
       <el-form-item label="月份">
         <el-select v-model="form.month" style="width:90px" clearable>
           <el-option v-for="n in 12" :key="n" :label="n" :value="n"></el-option>

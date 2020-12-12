@@ -41,7 +41,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="反馈日期" v-if="form.taskType==2" key="dueDate">
+        <el-form-item label="反馈日期" v-if="form.taskType==2" key="dueDate" prop="dueDate">
           <el-date-picker
             v-model="form.dueDate"
             value-format="yyyy-MM-dd"
@@ -156,7 +156,8 @@ export default {
         defaultDay: "", // 默认日期 day
       },
       formRules: {
-        taskName: [{ required: true, message: "请填写任务名称", trigger: "blur" }],
+        taskName: [{ required: true, message: "任务名称不能为空", trigger: "blur" }],
+        dueDate: [{ required: true, message: "反馈日期不能为空", trigger: "blur" }],
       },
       form2: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: '', 10: '', 11: '', 12: '' },
       files: [],

@@ -287,6 +287,7 @@ import { jsPDF } from "jspdf";
 import department from "@/components/Department";
 import { mapGetters } from "vuex";
 import riskSelect from './riskSelect'
+import { uploadProcessPDF } from '@/api/upload'
 
 const monthString = "1月,2月,3月,4月,5月,6月,7月,8月,9月,10月,11月,12月";
 const monthxAxis = monthString.split(",");
@@ -416,20 +417,11 @@ export default {
     },
     submit() {
       this.$loading();
-      let params = { ...this.formData, year: this.form.dateValue1, month: this.form.dateValue2 };
-      riskControlAdd(params).then(res => {
-        this.$loading().close();
-        if (res.code != '200') {
-          this.$message.error(res.msg);
-          this.loading = false;
-        } else {
-          this.$message.success("提交成功")
-          // let time = setTimeout(() => {
-          //   window.clearTimeout(time);
-          //   this.exportPDF();
-          // }, 1000);
-        }
-      })
+      // Timeout优化加载状态
+      let time = setTimeout(() => {
+        window.clearTimeout(time);
+        this.exportPDF();
+      }, 1000);
     },
     exportPDF() {
       let dom = document.getElementsByClassName("toPDF");
@@ -488,9 +480,35 @@ export default {
             page++;
           }
           if (_index == dom.length) {
-            pdf.save("月度风险评价报告.pdf");
-            this.loading = false;
-            this.$loading().close();
+            // 上传文件
+            let buffer = pdf.output("datauristring");
+            let arr = buffer.split("base64,");
+            let pdfData = arr[arr.length - 1];
+            let filename = "月度风险评价报告.pdf"
+            let params = {
+              filename,
+              pdfData
+            }
+            uploadProcessPDF(params).then(res => {
+              if (res.code != '200') {
+                this.$message.error(res.msg);
+                this.$loading().close();
+              } else {
+                this.formData.riskControl.fileId = res.obj.id;
+                let paramsD = { ...this.formData, year: this.form.dateValue1, month: this.form.dateValue2 };
+                riskControlAdd(paramsD).then(res => {
+                  this.$loading().close();
+                  if (res.code != '200') {
+                    this.$message.error(res.msg);
+                    this.loading = false;
+                  } else {
+                    this.$message.success("提交成功");
+                    // pdf.save("月度风险评价报告.pdf");
+                    this.$loading().close();
+                  }
+                })
+              }
+            })
           }
         });
       });

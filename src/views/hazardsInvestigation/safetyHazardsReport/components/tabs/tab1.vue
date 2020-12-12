@@ -54,7 +54,7 @@
         <template slot-scope="scope">
           <el-button-group>
             <el-button size="mini" icon="el-icon-edit" @click="edit(scope.row)"></el-button>
-            <el-button size="mini" icon="el-icon-delete" @click="subDelete(scope.row.id)"></el-button>
+            <el-button size="mini" icon="el-icon-delete" @click="subDelete(scope.row)"></el-button>
             <el-button size="mini" @click="subCancel(scope.row)">取消任务</el-button>
           </el-button-group>
         </template>
@@ -93,7 +93,7 @@ export default {
   },
   created() {
     hasOperatePerms().then(res => {
-      if(res.code != "200") {
+      if (res.code != "200") {
         this.$message.error(res.msg);
       } else {
         this.showOpera = res.obj
@@ -147,8 +147,10 @@ export default {
       this.$refs.hazardsStatistics.dialog = true;
     },
     subCancel(row) {
+      this.loading = true;
       this.$confirm("确认取消任务吗？").then(() => {
         cancelHiddenDanger(row.id, row.taskType).then(res => {
+          this.loading = false;
           if (res.code != '200') {
             this.$message.error(res.msg);
           } else {
@@ -158,7 +160,7 @@ export default {
         })
       }).catch(() => { });
     },
-    subDelete(id) {
+    subDelete(row) {
       this.$confirm("确认删除吗？").then(() => {
         deleteHiddenDanger(row.id, row.taskType).then(res => {
           if (res.code != '200') {
