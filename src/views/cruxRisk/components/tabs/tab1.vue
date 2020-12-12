@@ -17,7 +17,7 @@
       style="width: 100%;"
       @selection-change="selectionChange"
     >
-      <el-table-column type="selection" width="45" />
+      <!-- <el-table-column type="selection" width="45" /> -->
       <el-table-column prop="no" label="编号" width="140" />
       <el-table-column label="标题" min-width="140" show-overflow-tooltip>
         <template slot-scope="{row}">

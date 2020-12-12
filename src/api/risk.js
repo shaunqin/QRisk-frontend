@@ -242,6 +242,14 @@ export function specialRiskComplete(data) {
     data
   })
 }
+// 子任务下发
+export function specialRiskIssue(data) {
+  return request({
+    url: '/risk_mgr/special_risk_notice_mgr/issue',
+    method: 'post',
+    data
+  })
+}
 // 查询已办详情
 export function specialRiskGasDoneDetail(taskId, formId) {
   return request({

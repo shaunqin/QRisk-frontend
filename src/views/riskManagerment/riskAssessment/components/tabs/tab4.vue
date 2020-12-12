@@ -8,9 +8,9 @@
       :highlight-current-row="true"
       style="width: 100%;"
     >
-      <el-table-column prop="businessName" label="流程名称" width="200">
+      <el-table-column prop="type" label="类型" width="100">
         <template slot-scope="{row}">
-          <el-tag type="success">{{row.businessName}}</el-tag>
+          <el-tag type="success">{{renderType(row)}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="name" label="流程状态" width="180">
@@ -84,11 +84,13 @@ export default {
     },
     subHandle(row) {
       this.loading = true;
+      let _this = this.$refs.handle;
+      _this.dialogLoading = true;
       specialRiskFill(row.taskId).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
+          this.loading = false;
         } else {
-          let _this = this.$refs.handle;
           _this.assessmentType = this.assessmentType;
           _this.data = res.obj
           _this.data.endTime = formatShortDate(res.obj.endTime)
@@ -106,6 +108,7 @@ export default {
           _this.form.formId = res.obj.id;
           this.loading = false;
           _this.dialog = true;
+          _this.dialogLoading = false;
         }
       });
     },
@@ -153,6 +156,15 @@ export default {
           _this.possibleRisksList = res.obj
         }
       })
+    },
+    renderType(row) {
+      let type = "";
+      switch (row.type) {
+        case '1': type = "通知"; break;
+        case '2': type = "评估"; break;
+        default: break;
+      }
+      return type;
     }
   },
 };

@@ -18,8 +18,9 @@
     style="width:100%"
     clearable
     v-loading="loading"
+    @change="chooseValue"
   >
-    <el-checkbox v-if="multiple" v-model="checkAll" @change="ckChange">全选</el-checkbox>
+    <el-checkbox v-model="checkAll" @change="ckChange" v-if="multiple">全选</el-checkbox>
     <el-divider v-if="multiple"></el-divider>
     <el-option
       v-for="item in options"
@@ -41,13 +42,14 @@ export default {
       loading: false,
       options: [],
       treeData: [],
-      checkAll: false
+      checkAll: false,
+      selectValue: this.value
     };
   },
-  computed: {
+  /* computed: {
     selectValue: {
       get() {
-        return this.value;
+        return this.value
       },
       set(val) {
         if (val.length != this.options.length) {
@@ -56,7 +58,7 @@ export default {
         this.$emit("change", val);
       },
     },
-  },
+  }, */
   props: {
     value: {
       type: String | Array,
@@ -94,6 +96,12 @@ export default {
       } else {
         this.selectValue = [];
       }
+    },
+    chooseValue(val) {
+      if (val.length != this.options.length) {
+          this.checkAll = false;
+        }
+        this.$emit("change", val);
     }
   },
 };
