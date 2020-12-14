@@ -178,6 +178,20 @@
     <el-card header="办理人" key="reviewerInfo" v-if="data.reviewerInfo&&data.reviewerInfo.length>0">
       <transactor :data="data.reviewerInfo" width="100%" />
     </el-card>
+    <!-- <el-card
+        header="下发通知"
+        key="childNotes"
+        v-if="showChildNotes"
+      >
+        <childNotes :data="data" :showIssueRecord="true" />
+      </el-card>
+    <el-card
+      header="下发措施"
+      key="firstLevelMeasure"
+      v-if="showChildMeasures"
+    >
+      <childMeasures :data="data" :showIssueRecord="true" />
+    </el-card> -->
 
     <el-card
       header="审批记录"
@@ -198,10 +212,22 @@
 <script>
 import { formatShortDate } from '@/utils/datetime'
 import apprvalRecord from "./apprvalRecord";
+import childMeasures from './childMeasures'
+import childNotes from './childNotes'
 import report from "./report";
 import transactor from '@/components/common/transactor'
 export default {
-  components: { apprvalRecord, report, transactor },
+  components: { apprvalRecord, report, transactor, childMeasures, childNotes },
+  props: {
+    showChildNotes: {
+      type: Boolean,
+      default: false
+    },
+    showChildMeasures: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       formId: "",

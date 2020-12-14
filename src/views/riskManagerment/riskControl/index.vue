@@ -2,14 +2,39 @@
   <div class="app-container">
     <div class="head-container">
       <el-form :model="form" label-width="auto" size="mini" inline>
-        <el-form-item label="名称">
-          <el-input v-model="form.aa" placeholder></el-input>
+        <el-form-item label="评估类型">
+          <el-select v-model="form.assType" placeholder="请选择评估类型" clearable>
+            <el-option label="流程/标准" value="1"></el-option>
+            <el-option label="变革管理" value="2"></el-option>
+            <el-option label="维修能力" value="3"></el-option>
+            <el-option label="航站审定" value="4"></el-option>
+            <el-option label="关键风险" value="5"></el-option>
+            <el-option label="全员风险" value="6"></el-option>
+            <el-option label="其他评估" value="7"></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="日期">
-          <el-date-picker v-model="form.bb" placeholder></el-date-picker>
+        <!-- <el-form-item label="标题">
+          <el-input v-model="form.analysisTitle" placeholder></el-input>
+        </el-form-item> -->
+        <el-form-item label="发布日期">
+          <el-date-picker
+            v-model="date"
+            unlink-panels
+            type="daterange"
+            placeholder
+            value-format="yyyy-MM-dd"
+            style="width:220px"
+          ></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="success">搜索</el-button>
+          <el-button type="success" icon="el-icon-search" @click="toQuery">查询</el-button>
+          <el-button
+            class="filter-item"
+            size="mini"
+            type="success"
+            icon="el-icon-refresh"
+            @click="refresh"
+          >{{$t('global.reset')}}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -22,26 +47,41 @@
       stripe
       @selection-change="selectionChange"
     >
-      <el-table-column type="index" width="50" />
-      <el-table-column prop="nn" label="评估类型" />
-      <el-table-column prop="qq" label="发布日期" width="100" />
-      <el-table-column prop="xx" label="编号" width="120" />
-      <el-table-column prop="xx" label="标题" width="120" />
-      <el-table-column label="危险源" prop="aa" width="200" />
-      <el-table-column label="根原因分析" prop="gg" width="120" />
-      <el-table-column label="风险等级" prop="ff" />
-      <el-table-column label="可能导致的风险" prop="ee" width="200" />
-      <el-table-column label="控制措施" prop="hh" />
-      <el-table-column label="责任单位" prop="ii" />
-      <el-table-column label="完成期限" prop="kk" />
-      <el-table-column label="措施落实验证情况" prop="mm" width="200" />
-      <el-table-column label="状态" prop="jj" />
-      <el-table-column label="操作" width="140px" fixed="right">
+      <el-table-column prop="assTypeName" label="评估类型" show-overflow-tooltip />
+      <el-table-column prop="createTime" label="发布日期" width="100">
+        <template slot-scope="{row}">{{formatShortDate(row.createTime)}}</template>
+      </el-table-column>
+      <el-table-column prop="analysisNo" label="编号" width="120" show-overflow-tooltip />
+      <el-table-column label="标题" min-width="150" show-overflow-tooltip>
+        <template slot-scope="{row}">
+          <el-button type="text" size="mini" @click="detail(row)">{{row.analysisTitle}}</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="危险源" prop="hazardSourceName" width="200" show-overflow-tooltip />
+      <el-table-column label="根原因分析" prop="rootCauseAnalysis" width="120" show-overflow-tooltip />
+      <el-table-column label="风险等级" prop="riskLevelName" />
+      <el-table-column label="可能导致的风险" prop="possibleRisksName" width="200" show-overflow-tooltip />
+      <!-- <el-table-column label="控制目标" prop="controlObj" show-overflow-tooltip /> -->
+      <el-table-column label="控制措施" prop="controlMeasure" show-overflow-tooltip />
+      <el-table-column label="责任单位" prop="reponsibleDeptName" width="120" show-overflow-tooltip />
+      <el-table-column label="完成期限" prop="deadline" width="100">
+        <template slot-scope="{row}">{{formatShortDate(row.deadline)}}</template>
+      </el-table-column>
+      <el-table-column label="措施落实验证情况" prop="verifyMeasure" show-overflow-tooltip />
+      <el-table-column label="状态" prop="status" show-overflow-tooltip>
+        <template v-slot="{row}">
+          <span v-if="row.status == '11'">在控</span>
+          <span v-if="row.status == '12'">关闭</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="70px" fixed="right">
         <template slot-scope="scope">
-          <el-button-group>
-            <el-button size="mini" type="primary" @click="detail(scope.row)">详情</el-button>
-            <el-button size="mini" type="warning">通知</el-button>
-          </el-button-group>
+          <el-popconfirm
+            title="确定通知吗？"
+            @onConfirm="notice(scope.row)"
+          >
+            <el-button size="mini" type="warning" slot="reference">通知</el-button>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -54,14 +94,16 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-    <detail ref="detail" :type="dialogType"></detail>
+    <detail ref="detail"></detail>
   </div>
 </template>
 
 <script>
+import { getEvalReport, notifyUser } from "@/api/risk"
 import initData from "@/mixins/initData";
 import eform from "./form";
 import detail from "./components/detail";
+import { formatShortDate } from '@/utils/datetime'
 export default {
   components: { eform, detail },
   mixins: [initData],
@@ -70,41 +112,41 @@ export default {
       isSuperAdmin: false,
       userInfo: {},
       selections: [],
-      dialogType: "",
-      form: { aa: "", bb: "" },
+      form: { assType: '' },
+      date: ""
     };
   },
+  watch: {
+    date(val) {
+      if (val) {
+        this.form.startTime = val[0];
+        this.form.endTime = val[1];
+      } else {
+        this.form.startTime = "";
+        this.form.endTime = "";
+      }
+    },
+  },
   mounted() {
-    this.loading = false;
-    for (let i = 0; i < 5; i++) {
-      this.data.push({
-        xx: "FP2020050500",
-        yy: "飞机在运行过程中出现大翼引气渗漏等重复性故障",
-        zz: "2020-05-06",
-        aa: "飞机在运行过程中出现大翼引",
-        bb: "20200201",
-        cc: "大",
-        dd: "高",
-        ee: "飞机在运行过程中出现",
-        ff: "3",
-        gg: "飞机在运行过程中出现",
-        hh: "飞机在运行过程中出现",
-        ii: "上海",
-        jj: "在控",
-        kk: "待完成",
-        oo: "附件/起落架",
-        pp: "生产保障",
-        qq: "2020-04-03",
-      });
-    }
+    this.init()
   },
   methods: {
-    toQuery(name) {
-      if (!name) {
-        this.page = 1;
-        this.init();
-        return;
-      }
+    formatShortDate,
+    beforeInit() {
+      this.url = `/risk_mgr/riskMeasureControl_mgr/query/pageList/${this.page}/${this.size}`;
+      this.params = { ...this.queryForm };
+      return true;
+    },
+    toQuery() {
+      this.queryForm = Object.assign({}, this.form);
+      this.page = 1;
+      this.init();
+    },
+    refresh() {
+      this.queryForm = {},
+      this.form = { assType: '' },
+      this.date = ""
+      this.toQuery()
     },
     // 选择切换
     selectionChange: function (selections) {
@@ -112,44 +154,35 @@ export default {
       this.$emit("selectionChange", { selections: selections });
     },
     riskControl() {
-      this.dialogType = "";
       let _this = this.$refs.riskControl;
       _this.dialog = true;
     },
     detail(row) {
       let _this = this.$refs.detail;
-      _this.form = {
-        aa:
-          "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降、中断起飞的安全风险。",
-        bb: "FP2020050501",
-        cc: "批准",
-        dd: "上海",
-        ee: "2020-06-06",
-        ff: "上海",
-        gg: "杭州",
-        hh: `2020 年 6 月 5 日，A321/B-1833 飞机执行 CA1948 航班，成都起飞后地面监控出现 AIR R WING LEAK 警告信息，飞机返航，该机 5月 3 日曾出现相同的故障信息，并造成飞机返航`,
-        jj: "FP2020050501",
-      };
-      _this.riskForm = {
-        aa: "出现大翼引气渗漏等",
-        bb:
-          "A321/B-1833 飞机执行 CA1948 航班，成都起飞后地面监控出现 AIR R WING LEAK 警告信息",
-        cc: "出现相同的故障信息，并造成飞机返航",
-        dd: "高",
-        ee: "高",
-        ff: "3",
-      };
-      _this.dialog = true;
+      const params = {
+        noteId: row.noteId
+      }
+      getEvalReport(params).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          _this.form = [...res.obj]
+          _this.dialog = true
+        }
+      })
     },
-    approval(row) {
-      this.dialogType = "审批";
-      let _this = this.$refs.riskControl;
-      _this.dialog = true;
-    },
-    feedback(row) {
-      this.dialogType = "反馈";
-      let _this = this.$refs.riskControl;
-      _this.dialog = true;
+    notice(row) {
+      const params = {
+        noteId: row.noteId
+      }
+      notifyUser(params).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          this.$message.success("通知成功！");
+          this.init()
+        }
+      })
     },
   },
 };
