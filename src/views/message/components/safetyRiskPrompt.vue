@@ -47,32 +47,21 @@
           <el-table-column label="预览附件" min-width="120">
             <template slot-scope="{row}">
               <div v-for="(item, index) in row.accessory" :key="index">
-              <el-link
-                type="primary"
-                v-if="item!=null"
-                :href="getUrl(item.filePath)"
-                target="_blank"
-              >{{item.originFileName}}</el-link>
+                <el-link
+                  type="primary"
+                  v-if="item!=null"
+                  :href="getUrl(item.filePath)"
+                  target="_blank"
+                >{{item.originFileName}}</el-link>
               </div>
             </template>
           </el-table-column>
           <el-table-column label="办理人" width="80">
             <template slot-scope="{row}">
               <div v-if="row.reviewerInfo==null">-</div>
-              <el-popover v-else placement="left" width="1000">
+              <el-popover v-else placement="left">
                 <el-button type="text" slot="reference">详情</el-button>
-                <el-table :data="row.reviewerInfo">
-                  <el-table-column label="任务名称" prop="taskName"></el-table-column>
-                  <el-table-column label="分配人" width="135">
-                    <template slot-scope="{row}">{{row.name||"-"}}</template>
-                  </el-table-column>
-                  <el-table-column label="角色">
-                    <template slot-scope="{row}">{{row.groupName||"-"}}</template>
-                  </el-table-column>
-                  <el-table-column label="候选人">
-                    <template slot-scope="{row}">{{row.users||"-"}}</template>
-                  </el-table-column>
-                </el-table>
+                <transactor :data="row.reviewerInfo" />
               </el-popover>
             </template>
           </el-table-column>
@@ -91,19 +80,8 @@
           type="safety_risk_notice"
         />
       </el-form-item>
-      <el-form-item label="办理人" v-if="reviewerInfo.length>0">
-        <el-table :data="reviewerInfo" key="reviewerInfo">
-          <el-table-column label="任务名称" prop="taskName"></el-table-column>
-          <el-table-column label="分配人" width="135">
-            <template slot-scope="{row}">{{row.name||"-"}}</template>
-          </el-table-column>
-          <el-table-column label="角色">
-            <template slot-scope="{row}">{{row.groupName||"-"}}</template>
-          </el-table-column>
-          <el-table-column label="候选人">
-            <template slot-scope="{row}">{{row.users||"-"}}</template>
-          </el-table-column>
-        </el-table>
+      <el-form-item key="reviewerInfo" label="办理人" v-if="reviewerInfo.length>0">
+        <transactor :data="reviewerInfo" width="100%" />
       </el-form-item>
     </el-form>
   </div>
@@ -112,8 +90,9 @@
 <script>
 import childMeasures from '@/views/safetyRiskPrompt/components/childMeasures';
 import leaderApprvalRecord from '@/views/safetyRiskPrompt/components/leaderApprvalRecord';
+import transactor from '@/components/common/transactor'
 export default {
-  components: { childMeasures, leaderApprvalRecord },
+  components: { childMeasures, leaderApprvalRecord, transactor },
   props: ["data"],
   computed: {
     deptMeasure() {

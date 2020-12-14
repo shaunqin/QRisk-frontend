@@ -1,15 +1,19 @@
 <template>
   <div class="app-container">
     <div class="head-container">
-      <el-form :model="form" label-width="auto" size="mini" inline>
-        <el-form-item label="名称">
-          <el-input v-model="form.aa" placeholder></el-input>
+      <el-form :model="form" size="mini" inline>
+        <el-form-item label="编号">
+          <el-input v-model="form.no" placeholder></el-input>
         </el-form-item>
-        <el-form-item label="日期">
-          <el-date-picker v-model="form.bb" placeholder></el-date-picker>
+        <el-form-item label="标题">
+          <el-input v-model="form.title" placeholder></el-input>
+        </el-form-item>
+        <el-form-item label="月度">
+          <el-date-picker v-model="form.date" type="month" value-format="yyyy-MM" placeholder></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="success">搜索</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="toQuery">搜索</el-button>
+          <el-button type="primary" icon="el-icon-refresh" @click="reset">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -22,20 +26,27 @@
       stripe
       @selection-change="selectionChange"
     >
-      <el-table-column type="index" width="50" />
-      <el-table-column prop="nn" label="评估类型" />
-      <el-table-column prop="qq" label="发布日期" width="100" />
-      <el-table-column prop="xx" label="编号" width="120" />
-      <el-table-column prop="xx" label="标题" width="120" />
-      <el-table-column label="危险源" prop="aa" width="200" />
-      <el-table-column label="根原因分析" prop="gg" width="120" />
-      <el-table-column label="风险等级" prop="ff" />
-      <el-table-column label="可能导致的风险" prop="ee" width="200" />
-      <el-table-column label="控制措施" prop="hh" />
-      <el-table-column label="责任单位" prop="ii" />
-      <el-table-column label="完成期限" prop="kk" />
-      <el-table-column label="措施落实验证情况" prop="mm" width="200" />
-      <el-table-column label="状态" prop="jj" />
+      <el-table-column prop="no" label="编号" />
+      <el-table-column prop="title" label="标题" />
+      <el-table-column label="年月">
+        <template slot-scope="{row}">{{`${row.year}-${row.month}`}}</template>
+      </el-table-column>
+      <el-table-column label="拟制人">
+        <template slot-scope="{row}">{{`${row.issueName}[${row.issuer}]`}}</template>
+      </el-table-column>
+      <el-table-column label="待办部门" prop="todoDeptPathName" />
+      <el-table-column label="待办状态">
+        <template slot-scope="{row}">
+          <span v-if="row.todoStatus==0">待处理</span>
+          <span v-if="row.todoStatus==1">已下发</span>
+          <span v-if="row.todoStatus==2">已上报</span>
+          <span v-if="row.todoStatus==3">同意</span>
+          <span v-if="row.todoStatus==4">驳回</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="创建时间">
+        <template slot-scope="{row}">{{formatShortDate(row.createTime)}}</template>
+      </el-table-column>
       <el-table-column label="操作" width="140px" fixed="right">
         <template slot-scope="scope">
           <el-button-group>
@@ -62,6 +73,7 @@
 import initData from "@/mixins/initData";
 import eform from "./form";
 import detail from "./components/detail";
+import { formatShortDate } from '@/utils/datetime'
 export default {
   components: { eform, detail },
   mixins: [initData],
@@ -71,40 +83,27 @@ export default {
       userInfo: {},
       selections: [],
       dialogType: "",
-      form: { aa: "", bb: "" },
+      form: { no: "", title: "", date: "" },
     };
   },
-  mounted() {
-    this.loading = false;
-    for (let i = 0; i < 5; i++) {
-      this.data.push({
-        xx: "FP2020050500",
-        yy: "飞机在运行过程中出现大翼引气渗漏等重复性故障",
-        zz: "2020-05-06",
-        aa: "飞机在运行过程中出现大翼引",
-        bb: "20200201",
-        cc: "大",
-        dd: "高",
-        ee: "飞机在运行过程中出现",
-        ff: "3",
-        gg: "飞机在运行过程中出现",
-        hh: "飞机在运行过程中出现",
-        ii: "上海",
-        jj: "在控",
-        kk: "待完成",
-        oo: "附件/起落架",
-        pp: "生产保障",
-        qq: "2020-04-03",
-      });
-    }
+  created() {
+    this.init();
   },
   methods: {
-    toQuery(name) {
-      if (!name) {
-        this.page = 1;
-        this.init();
-        return;
-      }
+    formatShortDate,
+    beforeInit() {
+      this.url = `/riskControlManage/riskControlManage/query/pageTodoList/${this.page}/${this.size}`;
+      this.params = { ...this.params };
+      return true;
+    },
+    toQuery() {
+      this.params = this.form;
+      this.page = 1;
+      this.init();
+    },
+    reset() {
+      this.form = { no: "", title: "", date: "" };
+      this.toQuery();
     },
     // 选择切换
     selectionChange: function (selections) {

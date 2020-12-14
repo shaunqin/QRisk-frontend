@@ -41,20 +41,9 @@
       <el-table-column label="办理人" width="80">
         <template slot-scope="{row}">
           <div v-if="row.reviewerInfo.length==0">-</div>
-          <el-popover v-else placement="left" width="1000">
+          <el-popover v-else placement="left">
             <el-button type="text" slot="reference">详情</el-button>
-            <el-table :data="row.reviewerInfo" size="mini">
-              <el-table-column label="任务名称" prop="taskName"></el-table-column>
-              <el-table-column label="分配人" width="135">
-                <template slot-scope="{row}">{{row.name||"-"}}</template>
-              </el-table-column>
-              <el-table-column label="角色">
-                <template slot-scope="{row}">{{row.groupName||"-"}}</template>
-              </el-table-column>
-              <el-table-column label="候选人">
-                <template slot-scope="{row}">{{row.users||"-"}}</template>
-              </el-table-column>
-            </el-table>
+            <transactor :data="row.reviewerInfo" />
           </el-popover>
         </template>
       </el-table-column>
@@ -81,8 +70,9 @@ import approvalRecord from "./approvalRecord";
 import { formatShortDate } from '@/utils/datetime'
 import { queryControlListDetail, } from '@/api/hazards'
 import list2copy from './list2copy'
+import transactor from '@/components/common/transactor'
 export default {
-  components: { approvalRecord, list2copy },
+  components: { approvalRecord, list2copy, transactor },
   data() {
     return {
       dialog: false,

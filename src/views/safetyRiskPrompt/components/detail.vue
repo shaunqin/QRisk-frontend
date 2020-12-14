@@ -40,18 +40,7 @@
         />
       </el-form-item>
       <el-form-item label="办理人" v-if="form.reviewerInfo!=null">
-        <el-table :data="form.reviewerInfo" size="mini">
-          <el-table-column label="任务名称" prop="taskName"></el-table-column>
-          <el-table-column label="分配人" width="135">
-            <template slot-scope="{row}">{{row.name||"-"}}</template>
-          </el-table-column>
-          <el-table-column label="角色">
-            <template slot-scope="{row}">{{row.groupName||"-"}}</template>
-          </el-table-column>
-          <el-table-column label="候选人">
-            <template slot-scope="{row}">{{row.users||"-"}}</template>
-          </el-table-column>
-        </el-table>
+        <transactor :data="row.reviewerInfo" width="100%" />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -66,8 +55,9 @@ import { riskNoticeDetail } from "@/api/risk";
 import childMeasures from './childMeasures'
 import leaderApprvalRecord from './leaderApprvalRecord'
 import htmlContent from '@/components/common/htmlContent'
+import transactor from '@/components/common/transactor'
 export default {
-  components: { childMeasures, leaderApprvalRecord, htmlContent },
+  components: { childMeasures, leaderApprvalRecord, htmlContent, transactor },
   data() {
     return {
       loading: false,

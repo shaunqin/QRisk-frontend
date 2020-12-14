@@ -17,7 +17,7 @@
             <el-form-item label="标题">{{data.title}}</el-form-item>
             <el-form-item label="通知内容">{{data.noteContent}}</el-form-item>
             <el-form-item label="附件">
-            <span v-for="(item, index) in data.file" :key="index">
+              <span v-for="(item, index) in data.file" :key="index">
                 <el-link
                   type="primary"
                   v-show="item!=null"
@@ -25,7 +25,7 @@
                   target="_blank"
                 >{{item?item.originFileName:''}}</el-link>
               </span>
-          </el-form-item>
+            </el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -78,7 +78,12 @@
         <el-table-column label="管理流程" prop="managementProcess" />
         <el-table-column label="问题描述" prop="hazardSource" />
         <el-table-column label="根原因分析" prop="rootCauseAnalysis" width="140" show-overflow-tooltip />
-        <el-table-column label="可能导致的风险" prop="possibleRisksName" width="160" show-overflow-tooltip />
+        <el-table-column
+          label="可能导致的风险"
+          prop="possibleRisksName"
+          width="160"
+          show-overflow-tooltip
+        />
         <el-table-column label="风险控制措施" width="160" show-overflow-tooltip>
           <template slot-scope="{row}">
             <ul class="tab-ul">
@@ -106,7 +111,10 @@
         <el-table-column label="风险完成期限" width="160" show-overflow-tooltip>
           <template slot-scope="{row}">
             <ul class="tab-ul">
-              <li v-for="item in row.specialRiskMeasureList" :key="item.id">{{formatShortDate(item.deadline)}}</li>
+              <li
+                v-for="item in row.specialRiskMeasureList"
+                :key="item.id"
+              >{{formatShortDate(item.deadline)}}</li>
             </ul>
           </template>
         </el-table-column>
@@ -114,21 +122,7 @@
     </el-card>
 
     <el-card header="办理人" key="reviewerInfo" v-if="data.reviewerInfo&&data.reviewerInfo.length>0">
-      <el-table :data="data.reviewerInfo" size="mini">
-        <el-table-column label="任务名称" prop="taskName"></el-table-column>
-        <el-table-column label="分配人" width="135">
-          <template slot-scope="{row}">{{row.name||"-"}}</template>
-        </el-table-column>
-        <el-table-column label="分配时间" width="135">
-          <template slot-scope="{row}">{{formatShortDate(row.createTime) || "-"}}</template>
-        </el-table-column>
-        <el-table-column label="角色">
-          <template slot-scope="{row}">{{row.groupName||"-"}}</template>
-        </el-table-column>
-        <el-table-column label="候选人">
-          <template slot-scope="{row}">{{row.users||"-"}}</template>
-        </el-table-column>
-      </el-table>
+      <transactor :data="row.reviewerInfo" width="100%" />
     </el-card>
 
     <el-card
@@ -142,7 +136,7 @@
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="cancel">取消</el-button>
     </div>
-    
+
     <report ref="report" :formId="formId" :disabled="true" @change="formIdChange" />
   </el-dialog>
 </template>
@@ -151,8 +145,9 @@
 import { formatShortDate } from '@/utils/datetime'
 import apprvalRecord from "./apprvalRecord";
 import report from "./report";
+import transactor from '@/components/common/transactor'
 export default {
-  components: { apprvalRecord, report },
+  components: { apprvalRecord, report, transactor },
   data() {
     return {
       formId: "",

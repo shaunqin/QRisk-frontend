@@ -49,18 +49,7 @@
       <approvalRecord :data="comments" />
     </el-card>
     <el-card header="办理人" key="reviewersInfo" v-if="reviewersInfo.length>0">
-      <el-table :data="reviewersInfo" size="mini">
-        <el-table-column label="任务名称" prop="taskName"></el-table-column>
-        <el-table-column label="分配人" width="135">
-          <template slot-scope="{row}">{{row.name||"-"}}</template>
-        </el-table-column>
-        <el-table-column label="角色">
-          <template slot-scope="{row}">{{row.groupName||"-"}}</template>
-        </el-table-column>
-        <el-table-column label="候选人">
-          <template slot-scope="{row}">{{row.users||"-"}}</template>
-        </el-table-column>
-      </el-table>
+      <transactor :data="row.reviewerInfo" width="100%" />
     </el-card>
 
     <fillinForm
@@ -89,8 +78,9 @@ import fillinForm from './fillinForm'
 import detailFillin from './detailFillin'
 import approvalRecord from './approvalRecord'
 import childTask from './childTask'
+import transactor from '@/components/common/transactor'
 export default {
-  components: { fillinForm, detailFillin, approvalRecord, childTask },
+  components: { fillinForm, detailFillin, approvalRecord, childTask, transactor },
   data() {
     return {
       loading: false,

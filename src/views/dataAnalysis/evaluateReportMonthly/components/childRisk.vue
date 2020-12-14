@@ -8,27 +8,7 @@
         <template slot-scope="{row}">
           <span v-if="!row.reviewerInfo">-</span>
           <el-popover v-else placement="left">
-            <el-table size="mini" :data="row.reviewerInfo" style="width:600px">
-              <el-table-column label="任务名称" prop="taskName" />
-              <el-table-column label="角色">
-                <template slot-scope="{row}">
-                  <span v-if="!row.groupName">-</span>
-                  <span v-else>{{row.groupName}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="候选人">
-                <template slot-scope="{row}">
-                  <span v-if="!row.groupName">-</span>
-                  <span v-else>{{row.users}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="分配人">
-                <template slot-scope="{row}">
-                  <span v-if="!row.groupName">{{row.name}}</span>
-                  <span v-else>-</span>
-                </template>
-              </el-table-column>
-            </el-table>
+            <transactor :data="row.reviewerInfo" />
             <el-button size="mini" type="text" slot="reference">详细</el-button>
           </el-popover>
         </template>
@@ -87,8 +67,9 @@
 <script>
 import ehandle from './handleTo4'
 import { riskControlQueryDetailTask } from '@/api/risk'
+import transactor from '@/components/common/transactor'
 export default {
-  components: { ehandle },
+  components: { ehandle, transactor },
   data() {
     return {
       spanArr: [],

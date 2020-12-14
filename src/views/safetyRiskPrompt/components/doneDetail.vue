@@ -57,20 +57,9 @@
           <el-table-column label="办理人" width="80">
             <template slot-scope="{row}">
               <div v-if="row.reviewerInfo==null">-</div>
-              <el-popover v-else placement="left" width="1000">
+              <el-popover v-else placement="left">
                 <el-button type="text" slot="reference">详情</el-button>
-                <el-table :data="row.reviewerInfo">
-                  <el-table-column label="任务名称" prop="taskName"></el-table-column>
-                  <el-table-column label="分配人" width="135">
-                    <template slot-scope="{row}">{{row.name||"-"}}</template>
-                  </el-table-column>
-                  <el-table-column label="角色">
-                    <template slot-scope="{row}">{{row.groupName||"-"}}</template>
-                  </el-table-column>
-                  <el-table-column label="候选人">
-                    <template slot-scope="{row}">{{row.users||"-"}}</template>
-                  </el-table-column>
-                </el-table>
+                <transactor :data="row.reviewerInfo" />
               </el-popover>
             </template>
           </el-table-column>
@@ -89,19 +78,8 @@
           type="safety_risk_notice"
         />
       </el-form-item>
-      <el-form-item label="办理人" v-if="reviewerInfo.length>0">
-        <el-table :data="reviewerInfo" key="reviewerInfo">
-          <el-table-column label="任务名称" prop="taskName"></el-table-column>
-          <el-table-column label="分配人" width="135">
-            <template slot-scope="{row}">{{row.name||"-"}}</template>
-          </el-table-column>
-          <el-table-column label="角色">
-            <template slot-scope="{row}">{{row.groupName||"-"}}</template>
-          </el-table-column>
-          <el-table-column label="候选人">
-            <template slot-scope="{row}">{{row.users||"-"}}</template>
-          </el-table-column>
-        </el-table>
+      <el-form-item key="reviewerInfo" label="办理人" v-if="reviewerInfo.length>0">
+        <transactor :data="reviewerInfo" width="100%" />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -116,8 +94,9 @@ import { format } from '@/utils/datetime'
 import childMeasures from './childMeasures'
 import leaderApprvalRecord from './leaderApprvalRecord'
 import htmlContent from '@/components/common/htmlContent'
+import transactor from '@/components/common/transactor'
 export default {
-  components: { childMeasures, leaderApprvalRecord, htmlContent },
+  components: { childMeasures, leaderApprvalRecord, htmlContent, transactor },
   data() {
     return {
       dialog: false,

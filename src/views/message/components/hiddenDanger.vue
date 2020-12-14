@@ -61,20 +61,9 @@
         <el-table-column label="办理人">
           <template slot-scope="{row}">
             <div v-if="row.reviewerInfo==null">-</div>
-            <el-popover v-else placement="left" width="800">
+            <el-popover v-else placement="left">
               <el-button type="text" slot="reference">详情</el-button>
-              <el-table :data="row.reviewerInfo" size="mini">
-                <el-table-column label="任务名称" prop="taskName"></el-table-column>
-                <el-table-column label="分配人" width="135">
-                  <template slot-scope="{row}">{{row.name||"-"}}</template>
-                </el-table-column>
-                <el-table-column label="角色">
-                  <template slot-scope="{row}">{{row.groupName||"-"}}</template>
-                </el-table-column>
-                <el-table-column label="候选人">
-                  <template slot-scope="{row}">{{row.users||"-"}}</template>
-                </el-table-column>
-              </el-table>
+              <transactor :data="row.reviewerInfo" />
             </el-popover>
           </template>
         </el-table-column>
@@ -98,18 +87,7 @@
       <approvalRecord :data="comments" />
     </el-card>
     <el-card header="办理人" key="reviewersInfo" v-if="reviewersInfo.length>0">
-      <el-table :data="reviewersInfo" size="mini">
-        <el-table-column label="任务名称" prop="taskName"></el-table-column>
-        <el-table-column label="分配人" width="135">
-          <template slot-scope="{row}">{{row.name||"-"}}</template>
-        </el-table-column>
-        <el-table-column label="角色">
-          <template slot-scope="{row}">{{row.groupName||"-"}}</template>
-        </el-table-column>
-        <el-table-column label="候选人">
-          <template slot-scope="{row}">{{row.users||"-"}}</template>
-        </el-table-column>
-      </el-table>
+      <transactor :data="reviewersInfo" width="100%" />
     </el-card>
 
     <fillinForm
@@ -135,8 +113,9 @@ import { queryControlListDetail } from '@/api/hazards'
 import approvalRecord from '@/views/hazardsInvestigation/safetyHazardsReport/components/approvalRecord';
 import fillinForm from '@/views/hazardsInvestigation/safetyHazardsReport/components/fillinForm';
 import detailFillin from '@/views/hazardsInvestigation/safetyHazardsReport/components/detailFillin';
+import transactor from '@/components/common/transactor'
 export default {
-  components: { approvalRecord, detailFillin, fillinForm },
+  components: { approvalRecord, detailFillin, fillinForm, transactor },
   data() {
     return {
       baseApi: process.env.VUE_APP_BASE_API,

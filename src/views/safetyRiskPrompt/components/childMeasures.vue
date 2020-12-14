@@ -32,20 +32,9 @@
       <el-table-column label="办理人" width="80">
         <template slot-scope="{row}">
           <div v-if="row.reviewerInfo==null">-</div>
-          <el-popover v-else placement="left" width="1000">
+          <el-popover v-else placement="left">
             <el-button type="text" size="mini" slot="reference">详情</el-button>
-            <el-table :data="row.reviewerInfo">
-              <el-table-column label="任务名称" prop="taskName"></el-table-column>
-              <el-table-column label="角色">
-                <template slot-scope="{row}">{{row.groupName||"-"}}</template>
-              </el-table-column>
-              <el-table-column label="办理人">
-                <template slot-scope="{row}">{{row.users||row.name||"-"}}</template>
-              </el-table-column>
-              <el-table-column label="下发时间">
-                <template slot-scope="{row}">{{format(row.createTime)}}</template>
-              </el-table-column>
-            </el-table>
+            <transactor :data="row.reviewerInfo" />
           </el-popover>
         </template>
       </el-table-column>
@@ -81,8 +70,9 @@ import ehandle from "./handleTo4";
 import { riskNoticeQueryTask, queryIssueTreeData } from "@/api/risk";
 import cmdIssue from './cmdIssueTreeTable'
 import { format } from '@/utils/datetime'
+import transactor from '@/components/common/transactor'
 export default {
-  components: { leaderApprvalRecord, ehandle, cmdIssue },
+  components: { leaderApprvalRecord, ehandle, cmdIssue, transactor },
   data() {
     return {
       tbLoading: false
