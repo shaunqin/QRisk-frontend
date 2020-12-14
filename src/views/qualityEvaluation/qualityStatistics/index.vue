@@ -53,6 +53,9 @@
           style="width: 100%;"
         >
           <el-table-column v-for="(column,index) in columns" :key="column.name+index" :label="column.name" :prop="column.prop ? column.prop : null">
+              <template slot-scope="{row}" v-if="column.prop=='departmentName'">
+                <span>{{row[column.prop]}}<span v-if="row.fillStatus == '1'"><i class="el-icon-star-on" style="color: #13ce66"></i></span></span>
+              </template>
               <el-table-column
                 v-for="(item,iindex) in column.children"
                 :key="iindex"
