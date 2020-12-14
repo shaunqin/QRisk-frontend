@@ -40,22 +40,29 @@
                 style="width:220px"
               ></el-date-picker>
             </el-form-item>
-            <el-form-item label="发布单位">
+            <!-- <el-form-item label="发布单位">
               <department
                 class="form-dept-tree mini"
                 :value="form.deptPath"
                 @change="deptChange($event,'deptPath')"
                 style="width:220px"
               />
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label>
               <el-button type="success" icon="el-icon-search" @click="toQuery">查询</el-button>
+              <el-button
+                class="filter-item"
+                size="mini"
+                type="success"
+                icon="el-icon-refresh"
+                @click="refresh"
+              >{{$t('global.reset')}}</el-button>
             </el-form-item>
           </el-form>
           <el-form :model="form" size="mini" inline v-if="tabIndex==4||tabIndex==5">
-            <el-form-item label="任务名称">
+            <!-- <el-form-item label="任务名称">
               <el-input v-model="form.name" placeholder="请输入任务名称" style="width:120px"></el-input>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="发起人">
               <el-input v-model="form.starter" placeholder="请输入发起人" style="width:120px"></el-input>
             </el-form-item>
@@ -71,6 +78,13 @@
             </el-form-item>
             <el-form-item label>
               <el-button type="success" icon="el-icon-search" @click="toQuery">查询</el-button>
+              <el-button
+                class="filter-item"
+                size="mini"
+                type="success"
+                icon="el-icon-refresh"
+                @click="refresh"
+              >{{$t('global.reset')}}</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -122,7 +136,7 @@ export default {
         { name: "全员风险", type: 6 },
         { name: "其他评估", type: 7 },
       ],
-      assessmentType: this.$route.query.assType || "",
+      assessmentType: this.$route.query.assType || "1",
       tabIndex: "1",
       count: 0,
       queryForm: {},
@@ -163,6 +177,12 @@ export default {
   methods: {
     toQuery(name) {
       this.queryForm = Object.assign({}, this.form);
+    },
+    refresh() {
+      this.queryForm = {},
+      this.form = {},
+      this.date = ""
+      this.toQuery()
     },
     loadCount() {
       const params = {

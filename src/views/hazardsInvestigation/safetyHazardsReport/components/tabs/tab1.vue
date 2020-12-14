@@ -20,6 +20,7 @@
           <span v-if="row.taskType==2">单次任务</span>
         </template>
       </el-table-column>
+      <el-table-column prop="deptName" label="部门" show-overflow-tooltip />
       <el-table-column prop="dueDate" label="反馈时间" />
       <el-table-column label="安全隐患管控清单">
         <template slot-scope="{row}">

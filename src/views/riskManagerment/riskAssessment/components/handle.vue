@@ -7,18 +7,26 @@
     title="处理待办"
     custom-class="big_dialog"
   >
-    <step1 v-if="step==1" :data="data" :form="form" :assessmentType="assessmentType" />
-    <step2 ref="step2" v-if="step==2" :data="data" :form="form" :assessmentType="assessmentType" />
-    <step3 ref="step3" v-if="step==3" :data="data" :form="form" :assessmentType="assessmentType" />
-    <step4 ref="step4" v-if="step==4" :data="data" :form="form" :assessmentType="assessmentType" />
-    <step5 ref="step5" v-if="step==5" :data="data" :form="form" :assessmentType="assessmentType" />
-    <step6 ref="step6" v-if="step==6" :data="data" :form="form" :assessmentType="assessmentType" />
-    <hairdown ref="hairdown" :data="data" :form="form" />
+    <div v-loading="dialogLoading">
+      <step1 v-if="step==1" :data="data" :form="form" :assessmentType="assessmentType" />
+      <step2 ref="step2" v-if="step==2" :data="data" :form="form"  :assessmentType="assessmentType" />
+      <step3 ref="step3" v-if="step==3" :data="data" :form="form" :assessmentType="assessmentType" />
+      <step4 ref="step4" v-if="step==4" :data="data" :form="form" :assessmentType="assessmentType" />
+      <step5 ref="step5" v-if="step==5" :data="data" :form="form" :assessmentType="assessmentType" />
+      <step6 ref="step6" v-if="step==6" :data="data" :form="form" :assessmentType="assessmentType" />
+      <step7 ref="step7" v-if="step==7" :data="data" :form="form" :assessmentType="assessmentType" />
+      <step8 ref="step8" v-if="step==8" :data="data" :form="form" :assessmentType="assessmentType" />
+      <hairdown ref="hairdown" :data="data" :form="form" />
+      <!-- 风险评价报告 -->
+      <report ref="reportRef" :formId="formId" />
+      <!-- 抄送 -->
+      <ccPerson ref="ccPerson" :deptPath="deptPath" @subCC="subCC" />
+    </div>
+    
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button :loading="loading" type="warning" @click="doSubmitSave">暂存</el-button>
       <el-button
-        v-if="step==1||step==2||step==3||step==5||step==6"
         :loading="loading"
         type="primary"
         @click="doSubmit"
@@ -26,10 +34,6 @@
       <el-button v-if="step==1 && data.hiddenIssue||step==4 && data.hiddenIssue" :loading="hdLoading" type="success" @click="doHairdown">下发</el-button>
       <!-- <el-button v-if="step==2||step==6" :loading="loading" type="primary" @click="doSubmit">确定</el-button> -->
     </div>
-    <!-- 风险评价报告 -->
-    <report ref="reportRef" :formId="formId" />
-    <!-- 抄送 -->
-    <ccPerson ref="ccPerson" :deptPath="deptPath" @subCC="subCC" />
   </el-dialog>
 </template>
 
@@ -41,13 +45,16 @@ import step3 from "./step/step3";
 import step4 from "./step/step4";
 import step5 from "./step/step5";
 import step6 from "./step/step6";
+import step7 from "./step/step7";
+import step8 from "./step/step8";
 import hairdown from './hairdown';
 import ccPerson from './ccPerson';
 import report from "./report";
 export default {
-  components: { step1, step2, step3, step4, step5, step6, hairdown, ccPerson, report },
+  components: { step1, step2, step3, step4, step5, step6, step7, step8, hairdown, ccPerson, report },
   data() {
     return {
+      dialogLoading: false,
       loading: false,
       hdLoading: false,
       dialog: false,
@@ -89,11 +96,14 @@ export default {
       switch (this.step) {
         case 1:
         case 3:
+        case 4:
         case 5:
+        case 7:
           this.submitStep1();
           break;
         case 2:
         case 6:
+        case 8:
           this.judgeCC();
           break;
         default:
@@ -115,7 +125,6 @@ export default {
       this.dialog = false;
     },
     formChange(form) {
-      console.log(form);
       this.form = form;
     },
     submitStep1() {

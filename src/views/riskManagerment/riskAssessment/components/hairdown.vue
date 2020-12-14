@@ -9,8 +9,8 @@
     <el-form ref="form" :model="form" size="small">
       <el-form-item label="选择部门" label-width="80px">
         <department
-          :value="form.pathAndDeadLines"
-          :multiple="true"
+          :value="multiple?form.pathAndDeadLines:''"
+          :multiple="multiple"
           @change="deptChange"
           style="width:100%"
           :measureId="measureId"
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { specialRiskComplete } from "@/api/risk";
+import { specialRiskComplete, specialRiskIssue } from "@/api/risk";
 import department from '@/components/Department/deptByRole'
 
 export default {
@@ -35,10 +35,26 @@ export default {
     return {
       loading: false,
       dialog: false,
-      measureId: ""
+      measureId: "",
+      parentTaskId: ""
     };
   },
-  props: ["data", "form"],
+  props: {
+    data: {
+      type: Object
+    },
+    form: {
+      type: Object
+    },
+    multiple: {
+      type: Boolean,
+      default: true
+    },
+    issue: {
+      type: Boolean,
+      default: true
+    }
+  },
   created() {
     this.measureId = this.data.id;
   },
@@ -55,6 +71,13 @@ export default {
       this.resetForm();
     },
     doSubmit() {
+      if(this.issue) {
+        this.doComplete()
+      } else {
+        this.doIssue()
+      }
+    },
+    doComplete() {
       this.form.processFlag = "3";
       this.loading = true;
       specialRiskComplete(this.form).then(res => {
@@ -68,13 +91,34 @@ export default {
         this.loading = false;
       })
     },
+    doIssue() {
+      this.loading = true;
+      specialRiskIssue(this.form).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          this.resetForm();
+          const params = { taskId: this.form.taskId}
+          if(this.$parent.$parent.$parent.step == 1) {
+            this.$parent.$parent.$parent.$parent.subHandle(params)
+          } else {
+            this.$parent.$parent.$parent.$parent.$parent.subHandle(params)
+          }
+        }
+        this.loading = false;
+      })
+    },
     resetForm() {
       this.dialog = false;
       this.$refs["form"].resetFields();
       this.form.pathAndDeadLines = [];
     },
     deptChange(val) {
-      this.form.pathAndDeadLines = val;
+      if(this.multiple) {
+        this.form.pathAndDeadLines = val;
+      } else {
+        this.form.pathAndDeadLines[0] = val;
+      }
     }
   }
 };

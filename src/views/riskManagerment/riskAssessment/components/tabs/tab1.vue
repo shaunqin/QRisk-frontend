@@ -26,7 +26,7 @@
       style="width: 100%;"
       @selection-change="selectionChange"
     >
-      <el-table-column type="selection" width="45" />
+      <!-- <el-table-column type="selection" width="45" /> -->
       <el-table-column prop="no" label="编号" width="140" />
       <el-table-column label="标题" min-width="140" show-overflow-tooltip>
         <template slot-scope="{row}">
@@ -116,7 +116,11 @@ export default {
         let _this = this.$refs.form;
         _this.assessmentType = this.assessmentType;
         _this.form.assType = this.assessmentType;
-        _this.form.type = "1";
+        if(this.assessmentType == '1' || this.assessmentType == '3') {
+          _this.form.type = "2";
+        } else {
+          _this.form.type = "1";
+        }
         await this.getRiskListMgr()
         _this.dialog = true;
       }
@@ -127,8 +131,25 @@ export default {
           this.$message.error(res.msg);
         } else {
           let _this = this.$refs.detail;
-          _this.data = res.obj;
-          _this.dialog = true;
+          if(this.assessmentType == '4') {
+            _this.assessmentType = this.assessmentType;
+            _this.data = { ...res.obj }
+            if (res.obj.hazardVoList && res.obj.hazardVoList.length > 0) {
+              // _this.list = [...res.obj.hazardVoList]
+              _this.list.map((item, index) => {
+                item.possibility = res.obj.hazardVoList[index].possibility
+                item.rootCauseAnalysis = res.obj.hazardVoList[index].rootCauseAnalysis
+                item.specialRiskMeasureList[0].controlMeasure = res.obj.hazardVoList[index].specialRiskMeasureList[0].controlMeasure
+                item.specialRiskMeasureList[0].reponsibleDept = res.obj.hazardVoList[index].specialRiskMeasureList[0].reponsibleDept
+                item.specialRiskMeasureList[0].completion = res.obj.hazardVoList[index].specialRiskMeasureList[0].completion
+              })
+            }
+            _this.dialog = true;
+          } else {
+            _this.data = res.obj;
+            _this.assessmentType = this.assessmentType
+            _this.dialog = true;
+          }
         }
       });
     },
