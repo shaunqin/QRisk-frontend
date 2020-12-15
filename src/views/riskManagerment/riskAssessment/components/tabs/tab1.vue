@@ -30,16 +30,32 @@
       <el-table-column prop="no" label="编号" width="140" />
       <el-table-column label="标题" min-width="140" show-overflow-tooltip>
         <template slot-scope="{row}">
-          <el-button type="text" size="mini" @click="detail(row)">{{row.title}}</el-button>
+          <el-link v-if="assessmentType=='1' || assessmentType=='3'" type="primary" target="_blank" :href="baseUrl+row.pdfUrl">{{row.title}}</el-link>
+          <el-button v-else type="text" size="mini" @click="detail(row)">{{row.title}}</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="noteContent" label="通知内容" min-width="150" show-overflow-tooltip />
-      <el-table-column prop="issueDept" label="下发部门" />
-      <el-table-column label="拟制人">
+      <el-table-column key="noteContent" v-if="assessmentType!='1' && assessmentType!='3'" prop="noteContent" label="通知内容" min-width="150" show-overflow-tooltip />
+      <el-table-column prop="issueDept" key="issueDept">
+        <template slot="header">
+          {{assessmentType!='1' && assessmentType!='3' ?'下发单位':'单位/部门'}}
+        </template>
+      </el-table-column>
+      <el-table-column key="issueName">
+        <template slot="header">
+          {{assessmentType!='1' && assessmentType!='3' ?'拟制人':'评估人'}}
+        </template>
         <template slot-scope="{row}">{{row.issueName}}[{{row.staffno}}]</template>
       </el-table-column>
-      <el-table-column label="发布日期" width="100">
+      <el-table-column width="100" key="createDate">
+        <template slot="header">
+          {{assessmentType!='1' && assessmentType!='3' ?'发布日期':'评估日期'}}
+        </template>
         <template slot-scope="{row}">{{formatShortDate(row.createDate)}}</template>
+      </el-table-column>
+      <el-table-column key="detail" label width="100" fixed="right" v-if="assessmentType=='1' || assessmentType=='3'">
+        <template slot-scope="{row}">
+          <el-button type="primary" size="mini" @click="detail(row)">查看详情</el-button>
+        </template>
       </el-table-column>
     </el-table>
     <!--分页组件-->
@@ -69,6 +85,7 @@ export default {
   mixins: [initData],
   data() {
     return {
+      baseUrl: process.env.VUE_APP_BASE_API,
       selections: []
     };
   },

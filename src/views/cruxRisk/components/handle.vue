@@ -23,7 +23,7 @@
         type="primary"
         @click="doSubmit"
       >提交</el-button>
-      <el-button v-if="step==1 && data.hiddenIssue||step==4 && data.hiddenIssue" :loading="hdLoading" type="success" @click="doHairdown">下发</el-button>
+      <el-button v-if="(step==1||step==4) && data.hiddenIssue && data.type!='2'" :loading="hdLoading" type="success" @click="doHairdown">下发</el-button>
       <!-- <el-button v-if="step==2||step==6" :loading="loading" type="primary" @click="doSubmit">确定</el-button> -->
     </div>
     <!-- 风险评价报告 -->

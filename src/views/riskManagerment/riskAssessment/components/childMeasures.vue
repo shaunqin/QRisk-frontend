@@ -47,7 +47,7 @@
                       row.groupName || '-'
                     }}</template>
                   </el-table-column>
-                  <el-table-column label="候选人">
+                  <el-table-column label="审批人">
                     <template slot-scope="{ row }">{{
                       row.users || '-'
                     }}</template>
@@ -93,7 +93,7 @@
           </el-table-column>
       <el-table-column label="下发记录" v-if="showIssueRecord">
         <template slot-scope="{row}">
-          <el-button size="mini" type="primary" @click="issueRecord(row)">查询</el-button>
+          <el-button size="mini" type="primary" @click="issueRecord(row)" :loading="tbLoading">查询</el-button>
         </template>
       </el-table-column>
         </el-table>
@@ -107,7 +107,7 @@
 import leaderApprvalRecord from "./leaderApprvalRecord";
 import handleMeasures from "./handleTo4";
 import hairdown from './hairdown'
-import { specialRiskFill, queryIssueTreeData } from "@/api/risk";
+import { specialRiskFill, queryIssueTreeNoteData } from "@/api/risk";
 import cmdIssue from './cmdIssueTreeTable'
 import { format, formatShortDate } from '@/utils/datetime'
 export default {
@@ -115,6 +115,7 @@ export default {
   data() {
     return {
       reviewLoading: false,
+      tbLoading: false,
       formHairdown: {}
     }
   },
@@ -170,7 +171,8 @@ export default {
     },
     issueRecord(row) {
       this.tbLoading = true;
-      queryIssueTreeData(row.id).then(res => {
+      const issueType = '1';
+      queryIssueTreeNoteData(issueType, row.id).then(res => {
         this.tbLoading = false;
         if (res.code != '200') {
           this.$message.error(res.msg);

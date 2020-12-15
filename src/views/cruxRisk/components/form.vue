@@ -25,8 +25,17 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="下发部门">
-            <deptByRole :value="form.issueDepts" :multiple="true" @change="deptChange($event,'issueDepts')"></deptByRole>
+          <el-form-item>
+            <template slot="label">
+              {{form.type !='2' ?'下发部门':'分析单位'}}
+            </template>
+            <deptByRole v-if="form.type !='2'" :value="form.issueDepts" :multiple="true" @change="deptChange($event,'issueDepts')"></deptByRole>
+            <department
+              v-else
+              class="form-dept-tree mini"
+              :value="form.issueDepts"
+              @change="deptChange($event,'issueDepts')"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -73,7 +82,7 @@
             <el-form-item label="分析人">
               <el-input v-model="form.analysis"></el-input>
             </el-form-item>
-            <el-form-item label="批准">
+            <el-form-item label="批准人">
               <el-input :disabled="true" v-model="form.approval"></el-input>
             </el-form-item>
           </el-col>
@@ -249,8 +258,15 @@
 
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
-      <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
+      <el-button :loading="loading" type="primary" @click="doSubmit()">{{ form.type=='2' ? '暂存' : '确认'}}</el-button>
+      <el-button
+      v-if="form.type=='2'"
+        type="success"
+        @click="submit"
+        :loading="loading"
+      >提交</el-button>
     </div>
+    <selectEmplotee ref="selectEmplotee" @on-submit="doSubmit" />
   </el-dialog>
 </template>
 
@@ -263,9 +279,10 @@ import department from "@/components/Department/index";
 import deptByRole from "@/components/Department/deptByRole";
 import dictSelect from '@/components/common/dictSelect'
 import eupload from "@/components/Upload/index";
+import selectEmplotee from "./selectEmplotee";
 
 export default {
-  components: { department, deptByRole, dictSelect, eupload },
+  components: { department, deptByRole, dictSelect, eupload, selectEmplotee },
   data() {
     return {
       loading: false,
@@ -357,18 +374,25 @@ export default {
     cancel() {
       this.resetForm();
     },
-    doSubmit() {
+    doSubmit(sqlUserId) {
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.loading = true;
           if (this.isAdd) {
-            this.doAdd()
+            this.doAdd(sqlUserId)
           } else this.doModify()
         }
       });
     },
-    doAdd() {
-      specialRiskAdd(this.form)
+    submit() {
+      let _this = this.$refs.selectEmplotee;
+      // _this.id = this.selections[0];
+      _this.dialog = true;
+    },
+    doAdd(sqlUserId) {
+      let submit
+      if(this.form.type=="2") { submit = sqlUserId?"1":"2"}
+      specialRiskAdd({...this.form, submit: submit, staffno: sqlUserId})
         .then(res => {
           if (res.code === "200") {
             this.$message({

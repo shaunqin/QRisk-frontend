@@ -13,7 +13,7 @@
         <el-row :gutter="16">
           <el-col :span="12">
             <el-form-item label="下发部门" prop="data.issueDeptName">{{data.issueDeptName}}</el-form-item>
-            <el-form-item label="批准" prop="data.approval">{{data.approval}}</el-form-item>
+            <el-form-item label="批准人" prop="data.approval">{{data.approval}}</el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="分析人" prop="data.analysis">{{data.analysis}}</el-form-item>
@@ -83,7 +83,7 @@
           <el-form-item label="编号">{{data.analysisNo}}</el-form-item>
           <el-form-item label="分析人">{{data.analysis}}</el-form-item>
           <el-form-item label="分析单位">{{data.analysisDeptName}}</el-form-item>
-          <el-form-item label="批准">{{data.approval}}</el-form-item>
+          <el-form-item label="批准人">{{data.approval}}</el-form-item>
           <el-form-item label="批准日期">{{formatShortDate(data.approvalDate)}}</el-form-item>
           <el-table :data="data.specialRiskAnalyses" size="mini" max-height="500">
             <el-table-column label="系统" prop="productName" />
@@ -178,14 +178,14 @@
     <el-card header="办理人" key="reviewerInfo" v-if="data.reviewerInfo&&data.reviewerInfo.length>0">
       <transactor :data="data.reviewerInfo" width="100%" />
     </el-card>
-    <!-- <el-card
+    <el-card
         header="下发通知"
         key="childNotes"
         v-if="showChildNotes"
       >
         <childNotes :data="data" :showIssueRecord="true" />
       </el-card>
-    <el-card
+    <!-- <el-card
       header="下发措施"
       key="firstLevelMeasure"
       v-if="showChildMeasures"

@@ -12,11 +12,26 @@
       </el-form-item>
       <el-row :gutter="16">
         <el-col :span="12">
-          <el-form-item label="下发部门">
-            <department :value="form.issueDepts" :multiple="true" @change="deptChange" />
+          <el-form-item>
+            <template slot="label">
+              {{form.type !='2' ?'下发部门':'分析单位'}}
+            </template>
+            <deptByRole v-if="form.type !='2'" :value="form.issueDepts" :multiple="true" @change="deptChange($event,'issueDepts')"></deptByRole>
+            <department
+              v-else
+              class="form-dept-tree mini"
+              :value="form.issueDepts"
+              @change="deptChange($event,'issueDepts')"
+            />
           </el-form-item>
-          <el-form-item label="批准">
+          <el-form-item label="批准人">
             <el-input v-model="form.approval"></el-input>
+          </el-form-item>
+          <el-form-item label="类型">
+            <el-select v-model="form.type" placeholder="请选择类型">
+              <el-option label="通知" value="1"></el-option>
+              <el-option label="评估" value="2"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -92,17 +107,27 @@
     </el-table>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
-      <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
+      <el-button :loading="loading" type="primary" @click="doSubmit()">{{ form.type=='2' ? '暂存' : '确认'}}</el-button>
+      <el-button
+      v-if="form.type=='2'"
+        type="success"
+        @click="submit"
+        :loading="loading"
+      >提交</el-button>
     </div>
+    <selectEmplotee ref="selectEmplotee" @on-submit="doSubmit" />
   </el-dialog>
 </template>
 
 <script>
 import department from '@/components/Department'
+import deptByRole from "@/components/Department/deptByRole";
 import dictSelect from "@/components/common/dictSelect";
 import { specialRiskAdd, specialRiskModify, queryRiskListMgr } from "@/api/risk";
+import selectEmplotee from "./selectEmplotee";
+
 export default {
-  components: { department, dictSelect },
+  components: { department, deptByRole, dictSelect, selectEmplotee },
   props: {
     isAdd: {
       type: Boolean,
@@ -114,7 +139,7 @@ export default {
       loading: false,
       dialog: false,
       possibleRisksList: [],
-      form: {},
+      form: { type: '1' },
       list: [
         { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '开航信息、适用机型、考察需求提供不及时、不准确', hazardSources: '未按规定传递信息', hazard: 'J4-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: '2'}] },
         { product: '维修工程', subSystem: '维修计划和控制', managementProcess: 'ESM LM 022 新开航站机务考察和维修资源准备管理程序', hazardSource: '前期对当地航站维修资源了解不到位', hazardSources: '其他', hazard: 'T2-01', possibility: '', seriousness: '1', possibleRisks: 'F01', riskLevel: '1', rootCauseAnalysis: '', specialRiskMeasureList:[{controlMeasure: '', reponsibleDept: null, completion: '2'}] },
@@ -180,14 +205,19 @@ export default {
     cancel() {
       this.resetForm();
     },
-    doSubmit() {
+    doSubmit(sqlUserId) {
       this.loading = true;
       if (this.isAdd) {
-        this.doAdd()
+        this.doAdd(sqlUserId)
       } else this.doModify()
     },
-    doAdd() {
-      const params = {...this.form, hazardList: this.list, type: '2', assType: '4'}
+    submit() {
+      let _this = this.$refs.selectEmplotee;
+      // _this.id = this.selections[0];
+      _this.dialog = true;
+    },
+    doAdd(sqlUserId) {
+      const params = {...this.form, hazardList: this.list, type: '2', assType: '4', submit: sqlUserId?"1":"2", staffno: sqlUserId}
       specialRiskAdd(params)
         .then(res => {
           if (res.code === "200") {
