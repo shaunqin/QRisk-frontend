@@ -11,7 +11,7 @@
       <el-row :gutter="16">
         <el-col :span="12">
           <el-form-item label="产品" label-width="40px">
-            <el-select v-model="product" placeholder="请选择产品" style="width:100%" clearable>
+            <el-select v-model="product" placeholder="请选择产品" style="width:100%" clearable :disabled="!isAdd">
               <el-option
                 v-for="item in prodList"
                 :key="item.value"

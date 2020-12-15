@@ -648,219 +648,14 @@
         key="childNotes"
         v-if="showChildNotes"
       >
-        <el-table :data="data.childNotes" size="mini">
-          <el-table-column label="截止日期" prop="endTime" width="100">
-            <template slot-scope="{ row }">{{
-              formatShortDate(row.endTime) || '-'
-            }}</template>
-          </el-table-column>
-          <el-table-column
-            label="下发部门"
-            prop="issueDeptName"
-            width="110"
-            show-overflow-tooltip
-          />
-          <el-table-column label="通知内容" prop="noteContent" />
-          <el-table-column label="上报人" prop="reporter" width="120">
-          </el-table-column>
-          <el-table-column label="附件预览" width="120">
-            <template slot-scope="{ row }">
-              <div v-for="(item, index) in row.accessory" :key="index">
-                <el-link
-                  type="primary"
-                  v-if="item != null"
-                  :href="getUrl(item.filePath)"
-                  target="_blank"
-                  >{{ item.originFileName }}</el-link
-                >
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column label="状态" width="160">
-            <template slot-scope="{ row }">
-              <span v-if="row.status == 0">待处理</span>
-              <span v-if="row.status == 1">提交已下发</span>
-              <span v-if="row.status == 2">填报待审批</span>
-              <span v-if="row.status == 3">驳回修改</span>
-              <span v-if="row.status == 4">审批已上报</span>
-              <span v-if="row.status == 5">审批通过,措施待创建</span>
-              <span v-if="row.status == 6">措施下发</span>
-              <span v-if="row.status == 7">反馈待验证</span>
-              <span v-if="row.status == 8">措施验证已上报</span>
-              <span v-if="row.status == 9">验证不通过-重新反馈</span>
-              <span v-if="row.status == 10">验证通过-流程结束</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="办理人" width="80">
-            <template slot-scope="{ row }">
-              <div v-if="row.reviewerInfo == null">-</div>
-              <el-popover v-else placement="left" width="1000">
-                <el-button type="text" size="mini" slot="reference"
-                  >详情</el-button
-                >
-                <el-table :data="row.reviewerInfo">
-                  <el-table-column
-                    label="任务名称"
-                    prop="taskName"
-                  ></el-table-column>
-                  <el-table-column label="分配人" width="135">
-                    <template slot-scope="{ row }">{{
-                      row.name || '-'
-                    }}</template>
-                  </el-table-column>
-                  <el-table-column label="分配时间" width="135">
-                    <template slot-scope="{ row }">{{
-                      formatShortDate(row.createTime) || '-'
-                    }}</template>
-                  </el-table-column>
-                  <el-table-column label="角色">
-                    <template slot-scope="{ row }">{{
-                      row.groupName || '-'
-                    }}</template>
-                  </el-table-column>
-                  <el-table-column label="候选人">
-                    <template slot-scope="{ row }">{{
-                      row.users || '-'
-                    }}</template>
-                  </el-table-column>
-                </el-table>
-              </el-popover>
-            </template>
-          </el-table-column>
-          <el-table-column label="审批记录" width="100">
-            <template slot-scope="{ row }">
-              <div v-if="row.noteComment == null">-</div>
-              <el-popover v-else placement="left" width="1000">
-                <el-button type="text" size="mini" slot="reference"
-                  >详情</el-button
-                >
-                <leaderApprvalRecord
-                  :data="row.noteComment"
-                  type="safety_measures"
-                />
-              </el-popover>
-            </template>
-          </el-table-column>
-          <el-table-column label="审核" width="160">
-            <template slot-scope="{ row }">
-              <span v-if="!row.reviewing && !row.hiddenSubIssue">-</span>
-              <el-button
-                v-if="row.reviewing"
-                type="warning"
-                size="mini"
-                @click="doHandle(row)"
-                :loading="reviewLoading"
-                >办理</el-button
-              >
-              <el-button
-                v-if="row.hiddenSubIssue"
-                type="primary"
-                size="mini"
-                @click="doHairdown(row)"
-                :loading="reviewLoading"
-                >下发</el-button
-              >
-            </template>
-          </el-table-column>
-        </el-table>
+        <childNotes :data="data" />
       </el-card>
       <el-card
         header="已下发措施"
         key="childMeasures"
         v-if="showChildMeasures"
       >
-        <el-table :data="data.childMeasures" size="mini">
-          <el-table-column label="编号" prop="no" />
-          <el-table-column label="责任单位" prop="reponsibleDeptName" width="120" show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column label="控制措施" prop="controlMeasure" width="120" show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column label="落实情况" prop="completion" />
-          <el-table-column label="完成期限" prop="deadline" width="100">
-            <template slot-scope="{ row }">{{
-              formatShortDate(row.deadline) || '-'
-            }}</template>
-          </el-table-column>
-          <el-table-column label="状态" width="160">
-            <template slot-scope="{ row }">
-              <span v-if="row.status == 11">措施待填报</span>
-              <span v-if="row.status == 12">措施审核中</span>
-              <span v-if="row.status == 13">措施已关闭</span>
-              <span v-if="row.status == 14">措施驳回中</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="办理人" width="80">
-            <template slot-scope="{ row }">
-              <div v-if="row.reviewerInfo == null">-</div>
-              <el-popover v-else placement="left" width="1000">
-                <el-button type="text" size="mini" slot="reference"
-                  >详情</el-button
-                >
-                <el-table :data="row.reviewerInfo">
-                  <el-table-column
-                    label="任务名称"
-                    prop="taskName"
-                  ></el-table-column>
-                  <el-table-column label="分配人" width="135">
-                    <template slot-scope="{ row }">{{
-                      row.name || '-'
-                    }}</template>
-                  </el-table-column>
-                  <el-table-column label="分配时间" width="135">
-                    <template slot-scope="{ row }">{{
-                      formatShortDate(row.createTime) || '-'
-                    }}</template>
-                  </el-table-column>
-                  <el-table-column label="角色">
-                    <template slot-scope="{ row }">{{
-                      row.groupName || '-'
-                    }}</template>
-                  </el-table-column>
-                  <el-table-column label="候选人">
-                    <template slot-scope="{ row }">{{
-                      row.users || '-'
-                    }}</template>
-                  </el-table-column>
-                </el-table>
-              </el-popover>
-            </template>
-          </el-table-column>
-          <el-table-column label="审批记录" width="100">
-            <template slot-scope="{ row }">
-              <div v-if="row.noteComment == null">-</div>
-              <el-popover v-else placement="left" width="1000">
-                <el-button type="text" size="mini" slot="reference"
-                  >详情</el-button
-                >
-                <leaderApprvalRecord
-                  :data="row.noteComment"
-                  type="safety_measures"
-                />
-              </el-popover>
-            </template>
-          </el-table-column>
-          <el-table-column label="审核" width="160">
-            <template slot-scope="{ row }">
-              <span v-if="!row.reviewing && !row.hiddenSubIssue">-</span>
-              <el-button
-                v-if="row.reviewing"
-                type="warning"
-                size="mini"
-                @click="doHandle(row)"
-                :loading="reviewLoading"
-                >办理</el-button
-              >
-              <el-button
-                v-if="row.hiddenSubIssue"
-                type="primary"
-                size="mini"
-                @click="doHairdown(row)"
-                :loading="reviewLoading"
-                >下发</el-button
-              >
-            </template>
-          </el-table-column>
-        </el-table>
+        <childMeasures :data="data" />
       </el-card>
       <el-card
         header="审批记录"
@@ -875,8 +670,8 @@
         :disabled="true"
         @change="formIdChange"
       />
-      <ehandle ref="ehandle" />
-      <hairdown ref="formHairdown" :data="data" :form="formHairdown" :multiple="false" :issue="false" />
+      <!-- <ehandle ref="ehandle" />
+      <hairdown ref="formHairdown" :data="data" :form="formHairdown" :multiple="false" :issue="false" /> -->
     </div>
   </div>
 </template>
@@ -884,12 +679,14 @@
 <script>
 import { formatShortDate } from '@/utils/datetime'
 import apprvalRecord from '../apprvalRecord'
-import ehandle from '../handleTo4'
-import hairdown from '../hairdown'
+import childMeasures from '../childMeasures'
+import childNotes from '../childNotes'
+// import ehandle from '../handleTo4'
+// import hairdown from '../hairdown'
 import dictSelect from '@/components/common/dictSelect'
 import department from '@/components/Department'
 import report from '../report'
-import leaderApprvalRecord from '../leaderApprvalRecord'
+// import leaderApprvalRecord from '../leaderApprvalRecord'
 import {
   specialRiskSaveHazard,
   specialRiskQueryRiskLevel,
@@ -902,12 +699,14 @@ import { queryHazardList } from '@/api/standard'
 export default {
   components: {
     apprvalRecord,
+    childMeasures,
+    childNotes,
     report,
     dictSelect,
     department,
-    leaderApprvalRecord,
-    ehandle,
-    hairdown,
+    // leaderApprvalRecord,
+    // ehandle,
+    // hairdown,
   },
   data() {
     return {
@@ -1372,7 +1171,7 @@ export default {
         0,
       ],
       reviewLoading: false,
-      formHairdown: {},
+      // formHairdown: {},
     }
   },
   props: ['data', 'form', 'assessmentType'],
@@ -1581,7 +1380,7 @@ export default {
         }
       }
     },
-    doHandle(row) {
+    /* doHandle(row) {
       this.reviewLoading = true
       specialRiskFill(row.taskId).then((res) => {
         this.reviewLoading = false
@@ -1613,7 +1412,7 @@ export default {
       this.formHairdown.taskId = row.parentTaskId
       this.formHairdown.pathAndDeadLines = []
       this.$refs.formHairdown.dialog = true;
-    }
+    } */
   },
 }
 </script>

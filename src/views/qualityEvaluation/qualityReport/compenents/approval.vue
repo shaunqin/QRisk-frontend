@@ -204,7 +204,7 @@ export default {
       reviewMonthTaskParam(params).then(res => {
         if (res.code === "200") {
             this.$message({
-              message: "审批成功",
+              message: `${res.obj ? res.obj : '操作成功！'}`,
               type: "success",
             });
             this.resetForm();
