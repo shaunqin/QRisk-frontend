@@ -18,14 +18,7 @@
       </el-form>
     </div>
     <!--表格渲染-->
-    <el-table
-      v-loading="loading"
-      :data="data"
-      size="small"
-      style="width: 100%;"
-      stripe
-      @selection-change="selectionChange"
-    >
+    <el-table v-loading="loading" :data="data" size="small" style="width: 100%;" stripe>
       <el-table-column prop="no" label="编号" />
       <el-table-column prop="title" label="标题" />
       <el-table-column label="年月">
@@ -51,7 +44,7 @@
         <template slot-scope="scope">
           <el-button-group>
             <el-button size="mini" type="primary" @click="detail(scope.row)">详情</el-button>
-            <el-button size="mini" type="warning">通知</el-button>
+            <el-button size="mini" type="warning" @click="sendNotice(scope.row)">通知</el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -65,23 +58,20 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-    <detail ref="detail" :type="dialogType"></detail>
+    <detail ref="detail"></detail>
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
-import eform from "./form";
-import detail from "./components/detail";
+import detail from "../evaluateReportMonthly/components/detail"; // 取月度评价报告的详情
 import { formatShortDate } from '@/utils/datetime'
+import { riskControlDetailByFormId, riskControlSendDealNotice } from '@/api/risk'
 export default {
-  components: { eform, detail },
+  components: { detail },
   mixins: [initData],
   data() {
     return {
-      isSuperAdmin: false,
-      userInfo: {},
-      selections: [],
       dialogType: "",
       form: { no: "", title: "", date: "" },
     };
@@ -105,51 +95,30 @@ export default {
       this.form = { no: "", title: "", date: "" };
       this.toQuery();
     },
-    // 选择切换
-    selectionChange: function (selections) {
-      this.selections = selections;
-      this.$emit("selectionChange", { selections: selections });
-    },
-    riskControl() {
-      this.dialogType = "";
-      let _this = this.$refs.riskControl;
-      _this.dialog = true;
-    },
     detail(row) {
-      let _this = this.$refs.detail;
-      _this.form = {
-        aa:
-          "飞机在运行过程中出现大翼引气渗漏等重复性故障后，存在返 航、备降、中断起飞的安全风险。",
-        bb: "FP2020050501",
-        cc: "批准",
-        dd: "上海",
-        ee: "2020-06-06",
-        ff: "上海",
-        gg: "杭州",
-        hh: `2020 年 6 月 5 日，A321/B-1833 飞机执行 CA1948 航班，成都起飞后地面监控出现 AIR R WING LEAK 警告信息，飞机返航，该机 5月 3 日曾出现相同的故障信息，并造成飞机返航`,
-        jj: "FP2020050501",
-      };
-      _this.riskForm = {
-        aa: "出现大翼引气渗漏等",
-        bb:
-          "A321/B-1833 飞机执行 CA1948 航班，成都起飞后地面监控出现 AIR R WING LEAK 警告信息",
-        cc: "出现相同的故障信息，并造成飞机返航",
-        dd: "高",
-        ee: "高",
-        ff: "3",
-      };
-      _this.dialog = true;
+      riskControlDetailByFormId(row.todoId).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          let _this = this.$refs.detail;
+          _this.data = res.obj;
+          _this.dialog = true;
+        }
+      })
     },
-    approval(row) {
-      this.dialogType = "审批";
-      let _this = this.$refs.riskControl;
-      _this.dialog = true;
-    },
-    feedback(row) {
-      this.dialogType = "反馈";
-      let _this = this.$refs.riskControl;
-      _this.dialog = true;
-    },
+    sendNotice(row) {
+      this.$confirm("确认发送通知吗?").then(() => {
+        this.loading = true;
+        riskControlSendDealNotice(row.todoId).then(res => {
+          this.loading = false;
+          if (res.code != '200') {
+            this.$message.error(res.msg);
+          } else {
+            this.$message.success("通知发送成功");
+          }
+        })
+      }).catch(() => { });
+    }
   },
 };
 </script>

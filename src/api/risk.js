@@ -356,11 +356,11 @@ export function riskControlDelete(id) {
   })
 }
 // 提交
-export function riskControlSubmit(id, data) {
+export function riskControlSubmit(id, params) {
   return request({
     url: `/riskControlManage/riskControlManage/submit/${id}`,
     method: 'put',
-    data
+    params
   })
 }
 // 修改提交
@@ -401,7 +401,20 @@ export function riskControlHasDoneDetail(taskId, formId) {
     method: 'get'
   })
 }
-
+// 查询在控风险详情
+export function riskControlDetailByFormId(formId) {
+  return request({
+    url: `/riskControlManage/riskControlManage/query/detailByFormId/${formId}`,
+    method: 'get'
+  })
+}
+// 通知对应用户执行待办事项
+export function riskControlSendDealNotice(formId) {
+  return request({
+    url: `/riskControlManage/riskControlManage/query/sendDealNotice/${formId}`,
+    method: 'get',
+  })
+}
 // ======= 在控风险管理 end ========
 
 // =========  风险措施管控  ==============
@@ -422,5 +435,4 @@ export function notifyUser(params) {
     params
   })
 }
-
 // ======= 风险措施管控 end ========
