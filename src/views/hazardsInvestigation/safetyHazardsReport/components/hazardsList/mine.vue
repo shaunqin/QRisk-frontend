@@ -2,15 +2,16 @@
   <div>
     <!--表格渲染-->
     <el-table v-loading="loading" :data="data" size="small" style="width: 100%" max-height="400px">
+      <el-table-column type="index" :index="getIndex" label="序号"></el-table-column>
+      <el-table-column prop="no" label="编号" width="120px" />
       <el-table-column prop="hiddenName" label="隐患名称" width="120px" show-overflow-tooltip />
-      <el-table-column prop="no" label="编号" width="150px" show-overflow-tooltip />
       <el-table-column label="发现时间" width="100px">
         <template slot-scope="{row}">{{formatShortDate(row.findTime)}}</template>
       </el-table-column>
       <el-table-column prop="sourceName" label="来源" />
-      <el-table-column prop="levelsName" label="等级" />
-      <el-table-column prop="deptName" label="主题单位/部门" width="130px" />
       <el-table-column prop="typeName" label="类型" />
+      <el-table-column prop="levelsName" label="等级" />
+      <el-table-column prop="deptName" label="主体单位/部门" width="120px" show-overflow-tooltip />
       <el-table-column prop="businessName" label="涉及业务" width="100px" />
       <el-table-column prop="processName" label="涉及流程" width="100px" />
       <el-table-column prop="supervisoryUnit" label="监管单位" width="120px" show-overflow-tooltip />
@@ -31,10 +32,7 @@
       <el-table-column label="责任人" width="150px">
         <template slot-scope="{ row }">
           <ul class="tab-ul">
-            <li
-              v-for="item in row.controlList"
-              :key="item.id"
-            >{{ item.responsiblePerson }}</li>
+            <li v-for="item in row.controlList" :key="item.id">{{ item.responsiblePerson }}</li>
           </ul>
         </template>
       </el-table-column>
@@ -42,18 +40,6 @@
         <template slot-scope="{ row }">
           <ul class="tab-ul">
             <li v-for="item in row.controlList" :key="item.id">{{ formatShortDate(item.deadline) }}</li>
-          </ul>
-        </template>
-      </el-table-column>
-      <el-table-column label="措施实施情况跟踪" width="160px">
-        <template slot-scope="{ row }">
-          <ul class="tab-ul">
-            <li v-for="item in row.controlList" :key="item.id">
-              <el-popover trigger="hover" v-if="true" placement="top">
-                <span>{{item.implementationOfMeasures}}</span>
-                <div class="text" slot="reference">{{item.implementationOfMeasures}}</div>
-              </el-popover>
-            </li>
           </ul>
         </template>
       </el-table-column>
@@ -69,9 +55,21 @@
           </ul>
         </template>
       </el-table-column>
+      <el-table-column label="措施实施情况跟踪" width="160px">
+        <template slot-scope="{ row }">
+          <ul class="tab-ul">
+            <li v-for="item in row.controlList" :key="item.id">
+              <el-popover trigger="hover" v-if="true" placement="top">
+                <span>{{item.implementationOfMeasures}}</span>
+                <div class="text" slot="reference">{{item.implementationOfMeasures}}</div>
+              </el-popover>
+            </li>
+          </ul>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="verificationFollowUp"
-        label="治理效果验证标准"
+        label="治理效果情况跟踪"
         width="140px"
         show-overflow-tooltip
       />

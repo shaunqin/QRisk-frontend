@@ -30,7 +30,7 @@
       <el-table-column label="办理人">
         <template slot-scope="{row}">
           <div v-if="row.reviewerInfo==null">-</div>
-          <el-popover v-else placement="left" width="1000">
+          <el-popover v-else placement="left">
             <el-button type="text" slot="reference">详情</el-button>
             <transactor :data="row.reviewerInfo" />
           </el-popover>

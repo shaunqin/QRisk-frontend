@@ -23,7 +23,7 @@
           <el-table-column label="办理人" width="80">
             <template slot-scope="{ row }">
               <div v-if="row.reviewerInfo == null">-</div>
-              <el-popover v-else placement="left" width="1000">
+              <el-popover v-else placement="left">
                 <el-button type="text" size="mini" slot="reference"
                   >详情</el-button
                 >

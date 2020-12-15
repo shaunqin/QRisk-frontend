@@ -176,3 +176,11 @@ export function exportHistoryList(params) {
         params
     })
 }
+
+// 查询领导
+export function queryLeader() {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/queryLeader`,
+        method: 'get',
+    })
+}

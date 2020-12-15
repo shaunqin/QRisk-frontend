@@ -49,7 +49,7 @@
       <approvalRecord :data="comments" />
     </el-card>
     <el-card header="办理人" key="reviewersInfo" v-if="reviewersInfo.length>0">
-      <transactor :data="row.reviewerInfo" width="100%" />
+      <transactor :data="reviewersInfo" width="100%" />
     </el-card>
 
     <fillinForm

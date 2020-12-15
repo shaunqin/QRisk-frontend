@@ -17,19 +17,16 @@
         style="width: 100%"
         max-height="400px"
       >
-        <el-table-column prop="month" label="月份" width="60px" />
-        <el-table-column label="填报人" width="120px">
-          <template slot-scope="{row}">{{ `${row.fillerName}[${row.filler}]` }}</template>
-        </el-table-column>
-        <el-table-column prop="hiddenName" label="隐患名称" width="120px" show-overflow-tooltip />
+        <el-table-column type="index" :index="getIndex" label="序号"></el-table-column>
         <el-table-column prop="no" label="编号" width="120px" />
+        <el-table-column prop="hiddenName" label="隐患名称" width="120px" show-overflow-tooltip />
         <el-table-column label="发现时间" width="100px">
           <template slot-scope="{row}">{{formatShortDate(row.findTime)}}</template>
         </el-table-column>
         <el-table-column prop="sourceName" label="来源" />
-        <el-table-column prop="levelsName" label="等级" />
-        <el-table-column prop="deptName" label="主体单位" width="120px" show-overflow-tooltip />
         <el-table-column prop="typeName" label="类型" />
+        <el-table-column prop="levelsName" label="等级" />
+        <el-table-column prop="deptName" label="主体单位/部门" width="120px" show-overflow-tooltip />
         <el-table-column prop="businessName" label="涉及业务" width="100px" />
         <el-table-column prop="processName" label="涉及流程" width="100px" />
         <el-table-column prop="supervisoryUnit" label="监管单位" width="120px" show-overflow-tooltip />
@@ -55,10 +52,7 @@
         <el-table-column label="责任人" width="150px">
           <template slot-scope="{ row }">
             <ul class="tab-ul">
-              <li
-                v-for="item in row.controlList"
-                :key="item.id"
-              >{{ item.responsiblePerson }}</li>
+              <li v-for="item in row.controlList" :key="item.id">{{ item.responsiblePerson }}</li>
             </ul>
           </template>
         </el-table-column>
@@ -69,18 +63,6 @@
                 v-for="item in row.controlList"
                 :key="item.id"
               >{{ formatShortDate(item.deadline) }}</li>
-            </ul>
-          </template>
-        </el-table-column>
-        <el-table-column label="措施实施情况跟踪" width="160px">
-          <template slot-scope="{ row }">
-            <ul class="tab-ul">
-              <li v-for="item in row.controlList" :key="item.id">
-                <el-popover trigger="hover" v-if="true" placement="top">
-                  <span>{{item.implementationOfMeasures}}</span>
-                  <div class="text" slot="reference">{{item.implementationOfMeasures}}</div>
-                </el-popover>
-              </li>
             </ul>
           </template>
         </el-table-column>
@@ -96,9 +78,21 @@
             </ul>
           </template>
         </el-table-column>
+        <el-table-column label="措施实施情况跟踪" width="160px">
+          <template slot-scope="{ row }">
+            <ul class="tab-ul">
+              <li v-for="item in row.controlList" :key="item.id">
+                <el-popover trigger="hover" v-if="true" placement="top">
+                  <span>{{item.implementationOfMeasures}}</span>
+                  <div class="text" slot="reference">{{item.implementationOfMeasures}}</div>
+                </el-popover>
+              </li>
+            </ul>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="verificationFollowUp"
-          label="治理效果验证标准"
+          label="治理效果情况跟踪"
           width="140px"
           show-overflow-tooltip
         />
@@ -109,6 +103,10 @@
           show-overflow-tooltip
         />
         <el-table-column prop="remarks" label="备注" width="120px" show-overflow-tooltip />
+        <!-- <el-table-column prop="month" label="月份" width="60px" />
+        <el-table-column label="填报人" width="120px">
+          <template slot-scope="{row}">{{ `${row.fillerName}[${row.filler}]` }}</template>
+        </el-table-column>-->
         <el-table-column label="操作" fixed="right" width="100" v-if="showOpera">
           <template slot-scope="{ row }">
             <el-button type="success" icon="el-icon-document-copy" size="mini" @click="copy(row)"></el-button>
@@ -133,12 +131,14 @@
         icon="el-icon-download"
         @click="doExport(1)"
       >导出</el-button>
+      <el-button v-if="showOpera" size="mini" type="warning" @click="openSendAndApproval">发送给领导签批</el-button>
       <mine ref="mine" :taskId="taskId" :type="type" :showOpera="showOpera" @edit="edit" />
     </el-card>
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="cancel">取消</el-button>
     </div>
     <eform ref="form" />
+    <selectEmplotee ref="selectEmplotee" @on-submit="submitSendAndApproval" />
   </el-dialog>
 </template>
 
@@ -149,9 +149,10 @@ import eform from "./form";
 import { formatShortDate } from '@/utils/datetime'
 import mine from './mine'
 import search from './search'
+import selectEmplotee from './selectEmplotee'
 
 export default {
-  components: { eform, mine, search },
+  components: { eform, mine, search, selectEmplotee },
   mixins: [initData],
   data() {
     return {
@@ -217,6 +218,20 @@ export default {
           location.href = url;
         }
       })
+    },
+    openSendAndApproval() {
+      this.$refs.selectEmplotee.dialog = true;
+    },
+    submitSendAndApproval(sqlUserId) {
+      let params = {
+        type: this.type,
+        taskId: this.taskId,
+        sqlUserId
+      }
+      console.log(params)
+      let _this = this.$refs.selectEmplotee;
+      _this.loading = false;
+      _this.resetForm();
     }
   },
 };

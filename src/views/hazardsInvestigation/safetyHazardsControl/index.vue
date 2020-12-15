@@ -18,7 +18,7 @@
       <el-table-column prop="rectificationProgress" label="整改进展" />
       <el-table-column label="操作" width="100px">
         <template slot-scope="scope">
-          <el-button type size="mini" @click="detail(scope.row.id)">详情</el-button>
+          <el-button type="primary" size="mini" @click="detail(scope.row.id)" icon="el-icon-edit"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -68,7 +68,8 @@ export default {
           this.$message.error(res.msg);
         } else {
           let _this = this.$refs.detail;
-          _this.data = res.obj;
+          _this.form = res.obj;
+          _this.form.modifyTimes = 1;
           _this.dialog = true;
         }
       })

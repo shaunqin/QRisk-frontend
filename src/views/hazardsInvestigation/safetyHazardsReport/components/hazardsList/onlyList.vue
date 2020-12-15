@@ -11,19 +11,21 @@
       <search style="matgin-bottom:8px" />
       <!--表格渲染-->
       <el-table v-loading="loading" :data="data" size="small" style="width: 100%">
-        <el-table-column prop="month" label="月份" width="60px" />
-        <el-table-column label="填报人" width="120px">
-          <template slot-scope="{row}">{{ `${row.fillerName}[${row.filler}]` }}</template>
+        <el-table-column type="index" :index="getIndex" label="序号"></el-table-column>
+        <el-table-column prop="no" label="编号" width="120px" >
+          <template slot-scope="{row}">
+            <span v-if="!!row.modifyTimes" style="color:red">{{row.no}}</span>
+            <span v-else>{{row.no}}</span>
+          </template>
         </el-table-column>
         <el-table-column prop="hiddenName" label="隐患名称" width="120px" show-overflow-tooltip />
-        <el-table-column prop="no" label="编号" width="120px" />
         <el-table-column label="发现时间" width="100px">
           <template slot-scope="{row}">{{formatShortDate(row.findTime)}}</template>
         </el-table-column>
         <el-table-column prop="sourceName" label="来源" />
-        <el-table-column prop="levelsName" label="等级" />
-        <el-table-column prop="deptName" label="主体单位" width="120px" show-overflow-tooltip />
         <el-table-column prop="typeName" label="类型" />
+        <el-table-column prop="levelsName" label="等级" />
+        <el-table-column prop="deptName" label="主体单位/部门" width="120px" show-overflow-tooltip />
         <el-table-column prop="businessName" label="涉及业务" width="100px" />
         <el-table-column prop="processName" label="涉及流程" width="100px" />
         <el-table-column prop="supervisoryUnit" label="监管单位" width="120px" show-overflow-tooltip />
@@ -63,18 +65,6 @@
             </ul>
           </template>
         </el-table-column>
-        <el-table-column label="措施实施情况跟踪" width="160px">
-          <template slot-scope="{ row }">
-            <ul class="tab-ul">
-              <li v-for="item in row.controlList" :key="item.id">
-                <el-popover trigger="hover" v-if="true" placement="top">
-                  <span>{{item.implementationOfMeasures}}</span>
-                  <div class="text" slot="reference">{{item.implementationOfMeasures}}</div>
-                </el-popover>
-              </li>
-            </ul>
-          </template>
-        </el-table-column>
         <el-table-column label="治理结果情况跟踪" width="160px">
           <template slot-scope="{ row }">
             <ul class="tab-ul">
@@ -87,9 +77,21 @@
             </ul>
           </template>
         </el-table-column>
+        <el-table-column label="措施实施情况跟踪" width="160px">
+          <template slot-scope="{ row }">
+            <ul class="tab-ul">
+              <li v-for="item in row.controlList" :key="item.id">
+                <el-popover trigger="hover" v-if="true" placement="top">
+                  <span>{{item.implementationOfMeasures}}</span>
+                  <div class="text" slot="reference">{{item.implementationOfMeasures}}</div>
+                </el-popover>
+              </li>
+            </ul>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="verificationFollowUp"
-          label="治理效果验证标准"
+          label="治理效果情况跟踪"
           width="140px"
           show-overflow-tooltip
         />
