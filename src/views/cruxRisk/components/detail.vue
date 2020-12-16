@@ -41,7 +41,7 @@
         <el-form-item label="编号">{{data.analysisNo}}</el-form-item>
         <el-form-item label="分析人">{{data.analysis}}</el-form-item>
         <el-form-item label="分析单位">{{data.analysisDeptName}}</el-form-item>
-        <el-form-item label="批准">{{data.approval}}</el-form-item>
+        <el-form-item label="批准人">{{data.approval}}</el-form-item>
         <el-form-item label="批准日期">{{formatShortDate(data.approvalDate)}}</el-form-item>
         <el-table :data="data.specialRiskAnalyses" size="mini" max-height="500">
           <el-table-column label="系统" prop="productName" />
@@ -122,7 +122,7 @@
     </el-card>
 
     <el-card header="办理人" key="reviewerInfo" v-if="data.reviewerInfo&&data.reviewerInfo.length>0">
-      <transactor :data="row.reviewerInfo" width="100%" />
+      <transactor :data="data.reviewerInfo" width="100%" />
     </el-card>
 
     <el-card

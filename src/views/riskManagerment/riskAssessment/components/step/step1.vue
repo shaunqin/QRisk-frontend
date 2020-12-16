@@ -14,7 +14,7 @@
                 @change="deptChange($event, data, 'issueDepts')"
               />
             </el-form-item>
-            <el-form-item label="批准">
+            <el-form-item label="批准人">
               <el-input v-model="data.approval"></el-input>
             </el-form-item>
           </el-col>
@@ -168,7 +168,7 @@
                   :disabled="formEnable"
                 ></el-input>
               </el-form-item>
-              <el-form-item label="批准">
+              <el-form-item label="批准人">
                 <el-input :disabled="true" v-model="data.approval"></el-input>
               </el-form-item>
             </el-col>
@@ -380,7 +380,7 @@
                   v-model="data.analysis"
                 ></el-input>
               </el-form-item>
-              <el-form-item label="批准">
+              <el-form-item label="批准人">
                 <el-input :disabled="true" v-model="data.approval"></el-input>
               </el-form-item>
             </el-col>
@@ -643,6 +643,16 @@
         </el-card>
       </el-card>
 
+      <report
+        ref="report"
+        :formId="formId"
+        :disabled="true"
+        @change="formIdChange"
+      />
+      <!-- <ehandle ref="ehandle" />
+      <hairdown ref="formHairdown" :data="data" :form="formHairdown" :multiple="false" :issue="false" /> -->
+    </div>
+    
       <el-card
         header="已下发通知"
         key="childNotes"
@@ -664,15 +674,6 @@
       >
         <apprvalRecord :data="data.noticeComments" />
       </el-card>
-      <report
-        ref="report"
-        :formId="formId"
-        :disabled="true"
-        @change="formIdChange"
-      />
-      <!-- <ehandle ref="ehandle" />
-      <hairdown ref="formHairdown" :data="data" :form="formHairdown" :multiple="false" :issue="false" /> -->
-    </div>
   </div>
 </template>
 
@@ -1196,20 +1197,23 @@ export default {
       return this.data.step == 4 || this.data.step == 5 || this.data.step == 6
     },
     list() {
-      const arr = this.listArr.map((item, index) => {
-        item.possibility = this.data.hazardVoList[index].possibility
-        item.rootCauseAnalysis = this.data.hazardVoList[index].rootCauseAnalysis
-        item.specialRiskMeasureList[0].controlMeasure = this.data.hazardVoList[
-          index
-        ].specialRiskMeasureList[0].controlMeasure
-        item.specialRiskMeasureList[0].reponsibleDept = this.data.hazardVoList[
-          index
-        ].specialRiskMeasureList[0].reponsibleDept
-        item.specialRiskMeasureList[0].completion = this.data.hazardVoList[
-          index
-        ].specialRiskMeasureList[0].completion
-        return item
-      })
+      let arr = []
+      if(this.listArr.length == 10) {
+        arr = this.listArr.map((item, index) => {
+          item.possibility = this.data.hazardVoList[index].possibility
+          item.rootCauseAnalysis = this.data.hazardVoList[index].rootCauseAnalysis
+          item.specialRiskMeasureList[0].controlMeasure = this.data.hazardVoList[
+            index
+          ].specialRiskMeasureList[0].controlMeasure
+          item.specialRiskMeasureList[0].reponsibleDept = this.data.hazardVoList[
+            index
+          ].specialRiskMeasureList[0].reponsibleDept
+          item.specialRiskMeasureList[0].completion = this.data.hazardVoList[
+            index
+          ].specialRiskMeasureList[0].completion
+          return item
+        })
+      }
       return arr
     },
     departmentParams() {

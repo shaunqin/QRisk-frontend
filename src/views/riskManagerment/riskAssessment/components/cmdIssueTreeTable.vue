@@ -18,15 +18,15 @@
       <el-table-column label="截止日期">
         <template slot-scope="{row}">{{row.data.deadline}}</template>
       </el-table-column>
-      <el-table-column label="措施内容">
+      <el-table-column label="内容">
         <template slot-scope="{row}">{{row.data.content}}</template>
       </el-table-column>
-      <el-table-column label="落实情况">
+      <!-- <el-table-column label="落实情况">
         <template slot-scope="{row}">{{row.data.impl}}</template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="下发人" prop="issuer" width="130" />
       <el-table-column label="上报人" prop="filler" width="130" />
-      <el-table-column label="附件预览">
+      <!-- <el-table-column label="附件预览">
         <template slot-scope="{row}">
           <div v-for="(item, index) in row.data.files" :key="index">
             <el-link
@@ -37,7 +37,7 @@
             >{{item.originFileName}}</el-link>
           </div>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="状态" width="80">
         <template slot-scope="{row}">
           <span v-if="row.status==0">待填</span>

@@ -16,7 +16,7 @@
             <el-form-item label="编号">{{item.analysisNo}}</el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="批准">{{item.approval}}</el-form-item>
+            <el-form-item label="批准人">{{item.approval}}</el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="日期">{{formatShortDate(item.approvalDate)}}</el-form-item>

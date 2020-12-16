@@ -36,7 +36,7 @@
             <el-form-item label="编号">
               <el-input v-model="form.analysisNo"></el-input>
             </el-form-item>
-            <el-form-item label="批准">
+            <el-form-item label="批准人">
               <el-input v-model="form.approval"></el-input>
             </el-form-item>
           </el-col>

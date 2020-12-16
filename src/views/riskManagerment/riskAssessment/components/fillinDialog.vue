@@ -37,7 +37,7 @@
             <el-form-item label="分析人">
               <el-input v-model="form.analysis"></el-input>
             </el-form-item>
-            <el-form-item label="批准">
+            <el-form-item label="批准人">
               <el-input :disabled="true" v-model="form.approval"></el-input>
             </el-form-item>
           </el-col>
@@ -164,7 +164,7 @@
             <el-form-item label="分析人">
               <el-input v-model="form.analysis"></el-input>
             </el-form-item>
-            <el-form-item label="批准">
+            <el-form-item label="批准人">
               <el-input :disabled="true" v-model="form.approval"></el-input>
             </el-form-item>
           </el-col>

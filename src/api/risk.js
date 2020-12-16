@@ -305,7 +305,13 @@ export function queryRiskListMgr() {
     method: 'get',
   })
 }
-
+// 查询树形下发措施和下发通知
+export function queryIssueTreeNoteData(type, id) {
+  return request({
+    url: `/risk_mgr/special_risk_notice_mgr/treeData/${type}/${id}`,
+    method: 'get',
+  })
+}
 
 // ======== 专项风险 end =======
 

@@ -22,7 +22,7 @@
             <el-form-item label="标题">
               <el-input v-model="form.title" placeholder="请输入主题" style="width:120px"></el-input>
             </el-form-item>
-            <el-form-item label="下发单位">
+            <el-form-item label="下发单位" v-if="assessmentType !='1' && assessmentType !='3'">
               <department
                 class="form-dept-tree mini"
                 :value="form.responsePath"
@@ -30,7 +30,25 @@
                 style="width:220px"
               />
             </el-form-item>
-            <el-form-item label="发布日期">
+            <el-form-item label="发布日期" v-if="assessmentType !='1' && assessmentType !='3'">
+              <el-date-picker
+                v-model="date"
+                unlink-panels
+                type="daterange"
+                placeholder
+                value-format="yyyy-MM-dd"
+                style="width:220px"
+              ></el-date-picker>
+            </el-form-item>
+            <el-form-item label="分析单位" v-if="assessmentType =='1' || assessmentType =='3'">
+              <department
+                class="form-dept-tree mini"
+                :value="form.analysisDept"
+                @change="deptChange($event,'analysisDept')"
+                style="width:220px"
+              />
+            </el-form-item>
+            <el-form-item label="评估日期" v-if="assessmentType =='1' || assessmentType =='3'">
               <el-date-picker
                 v-model="date"
                 unlink-panels
@@ -48,7 +66,7 @@
                 style="width:220px"
               />
             </el-form-item> -->
-            <el-form-item label>
+            <el-form-item label key="query">
               <el-button type="success" icon="el-icon-search" @click="toQuery">查询</el-button>
               <el-button
                 class="filter-item"
@@ -141,7 +159,7 @@ export default {
       count: 0,
       queryForm: {},
       form: {
-        no: "", title: "", responsePath: null
+        no: "", title: "", analysisDept: null
       },
       date: ""
     };
