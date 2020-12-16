@@ -81,27 +81,37 @@ export default {
       default: '/riskmgr_mgr/safety_risk_notice_mgr/query/depts',
     }
   },
+  watch: {
+    measureId(val) {
+      if (val)
+        this.loadData();
+    }
+  },
   created() {
-    let form = !!this.measureId ? { id: this.measureId } : {}
-    this.loading = true;
-    queryDepts(this.url, form).then((res) => {
-      this.loading = false;
-      this.options = res.obj;
-    });
+    this.loadData();
   },
   methods: {
+    loadData() {
+      let form = !!this.measureId ? { id: this.measureId } : {}
+      this.loading = true;
+      queryDepts(this.url, form).then((res) => {
+        this.loading = false;
+        this.options = res.obj;
+      });
+    },
     ckChange(val) {
       if (val) {
         this.selectValue = this.options.map(r => r.deptPath);
       } else {
         this.selectValue = [];
       }
+      this.$emit("change", this.selectValue);
     },
     chooseValue(val) {
       if (val.length != this.options.length) {
-          this.checkAll = false;
-        }
-        this.$emit("change", val);
+        this.checkAll = false;
+      }
+      this.$emit("change", val);
     }
   },
 };

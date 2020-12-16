@@ -61,12 +61,17 @@ export default {
       this.resetForm();
     },
     doSubmit() {
+      if (this.hairDownForm.deptPathList.length == 0) {
+        this.$message.error("请选择部门!");
+        return
+      }
       this.loading = true;
       let params = { ...this.hairDownForm, taskId: this.form.taskId, id: this.measureId };
       riskControlIssue(params).then(res => {
         if (res.code != '200') {
           this.$message.error(res.msg);
         } else {
+          this.$message.success("下发成功")
           this.resetForm();
           this.$parent.$parent.$parent.subHandle(this.form);
         }

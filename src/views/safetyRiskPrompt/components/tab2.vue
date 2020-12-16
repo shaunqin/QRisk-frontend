@@ -57,7 +57,7 @@
       @current-change="pageChange"
     />
     <eform ref="form" :isAdd="isAdd" />
-    <selectEmplotee ref="selectEmplotee" @on-submit="doSubmit" />
+    <selectEmplotee :deptPath="deptPath" ref="selectEmplotee" @on-submit="doSubmit" />
   </div>
 </template>
 
@@ -75,6 +75,7 @@ export default {
   data() {
     return {
       selections: [],
+      deptPath: ""
     };
   },
   mixins: [initData],
@@ -99,6 +100,8 @@ export default {
     // 选择切换
     selectionChange: function (selections) {
       this.selections = selections.map((r) => r.id);
+      if (selections.length > 0)
+        this.deptPath = selections[0].deptPath;
     },
     edit() {
       this.isAdd = false;

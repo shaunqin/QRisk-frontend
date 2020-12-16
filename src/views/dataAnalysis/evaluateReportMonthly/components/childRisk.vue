@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table :data="data" size="mini" :span-method="objectSpanMethod" border>
+    <el-table v-loading="loading" :data="data" size="mini" :span-method="objectSpanMethod" border>
       <el-table-column label="部门" prop="deptPathCn" />
       <el-table-column label="风险" prop="riskName" />
       <el-table-column label="备注" prop="remark" />
@@ -59,21 +59,29 @@
           <el-button v-else type="primary" size="mini" @click="subHandle(row)">办理</el-button>
         </template>
       </el-table-column>
+      <el-table-column label="下发记录">
+        <template slot-scope="{row}">
+          <el-button size="mini" type="primary" @click="issueRecord(row)">查询</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <ehandle ref="ehandle" />
+    <cmdIssue ref="cmdIssue" />
   </div>
 </template>
 
 <script>
 import ehandle from './handleTo4'
-import { riskControlQueryDetailTask } from '@/api/risk'
+import { riskControlQueryDetailTask, riskControlIssueTreeData } from '@/api/risk'
 import transactor from '@/components/common/transactor'
+import cmdIssue from './cmdIssueTreeTable'
 export default {
-  components: { ehandle, transactor },
+  components: { ehandle, transactor, cmdIssue },
   data() {
     return {
       spanArr: [],
-      position: 0
+      position: 0,
+      loading: false
     }
   },
   props: ["data"],
@@ -136,6 +144,19 @@ export default {
           _this.dialog = true;
         }
       });
+    },
+    issueRecord(row) {
+      this.loading = true;
+      riskControlIssueTreeData(row.riskDeptId).then(res => {
+        this.loading = false;
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          let _this = this.$refs.cmdIssue;
+          _this.data = res.obj;
+          _this.dialog = true;
+        }
+      })
     }
   },
 }

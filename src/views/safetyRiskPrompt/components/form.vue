@@ -84,7 +84,7 @@
         </el-row>
       </el-form-item>
     </el-form>
-    <selectEmplotee ref="selectEmplotee" @on-submit="doSubmit" />
+    <selectEmplotee :deptPath="form.deptPath" ref="selectEmplotee" @on-submit="doSubmit" />
     <div slot="footer" class="dialog-footer">
       <el-link
         v-if="form.pdf&&form.pdf.filePath"
@@ -92,7 +92,10 @@
         target="_blank"
         type="primary"
         :underline="false"
-      >查看PDF<i class="el-icon-view el-icon--right"></i> </el-link>
+      >
+        查看PDF
+        <i class="el-icon-view el-icon--right"></i>
+      </el-link>
       <el-button type="info" @click="cancel">取消</el-button>
       <el-button :loading="save_loading" type="success" @click="doSave">保存</el-button>
       <el-button :loading="loading" type="primary" @click="handleEmp">提交</el-button>
@@ -101,7 +104,7 @@
 </template>
 
 <script>
-import { riskNoticeAdd, riskNoticeModify, riskNoticeSaveandSubmit, riskNoticeUpdateandSubmit, } from "@/api/risk";
+import { riskNoticeAdd, riskNoticeModify, riskNoticeSaveandSubmit, riskNoticeUpdateandSubmit, getRiskNoticeNo } from "@/api/risk";
 import department from "@/components/Department/deptByRole";
 import { format } from "@/utils/datetime";
 import selectEmplotee from "./selectEmplotee";
@@ -136,6 +139,13 @@ export default {
       type: Boolean,
       required: true,
     },
+  },
+  watch: {
+    "form.deptPath"(val) {
+      getRiskNoticeNo(val).then(res => {
+        this.form.no = res.obj;
+      })
+    }
   },
   methods: {
     format,
@@ -220,6 +230,7 @@ export default {
         background: "",
         existingRisk: "",
         measures: [],
+        deptPath: '',
       };
     },
     addRisk() {

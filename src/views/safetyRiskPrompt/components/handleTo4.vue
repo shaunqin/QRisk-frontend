@@ -107,7 +107,6 @@ export default {
           this.$message.error(res.msg);
         } else {
           this.$message.success("操作成功");
-          this.resetForm();
           // 办理页面弹出办理
           if (this.isSecChild) {
             // 刷新父页面-已下发措施
@@ -123,6 +122,7 @@ export default {
           }
         }
         this.loading = false;
+        this.resetForm();
       });
     },
     resetForm() {

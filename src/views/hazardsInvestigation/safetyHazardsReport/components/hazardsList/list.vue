@@ -144,7 +144,7 @@
 
 <script>
 import initData from '@/mixins/initData'
-import { copyHiddenDanger, exportList } from "@/api/hazards";
+import { copyHiddenDanger, exportList, signApprove } from "@/api/hazards";
 import eform from "./form";
 import { formatShortDate } from '@/utils/datetime'
 import mine from './mine'
@@ -228,10 +228,15 @@ export default {
         taskId: this.taskId,
         sqlUserId
       }
-      console.log(params)
-      let _this = this.$refs.selectEmplotee;
-      _this.loading = false;
-      _this.resetForm();
+      signApprove(params).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          let _this = this.$refs.selectEmplotee;
+          _this.loading = false;
+          _this.resetForm();
+        }
+      })
     }
   },
 };

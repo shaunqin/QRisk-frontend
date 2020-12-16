@@ -310,10 +310,11 @@ export function queryRiskListMgr() {
 // ======== 专项风险 end =======
 
 // 风险提示编号
-export function getRiskNoticeNo() {
+export function getRiskNoticeNo(deptPath) {
   return request({
     url: `/riskmgr_mgr/safety_risk_notice_mgr/getNextNo`,
     method: 'get',
+    params: { deptPath }
   })
 }
 
@@ -412,6 +413,13 @@ export function riskControlDetailByFormId(formId) {
 export function riskControlSendDealNotice(formId) {
   return request({
     url: `/riskControlManage/riskControlManage/query/sendDealNotice/${formId}`,
+    method: 'get',
+  })
+}
+// 查询在控风险树形下发记录
+export function riskControlIssueTreeData(formId) {
+  return request({
+    url: `/riskControlManage/riskControlManage/treeData/${formId}`,
     method: 'get',
   })
 }

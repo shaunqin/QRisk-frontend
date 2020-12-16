@@ -184,3 +184,11 @@ export function queryLeader() {
         method: 'get',
     })
 }
+// 发送提交审核
+export function signApprove(data) {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/startProcess/signApprove`,
+        method: 'post',
+        data
+    })
+}

@@ -6,8 +6,8 @@
     :visible.sync="dialog"
     title="选择审核人"
   >
-    <emplotee :value="sqlUserId" @change="empChange" />
-    <span style="color:red">*不选则默认所有人</span>
+    <emplotee :deptPath="deptPath" :value="sqlUserId" @change="empChange" />
+    <!-- <span style="color:red">*不选则默认所有人</span> -->
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button :loading="loading" type="primary" @click="doSubmit">确定</el-button>
@@ -27,7 +27,10 @@ export default {
     };
   },
   props: {
-
+    deptPath: {
+      type: String,
+      default: ""
+    }
   },
   created() { },
   methods: {

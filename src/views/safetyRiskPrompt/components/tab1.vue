@@ -97,28 +97,22 @@ export default {
     },
     add() {
       this.isAdd = true;
-      getRiskNoticeNo()
+      queryRiskMgrDept()
         .then((res) => {
           if (res.code != "200") {
             this.$message.error(res.msg);
-            return ""
           } else {
-
-            return res.obj
+            if (res.obj.length > 0) {
+              let _this = this.$refs.form;
+              _this.deptList = res.obj;
+              // 设置默认选中
+              if (res.obj.length > 0) {
+                _this.form.deptPath = res.obj[0].deptPath;
+              }
+              _this.dialog = true;
+            }
           }
         })
-        .then((data) => {
-          queryRiskMgrDept().then(res => {
-            let _this = this.$refs.form;
-            _this.form.no = data;
-            _this.deptList = res.obj;
-            // 设置默认选中
-            if (res.obj.length > 0) {
-              _this.form.deptPath = res.obj[0].deptPath;
-            }
-            _this.dialog = true;
-          })
-        });
     },
     detail(row) {
       riskNoticeDetail(row.id).then((res) => {

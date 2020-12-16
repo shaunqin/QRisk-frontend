@@ -26,6 +26,10 @@ export default {
       type: String,
       default: ""
     },
+    deptPath: {
+      type: String,
+      default: ""
+    }
   },
   computed: {
     _value: {
@@ -37,9 +41,14 @@ export default {
       }
     }
   },
+  watch: {
+    deptPath() {
+      this.init();
+    }
+  },
   methods: {
     init() {
-      queryEmplotee().then(res => {
+      queryEmplotee({ deptPath: this.deptPath }).then(res => {
         if (res.code != '200') {
           this.$message.error(res.msg);
         } else {

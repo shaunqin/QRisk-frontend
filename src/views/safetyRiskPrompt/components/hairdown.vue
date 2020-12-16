@@ -6,7 +6,7 @@
     :visible.sync="dialog"
     title="下发"
   >
-    <el-form :model="hairdownForm" size="small" label-width="auto">
+    <el-form :model="hairdownForm" size="small" label-width="80px">
       <el-form-item label="措施内容">
         <el-input v-model="hairdownForm.content" placeholder style="width:100%"></el-input>
       </el-form-item>
@@ -141,6 +141,10 @@ export default {
       }
     },
     doSubmit() {
+      if (this.hairdownForm.pathAndDeadLines.length == 0) {
+        this.$message.error("请选择部门!");
+        return
+      }
       this.loading = true;
       riskNoticeIssue(this.hairdownForm).then(res => {
         this.loading = false;

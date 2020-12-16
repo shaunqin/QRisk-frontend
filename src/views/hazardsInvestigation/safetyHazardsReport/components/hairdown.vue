@@ -6,7 +6,7 @@
     :visible.sync="dialog"
     title="下发"
   >
-    <el-form :model="hairdownForm" size="small" label-width="auto">
+    <el-form :model="hairdownForm" size="small" label-width="80px">
       <el-form-item label="责任单位">
         <department
           style="width:100%"
@@ -52,6 +52,14 @@ export default {
       default: () => { },
     },
   },
+  watch: {
+    data: {
+      deep: true,
+      handler(data) {
+        this.measureId = data.id;
+      }
+    }
+  },
   methods: {
     cancel() {
       this.resetForm();
@@ -65,6 +73,10 @@ export default {
       }
     },
     doSubmit() {
+      if (this.hairdownForm.path.length == 0) {
+        this.$message.error("请选择部门!");
+        return
+      }
       this.loading = true;
       hazardsIssue(this.hairdownForm).then(res => {
         this.loading = false;

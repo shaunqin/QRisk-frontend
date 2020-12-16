@@ -8,9 +8,7 @@
       size="small"
       :highlight-current-row="true"
       style="width: 100%;"
-      @selection-change="selectionChange"
     >
-      <el-table-column type="selection" width="45" />
       <el-table-column prop="no" label="编号" width="130" />
       <el-table-column label="标题" min-width="150" show-overflow-tooltip>
         <template slot-scope="{row}">
@@ -69,11 +67,6 @@ export default {
       this.url = `/riskControlManage/riskControlManage/query/pageList/${this.page}/${this.size}`;
       this.params = { ...this.queryForm };
       return true;
-    },
-    // 选择切换
-    selectionChange: function (selections) {
-      this.selections = selections;
-      this.$emit("selectionChange", { selections: selections });
     },
     add() {
       this.isAdd = true;
