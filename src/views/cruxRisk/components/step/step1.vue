@@ -17,7 +17,7 @@
     <el-card class="chead">
       <div slot="header" class="hslot">
         <span>危险源</span>
-        <el-button type="text" icon="el-icon-tickets" @click="showReport">风险报告</el-button>
+        <el-button type="text" icon="el-icon-tickets" @click="showReport" :disabled="!data.hiddenReport">风险报告</el-button>
       </div>
       <el-form size="mini" label-width="80px">
         <el-row :gutter="8">
@@ -380,7 +380,7 @@ export default {
     formatShortDate,
     showReport() {
       this.formId = this.data.id;
-      // this.$refs.report.dialog = true;
+      this.$refs.report.dialog = true;
     },
     formIdChange(val) {
       this.formId = val;
