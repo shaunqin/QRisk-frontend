@@ -33,6 +33,13 @@ export const queryHazards = (taskId, formId) => {
         method: 'get'
     })
 }
+export const queryHazards2 = (params) => {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/query`,
+        method: 'get',
+        params
+    })
+}
 
 // 单位下发月度任务
 export const hazardsIssue = (data) => {
@@ -47,6 +54,14 @@ export const hazardsIssue = (data) => {
 export const hazardsComplete = (data) => {
     return request({
         url: `/riskmgr_mgr/hidden_danger/complete/${data.taskId}`,
+        method: 'post',
+        data
+    })
+}
+// runTask 处理待办
+export const hazardsComplete2 = (data) => {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/leadercomplete/${data.taskId}`,
         method: 'post',
         data
     })

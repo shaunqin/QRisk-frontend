@@ -51,6 +51,18 @@
           </span>
         </template>
       </el-table-column>
+      <el-table-column label="excel清单" width="90">
+        <template slot-scope="{row}">
+          <el-link
+            v-if="row.filePath"
+            size="mini"
+            icon="el-icon-download"
+            type="primary"
+            :href="baseApi+row.filePath"
+            target="_blank"
+          >下载</el-link>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="200px" align="center" fixed="right" v-if="showOpera">
         <template slot-scope="scope">
           <el-button-group>
@@ -90,6 +102,7 @@ export default {
       taskId: "",
       type: "",
       showOpera: true,
+      baseApi: process.env.VUE_APP_BASE_API,
     }
   },
   created() {

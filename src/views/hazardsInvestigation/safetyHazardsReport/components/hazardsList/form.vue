@@ -77,25 +77,30 @@
         />
       </el-form-item>
       <el-form-item label="监管单位">
-        <el-input placeholder="请输入内容" v-model="form.supervisoryUnit" class="input-with-select" :disabled="disabled">
-            <template slot="append">
-              <dictSelect
-                type="supervisory_unit"
-                :value="form.supervisoryUnit"
-                @change="dictChange($event,form,'supervisoryUnit')"
-                style="width: 38px"
-                :clearable="false"
-                :disabled="disabled"
-              />
-            </template>
-          </el-input>
+        <el-input
+          placeholder="请输入内容"
+          v-model="form.supervisoryUnit"
+          class="input-with-select"
+          :disabled="disabled"
+        >
+          <template slot="append">
+            <dictSelect
+              type="supervisory_unit"
+              :value="form.supervisoryUnit"
+              @change="dictChange($event,form,'supervisoryUnit')"
+              style="width: 38px"
+              :clearable="false"
+              :disabled="disabled"
+            />
+          </template>
+        </el-input>
       </el-form-item>
-        <el-form-item label="整改进展">
-          <el-select v-model="form.rectificationProgress" placeholder style="width: 140px">
-            <el-option label="正在整改" value="正在整改"></el-option>
-            <el-option label="关闭" value="关闭"></el-option>
-          </el-select>
-        </el-form-item>
+      <el-form-item label="整改进展">
+        <el-select v-model="form.rectificationProgress" placeholder style="width: 140px">
+          <el-option label="正在整改" value="正在整改"></el-option>
+          <el-option label="关闭" value="关闭"></el-option>
+        </el-select>
+      </el-form-item>
       <el-row class="fill-row" :gutter="16">
         <el-col :span="12">
           <el-form-item label="原因分析">
@@ -117,15 +122,15 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-            <el-form-item label="等效措施">
-              <el-input
-                v-model="form.equivalentMeasures"
-                placeholder
-                type="textarea"
-                rows="3"
-                :disabled="disabled"
-              ></el-input>
-            </el-form-item>
+          <el-form-item label="等效措施">
+            <el-input
+              v-model="form.equivalentMeasures"
+              placeholder
+              type="textarea"
+              rows="3"
+              :disabled="disabled"
+            ></el-input>
+          </el-form-item>
           <el-form-item label="备注">
             <el-input v-model="form.remarks" type="textarea" rows="3" :disabled="disabled"></el-input>
           </el-form-item>
@@ -149,16 +154,12 @@
       </el-table-column>
       <el-table-column label="责任人">
         <template slot-scope="{row}">
-          <el-input
-              v-model="row.responsiblePerson"
-              size="mini"
-              :disabled="disabled"
-            ></el-input>
+          <el-input v-model="row.responsiblePerson" size="mini" :disabled="disabled"></el-input>
           <!-- <el-button
             :disabled="disabled"
             type="text"
             @click="PersonClick(row)"
-          >{{!!row.realname?`${row.realname}[${row.responsiblePerson}]`:'请选择'}}</el-button> -->
+          >{{!!row.realname?`${row.realname}[${row.responsiblePerson}]`:'请选择'}}</el-button>-->
         </template>
       </el-table-column>
       <el-table-column label="整改时限">
@@ -229,12 +230,17 @@ export default {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           console.log(this.form)
-          modifyHiddenDanger(this.form).then((res)=>{
-            if(res.code!='200'){
+          modifyHiddenDanger(this.form).then((res) => {
+            if (res.code != '200') {
               this.$message.error(res.msg);
-            }else{
+            } else {
               this.$message.success("修改成功！");
-              this.$parent.$parent.$refs.mine.init();
+              if (this.$parent.$parent.$refs.mine) {
+                this.$parent.$parent.$refs.mine.init();
+              }
+              if (this.$parent.reloadTable) {
+                this.$parent.reloadTable();
+              }
               this.resetForm();
             }
           })

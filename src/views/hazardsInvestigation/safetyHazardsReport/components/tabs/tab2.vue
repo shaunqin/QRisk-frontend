@@ -8,7 +8,7 @@
       :highlight-current-row="true"
       style="width: 100%;"
     >
-      <el-table-column prop="name" label="流程状态">
+      <el-table-column prop="name" label="流程状态" min-width="100">
         <template slot-scope="{row}">
           <el-tag type="warning">{{row.name}}</el-tag>
         </template>
@@ -45,17 +45,19 @@
     />
     <!-- 处理待办 -->
     <handle ref="handle" />
+    <handleRun ref="handleRun" />
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
-import { queryHazards } from "@/api/hazards";
+import { queryHazards, queryHazards2 } from "@/api/hazards";
 import { format } from "@/utils/datetime"
 import handle from "../handle";
+import handleRun from "../handleRun";
 export default {
   mixins: [initData],
-  components: { handle },
+  components: { handle, handleRun },
   mounted() {
     this.init();
   },
@@ -75,25 +77,38 @@ export default {
       return true;
     },
     subHandle(row) {
-      let _this = this.$refs.handle;
-      _this.dialogLoading = true
-      queryHazards(row.taskId, row.formId).then((res) => {
-        if (res.code != "200") {
-          this.$message.error(res.msg);
-        } else {
-          _this.data = res.obj;
-          _this.form.taskId = row.taskId;
-          _this.form.formId = row.formId;
-          if (res.obj.step != 4) {
-            _this.form.comment = res.obj.deptMeasure ? (res.obj.deptMeasure.implementStatus || "") : "";
+      if (row.businessType == 5) {
+        queryHazards(row.taskId, row.formId).then((res) => {
+          let _this = this.$refs.handle;
+          _this.dialogLoading = true;
+          if (res.code != "200") {
+            this.$message.error(res.msg);
+          } else {
+            _this.data = res.obj;
+            _this.form.taskId = row.taskId;
+            _this.form.formId = row.formId;
+            if (res.obj.step != 4) {
+              _this.form.comment = res.obj.deptMeasure ? (res.obj.deptMeasure.implementStatus || "") : "";
+            }
+            _this.form.implementStatus = res.obj.deptMeasure ? (res.obj.deptMeasure.implementStatus || "") : "";
+            _this.dialog = true;
+            setTimeout(() => {
+              _this.dialogLoading = false
+            }, 500);
           }
-          _this.form.implementStatus = res.obj.deptMeasure ? (res.obj.deptMeasure.implementStatus || "") : "";
-          _this.dialog = true;
-          setTimeout(() => {
-            _this.dialogLoading = false
-          }, 500);
-        }
-      });
+        });
+      } else {
+        queryHazards2({ runTaskId: row.taskId }).then((res) => {
+          let _this = this.$refs.handleRun;
+          if (res.code != "200") {
+            this.$message.error(res.msg);
+          } else {
+            _this.data = res.obj;
+            _this.form.taskId = row.taskId;
+            _this.dialog = true;
+          }
+        });
+      }
     },
     formatDate(time) {
       return format(time)

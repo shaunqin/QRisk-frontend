@@ -98,3 +98,12 @@ export const queryNextOperator = (noteId) => {
     method: 'get'
   })
 }
+
+// 在控风险-查询下一操作人
+export const riskControlQueryNextOperator = (params) => {
+  return request({
+    url: `/riskControlManage/riskControlManage/query/nextOperator`,
+    method: 'get',
+    params
+  })
+}

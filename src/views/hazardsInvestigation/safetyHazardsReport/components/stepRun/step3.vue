@@ -1,23 +1,19 @@
 <template>
-  <el-dialog
-    :append-to-body="true"
-    :close-on-click-modal="false"
-    :before-close="cancel"
-    :visible.sync="dialog"
-    title="安全隐患管控清单"
-    custom-class="big_dialog"
-  >
-    <el-card header="全部列表">
-      <search style="matgin-bottom:8px" />
+  <div>
+    <el-card>
+      <div slot="header">
+        <el-link
+          icon="el-icon-download"
+          v-for="(item) in data.excel"
+          :key="item.id"
+          type="primary"
+          :href="baseApi+item.filePath"
+          target="_blank"
+        >{{item.originFileName}}</el-link>
+      </div>
       <!--表格渲染-->
-      <el-table
-        v-loading="loading"
-        :data="data"
-        size="small"
-        style="width: 100%"
-        max-height="400px"
-      >
-        <el-table-column type="index" :index="getIndex" label="序号"></el-table-column>
+      <el-table v-loading="tbLoading" :data="tbList" size="small" style="width: 100%">
+        <el-table-column type="index" label="序号"></el-table-column>
         <el-table-column prop="no" label="编号" width="120px" />
         <el-table-column prop="hiddenName" label="隐患名称" width="120px" show-overflow-tooltip />
         <el-table-column label="发现时间" width="100px">
@@ -103,148 +99,148 @@
           show-overflow-tooltip
         />
         <el-table-column prop="remarks" label="备注" width="120px" show-overflow-tooltip />
-        <!-- <el-table-column prop="month" label="月份" width="60px" />
-        <el-table-column label="填报人" width="120px">
-          <template slot-scope="{row}">{{ `${row.fillerName}[${row.filler}]` }}</template>
-        </el-table-column>-->
-        <el-table-column label="操作" fixed="right" width="100" v-if="showOpera">
-          <template slot-scope="{ row }">
-            <el-button type="success" icon="el-icon-document-copy" size="mini" @click="copy(row)"></el-button>
+        <el-table-column label="操作" fixed="right" width="80">
+          <template slot-scope="{row}">
+            <!-- <el-button type="danger" size="mini" icon="el-icon-delete" @click="subDelete(row.id)"></el-button> -->
+            <el-button type="primary" size="mini" icon="el-icon-edit" @click="edit(row)"></el-button>
           </template>
         </el-table-column>
       </el-table>
-      <!--分页组件-->
-      <el-pagination
-        :total="total"
-        :current-page="page"
-        style="margin-top: 8px;text-align: right"
-        layout="total, prev, pager, next, sizes"
-        @size-change="sizeChange"
-        @current-change="pageChange"
-      />
     </el-card>
-    <el-card header="Ameco安全隐患管控清单">
-      <el-button
-        class="mb"
-        size="mini"
-        type="primary"
-        icon="el-icon-download"
-        @click="doExport(1)"
-      >导出</el-button>
-      <el-button v-if="showOpera" size="mini" type="warning" @click="openSendAndApproval">发送给领导签批</el-button>
-      <mine ref="mine" :taskId="taskId" :type="type" :showOpera="showOpera" @edit="edit" />
+
+    <el-card header="审批记录" v-if="comments.length>0">
+      <el-table :data="comments" size="mini">
+        <el-table-column label="批复人">
+          <template slot-scope="{row}">{{row.name}}[{{row.sqlUserId}}]</template>
+        </el-table-column>
+        <el-table-column label="批复时间">
+          <template slot-scope="{row}">{{format(row.createTime)}}</template>
+        </el-table-column>
+        <el-table-column label="批复结果">
+          <template slot-scope="{row}">
+            <span v-if="row.processFlag=='1'">同意</span>
+            <span v-else>驳回</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="备注" prop="remark" />
+      </el-table>
     </el-card>
-    <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="cancel">取消</el-button>
-    </div>
+
     <eform ref="form" />
-    <selectEmplotee ref="selectEmplotee" @on-submit="submitSendAndApproval" />
-  </el-dialog>
+  </div>
 </template>
 
 <script>
-import initData from '@/mixins/initData'
-import { copyHiddenDanger, exportList, signApprove } from "@/api/hazards";
-import eform from "./form";
-import { formatShortDate } from '@/utils/datetime'
-import mine from './mine'
-import search from './search'
-import selectEmplotee from './selectEmplotee'
-
+import { formatShortDate, format } from '@/utils/datetime'
+import department from '@/components/Department'
+import { queryHazards2, deleteHiddenDanger } from "@/api/hazards";
+import eform from '../hazardsList/form'
 export default {
-  components: { eform, mine, search, selectEmplotee },
-  mixins: [initData],
+  components: { department, eform },
   data() {
     return {
-      dialog: false,
-      data: [],
-    };
-  },
-  props: ["taskId", "type", "showOpera"],
-  created() {
-    // this.init()
-  },
-  watch: {
-    taskId() {
-      if (!!this.taskId) {
-        this.init()
+      baseApi: process.env.VUE_APP_BASE_API,
+      disabled: false,
+      tbLoading: false,
+      tbList: [],
+      queryForm: {
+        runTaskId: this.data.runTaskId,
+        sourcePath: null,
+        hiddenName: "",
+        hiddenNo: ""
       }
     }
   },
+  props: {
+    data: {
+      type: Object,
+      default: () => { }
+    },
+    form: {
+      type: Object,
+      default: () => { }
+    }
+  },
+  watch: {
+    data: {
+      deep: true,
+      handler(data) {
+        this.tbList = data.list;
+      }
+    }
+  },
+  computed: {
+    comments() {
+      if (this.data.comments && this.data.comments.length > 0) {
+        return this.data.comments;
+      }
+      return [];
+    }
+  },
+  created() {
+    this.tbList = this.data.list;
+  },
   methods: {
     formatShortDate,
-    beforeInit() {
-      this.url = `/riskmgr_mgr/hidden_danger/query/subControlList/${this.page}/${this.size}/${this.taskId}/${this.type}`;
-      return true
-    },
-    cancel() {
-      this.resetForm();
-    },
-    resetForm() {
-      this.dialog = false;
-      this.$parent.taskId = "";
-    },
-    copy(row) {
-      this.$confirm("确定复制吗？").then(() => {
-        copyHiddenDanger(row.id).then(res => {
-          if (res.code != '200') {
-            this.$message.error(res.msg);
-          } else {
-            this.$message.success("复制成功！")
-            this.$refs.mine.init();
-          }
-        })
-      }).catch(() => { })
-    },
+    format,
     edit(row) {
       let _this = this.$refs.form;
       _this.form = row;
       _this.dialog = true;
     },
-    doExport(listType) {
-      let params = {};
-      if (listType == 1) {
-        params = { taskId: this.taskId, type: this.type };
-      } else {
-        params = { ...this.params, taskId: this.taskId, type: this.type };
-      }
-      this.$loading();
-      exportList(listType, params).then(res => {
-        this.$loading().close();
-        if (res.code != '200') {
-          this.$message.error(res.obj);
-        } else {
-          let url = `${process.env.VUE_APP_BASE_API}${res.obj}`;
-          location.href = url;
-        }
-      })
+    subDelete(id) {
+      this.$confirm("确定删除吗？").then(() => {
+        deleteHiddenDanger(id).then(res => {
+          if (res.code != '200') {
+            this.$message.error(res.msg);
+          } else {
+            this.$message.success("删除成功！")
+            this.reloadTable();
+          }
+        })
+      }).catch(() => { })
     },
-    openSendAndApproval() {
-      this.$refs.selectEmplotee.dialog = true;
-    },
-    submitSendAndApproval(sqlUserId) {
-      let params = {
-        type: this.type,
-        taskId: this.taskId,
-        sqlUserId
-      }
-      signApprove(params).then(res => {
-        let _this = this.$refs.selectEmplotee;
-        _this.loading = false;
-        if (res.code != '200') {
+    reloadTable() {
+      this.tbLoading = true;
+      queryHazards2(this.queryForm).then((res) => {
+        this.tbLoading = false;
+        if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
-          this.$message.success("发送成功")
-          _this.resetForm();
+          this.tbList = res.obj.list;
         }
-      })
+      });
     }
-  },
-};
+  }
+}
 </script>
 
+<style lang="scss" scoped>
+.detail-form {
+  .el-form-item {
+    margin-bottom: 0px;
+  }
+}
+.file-ul {
+  margin: 0;
+  list-style-type: decimal;
+  padding-inline-start: 20px;
+}
+.el-card + .el-card {
+  margin-top: 20px;
+}
 
-<style lang="scss" scope>
+.fill-row {
+  /deep/ .el-form-item {
+    display: flex;
+    .el-form-item__content {
+      flex: 1;
+    }
+  }
+}
+/deep/ .is-disabled {
+  color: #000;
+}
 .tab-ul {
   list-style: decimal;
   text-align: left;
@@ -255,11 +251,5 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-}
-.el-card + .el-card {
-  margin-top: 20px;
-}
-.mb {
-  margin-bottom: 8px;
 }
 </style>
