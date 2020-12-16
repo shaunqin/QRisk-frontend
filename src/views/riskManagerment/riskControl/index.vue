@@ -166,7 +166,7 @@ export default {
         if (res.code != '200') {
           this.$message.error(res.msg);
         } else {
-          _this.form = [...res.obj]
+          _this.form = {...res.obj}
           _this.dialog = true
         }
       })

@@ -13,12 +13,13 @@
     <step4 ref="step4" v-if="step==4" :data="data" :form="form" />
     <step5 ref="step5" v-if="step==5" :data="data" :form="form" />
     <step6 ref="step6" v-if="step==6" :data="data" :form="form" />
+    <step7 ref="step7" v-if="step==7" :data="data" :form="form" />
+    <step8 ref="step8" v-if="step==8" :data="data" :form="form" />
     <hairdown ref="hairdown" :data="data" :form="form" />
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button :loading="loading" type="warning" @click="doSubmitSave">暂存</el-button>
       <el-button
-        v-if="step==1||step==2||step==3||step==5||step==6"
         :loading="loading"
         type="primary"
         @click="doSubmit"
@@ -41,11 +42,13 @@ import step3 from "./step/step3";
 import step4 from "./step/step4";
 import step5 from "./step/step5";
 import step6 from "./step/step6";
+import step7 from "./step/step7";
+import step8 from "./step/step8";
 import hairdown from './hairdown';
 import ccPerson from './ccPerson';
 import report from "./report";
 export default {
-  components: { step1, step2, step3, step4, step5, step6, hairdown, ccPerson, report },
+  components: { step1, step2, step3, step4, step5, step6, step7, step8, hairdown, ccPerson, report },
   data() {
     return {
       loading: false,
@@ -89,10 +92,12 @@ export default {
         case 1:
         case 3:
         case 5:
+        case 7:
           this.submitStep1();
           break;
         case 2:
         case 6:
+        case 8:
           this.judgeCC();
           break;
         default:

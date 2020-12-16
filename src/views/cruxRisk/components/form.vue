@@ -16,7 +16,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="截止日期">
-            <el-date-picker v-model="form.endTime" value-format="yyyy-MM-dd" style="width: 100%;"></el-date-picker>
+            <el-date-picker v-model="form.endTime" value-format="yyyy-MM-dd" style="width: 100%;" :picker-options="pickerOptions"></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -235,6 +235,7 @@
                   v-model="scope.row.deadline"
                   value-format="yyyy-MM-dd"
                   style="max-width:100%"
+                  :picker-options="pickerOptions"
                 ></el-date-picker>
               </template>
             </el-table-column>
@@ -350,12 +351,22 @@ export default {
       formRules: {
         title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
       },
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7;
+        },
+      }
     };
   },
   props: {
     isAdd: {
       type: Boolean,
       required: true
+    }
+  },
+  watch: {
+    'form.type'(val) {
+      this.form.issueDepts = null
     }
   },
   created() {
@@ -391,8 +402,14 @@ export default {
     },
     doAdd(sqlUserId) {
       let submit
-      if(this.form.type=="2") { submit = sqlUserId?"1":"2"}
-      specialRiskAdd({...this.form, submit: submit, staffno: sqlUserId})
+      let issueDepts = []
+      if(this.form.type=="2") { 
+        submit = sqlUserId?"1":"2"
+        issueDepts.push(this.form.issueDepts)
+      } else {
+        issueDepts = this.form.issueDepts
+      }
+      specialRiskAdd({...this.form, submit: submit, staffno: sqlUserId, issueDepts: issueDepts})
         .then(res => {
           if (res.code === "200") {
             this.$message({

@@ -28,6 +28,7 @@
                 value-format="yyyy-MM-dd"
                 placeholder
                 style="width: 100%"
+                :picker-options="pickerOptions"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -352,7 +353,7 @@
       <el-card class="chead">
         <div slot="header" class="hslot">
           <span>危险源</span>
-          <el-button type="text" icon="el-icon-tickets" @click="showReport"
+          <el-button type="text" icon="el-icon-tickets" @click="showReport" :disabled="!data.hiddenReport"
             >风险报告</el-button
           >
         </div>
@@ -1172,6 +1173,11 @@ export default {
         0,
       ],
       reviewLoading: false,
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7;
+        },
+      }
       // formHairdown: {},
     }
   },
@@ -1242,7 +1248,7 @@ export default {
     formatShortDate,
     showReport() {
       this.formId = this.data.id
-      // this.$refs.report.dialog = true;
+      this.$refs.report.dialog = true;
     },
     formIdChange(val) {
       this.formId = val

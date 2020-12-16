@@ -7,19 +7,20 @@
     :title="'风险评价报告'"
     custom-class="big_dialog"
   >
-    <el-card v-for="(item,index) in form" :key="index">
+    <el-card header="详细信息">
       <el-form class="form" size="mini" label-width="85px">
-      <el-card>
-        <el-form-item label="标题">{{item.analysisTitle}}</el-form-item>
+        <el-form-item label="标题">{{ form.analysisTitle }}</el-form-item>
         <el-row :gutter="16">
           <el-col :span="8">
-            <el-form-item label="编号">{{item.analysisNo}}</el-form-item>
+            <el-form-item label="编号">{{ form.analysisNo }}</el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="批准人">{{item.approval}}</el-form-item>
+            <el-form-item label="批准人">{{ form.approval }}</el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="日期">{{formatShortDate(item.approvalDate)}}</el-form-item>
+            <el-form-item label="日期">{{
+              formatShortDate(form.approvalDate)
+            }}</el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="16">
@@ -27,8 +28,8 @@
             <el-form-item label="评价单位">
               <department
                 class="mini"
-                :value="item.evaluationUnit"
-                @change="deptChange($event,item,'evaluationUnit')"
+                :value="form.evaluationUnit"
+                @change="deptChange($event, 'evaluationUnit')"
                 :disabled="true"
               />
             </el-form-item>
@@ -37,8 +38,8 @@
             <el-form-item label="主送单位">
               <department
                 class="mini"
-                :value="item.distributeDept"
-                @change="deptChange($event,item,'distributeDept')"
+                :value="form.distributeDept"
+                @change="deptChange($event, 'distributeDept')"
                 :disabled="true"
               />
             </el-form-item>
@@ -47,57 +48,79 @@
             <el-form-item label="抄送单位">
               <department
                 class="mini"
-                :value="item.copyDept"
-                @change="deptChange($event,item,'copyDept')"
+                :value="form.copyDept"
+                @change="deptChange($event, 'copyDept')"
                 :disabled="true"
               />
             </el-form-item>
           </el-col>
         </el-row>
         <el-form-item label="背景描述">
-          <el-input v-model="item.background" type="textarea" rows="5" :disabled="true"></el-input>
+          <el-input
+            v-model="form.background"
+            type="textarea"
+            rows="5"
+            :disabled="true"
+          ></el-input>
         </el-form-item>
-        </el-card>
-        <!-- <el-divider></el-divider> -->
-        <el-card header="危险源识别">
-          <el-row :gutter="16">
-          <el-col :span="24">
-            <el-form-item label="危险源">{{item.hazardSourceName}}</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="根原因分析">{{item.rootCauseAnalysis}}</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="可能导致的风险">{{item.possibleRisksName}}</el-form-item>
-          </el-col>
-        </el-row>
-        </el-card>
-        <el-card header="风险分析和评价">
-        <el-row :gutter="16">
-          <el-col :span="8">
-            <el-form-item label="严重性等级">{{item.seriousnessLevelName}}</el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="可能性等级">{{item.possibleLevelName}}</el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="风险等级">{{item.riskLevelName}}</el-form-item>
-          </el-col>
-        </el-row>
-        <el-form-item label="控制目标">{{item.controlObj}}</el-form-item>
-        <el-row :gutter="16">
-          <el-col :span="8">
-            <el-form-item label="控制措施">{{item.controlMeasure}}</el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="责任单位">{{item.reponsibleDeptName}}</el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="完成期限">{{formatShortDate(item.deadline)}}</el-form-item>
-          </el-col>
-        </el-row>
-        </el-card>
       </el-form>
+    </el-card>
+    <!-- <el-divider></el-divider> -->
+    <el-card header="风险识别">
+      <el-table :data="form.specialRiskHazardVos" size="mini">
+        <el-table-column label="危险源" prop="hazardName" />
+        <el-table-column label="可能性等级" prop="possibilityName" />
+        <el-table-column label="严重性等级" prop="seriousnessName" />
+        <el-table-column label="风险等级" prop="riskLevelName" />
+        <el-table-column
+          label="根原因分析"
+          prop="rootCauseAnalysis"
+          width="140"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          label="可能导致的风险"
+          prop="possibleRisksName"
+          width="160"
+          show-overflow-tooltip
+        />
+        <el-table-column label="控制措施" width="160" show-overflow-tooltip>
+          <template slot-scope="{ row }">
+            <ul class="tab-ul">
+              <li v-for="item in row.specialRiskMeasureList" :key="item.id">
+                {{ item.controlMeasure }}
+              </li>
+            </ul>
+          </template>
+        </el-table-column>
+        <el-table-column label="责任单位" width="160" show-overflow-tooltip>
+          <template slot-scope="{ row }">
+            <ul class="tab-ul">
+              <li v-for="item in row.specialRiskMeasureList" :key="item.id">
+                {{ item.reponsibleDeptName }}
+              </li>
+            </ul>
+          </template>
+        </el-table-column>
+        <!-- <el-table-column label="控制目标" width="160" show-overflow-tooltip>
+          <template slot-scope="{ row }">
+            <ul class="tab-ul">
+              <li v-for="item in row.specialRiskMeasureList" :key="item.id">
+                {{ item.controlObj }}
+              </li>
+            </ul>
+          </template>
+        </el-table-column> -->
+        <el-table-column label="完成期限" width="160" show-overflow-tooltip>
+          <template slot-scope="{ row }">
+            <ul class="tab-ul">
+              <li v-for="item in row.specialRiskMeasureList" :key="item.id">
+                {{ formatShortDate(item.deadline) }}
+              </li>
+            </ul>
+          </template>
+        </el-table-column>
+      </el-table>
     </el-card>
 
     <div slot="footer" class="dialog-footer">
@@ -108,8 +131,8 @@
 </template>
 
 <script>
-import { formatShortDate } from "@/utils/datetime";
-import department from "@/components/Department";
+import { formatShortDate } from '@/utils/datetime'
+import department from '@/components/Department'
 
 export default {
   components: { department },
@@ -117,30 +140,46 @@ export default {
     return {
       loading: false,
       dialog: false,
-      form: [],
+      form: {},
       riskForm: {},
       roleSelect: [],
       entArr: [],
-      dataString: "",
-      bumen: "",
-      data: []
-    };
+      dataString: '',
+      bumen: '',
+      data: [],
+    }
   },
   created() {},
   methods: {
     formatShortDate,
     cancel() {
-      this.resetForm();
+      this.resetForm()
     },
     resetForm() {
-      this.dialog = false;
-      this.form = [];
+      this.dialog = false
+      this.form = {}
     },
-  }
-};
+    deptChange(val, key) {
+      this.form[key] = val;
+    },
+  },
+}
 </script>
 
 <style lang="scss" scoped>
-
+.el-card + .el-card {
+  margin-top: 20px;
+}
+.tab-ul {
+  list-style: decimal;
+  text-align: left;
+  padding-inline-start: 20px;
+  margin: 0;
+  .text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
 </style>
 

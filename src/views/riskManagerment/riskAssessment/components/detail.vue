@@ -109,7 +109,7 @@
       <el-card key="hazardVoList" class="chead">
         <div slot="header" class="hslot">
           <span>危险源</span>
-          <el-button type="text" icon="el-icon-tickets" @click="showReport">风险报告</el-button>
+          <el-button type="text" icon="el-icon-tickets" @click="showReport" :disabled="!data.hiddenReport">风险报告</el-button>
         </div>
         <el-table :data="data.hazardVoList" size="mini">
           <el-table-column label="系统" prop="productName" />
@@ -268,7 +268,7 @@ export default {
     formatShortDate,
     showReport() {
       this.formId = this.data.id;
-      // this.$refs.report.dialog = true;
+      this.$refs.report.dialog = true;
     },
     cancel() {
       this.resetForm();
