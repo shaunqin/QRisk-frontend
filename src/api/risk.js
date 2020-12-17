@@ -429,6 +429,13 @@ export function riskControlIssueTreeData(formId) {
     method: 'get',
   })
 }
+// 措施上报的责任单位
+export function riskControlrRespDeptTree(params) {
+  return request({
+    url: `/riskControlManage/riskControlManage/query/respDeptTree/${params.path}`,
+    method: 'get',
+  })
+}
 // ======= 在控风险管理 end ========
 
 // =========  风险措施管控  ==============

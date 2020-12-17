@@ -88,7 +88,7 @@
 <script>
 import { formatShortDate } from '@/utils/datetime';
 import childRisk from '../childRisk'
-import department from '@/components/Department'
+import department from '../department'
 export default {
   components: { childRisk, department },
   data() {

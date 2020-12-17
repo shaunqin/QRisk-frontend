@@ -18,6 +18,7 @@
 
 <script>
 import { hazardsComplete2, } from "@/api/hazards";
+import { validatePWD, } from "@/api/risk";
 import step2 from "./stepRun/step2";
 import step3 from "./stepRun/step3";
 
@@ -48,13 +49,42 @@ export default {
     doSubmit() {
       switch (this.step) {
         case 2:
-          this.submitStep2();
+          this.validatePWD();
           break;
         case 3:
           this.submitStep3();
           break;
         default:
           break;
+      }
+    },
+    validatePWD() {
+      if (this.form.processFlag == "") {
+        this.$message.error("请选择同意/驳回！");
+        return;
+      }
+      if (this.form.processFlag == "1") {
+        this.$prompt('请输入密码', '', {
+          inputType: 'password',
+        }).then(({ value }) => {
+          if (!value) {
+            this.$message.error("请输入密码");
+          } else {
+            validatePWD(value).then(res => {
+              if (res.code != '200') {
+                this.$message.error(res.msg);
+              } else {
+                if (res.obj) {
+                  this.submitStep2();
+                } else {
+                  this.$message.error("密码不正确")
+                }
+              }
+            })
+          }
+        }).catch(() => { })
+      } else {
+        this.submitStep1();
       }
     },
     submitStep2() {
