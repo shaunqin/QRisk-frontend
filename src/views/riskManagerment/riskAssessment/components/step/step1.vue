@@ -267,6 +267,7 @@
                 :value="data.analysisDept"
                 @change="deptAnalysisChange($event, 'analysisDept')"
                 :disabled="formEnable"
+                :path="departmentParams"
               ></department>
             </el-form-item>
             <el-form-item label="批准日期">
@@ -309,6 +310,7 @@
               <el-select
                 v-model="row.possibility"
                 style="width: 100%"
+                @change="forceUpdate()"
                 :disabled="false"
               >
                 <!-- code作为key -->
@@ -346,7 +348,7 @@
           <el-table-column label="风险等级" prop="riskLevel" />
           <el-table-column label="根原因分析" width="200">
             <template slot-scope="{ row }">
-              <el-input v-model="row.rootCauseAnalysis" placeholder></el-input>
+              <el-input v-model="row.rootCauseAnalysis" placeholder @input="forceUpdate()"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="控制措施" min-width="210">
@@ -361,7 +363,7 @@
               </ul>
             </template>
           </el-table-column>
-          <el-table-column label="责任单位" min-width="170">
+          <el-table-column label="责任单位" min-width="380">
             <template slot-scope="{ row }">
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
@@ -613,6 +615,7 @@
                   v-model="scope.row.deadline"
                   value-format="yyyy-MM-dd"
                   :disabled="riskEnable"
+                  :picker-options="pickerOptions"
                   style="max-width: 100%"
                 ></el-date-picker>
               </template>
@@ -1205,7 +1208,7 @@ export default {
       )
     },
     completionEnable() {
-      return this.data.step != 5 && this.data.step != 6
+      return this.data.step != 7 && this.data.step != 8
     },
     showChildNotes() {
       const bool = !(
@@ -1443,7 +1446,11 @@ export default {
         row.specialRiskMeasureList[0].reponsibleDept = null
         row.specialRiskMeasureList[0].completion = ''
       }
-    }
+    },
+    forceUpdate() {
+      this.data.hazardList = this.list
+      this.$forceUpdate()
+    },
     /* doHandle(row) {
       this.reviewLoading = true
       specialRiskFill(row.taskId).then((res) => {

@@ -55,6 +55,7 @@
             <el-form-item label="分析单位">
               <department
                 :value="data.analysisDept"
+                :path="data.issueDept"
                 @change="deptAnalysisChange($event, 'analysisDept')"
                 :disabled="formEnable"
               ></department>
@@ -252,6 +253,7 @@
             <template slot-scope="scope">
               <department
                 :value="scope.row.reponsibleDept"
+                :path="data.issueDept"
                 @change="deptChange($event, scope.row)"
                 :disabled="riskEnable"
               />
@@ -275,6 +277,7 @@
                 v-model="scope.row.deadline"
                 value-format="yyyy-MM-dd"
                 :disabled="riskEnable"
+                :picker-options="pickerOptions"
                 style="max-width: 100%"
               ></el-date-picker>
             </template>
@@ -310,77 +313,12 @@
       @change="formIdChange"
     />
 
-    <!-- <el-card
-      header="已下发通知"
-      key="measures"
-    >
-      <el-table :data="data.childNotes" size="mini">
-      <el-table-column label="截止日期" prop="endTime" width="100" />
-      <el-table-column label="下发部门" prop="issueDeptName" width="110" show-overflow-tooltip />
-      <el-table-column label="通知内容" prop="noteContent" />
-      <el-table-column label="上报人" prop="reporter" width="120">
-      </el-table-column>
-      <el-table-column label="附件预览" width="120">
-        <template slot-scope="{row}">
-          <div v-for="(item, index) in row.accessory" :key="index">
-          <el-link
-            type="primary"
-            v-if="item!=null"
-            :href="getUrl(item.filePath)"
-            target="_blank"
-          >{{item.originFileName}}</el-link>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="状态" width="100">
-        <template slot-scope="{row}">
-          <span v-if="row.status==0">待处理</span>
-          <span v-if="row.status==1">已下发</span>
-          <span v-if="row.status==2">已上报</span>
-          <span v-if="row.status==3">领导同意</span>
-          <span v-if="row.status==4">领导驳回</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="办理人" width="80">
-        <template slot-scope="{row}">
-          <div v-if="row.reviewerInfo==null">-</div>
-          <el-popover v-else placement="left" width="1000">
-            <el-button type="text" size="mini" slot="reference">详情</el-button>
-            <el-table :data="row.reviewerInfo">
-              <el-table-column label="任务名称" prop="taskName"></el-table-column>
-              <el-table-column label="分配人" width="135">
-                <template slot-scope="{row}">{{row.name||"-"}}</template>
-              </el-table-column>
-              <el-table-column label="分配时间" width="135">
-                <template slot-scope="{row}">{{formatShortDate(row.createTime) || "-"}}</template>
-              </el-table-column>
-              <el-table-column label="角色">
-                <template slot-scope="{row}">{{row.groupName||"-"}}</template>
-              </el-table-column>
-              <el-table-column label="候选人">
-                <template slot-scope="{row}">{{row.users||"-"}}</template>
-              </el-table-column>
-            </el-table>
-          </el-popover>
-        </template>
-      </el-table-column>
-      <el-table-column label="审批记录" width="100">
-        <template slot-scope="{row}">
-          <div v-if="row.noteComment==null">-</div>
-          <el-popover v-else placement="left" width="1000">
-            <el-button type="text" size="mini" slot="reference">详情</el-button>
-            <leaderApprvalRecord :data="row.noteComment" type="safety_measures" />
-          </el-popover>
-        </template>
-      </el-table-column>
-      <el-table-column label="审核" width="80">
-        <template slot-scope="{row}">
-          <span v-if="!row.reviewing">-</span>
-          <el-button v-else type="primary" size="mini" @click="doHandle(row)">办理</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    </el-card> -->
+    <el-card header="已下发通知" key="childNotes" v-if="showChildNotes">
+      <childNotes :data="data" />
+    </el-card>
+    <el-card header="已下发措施" key="childMeasures" v-if="showChildMeasures">
+      <childMeasures :data="data" />
+    </el-card>
     <el-card
       header="审批记录"
       key="noticeComments"
@@ -398,6 +336,8 @@ import dictSelect from '@/components/common/dictSelect'
 import department from '@/components/Department'
 import report from '../report'
 import leaderApprvalRecord from '../leaderApprvalRecord'
+import childMeasures from '../childMeasures'
+import childNotes from '../childNotes'
 import {
   specialRiskSaveHazard,
   specialRiskQueryRiskLevel,
@@ -413,6 +353,8 @@ export default {
     dictSelect,
     department,
     leaderApprvalRecord,
+    childMeasures,
+    childNotes,
   },
   data() {
     return {
@@ -422,33 +364,11 @@ export default {
       totalhazardList: [], // 全部危险源
       hazardList: [], // 危险源
       possibleRisksList: [], // 可能导致的风险列表
-      spanArr: [
-        25,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-      ],
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7
+        },
+      },
     }
   },
   props: ['data', 'form'],
@@ -457,13 +377,39 @@ export default {
       return this.data.step
     },
     formEnable() {
-      return this.data.step == 4 || this.data.step == 5 || this.data.step == 6
+      return (
+        this.data.step == 4 ||
+        this.data.step == 5 ||
+        this.data.step == 6 ||
+        this.data.step == 7 ||
+        this.data.step == 8
+      )
     },
     riskEnable() {
-      return this.data.step == 5 || this.data.step == 6
+      return (
+        this.data.step == 4 ||
+        this.data.step == 5 ||
+        this.data.step == 6 ||
+        this.data.step == 7 ||
+        this.data.step == 8
+      )
     },
     completionEnable() {
-      return this.data.step != 5 && this.data.step != 6
+      return this.data.step != 7 && this.data.step != 8
+    },
+    showChildNotes() {
+      const bool = !(
+        (this.data.step == 1 && this.data.hiddenIssue) ||
+        this.data.step == 4 ||
+        this.data.step == 2 ||
+        this.data.step == 6 ||
+        this.data.step == 7 ||
+        this.data.step == 8
+      )
+      return bool
+    },
+    showChildMeasures() {
+      return this.data.step == 4 || this.data.step == 5 || this.data.step == 6
     },
   },
   created() {
@@ -618,17 +564,6 @@ export default {
       }
       item.hazard = this.hazardList[0] ? this.hazardList[0].diskNo : ''
       this.$forceUpdate()
-    },
-    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-      //表格合并行
-      if (columnIndex === 0 || columnIndex === 1 || columnIndex === 2) {
-        const _row = this.spanArr[rowIndex]
-        const _col = _row > 0 ? 1 : 0
-        return {
-          rowspan: _row,
-          colspan: _col,
-        }
-      }
     },
   },
 }
