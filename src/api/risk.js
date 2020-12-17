@@ -313,6 +313,13 @@ export function queryIssueTreeNoteData(type, id) {
   })
 }
 
+// 查询关键风险清单
+export function queryTableList() {
+  return request({
+    url: '/risk_mgr/special_risk_notice_mgr/tableList',
+    method: 'get',
+  })
+}
 // ======== 专项风险 end =======
 
 // 风险提示编号

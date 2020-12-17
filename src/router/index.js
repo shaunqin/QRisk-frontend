@@ -381,16 +381,37 @@ export const asyncRoutes = [{
     title: 'cruxRisk',
     icon: 'cruxRisk'
   },
-  redirect: '/cruxRisk/list',
+  redirect: '/cruxRisk/index',
   children: [
     {
-      path: 'list',
+      path: 'index',
       component: () => import('@/views/cruxRisk/index'),
-      name: 'cruxRiskList',
-      hidden: true,
       meta: {
-        title: 'cruxRiskList'
-      }
+        title: 'cruxRisk',
+        icon: 'cruxRisk'
+      },
+      hidden: true,
+      redirect: '/cruxRisk/index/notificationAndEvaluation',
+      children: [
+        {
+          path: 'notificationAndEvaluation',
+          component: () => import('@/views/cruxRisk/notificationAndEvaluation/index'),
+          name: 'notificationAndEvaluation',
+          hidden: true,
+          meta: {
+            title: 'notificationAndEvaluation'
+          }
+        },
+        {
+          path: 'keyRisksList',
+          component: () => import('@/views/cruxRisk/keyRisksList/index'),
+          name: 'keyRisksList',
+          hidden: true,
+          meta: {
+            title: 'keyRisksList'
+          }
+        }
+      ]
     }
   ]
 },

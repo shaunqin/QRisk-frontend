@@ -7,7 +7,7 @@
     :disabled="disabled"
   >
     <!-- code作为key -->
-    <el-option v-for="item in list" :key="item.key" :label="item.name" :value="item.value"></el-option>
+    <el-option v-for="item in list" :key="item.key" :label="showName?`${item.value}(${item.name})`:item.name" :value="item.value"></el-option>
   </el-select>
 </template>
 
@@ -39,6 +39,10 @@ export default {
     clearable: {
       type: Boolean,
       default: true
+    },
+    showName: {
+      type: Boolean,
+      default: false
     },
   },
   computed: {

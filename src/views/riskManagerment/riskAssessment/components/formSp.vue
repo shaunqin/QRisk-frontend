@@ -89,7 +89,7 @@
             <el-option
               v-for="item in dictList"
               :key="item.key"
-              :label="item.name"
+              :label="`${item.value}(${item.name})`"
               :value="item.value"
             ></el-option>
           </el-select>

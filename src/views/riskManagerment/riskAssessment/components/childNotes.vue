@@ -66,13 +66,13 @@
             @click="doHandle(row)"
             :loading="reviewLoading"
           >办理</el-button>
-          <el-button
+          <!-- <el-button
             v-if="row.hiddenSubIssue"
             type="primary"
             size="mini"
             @click="doHairdown(row)"
             :loading="reviewLoading"
-          >下发</el-button>
+          >下发</el-button> -->
         </template>
       </el-table-column>
       <el-table-column label="通知记录" v-if="showIssueRecord">
