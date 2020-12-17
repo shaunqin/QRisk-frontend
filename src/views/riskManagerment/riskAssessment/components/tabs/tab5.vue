@@ -104,14 +104,12 @@ export default {
           if(this.assessmentType == '4') {
             _this.assessmentType = this.assessmentType;
             _this.data = { ...res.obj }
-            if (res.obj.hazardVoList && res.obj.hazardVoList.length > 0) {
+            if (res.obj.hazardVoList && res.obj.hazardVoList.length == 25) {
               // _this.list = [...res.obj.hazardVoList]
               _this.list.map((item, index) => {
                 item.possibility = res.obj.hazardVoList[index].possibility
                 item.rootCauseAnalysis = res.obj.hazardVoList[index].rootCauseAnalysis
-                item.specialRiskMeasureList[0].controlMeasure = res.obj.hazardVoList[index].specialRiskMeasureList[0].controlMeasure
-                item.specialRiskMeasureList[0].reponsibleDept = res.obj.hazardVoList[index].specialRiskMeasureList[0].reponsibleDept
-                item.specialRiskMeasureList[0].completion = res.obj.hazardVoList[index].specialRiskMeasureList[0].completion
+                item.specialRiskMeasureList = res.obj.hazardVoList[index].specialRiskMeasureList
               })
             }
             _this.dialog = true;

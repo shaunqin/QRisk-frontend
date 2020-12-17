@@ -72,7 +72,7 @@
           </el-table-column>
           <el-table-column label="审核" width="160">
             <template slot-scope="{ row }">
-              <span v-if="!row.reviewing && !row.hiddenSubIssue">-</span>
+              <span v-if="!row.reviewing">-</span>
               <el-button
                 v-if="row.reviewing"
                 type="warning"
@@ -81,14 +81,14 @@
                 :loading="reviewLoading"
                 >办理</el-button
               >
-              <el-button
+              <!-- <el-button
                 v-if="row.hiddenSubIssue"
                 type="primary"
                 size="mini"
                 @click="doHairdown(row)"
                 :loading="reviewLoading"
                 >下发</el-button
-              >
+              > -->
             </template>
           </el-table-column>
       <el-table-column label="下发记录" v-if="showIssueRecord">

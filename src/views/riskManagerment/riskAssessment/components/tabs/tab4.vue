@@ -96,11 +96,11 @@ export default {
           _this.assessmentType = this.assessmentType;
           _this.data = res.obj
           _this.data.endTime = formatShortDate(res.obj.endTime)
-          if(res.obj.type == '2') {
+          /* if(res.obj.type == '2') {
             _this.data.issueDepts = res.obj.issueDept
           } else {
             _this.data.issueDepts = [res.obj.issueDept]
-          }
+          } */
           _this.data.approvalDate = formatShortDate(res.obj.approvalDate);
           if (res.obj.hazardVoList && res.obj.hazardVoList.length > 0) {
             _this.data.hazardList = res.obj.hazardVoList.map(item => {

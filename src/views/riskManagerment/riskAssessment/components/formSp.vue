@@ -6,12 +6,34 @@
     :title="isAdd ? '新增' : '编辑'"
     custom-class="big_dialog"
   >
-    <el-form size="mini" label-width="auto">
-      <el-form-item label="标题">
-        <el-input v-model="form.title"></el-input>
-      </el-form-item>
+    <el-form ref="form" :model="form" size="small" :rules="formRules" label-width="80px">
       <el-row :gutter="16">
         <el-col :span="12">
+          <el-form-item label="标题" prop="title">
+            <el-input v-model="form.title"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="截止日期">
+            <el-date-picker
+              v-model="form.endTime"
+              value-format="yyyy-MM-dd"
+              style="width: 100%"
+              :picker-options="pickerOptions"
+            ></el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="通知内容">
+            <el-input
+              v-model="form.noteContent"
+              style="width: 100%"
+              type="textarea"
+              rows="4"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
           <el-form-item>
             <template slot="label">
               {{ form.type != '2' ? '下发部门' : '分析单位' }}
@@ -29,9 +51,29 @@
               @change="deptChange($event, 'issueDepts')"
             />
           </el-form-item>
-          <el-form-item label="批准人">
-            <el-input v-model="form.approval"></el-input>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="附件">
+            <eupload @success="success"></eupload>
+            <span v-for="(item, index) in form.file" :key="index">
+              <el-link
+                type="primary"
+                v-show="item != null"
+                :href="getUrl(item ? item.filePath : '')"
+                target="_blank"
+                >{{ item ? item.originFileName : '' }}</el-link
+              >
+              <el-popconfirm title="确定删除该附件吗？" @onConfirm="del(item)">
+                <i
+                  class="el-icon-delete"
+                  style="cursor: pointer; margin-right: 10px"
+                  slot="reference"
+                ></i>
+              </el-popconfirm>
+            </span>
           </el-form-item>
+        </el-col>
+        <el-col :span="24" v-if="isAdd">
           <el-form-item label="类型">
             <el-select v-model="form.type" placeholder="请选择类型">
               <el-option label="通知" value="1"></el-option>
@@ -39,124 +81,146 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="分析人">
-            <el-input v-model="form.analysis"></el-input>
-          </el-form-item>
-          <el-form-item label="截止日期">
-            <el-date-picker
-              v-model="form.endTime"
-              value-format="yyyy-MM-dd"
-              placeholder
-              style="width: 100%"
-              :picker-options="pickerOptions"
-            ></el-date-picker>
-          </el-form-item>
-        </el-col>
       </el-row>
-    </el-form>
-    <el-table
-      :data="list"
-      size="mini"
-      :span-method="objectSpanMethod"
-      border
-      height="550"
-    >
-      <el-table-column label="系统" prop="product" />
-      <el-table-column label="子系统" prop="subSystem" />
-      <el-table-column label="管理流程" prop="managementProcess" />
-      <el-table-column
-        label="危险源描述"
-        prop="hazardSource"
-        min-width="300"
-        show-overflow-tooltip
-      />
-      <el-table-column
-        label="危险源"
-        prop="hazardSources"
-        min-width="200"
-        show-overflow-tooltip
-      />
-      <el-table-column label="ID" prop="hazard" />
-      <el-table-column label="可能性" width="110">
-        <template slot-scope="{ row }">
-          <el-select
-            v-model="row.possibility"
-            style="width: 100%"
-            :disabled="false"
-          >
-            <!-- code作为key -->
-            <el-option
-              v-for="item in dictList"
-              :key="item.key"
-              :label="`${item.value}(${item.name})`"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </template>
-      </el-table-column>
-      <el-table-column label="严重性" prop="seriousness" />
-      <el-table-column
-        label="可能导致的风险"
-        prop="possibleRisks"
-        min-width="140"
-      >
-        <template slot-scope="{ row }">
-          <el-select
-            v-model="row.possibleRisks"
-            style="width: 120px"
-            :disabled="true"
-          >
-            <el-option
-              v-for="childItem in possibleRisksList"
-              :key="childItem.riskNo"
-              :label="childItem.riskName"
-              :value="childItem.riskNo"
-            >
-            </el-option>
-          </el-select>
-        </template>
-      </el-table-column>
-      <el-table-column label="风险等级" prop="riskLevel" />
-      <el-table-column label="根原因分析" width="200">
-        <template slot-scope="{ row }">
-          <el-input v-model="row.rootCauseAnalysis" placeholder></el-input>
-        </template>
-      </el-table-column>
-      <el-table-column label="控制措施" min-width="200">
-        <template slot-scope="{ row }">
-          <el-input
-            v-model="row.specialRiskMeasureList[0].controlMeasure"
-            placeholder
-          ></el-input>
-        </template>
-      </el-table-column>
-      <el-table-column label="责任单位" width="160">
-        <template slot-scope="{ row }">
-          <treeselect
-            v-loading="loadingTree"
-            v-model="row.specialRiskMeasureList[0].reponsibleDept"
-            :options="options"
-            :normalizer="normalizer"
-            :default-expand-level="1"
-            :multiple="false"
-            :limit="Infinity"
-            :flat="false"
-            :placeholder="$t('global.select')"
-            appendToBody
+      <el-card header="危险源" key="2" style="margin-top: 20px">
+        <el-row :gutter="8">
+          <el-col :span="8">
+            <el-form-item label="标题">
+              <el-input v-model="form.analysisTitle"></el-input>
+            </el-form-item>
+            <el-form-item label="编号">
+              <el-input :disabled="true" v-model="form.analysisNo"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="分析人">
+              <el-input v-model="form.analysis"></el-input>
+            </el-form-item>
+            <el-form-item label="批准人">
+              <el-input :disabled="true" v-model="form.approval"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="分析单位">
+              <department
+                :value="form.analysisDept"
+                @change="deptChange($event, 'analysisDept')"
+              ></department>
+            </el-form-item>
+            <el-form-item label="批准日期">
+              <el-date-picker
+                v-model="form.approvalDate"
+                value-format="yyyy-MM-dd"
+                style="width: 100%"
+                :disabled="true"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-table
+          :data="list"
+          size="mini"
+          :span-method="objectSpanMethod"
+          border
+          height="550"
+        >
+          <el-table-column label="系统" prop="product" />
+          <el-table-column label="子系统" prop="subSystem" />
+          <el-table-column label="管理流程" prop="managementProcess" />
+          <el-table-column
+            label="危险源描述"
+            prop="hazardSource"
+            min-width="300"
+            show-overflow-tooltip
           />
-        </template>
-      </el-table-column>
-      <el-table-column label="控制状态" width="110">
-        <template slot-scope="{ row }">
-          <el-select v-model="row.specialRiskMeasureList[0].completion">
-            <el-option label="未控制" value="1"></el-option>
-            <el-option label="在控" value="2"></el-option>
-            <el-option label="关闭" value="3"></el-option>
-          </el-select>
-        </template>
-      </el-table-column>
-    </el-table>
+          <el-table-column
+            label="危险源"
+            prop="hazardSources"
+            min-width="200"
+            show-overflow-tooltip
+          />
+          <el-table-column label="ID" prop="hazard" />
+          <el-table-column label="可能性" width="110">
+            <template slot-scope="{ row }">
+              <el-select
+                v-model="row.possibility"
+                style="width: 100%"
+                :disabled="false"
+              >
+                <!-- code作为key -->
+                <el-option
+                  v-for="item in dictList"
+                  :key="item.key"
+                  :label="`${item.value}(${item.name})`"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column label="严重性" prop="seriousness" />
+          <el-table-column
+            label="可能导致的风险"
+            prop="possibleRisks"
+            min-width="140"
+          >
+            <template slot-scope="{ row }">
+              <el-select
+                v-model="row.possibleRisks"
+                style="width: 120px"
+                :disabled="true"
+              >
+                <el-option
+                  v-for="childItem in possibleRisksList"
+                  :key="childItem.riskNo"
+                  :label="childItem.riskName"
+                  :value="childItem.riskNo"
+                >
+                </el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column label="风险等级" prop="riskLevel" />
+          <el-table-column label="根原因分析" width="200">
+            <template slot-scope="{ row }">
+              <el-input v-model="row.rootCauseAnalysis" placeholder></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="控制措施" min-width="200">
+            <template slot-scope="{ row }">
+              <el-input
+                v-model="row.specialRiskMeasureList[0].controlMeasure"
+                placeholder
+              ></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="责任单位" width="160">
+            <template slot-scope="{ row }">
+              <treeselect
+                v-loading="loadingTree"
+                v-model="row.specialRiskMeasureList[0].reponsibleDept"
+                :options="options"
+                :normalizer="normalizer"
+                :default-expand-level="1"
+                :multiple="false"
+                :limit="Infinity"
+                :flat="false"
+                :placeholder="$t('global.select')"
+                appendToBody
+              />
+            </template>
+          </el-table-column>
+          <el-table-column label="控制状态" width="110">
+            <template slot-scope="{ row }">
+              <el-select v-model="row.specialRiskMeasureList[0].completion">
+                <el-option label="未控制" value="1"></el-option>
+                <el-option label="在控" value="2"></el-option>
+                <el-option label="关闭" value="3"></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-card>
+    </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button :loading="loading" type="primary" @click="doSubmit()">{{
@@ -177,12 +241,14 @@
 <script>
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import { delUpload } from '@/api/upload'
 import { queryDepartmentTree } from '@/api/emplotee'
 import { queryDictByName } from '@/api/dict'
+import { specialRiskAdd, specialRiskModify, queryRiskListMgr } from '@/api/risk'
 import department from '@/components/Department'
 import deptByRole from '@/components/Department/deptByRole'
 import dictSelect from '@/components/common/dictSelect'
-import { specialRiskAdd, specialRiskModify, queryRiskListMgr } from '@/api/risk'
+import eupload from '@/components/Upload/index'
 import selectEmplotee from './selectEmplotee'
 
 export default {
@@ -192,6 +258,7 @@ export default {
     dictSelect,
     selectEmplotee,
     Treeselect,
+    eupload,
   },
   props: {
     isAdd: {
@@ -667,6 +734,9 @@ export default {
           return time.getTime() < Date.now() - 8.64e7
         },
       },
+      formRules: {
+        title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
+      },
     }
   },
   watch: {
@@ -803,6 +873,14 @@ export default {
         id: node.key,
         label: node.name,
         children: node.children,
+      }
+    },
+    success(res) {
+      if (res.code != '200') {
+        this.$message.error(res.msg)
+      } else {
+        this.form.file = this.form.file ? this.form.file : []
+        this.form.file.push(res.obj)
       }
     },
   },

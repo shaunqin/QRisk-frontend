@@ -58,7 +58,7 @@
       </el-table-column>
       <el-table-column label="审核" width="160">
         <template slot-scope="{ row }">
-          <span v-if="!row.reviewing && !row.hiddenSubIssue">-</span>
+          <span v-if="!row.reviewing">-</span>
           <el-button
             v-if="row.reviewing"
             type="warning"
@@ -165,7 +165,7 @@ export default {
     issueRecord(row) {
       this.tbLoading = true;
       const issueType = '1';
-      queryIssueTreeNoteData(issueType, row.id).then(res => {
+      queryIssueTreeNoteData(issueType, row.parentId).then(res => {
         this.tbLoading = false;
         if (res.code != '200') {
           this.$message.error(res.msg);
