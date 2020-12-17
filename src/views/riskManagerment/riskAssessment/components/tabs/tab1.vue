@@ -30,7 +30,7 @@
       <el-table-column prop="no" label="编号" width="140" />
       <el-table-column label="标题" min-width="140" show-overflow-tooltip>
         <template slot-scope="{row}">
-          <el-link v-if="assessmentType=='1' || assessmentType=='3'" type="primary" target="_blank" :href="baseUrl+row.pdfUrl">{{row.title}}</el-link>
+          <el-link v-if="assessmentType=='1' || assessmentType=='3'" :type="row.pdfUrl?'primary':'info'" target="_blank" :href="row.pdfUrl?baseUrl+row.pdfUrl:null">{{row.title}}</el-link>
           <el-button v-else type="text" size="mini" @click="detail(row)">{{row.title}}</el-button>
         </template>
       </el-table-column>

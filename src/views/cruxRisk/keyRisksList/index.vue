@@ -1,5 +1,29 @@
 <template>
   <div>
+     <div class="head-container">
+          <el-form size="mini" inline>
+            <el-form-item label="发布日期">
+              <el-date-picker
+                v-model="date"
+                unlink-panels
+                type="daterange"
+                placeholder
+                value-format="yyyy-MM-dd"
+                style="width:220px"
+              ></el-date-picker>
+            </el-form-item>
+            <el-form-item label>
+              <el-button type="success" icon="el-icon-search" @click="toQuery">查询</el-button>
+              <el-button
+                class="filter-item"
+                size="mini"
+                type="success"
+                icon="el-icon-refresh"
+                @click="refresh"
+              >{{$t('global.reset')}}</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
     <el-table
       v-loading="loading"
       :data="data"
@@ -52,8 +76,21 @@ export default {
       columns: [],
       list: {
         headers: [{nameEN: ''}]
-      }
+      },
+      form: {},
+      date: ""
     }
+  },
+  watch: {
+    date(val) {
+      if (val) {
+        this.form.startTime = val[0];
+        this.form.endTime = val[1];
+      } else {
+        this.form.startTime = "";
+        this.form.endTime = "";
+      }
+    },
   },
   created() {
     this.toQuery()
