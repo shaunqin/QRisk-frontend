@@ -82,164 +82,13 @@
         </el-col>
         <el-col :span="24" v-if="isAdd">
           <el-form-item label="类型">
-            <el-select
-              v-model="form.type"
-              placeholder="请选择类型"
-              :disabled="assessmentType == '1' || assessmentType == '3'"
-            >
+            <el-select v-model="form.type" placeholder="请选择活动区域">
               <el-option label="通知" value="1"></el-option>
               <el-option label="评估" value="2"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
       </el-row>
-      <!-- 系统和工作分析记录表 -->
-      <el-card
-        header="系统和工作分析记录表"
-        key="1"
-        v-if="
-          (form.type == 2 &&
-            (assessmentType == '1' || assessmentType == '2')) ||
-          (!isAdd && (assessmentType == '1' || assessmentType == '2'))
-        "
-      >
-        <el-row>
-          <el-col :span="24">
-            <el-button
-              class="mb-10"
-              type="info"
-              size="mini"
-              icon="el-icon-plus"
-              @click="addCol"
-              >新增一行</el-button
-            >
-          </el-col>
-        </el-row>
-        <el-table :data="form.specialRiskAnalyses" size="mini" max-height="500">
-          <el-table-column label="系统" min-width="130">
-            <template slot-scope="{ row }">
-              <el-select
-                v-model="row.product"
-                placeholder="请选择系统"
-                clearable
-              >
-                <el-option label="维修工程" value="维修工程"></el-option>
-              </el-select>
-            </template>
-          </el-table-column>
-          <el-table-column label="子系统" width="130">
-            <template slot-scope="{ row }">
-              <dictSelect
-                type="system"
-                :value="row.subSystem"
-                @change="dictChange($event, row, 'subSystem')"
-              />
-            </template>
-          </el-table-column>
-          <el-table-column label="管理流程" min-width="130">
-            <template slot-scope="{ row }">
-              <el-input v-model="row.managementProcess" placeholder></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column label="责任单位" min-width="200">
-            <template slot-scope="{ row }">
-              <department
-                :value="row.reponsibleUnit"
-                @change="deptChangeOnTb($event, row)"
-              ></department>
-            </template>
-          </el-table-column>
-          <el-table-column label="岗位" min-width="130">
-            <template slot-scope="{ row }">
-              <el-input v-model="row.post" placeholder></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column label="流程要素">
-            <el-table-column label="人" min-width="130">
-              <template slot-scope="{ row }">
-                <el-input
-                  v-model="row.processHuman"
-                  type="textarea"
-                  rows="1"
-                  placeholder
-                ></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column label="机" min-width="130">
-              <template slot-scope="{ row }">
-                <el-input
-                  v-model="row.processMachine"
-                  type="textarea"
-                  rows="1"
-                  placeholder
-                ></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column label="料" min-width="130">
-              <template slot-scope="{ row }">
-                <el-input
-                  v-model="row.processMaterial"
-                  type="textarea"
-                  rows="1"
-                  placeholder
-                ></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column label="法" min-width="130">
-              <template slot-scope="{ row }">
-                <el-input
-                  v-model="row.processRegulation"
-                  type="textarea"
-                  rows="1"
-                  placeholder
-                ></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column label="环" min-width="130">
-              <template slot-scope="{ row }">
-                <el-input
-                  v-model="row.processEnvironment"
-                  type="textarea"
-                  rows="1"
-                  placeholder
-                ></el-input>
-              </template>
-            </el-table-column>
-          </el-table-column>
-          <el-table-column label="流程分析">
-            <el-table-column label="输入" min-width="130">
-              <template slot-scope="{ row }">
-                <el-input
-                  v-model="row.input"
-                  type="textarea"
-                  rows="1"
-                  placeholder
-                ></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column label="输出" min-width="130">
-              <template slot-scope="{ row }">
-                <el-input
-                  v-model="row.output"
-                  type="textarea"
-                  rows="1"
-                  placeholder
-                ></el-input>
-              </template>
-            </el-table-column>
-          </el-table-column>
-          <el-table-column label fixed="right" width="80">
-            <template slot-scope="{ $index }">
-              <el-button
-                type="danger"
-                size="small"
-                icon="el-icon-delete"
-                @click="delCol($index)"
-              ></el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-card>
 
       <!-- 危险源清单 -->
       <el-card
@@ -590,7 +439,6 @@ export default {
       formRules: {
         title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
       },
-      assessmentType: '',
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() < Date.now() - 8.64e7

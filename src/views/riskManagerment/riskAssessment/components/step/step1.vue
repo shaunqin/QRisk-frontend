@@ -3,24 +3,47 @@
     <div v-if="assessmentType == '4'">
       <el-form size="mini" label-width="auto">
         <el-form-item label="标题">
-          <el-input v-model="data.title"></el-input>
+          <el-input v-model="data.title" :disabled="true"></el-input>
         </el-form-item>
         <el-row :gutter="16">
           <el-col :span="12">
-            <el-form-item label="下发部门">
-              <department
+            <el-form-item>
+              <template slot="label">
+                {{ data.type != '2' ? '下发部门' : '分析单位' }}
+              </template>
+              <deptByRole
+                v-if="data.type != '2'"
                 :value="data.issueDepts"
                 :multiple="true"
+                :disabled="true"
+                @change="deptChange($event, data, 'issueDepts')"
+              ></deptByRole>
+              <department
+                v-else
+                class="form-dept-tree mini"
+                :value="data.issueDepts"
+                :disabled="true"
                 @change="deptChange($event, data, 'issueDepts')"
               />
             </el-form-item>
             <el-form-item label="批准人">
-              <el-input v-model="data.approval"></el-input>
+              <el-input v-model="data.approval" :disabled="true"></el-input>
+            </el-form-item>
+
+            <el-form-item label="类型">
+              <el-select
+                v-model="data.type"
+                placeholder="请选择类型"
+                :disabled="true"
+              >
+                <el-option label="通知" value="1"></el-option>
+                <el-option label="评估" value="2"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="分析人">
-              <el-input v-model="data.analysis"></el-input>
+              <el-input v-model="data.analysis" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="截止日期">
               <el-date-picker
@@ -28,6 +51,7 @@
                 value-format="yyyy-MM-dd"
                 placeholder
                 style="width: 100%"
+                :disabled="true"
                 :picker-options="pickerOptions"
               ></el-date-picker>
             </el-form-item>
@@ -59,16 +83,27 @@
         <el-table-column label="ID" prop="hazard" />
         <el-table-column label="可能性" width="110">
           <template slot-scope="{ row }">
-            <!-- <el-select v-model="row.possibility" placeholder>
-            <el-option label="可能性" value="可能性"></el-option>
-          </el-select> -->
-            <dict-select
+            <el-select
+              v-model="row.possibility"
+              style="width: 100%"
+              :disabled="false"
+            >
+              <!-- code作为key -->
+              <el-option
+                v-for="item in dictList"
+                :key="item.key"
+                :label="`${item.value}(${item.name})`"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+            <!-- <dict-select
               :clearable="false"
               :value="row.possibility"
+                :showName="true"
               type="probability_level"
               @change="dictChange($event, row, 'possibility')"
               style="width: 90px"
-            />
+            /> -->
           </template>
         </el-table-column>
         <el-table-column label="严重性" prop="seriousness" />
@@ -109,10 +144,22 @@
         </el-table-column>
         <el-table-column label="责任单位" width="160">
           <template slot-scope="{ row }">
-            <department
+            <treeselect
+              v-loading="loadingTree"
+              v-model="row.specialRiskMeasureList[0].reponsibleDept"
+              :options="options"
+              :normalizer="normalizer"
+              :default-expand-level="1"
+              :multiple="false"
+              :limit="Infinity"
+              :flat="false"
+              :placeholder="$t('global.select')"
+              appendToBody
+            />
+            <!-- <department
               :value="row.specialRiskMeasureList[0].reponsibleDept"
               @change="respChange($event, row)"
-            />
+            /> -->
           </template>
         </el-table-column>
         <el-table-column label="控制状态" width="110">
@@ -353,7 +400,11 @@
       <el-card class="chead">
         <div slot="header" class="hslot">
           <span>危险源</span>
-          <el-button type="text" icon="el-icon-tickets" @click="showReport" :disabled="!data.hiddenReport"
+          <el-button
+            type="text"
+            icon="el-icon-tickets"
+            @click="showReport"
+            :disabled="!data.hiddenReport"
             >风险报告</el-button
           >
         </div>
@@ -604,9 +655,7 @@
             </el-table-column>
             <el-table-column label="落实情况" v-else>
               <template slot-scope="scope">
-                <el-input
-                  v-model="scope.row.completion"
-                ></el-input>
+                <el-input v-model="scope.row.completion"></el-input>
               </template>
             </el-table-column>
             <el-table-column label="完成期限">
@@ -653,32 +702,26 @@
       <!-- <ehandle ref="ehandle" />
       <hairdown ref="formHairdown" :data="data" :form="formHairdown" :multiple="false" :issue="false" /> -->
     </div>
-    
-      <el-card
-        header="已下发通知"
-        key="childNotes"
-        v-if="showChildNotes"
-      >
-        <childNotes :data="data" />
-      </el-card>
-      <el-card
-        header="已下发措施"
-        key="childMeasures"
-        v-if="showChildMeasures"
-      >
-        <childMeasures :data="data" />
-      </el-card>
-      <el-card
-        header="审批记录"
-        key="noticeComments"
-        v-if="data.noticeComments && data.noticeComments.length > 0"
-      >
-        <apprvalRecord :data="data.noticeComments" />
-      </el-card>
+
+    <el-card header="已下发通知" key="childNotes" v-if="showChildNotes">
+      <childNotes :data="data" />
+    </el-card>
+    <el-card header="已下发措施" key="childMeasures" v-if="showChildMeasures">
+      <childMeasures :data="data" />
+    </el-card>
+    <el-card
+      header="审批记录"
+      key="noticeComments"
+      v-if="data.noticeComments && data.noticeComments.length > 0"
+    >
+      <apprvalRecord :data="data.noticeComments" />
+    </el-card>
   </div>
 </template>
 
 <script>
+import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { formatShortDate } from '@/utils/datetime'
 import apprvalRecord from '../apprvalRecord'
 import childMeasures from '../childMeasures'
@@ -686,6 +729,7 @@ import childNotes from '../childNotes'
 // import ehandle from '../handleTo4'
 // import hairdown from '../hairdown'
 import dictSelect from '@/components/common/dictSelect'
+import deptByRole from '@/components/Department/deptByRole'
 import department from '@/components/Department'
 import report from '../report'
 // import leaderApprvalRecord from '../leaderApprvalRecord'
@@ -697,14 +741,17 @@ import {
 } from '@/api/risk'
 import { queryDictByName } from '@/api/dict'
 import { queryHazardList } from '@/api/standard'
+import { queryDepartmentTree } from '@/api/emplotee'
 
 export default {
   components: {
+    Treeselect,
     apprvalRecord,
     childMeasures,
     childNotes,
     report,
     dictSelect,
+    deptByRole,
     department,
     // leaderApprvalRecord,
     // ehandle,
@@ -712,6 +759,9 @@ export default {
   },
   data() {
     return {
+      options: [],
+      dictList: [],
+      loadingTree: false,
       formId: '',
       riskLevel1List: [],
       riskLevel2List: [],
@@ -1175,9 +1225,9 @@ export default {
       reviewLoading: false,
       pickerOptions: {
         disabledDate(time) {
-          return time.getTime() < Date.now() - 8.64e7;
+          return time.getTime() < Date.now() - 8.64e7
         },
-      }
+      },
       // formHairdown: {},
     }
   },
@@ -1187,16 +1237,35 @@ export default {
       return this.data.step
     },
     formEnable() {
-      return this.data.step == 4 || this.data.step == 5 || this.data.step == 6 || this.data.step == 7 || this.data.step == 8
+      return (
+        this.data.step == 4 ||
+        this.data.step == 5 ||
+        this.data.step == 6 ||
+        this.data.step == 7 ||
+        this.data.step == 8
+      )
     },
     riskEnable() {
-      return this.data.step == 4 || this.data.step == 5 || this.data.step == 6 || this.data.step == 7 || this.data.step == 8
+      return (
+        this.data.step == 4 ||
+        this.data.step == 5 ||
+        this.data.step == 6 ||
+        this.data.step == 7 ||
+        this.data.step == 8
+      )
     },
     completionEnable() {
       return this.data.step != 5 && this.data.step != 6
     },
     showChildNotes() {
-      const bool = !((this.data.step == 1 && this.data.hiddenIssue) || this.data.step == 4 || this.data.step == 2 || this.data.step == 6 || this.data.step == 7 || this.data.step == 8)
+      const bool = !(
+        (this.data.step == 1 && this.data.hiddenIssue) ||
+        this.data.step == 4 ||
+        this.data.step == 2 ||
+        this.data.step == 6 ||
+        this.data.step == 7 ||
+        this.data.step == 8
+      )
       return bool
     },
     showChildMeasures() {
@@ -1204,10 +1273,12 @@ export default {
     },
     list() {
       let arr = []
-      if(this.listArr.length == 10) {
+      if (this.listArr.length == 10) {
         arr = this.listArr.map((item, index) => {
           item.possibility = this.data.hazardVoList[index].possibility
-          item.rootCauseAnalysis = this.data.hazardVoList[index].rootCauseAnalysis
+          item.rootCauseAnalysis = this.data.hazardVoList[
+            index
+          ].rootCauseAnalysis
           item.specialRiskMeasureList[0].controlMeasure = this.data.hazardVoList[
             index
           ].specialRiskMeasureList[0].controlMeasure
@@ -1224,7 +1295,12 @@ export default {
     },
     departmentParams() {
       return this.data.issueDept
-    }
+    },
+  },
+  watch: {
+    'data.type'(val) {
+      this.data.issueDepts = null
+    },
   },
   created() {
     // 危险源层级
@@ -1243,12 +1319,25 @@ export default {
         this.possibleRisksList = res.obj
       }
     })
+
+    this.loadingTree = true
+    queryDepartmentTree({}).then((res) => {
+      this.loadingTree = false
+      this.options = res.obj
+    })
+    queryDictByName('probability_level').then((res) => {
+      if (res.code != '200') {
+        this.$message.error(res.msg)
+      } else {
+        this.dictList = res.obj[0].children
+      }
+    })
   },
   methods: {
     formatShortDate,
     showReport() {
       this.formId = this.data.id
-      this.$refs.report.dialog = true;
+      this.$refs.report.dialog = true
     },
     formIdChange(val) {
       this.formId = val
@@ -1388,6 +1477,16 @@ export default {
           rowspan: _row,
           colspan: _col,
         }
+      }
+    },
+    normalizer(node) {
+      if (node.children && !node.children.length) {
+        delete node.children
+      }
+      return {
+        id: node.key,
+        label: node.name,
+        children: node.children,
       }
     },
     /* doHandle(row) {

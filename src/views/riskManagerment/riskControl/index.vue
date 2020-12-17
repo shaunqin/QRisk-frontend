@@ -70,8 +70,8 @@
       <el-table-column label="措施落实验证情况" prop="verifyMeasure" show-overflow-tooltip />
       <el-table-column label="状态" prop="status" show-overflow-tooltip>
         <template v-slot="{row}">
-          <span v-if="row.status == '11'">在控</span>
-          <span v-if="row.status == '12'">关闭</span>
+          <span v-if="row.status != '13'">在控</span>
+          <span v-if="row.status == '13'">关闭</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="70px" fixed="right">

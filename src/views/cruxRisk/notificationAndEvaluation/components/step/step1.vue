@@ -2,13 +2,15 @@
   <div>
     <el-card header="详细信息">
       <el-form size="small" label-width="80px" class="info" inline>
-        <el-form-item label="编号">{{data.no}}</el-form-item>
-        <el-form-item label="截止日期">{{formatShortDate(data.endTime)}}</el-form-item>
-        <el-form-item label="下发部门">{{data.issueDeptName}}</el-form-item>
+        <el-form-item label="编号">{{ data.no }}</el-form-item>
+        <el-form-item label="截止日期">{{
+          formatShortDate(data.endTime)
+        }}</el-form-item>
+        <el-form-item label="下发部门">{{ data.issueDeptName }}</el-form-item>
         <el-row class="fill-row">
           <el-col :span="24">
-            <el-form-item label="标题">{{data.title}}</el-form-item>
-            <el-form-item label="通知内容">{{data.noteContent}}</el-form-item>
+            <el-form-item label="标题">{{ data.title }}</el-form-item>
+            <el-form-item label="通知内容">{{ data.noteContent }}</el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -17,13 +19,22 @@
     <el-card class="chead">
       <div slot="header" class="hslot">
         <span>危险源</span>
-        <el-button type="text" icon="el-icon-tickets" @click="showReport" :disabled="!data.hiddenReport">风险报告</el-button>
+        <el-button
+          type="text"
+          icon="el-icon-tickets"
+          @click="showReport"
+          :disabled="!data.hiddenReport"
+          >风险报告</el-button
+        >
       </div>
       <el-form size="mini" label-width="80px">
         <el-row :gutter="8">
           <el-col :span="8">
             <el-form-item label="标题">
-              <el-input :disabled="formEnable" v-model="data.analysisTitle"></el-input>
+              <el-input
+                :disabled="formEnable"
+                v-model="data.analysisTitle"
+              ></el-input>
             </el-form-item>
             <el-form-item label="编号">
               <el-input :disabled="true" v-model="data.analysisNo"></el-input>
@@ -31,7 +42,10 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="分析人">
-              <el-input :disabled="formEnable" v-model="data.analysis"></el-input>
+              <el-input
+                :disabled="formEnable"
+                v-model="data.analysis"
+              ></el-input>
             </el-form-item>
             <el-form-item label="批准人">
               <el-input :disabled="true" v-model="data.approval"></el-input>
@@ -39,30 +53,43 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="分析单位">
-              <department :value="data.analysisDept" @change="deptAnalysisChange($event,'analysisDept')" :disabled="formEnable"></department>
+              <department
+                :value="data.analysisDept"
+                @change="deptAnalysisChange($event, 'analysisDept')"
+                :disabled="formEnable"
+              ></department>
             </el-form-item>
             <el-form-item label="批准日期">
               <el-date-picker
                 v-model="data.approvalDate"
                 value-format="yyyy-MM-dd"
-                style="width:100%"
+                style="width: 100%"
                 :disabled="true"
               ></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
-        </el-form>
+      </el-form>
       <el-button
         :disabled="formEnable"
         type="primary"
         size="mini"
         @click="addHazard"
-        style="margin-bottom:10px"
-      >新增危险源</el-button>
-      <el-card shadow="never" v-for="(item,index) in data.hazardList" :key="index">
+        style="margin-bottom: 10px"
+        >新增危险源</el-button
+      >
+      <el-card
+        shadow="never"
+        v-for="(item, index) in data.hazardList"
+        :key="index"
+      >
         <el-form size="mini" inline label-width="70px" :disabled="formEnable">
           <el-form-item label="系统">
-            <el-select v-model="item.product" placeholder="请选择系统" clearable>
+            <el-select
+              v-model="item.product"
+              placeholder="请选择系统"
+              clearable
+            >
               <el-option label="维修工程" value="维修工程"></el-option>
             </el-select>
           </el-form-item>
@@ -70,12 +97,15 @@
             <dict-select
               :value="item.subSystem"
               type="system"
-              @change="dictChange($event,item,'subSystem')"
-              style="width:130px"
+              @change="dictChange($event, item, 'subSystem')"
+              style="width: 130px"
             />
           </el-form-item>
           <el-form-item label="管理流程">
-            <el-input v-model="item.managementProcess" @input="$forceUpdate()"></el-input>
+            <el-input
+              v-model="item.managementProcess"
+              @input="$forceUpdate()"
+            ></el-input>
           </el-form-item>
           <el-form-item label="危险源层级一" label-width="115px">
             <el-select
@@ -98,7 +128,7 @@
               clearable
               v-model="item.riskLevel2"
               placeholder="请选择层级二"
-              style="width: 130px;"
+              style="width: 130px"
               @change="chooseRiskLevel2(item.riskLevel2, item)"
             >
               <el-option
@@ -110,62 +140,85 @@
             </el-select>
           </el-form-item>
           <el-form-item label="危险源">
-            <el-select v-model="item.hazard" placeholder="请选择危险源" style="width:130px" @change="dictChange(item.hazard,item,'hazard')">
+            <el-select
+              v-model="item.hazard"
+              placeholder="请选择危险源"
+              style="width: 130px"
+              @change="dictChange(item.hazard, item, 'hazard')"
+            >
               <el-option
                 v-for="childItem in hazardList"
                 :key="childItem.diskNo"
                 :label="childItem.diskName"
                 :value="childItem.diskNo"
-                >
+              >
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="可能导致的风险" label-width="115px">
-            <el-select v-model="item.possibleRisks" clearable placeholder="请选择可能导致的风险" style="width:130px" @change="dictChange(item.possibleRisks,item,'possibleRisks')">
+            <el-select
+              v-model="item.possibleRisks"
+              clearable
+              placeholder="请选择可能导致的风险"
+              style="width: 130px"
+              @change="dictChange(item.possibleRisks, item, 'possibleRisks')"
+            >
               <el-option
                 v-for="childItem in possibleRisksList"
                 :key="childItem.riskNo"
                 :label="childItem.riskName"
                 :value="childItem.riskNo"
-                >
+              >
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="可能性">
             <dict-select
               :clearable="false"
+              :showName="true"
               :value="item.possibility"
               type="probability_level"
-              @change="dictChange($event,item,'possibility')"
-              style="width:130px"
+              @change="dictChange($event, item, 'possibility')"
+              style="width: 130px"
             />
           </el-form-item>
           <el-form-item label="严重性">
             <dict-select
               :clearable="false"
+              :showName="true"
               :value="item.seriousness"
               type="severity_level_matrix_graph"
-              @change="dictChange($event,item,'seriousness')"
+              @change="dictChange($event, item, 'seriousness')"
             />
           </el-form-item>
           <el-form-item label="风险等级">
             <dict-select
               :value="item.riskLevel"
               type="risk_level"
-              @change="dictChange($event,item,'riskLevel')"
-              style="width:130px"
+              @change="dictChange($event, item, 'riskLevel')"
+              style="width: 130px"
               :disabled="true"
             />
           </el-form-item>
           <el-row :gutter="16" class="fill-row">
             <el-col :span="12">
               <el-form-item label="危险源描述" label-width="115px">
-                <el-input v-model="item.hazardSource" type="textarea" rows="3" @input="$forceUpdate()"></el-input>
+                <el-input
+                  v-model="item.hazardSource"
+                  type="textarea"
+                  rows="3"
+                  @input="$forceUpdate()"
+                ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="根原因分析" label-width="115px">
-                <el-input v-model="item.rootCauseAnalysis" type="textarea" rows="3" @input="$forceUpdate()"></el-input>
+                <el-input
+                  v-model="item.rootCauseAnalysis"
+                  type="textarea"
+                  rows="3"
+                  @input="$forceUpdate()"
+                ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -177,26 +230,39 @@
           size="mini"
           class="at"
           @click="addRow(item)"
-        >新增一行</el-button>
-        <el-table :data="item.specialRiskMeasureList" size="small" max-height="400px">
+          >新增一行</el-button
+        >
+        <el-table
+          :data="item.specialRiskMeasureList"
+          size="small"
+          max-height="400px"
+        >
           <el-table-column type="index" width="50" />
           <el-table-column label="控制措施">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.controlMeasure" :disabled="riskEnable" type="textarea" rows="3"></el-input>
+              <el-input
+                v-model="scope.row.controlMeasure"
+                :disabled="riskEnable"
+                type="textarea"
+                rows="3"
+              ></el-input>
             </template>
           </el-table-column>
           <el-table-column label="责任单位">
             <template slot-scope="scope">
               <department
                 :value="scope.row.reponsibleDept"
-                @change="deptChange($event,scope.row)"
+                @change="deptChange($event, scope.row)"
                 :disabled="riskEnable"
               />
             </template>
           </el-table-column>
           <el-table-column label="控制状态">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.completion" :disabled="completionEnable">
+              <el-select
+                v-model="scope.row.completion"
+                :disabled="completionEnable"
+              >
                 <el-option label="未控制" value="1"></el-option>
                 <el-option label="在控" value="2"></el-option>
                 <el-option label="关闭" value="3"></el-option>
@@ -209,18 +275,18 @@
                 v-model="scope.row.deadline"
                 value-format="yyyy-MM-dd"
                 :disabled="riskEnable"
-                style="max-width:100%"
+                style="max-width: 100%"
               ></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column width="80">
-            <template slot-scope="{$index}">
+            <template slot-scope="{ $index }">
               <el-button
                 :disabled="riskEnable"
                 type="text"
                 size="mini"
                 icon="el-icon-delete"
-                @click="delCol($index,item)"
+                @click="delCol($index, item)"
               ></el-button>
             </template>
           </el-table-column>
@@ -232,13 +298,19 @@
             icon="el-icon-delete"
             size="mini"
             @click="delHazard(index)"
-          >删除</el-button>
+            >删除</el-button
+          >
         </div>
       </el-card>
     </el-card>
-    <report ref="report" :formId="formId" :disabled="true" @change="formIdChange" />
-  
-  <!-- <el-card
+    <report
+      ref="report"
+      :formId="formId"
+      :disabled="true"
+      @change="formIdChange"
+    />
+
+    <!-- <el-card
       header="已下发通知"
       key="measures"
     >
@@ -309,214 +381,257 @@
       </el-table-column>
     </el-table>
     </el-card> -->
-  <el-card
+    <el-card
       header="审批记录"
       key="noticeComments"
-      v-if="data.noticeComments&&data.noticeComments.length>0"
+      v-if="data.noticeComments && data.noticeComments.length > 0"
     >
       <apprvalRecord :data="data.noticeComments" />
     </el-card>
-</div>
+  </div>
 </template>
 
 <script>
-import { formatShortDate } from "@/utils/datetime";
-import apprvalRecord from "../apprvalRecord";
-import dictSelect from "@/components/common/dictSelect";
-import department from "@/components/Department";
-import report from "../report";
-import leaderApprvalRecord from "../leaderApprvalRecord";
-import { specialRiskSaveHazard, specialRiskQueryRiskLevel, queryRiskListMgr } from "@/api/risk";
-import { queryDictByName } from "@/api/dict";
-import { queryHazardList } from "@/api/standard";
+import { formatShortDate } from '@/utils/datetime'
+import apprvalRecord from '../apprvalRecord'
+import dictSelect from '@/components/common/dictSelect'
+import department from '@/components/Department'
+import report from '../report'
+import leaderApprvalRecord from '../leaderApprvalRecord'
+import {
+  specialRiskSaveHazard,
+  specialRiskQueryRiskLevel,
+  queryRiskListMgr,
+} from '@/api/risk'
+import { queryDictByName } from '@/api/dict'
+import { queryHazardList } from '@/api/standard'
 
 export default {
-  components: { apprvalRecord, report, dictSelect, department, leaderApprvalRecord },
+  components: {
+    apprvalRecord,
+    report,
+    dictSelect,
+    department,
+    leaderApprvalRecord,
+  },
   data() {
     return {
-      formId: "",
+      formId: '',
       riskLevel1List: [],
       riskLevel2List: [],
       totalhazardList: [], // 全部危险源
       hazardList: [], // 危险源
       possibleRisksList: [], // 可能导致的风险列表
-      spanArr: [25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    };
+      spanArr: [
+        25,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+      ],
+    }
   },
-  props: ["data", "form"],
+  props: ['data', 'form'],
   computed: {
     type() {
-      return this.data.step;
+      return this.data.step
     },
     formEnable() {
-      return this.data.step == 4 || this.data.step == 5 || this.data.step == 6;
+      return this.data.step == 4 || this.data.step == 5 || this.data.step == 6
     },
     riskEnable() {
-      return this.data.step == 5 || this.data.step == 6;
+      return this.data.step == 5 || this.data.step == 6
     },
     completionEnable() {
-      return this.data.step != 5 && this.data.step != 6;
+      return this.data.step != 5 && this.data.step != 6
     },
   },
   created() {
     // 危险源层级
-    queryDictByName("hazard_source").then((response) => {
-      this.riskLevel1List = response.obj[0].children;
-    });
+    queryDictByName('hazard_source').then((response) => {
+      this.riskLevel1List = response.obj[0].children
+    })
     // 危险源
     queryHazardList().then((res) => {
-      this.totalhazardList = res.obj;
+      this.totalhazardList = res.obj
       this.hazardList = this.totalhazardList
-    });
-    queryRiskListMgr().then(res => {
-        if (res.code != "200") {
-          this.$message.error(res.msg);
-        } else {
-          this.possibleRisksList = res.obj
-        }
-      })
+    })
+    queryRiskListMgr().then((res) => {
+      if (res.code != '200') {
+        this.$message.error(res.msg)
+      } else {
+        this.possibleRisksList = res.obj
+      }
+    })
   },
   methods: {
     formatShortDate,
     showReport() {
-      this.formId = this.data.id;
-      this.$refs.report.dialog = true;
+      this.formId = this.data.id
+      this.$refs.report.dialog = true
     },
     formIdChange(val) {
-      this.formId = val;
+      this.formId = val
     },
     addCol() {
       this.data.specialRiskAnalyses.push({
-        product: "",  // 产品
-        subSystem: "", // 子系统
-        managementProcess: "", // 管理流程
+        product: '', // 产品
+        subSystem: '', // 子系统
+        managementProcess: '', // 管理流程
         reponsibleUnit: null, // 责任单位
-        post: "", // 岗位
-        processHuman: "", // 人
-        processMachine: "", // 机
-        processMaterial: "", // 料
-        processRegulation: "", // 法
-        processEnvironment: "", // 环
-        input: "", // 输入
-        output: "", // 输出
-      });
+        post: '', // 岗位
+        processHuman: '', // 人
+        processMachine: '', // 机
+        processMaterial: '', // 料
+        processRegulation: '', // 法
+        processEnvironment: '', // 环
+        input: '', // 输入
+        output: '', // 输出
+      })
     },
     delAnalysesCol(index) {
-      this.data.specialRiskAnalyses.splice(index, 1);
+      this.data.specialRiskAnalyses.splice(index, 1)
     },
     addHazard() {
       this.data.hazardList.push({
-        riskLevel1: this.riskLevel1List[0] ? this.riskLevel1List[0].value : "", //危险源层级1
-        riskLevel2: this.riskLevel2List[0] ? this.riskLevel2List[0].value : "", //危险源层级2
-        hazard: this.hazardList[0] ? this.hazardList[0].diskNo : "",
-        hazardSource: "",
-        managementProcess: "",
-        possibility: "1",
-        possibleRisks: this.possibleRisksList[0] ? this.possibleRisksList[0].riskNo : "",
-        riskLevel: "1",
-        rootCauseAnalysis: "",
-        seriousness: "1",
+        riskLevel1: this.riskLevel1List[0] ? this.riskLevel1List[0].value : '', //危险源层级1
+        riskLevel2: this.riskLevel2List[0] ? this.riskLevel2List[0].value : '', //危险源层级2
+        hazard: this.hazardList[0] ? this.hazardList[0].diskNo : '',
+        hazardSource: '',
+        managementProcess: '',
+        possibility: '1',
+        possibleRisks: this.possibleRisksList[0]
+          ? this.possibleRisksList[0].riskNo
+          : '',
+        riskLevel: '1',
+        rootCauseAnalysis: '',
+        seriousness: '1',
         specialRiskMeasureList: [
           {
-            completion: "2",
-            controlMeasure: "",
-            deadline: "",
+            completion: '2',
+            controlMeasure: '',
+            deadline: '',
             reponsibleDept: null,
           },
         ],
-        subSystem: "",
-        product: "维修工程",
-      });
-      this.data.hazardList[this.data.hazardList.length-1].riskLevel1 = this.riskLevel1List[0].value
-      this.chooseRiskLevel1(this.data.hazardList[this.data.hazardList.length-1].riskLevel1, this.data.hazardList[this.data.hazardList.length-1])
-      this.$forceUpdate();
+        subSystem: '',
+        product: '维修工程',
+      })
+      this.data.hazardList[
+        this.data.hazardList.length - 1
+      ].riskLevel1 = this.riskLevel1List[0].value
+      this.chooseRiskLevel1(
+        this.data.hazardList[this.data.hazardList.length - 1].riskLevel1,
+        this.data.hazardList[this.data.hazardList.length - 1]
+      )
+      this.$forceUpdate()
     },
     delHazard(index) {
-      this.data.hazardList.splice(index, 1);
-      this.$forceUpdate();
+      this.data.hazardList.splice(index, 1)
+      this.$forceUpdate()
     },
     addRow(item) {
       item.specialRiskMeasureList.push({
-        completion: "2",
-        controlMeasure: "",
-        deadline: "",
+        completion: '2',
+        controlMeasure: '',
+        deadline: '',
         reponsibleDept: null,
-      });
+      })
     },
     delCol(index, item) {
-      item.specialRiskMeasureList.splice(index, 1);
-      this.$forceUpdate();
+      item.specialRiskMeasureList.splice(index, 1)
+      this.$forceUpdate()
     },
     dictChange(val, item, key) {
-      item[key] = val;
+      item[key] = val
       if (key == 'possibility' || key == 'seriousness') {
-        this.queryRiskLevel(item.possibility, item.seriousness, item);
+        this.queryRiskLevel(item.possibility, item.seriousness, item)
       }
-      this.$forceUpdate();
+      this.$forceUpdate()
       /* if (key == 'hazard' || key == 'possibleRisks') {
         this.queryRiskLevel(item.hazard, item.possibleRisks, item);
       } */
     },
     deptChange(val, row) {
-      row.reponsibleDept = val;
-      this.$forceUpdate();
+      row.reponsibleDept = val
+      this.$forceUpdate()
     },
     deptAnalysisChange(val, key) {
-      this.data[key] = val;
-      this.$forceUpdate();
+      this.data[key] = val
+      this.$forceUpdate()
     },
     deptChangeOnTb(val, row) {
-      row.reponsibleUnit = val;
-      this.$forceUpdate();
+      row.reponsibleUnit = val
+      this.$forceUpdate()
     },
     ideUnitChange(val) {
-      this.data.identificationUnit = val;
-      this.$forceUpdate();
+      this.data.identificationUnit = val
+      this.$forceUpdate()
     },
     /**查询风险 */
     queryRiskLevel(hazard, risk, item) {
       if (!!hazard && !!risk) {
-        specialRiskQueryRiskLevel(hazard, risk).then(res => {
+        specialRiskQueryRiskLevel(hazard, risk).then((res) => {
           if (res.code == '200') {
             /* item.possibility = res.obj.possibility;
             item.seriousness = res.obj.seriousness; */
-            item.riskLevel = `${res.obj}`;
-            this.$forceUpdate();
+            item.riskLevel = `${res.obj}`
+            this.$forceUpdate()
           }
         })
       }
     },
     chooseRiskLevel1(val, item) {
       if (this.riskLevel1List.length > 0) {
-          let list = this.riskLevel1List.filter((r) => r.value == val);
-          if (list && list.length > 0) {
-            this.riskLevel2List = list[0].children;
-          }
-          item.riskLevel2 = this.riskLevel2List[0].value
-          this.chooseRiskLevel2(item.riskLevel2, item)
+        let list = this.riskLevel1List.filter((r) => r.value == val)
+        if (list && list.length > 0) {
+          this.riskLevel2List = list[0].children
         }
+        item.riskLevel2 = this.riskLevel2List[0].value
+        this.chooseRiskLevel2(item.riskLevel2, item)
+      }
     },
     chooseRiskLevel2(val, item) {
-      let list = this.totalhazardList.filter((r) => r.cateValue == val);
+      let list = this.totalhazardList.filter((r) => r.cateValue == val)
       if (list && list.length > 0) {
-        this.hazardList = list;
+        this.hazardList = list
       }
-      item.hazard = this.hazardList[0] ? this.hazardList[0].diskNo : ""
-      this.$forceUpdate();
+      item.hazard = this.hazardList[0] ? this.hazardList[0].diskNo : ''
+      this.$forceUpdate()
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       //表格合并行
       if (columnIndex === 0 || columnIndex === 1 || columnIndex === 2) {
-        const _row = this.spanArr[rowIndex];
-        const _col = _row > 0 ? 1 : 0;
+        const _row = this.spanArr[rowIndex]
+        const _col = _row > 0 ? 1 : 0
         return {
           rowspan: _row,
-          colspan: _col
-        };
+          colspan: _col,
+        }
       }
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
