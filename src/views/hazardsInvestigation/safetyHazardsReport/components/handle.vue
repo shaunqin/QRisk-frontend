@@ -82,7 +82,7 @@ export default {
     },
     judgeCC() {
       // 领导审核同意
-      if (this.data.leaderApprove && this.form.processFlag == "1") {
+      if (this.data.leaderApprove && this.form.processFlag == "1" && this.data.cc) {
         this.$refs.ccPerson.dialog = true;
       } else if (!this.data.leaderApprove && this.form.processFlag == "2" && this.data.cc) {  // 上级风险管理员驳回
         if (this.form.comment == "") {
