@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table :data="data">
+    <el-table :data="data" size="mini">
       <el-table-column label="批复人">
         <template slot-scope="{row}">{{row.name}}[{{row.sqlUserId}}]</template>
       </el-table-column>

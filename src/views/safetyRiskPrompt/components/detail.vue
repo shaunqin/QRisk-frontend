@@ -40,7 +40,7 @@
         />
       </el-form-item>
       <el-form-item label="办理人" v-if="form.reviewerInfo!=null">
-        <transactor :data="row.reviewerInfo" width="100%" />
+        <transactor :data="form.reviewerInfo" width="100%" />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">

@@ -92,7 +92,7 @@
 import { formatShortDate } from '@/utils/datetime'
 import childRisk from '../childRisk'
 import apprvalRecord from '../apprvalRecord'
-import department from '@/components/Department'
+import department from '../department'
 export default {
   components: { childRisk, apprvalRecord, department },
   data() {

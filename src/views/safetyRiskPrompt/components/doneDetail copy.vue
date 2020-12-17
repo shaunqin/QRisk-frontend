@@ -7,7 +7,7 @@
     title="已办详情"
     custom-class="big_dialog"
   >
-    <el-form ref="form" size="small" label-width="80px">
+    <el-form ref="form" size="small" label-width="auto">
       <el-row :gutter="16">
         <el-col :span="12">
           <el-form-item label="编号">{{data.no}}</el-form-item>
@@ -29,10 +29,49 @@
           <li v-for="(item,index) in data.measuresVos" :key="index">{{item.content}}</li>
         </ul>
       </el-form-item>
-      <el-form-item label="部门措施">
-        <childMeasures :data="data.deptsMeasures" :hiddenField="['审核']" />
+      <el-form-item label="风险防范" v-if="deptMeasure.length>0">
+        <el-table :data="deptMeasure" size="mini">
+          <el-table-column label="截止日期" prop="deadline" />
+          <el-table-column label="措施内容" prop="content" />
+          <el-table-column label="落实情况" min-width="200" align="left">
+            <template slot-scope="{row}">
+              <span style="white-space: break-spaces;" v-html="row.implementStatus"></span>
+            </template>
+          </el-table-column>
+          <el-table-column label="经办人">
+            <template slot-scope="{row}">{{row.fillerName}}[{{row.filler}}]</template>
+          </el-table-column>
+
+          <el-table-column label="预览附件" min-width="120">
+            <template slot-scope="{row}">
+              <div v-for="(item, index) in row.accessory" :key="index">
+                <el-link
+                  type="primary"
+                  v-if="item!=null"
+                  :href="getUrl(item.filePath)"
+                  target="_blank"
+                >{{item.originFileName}}</el-link>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="办理人" width="80">
+            <template slot-scope="{row}">
+              <div v-if="row.reviewerInfo==null">-</div>
+              <el-popover v-else placement="left">
+                <el-button type="text" slot="reference">详情</el-button>
+                <transactor :data="row.reviewerInfo" />
+              </el-popover>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-form-item>
-      <el-form-item label="风险提示处理记录" v-if="noticeComments.length>0">
+      <el-form-item label="已下发措施" v-if="childMeasures.length>0">
+        <childMeasures :data="childMeasures" key="childMeasures" />
+      </el-form-item>
+      <el-form-item label="处理记录" v-if="measureComment.length>0">
+        <leaderApprvalRecord key="measureComment" :data="measureComment" type="safety_measures" />
+      </el-form-item>
+      <el-form-item label="处理记录" v-if="noticeComments.length>0">
         <leaderApprvalRecord
           key="leaderApprvalRecord"
           :data="noticeComments"
@@ -65,6 +104,18 @@ export default {
     };
   },
   computed: {
+    deptMeasure() {
+      if (this.data.deptMeasure) {
+        return [this.data.deptMeasure]
+      }
+      return []
+    },
+    measureComment() {
+      if (this.data.deptMeasure && this.data.deptMeasure.measureComment) {
+        return this.data.deptMeasure.measureComment;
+      }
+      return []
+    },
     noticeComments() {
       if (this.data.noticeComments) {
         return this.data.noticeComments;

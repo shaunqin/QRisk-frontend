@@ -8,14 +8,11 @@
       :highlight-current-row="true"
       style="width: 100%;"
     >
-      <el-table-column prop="title" label="主题" min-width="300" show-overflow-tooltip />
-      <el-table-column prop="dept" label="部门" min-width="140" show-overflow-tooltip />
-      <el-table-column prop="content" label="措施内容" min-width="300" show-overflow-tooltip />
-      <el-table-column label="填报人">
-        <template slot-scope="{row}">{{renderColum(row)}}</template>
-      </el-table-column>
-      <el-table-column prop="createBy" label="发起人" width="120" />
-      <el-table-column label="发起时间" width="140">
+      <el-table-column prop="no" label="编号" />
+      <el-table-column prop="title" label="主题" show-overflow-tooltip />
+      <el-table-column prop="dept" label="发起单位" />
+      <el-table-column prop="createBy" label="发起人" />
+      <el-table-column label="发起时间">
         <template slot-scope="{row}">{{formatShortDate(row.createTime)}}</template>
       </el-table-column>
       <el-table-column label width="100">
@@ -45,7 +42,7 @@
 <script>
 import initData from "@/mixins/initData";
 import { format, formatShortDate } from "@/utils/datetime";
-import { riskNoticeDoneDetail } from '@/api/risk';
+import { riskNoticeDoneDetail2 } from '@/api/risk';
 import doneDetail from './doneDetail'
 export default {
   components: { doneDetail },
@@ -65,13 +62,13 @@ export default {
   methods: {
     formatShortDate,
     beforeInit() {
-      this.url = `/riskmgr_mgr/safety_risk_notice_mgr/query/hasDone/${this.page}/${this.size}`;
+      this.url = `/riskmgr_mgr/safety_risk_notice_mgr/query/hasDone2/${this.page}/${this.size}`;
       this.params = { ...this.queryForm };
       return true;
     },
     detail(row) {
       this.loading = true;
-      riskNoticeDoneDetail(row.formId).then(res => {
+      riskNoticeDoneDetail2(row.id).then(res => {
         this.loading = false;
         if (res.code != '200') {
           this.$message.error(res.msg);

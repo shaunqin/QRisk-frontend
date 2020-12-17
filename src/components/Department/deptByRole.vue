@@ -79,20 +79,28 @@ export default {
     url: {
       type: String,
       default: '/riskmgr_mgr/safety_risk_notice_mgr/query/depts',
+    },
+    deptPath: {
+      type: String,
+      default: null
     }
   },
   watch: {
     measureId(val) {
       if (val)
         this.loadData();
-    }
+    },
+    deptPath(val) {
+      if (val)
+        this.loadData();
+    },
   },
   created() {
     this.loadData();
   },
   methods: {
     loadData() {
-      let form = !!this.measureId ? { id: this.measureId } : {}
+      let form = { id: this.measureId, deptPath: this.deptPath };
       this.loading = true;
       queryDepts(this.url, form).then((res) => {
         this.loading = false;

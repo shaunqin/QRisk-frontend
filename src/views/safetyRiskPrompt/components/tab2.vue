@@ -65,17 +65,14 @@
 import initData from "@/mixins/initData";
 import eform from "./form";
 import selectEmplotee from './selectEmplotee'
-import {
-  riskNoticeDetail,
-  riskNoticeDelete,
-  riskNoticeSubmit,
-} from "@/api/risk";
+import { riskNoticeDetail, riskNoticeDelete, riskNoticeSubmit, needSubmit2Leader } from "@/api/risk";
 export default {
   components: { eform, selectEmplotee },
   data() {
     return {
       selections: [],
-      deptPath: ""
+      deptPath: "",
+      needLeader: true, // 是否需要领导,提交/下发
     };
   },
   mixins: [initData],
@@ -88,7 +85,7 @@ export default {
       }
     }
   },
-  mounted() {
+  created() {
     this.init();
   },
   methods: {
@@ -143,8 +140,14 @@ export default {
         .catch(() => { });
     },
     handleEmp() {
-      let _this = this.$refs.selectEmplotee;
-      _this.dialog = true;
+      needSubmit2Leader(this.deptPath).then(res => {
+        if (!!res.obj) {
+          let _this = this.$refs.selectEmplotee;
+          _this.dialog = true;
+        } else {
+          this.doSubmit("");
+        }
+      })
     },
     doSubmit(sqlUserId) {
       let id = this.selections[0];

@@ -47,6 +47,7 @@
               @change="deptChange($event, item)"
               :multiple="true"
               style="line-height: 20px"
+              :deptPath="form.deptPath"
             />
           </div>
           <div style="display: flex; margin-top: 10px">
@@ -98,13 +99,13 @@
       </el-link>
       <el-button type="info" @click="cancel">取消</el-button>
       <el-button :loading="save_loading" type="success" @click="doSave">保存</el-button>
-      <el-button :loading="loading" type="primary" @click="handleEmp">提交</el-button>
+      <el-button :loading="loading" type="primary" @click="handleEmp">{{needLeader?'提交':'下发'}}</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
-import { riskNoticeAdd, riskNoticeModify, riskNoticeSaveandSubmit, riskNoticeUpdateandSubmit, getRiskNoticeNo } from "@/api/risk";
+import { riskNoticeAdd, riskNoticeModify, riskNoticeSaveandSubmit, riskNoticeUpdateandSubmit, getRiskNoticeNo, needSubmit2Leader } from "@/api/risk";
 import department from "@/components/Department/deptByRole";
 import { format } from "@/utils/datetime";
 import selectEmplotee from "./selectEmplotee";
@@ -132,6 +133,7 @@ export default {
         existingRisk: [{ required: true, message: "存在的安全风险不能为空", trigger: "blur" },],
       },
       deptList: [],
+      needLeader: true, // 是否需要领导,提交/下发
     };
   },
   props: {
@@ -145,7 +147,10 @@ export default {
       getRiskNoticeNo(val).then(res => {
         this.form.no = res.obj;
       })
-    }
+      needSubmit2Leader(val).then(res => {
+        this.needLeader = !!res.obj;
+      })
+    },
   },
   methods: {
     format,
@@ -184,8 +189,12 @@ export default {
       });
     },
     handleEmp() {
-      let _this = this.$refs.selectEmplotee;
-      _this.dialog = true;
+      if (this.needLeader) {
+        let _this = this.$refs.selectEmplotee;
+        _this.dialog = true;
+      } else {
+        this.doSubmit("");
+      }
     },
     doSubmit(sqlUserId) {
       if (this.isAdd) {

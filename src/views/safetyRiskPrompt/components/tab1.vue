@@ -3,7 +3,7 @@
     <eform ref="form" :is-add="isAdd"></eform>
     <div class="head-container">
       <el-button
-        v-if="roles.includes('RISK_MANAGER')"
+        v-if="showBtn"
         class="filter-item"
         size="mini"
         type="success"
@@ -60,13 +60,15 @@ import initData from "@/mixins/initData";
 import { format, formatShortDate } from "@/utils/datetime";
 import eform from "./form";
 import edetail from "./detail";
-import { riskNoticeDetail, getRiskNoticeNo, queryRiskMgrDept } from "@/api/risk";
+import { riskNoticeDetail, getRiskNoticeNo, queryRiskMgrDept, verifyPerms } from "@/api/risk";
 import { mapGetters } from "vuex";
 export default {
   components: { eform, edetail },
   mixins: [initData],
   data() {
-    return {};
+    return {
+      showBtn: false
+    };
   },
   props: ["queryForm"],
   watch: {
@@ -82,6 +84,13 @@ export default {
   },
   created() {
     this.init();
+    verifyPerms().then(res => {
+      if (res.code != '200') {
+        this.$message.error(res.msg);
+      } else {
+        this.showBtn = !!res.obj;
+      }
+    })
   },
   methods: {
     formatShortDate,

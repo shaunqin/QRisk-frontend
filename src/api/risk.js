@@ -129,6 +129,12 @@ export function riskNoticeDoneDetail(formId) {
     method: 'get'
   })
 }
+export function riskNoticeDoneDetail2(formId) {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/query/hasDoneDetail2/${formId}`,
+    method: 'get'
+  })
+}
 // 领导验证密码
 export function validatePWD(password) {
   return request({
@@ -137,6 +143,13 @@ export function validatePWD(password) {
     data: {
       password
     }
+  })
+}
+// 验证添加权限
+export function verifyPerms() {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/verifyPerms`,
+    method: 'get',
   })
 }
 // 待办数量
@@ -176,6 +189,14 @@ export function queryIssueTreeData(measureId) {
   return request({
     url: `/riskmgr_mgr/safety_risk_notice_mgr/treeData/${measureId}`,
     method: 'get',
+  })
+}
+// 查询树形下发措施
+export function needSubmit2Leader(deptPath) {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/needSubmit2Leader`,
+    method: 'get',
+    params: { deptPath }
   })
 }
 // =========  风险提示 end ==============

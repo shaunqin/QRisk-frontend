@@ -8,7 +8,7 @@
       <el-table-column label="上报人" width="120">
         <template slot-scope="{row}" v-if="row.filler!=null">{{`${row.fillerName}[${row.filler}]`}}</template>
       </el-table-column>
-      <el-table-column label="附件预览" width="120">
+      <el-table-column label="附件预览" min-width="120">
         <template slot-scope="{row}">
           <div v-for="(item, index) in row.accessory" :key="index">
             <el-link
@@ -47,7 +47,7 @@
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column label="审核" width="80">
+      <el-table-column label="审核" width="80" v-if="!hiddenField.includes('审核')">
         <template slot-scope="{row}">
           <span v-if="!row.reviewing">-</span>
           <el-button v-else type="primary" size="mini" @click="doHandle(row)">办理</el-button>
@@ -81,11 +81,15 @@ export default {
   props: {
     data: {
       type: Array,
-      default: [],
+      default: () => [],
     },
     source: {
       type: String,
       default: ''
+    },
+    hiddenField: {
+      type: Array,
+      default: () => [],
     }
   },
   methods: {

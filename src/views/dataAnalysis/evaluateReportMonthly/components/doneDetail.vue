@@ -31,6 +31,10 @@
       <el-form-item key="childRisk" label="下发措施" v-if="childRisk.length > 0">
         <childRisk :data="childRisk" />
       </el-form-item>
+      <!-- 落实情况 -->
+      <el-form-item key="riskMeasuresExpVoList" label="落实情况" v-if="riskMeasuresExpVoList.length>0">
+        <cmpImplement :data="riskMeasuresExpVoList" />
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
@@ -44,8 +48,9 @@ import { formatShortDate } from "@/utils/datetime";
 import childRisk from "./childRisk";
 import apprvalRecord from "./apprvalRecord";
 import cmpRiskControl from './cmpRiskControl'
+import cmpImplement from './cmpImplement'
 export default {
-  components: { childRisk, apprvalRecord, cmpRiskControl },
+  components: { childRisk, apprvalRecord, cmpRiskControl, cmpImplement },
   data() {
     return {
       dialog: false,
@@ -66,6 +71,11 @@ export default {
         return [];
       }
     },
+    riskMeasuresExpVoList() {
+      if (this.data.riskMeasuresExpVoList) {
+        return this.data.riskMeasuresExpVoList
+      } return []
+    }
   },
   mounted() { },
   methods: {

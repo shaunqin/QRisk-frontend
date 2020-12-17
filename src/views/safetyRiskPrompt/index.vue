@@ -228,7 +228,7 @@ export default {
   }
 }
 /deep/ .scrollbar-wrapper {
-  height: calc(100vh - 60px);
+  height: calc(100vh - 77px);
 }
 /deep/ .el-badge__content.is-fixed {
   top: 10px;
