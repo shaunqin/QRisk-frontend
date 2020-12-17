@@ -21,7 +21,7 @@
       </el-row>
       <el-form-item label="标题">{{ data.title }}</el-form-item>
       <el-form-item label="风险措施">
-        <cmpRiskControl :data="data.riskControlExpVoList" />
+        <cmpRiskControl :data="data.riskControlExpVoList||[]" :measuresEnable="measuresEnable" />
       </el-form-item>
       <!-- 审批记录 -->
       <el-form-item label="审批记录" key="apprvalRecord" v-if="noticeComments.length > 0">
@@ -75,7 +75,14 @@ export default {
       if (this.data.riskMeasuresExpVoList) {
         return this.data.riskMeasuresExpVoList
       } return []
-    }
+    },
+    measuresEnable() {
+      try {
+        return this.data.deptRisk.tag == '1'
+      } catch (e) {
+        return false
+      }
+    },
   },
   mounted() { },
   methods: {

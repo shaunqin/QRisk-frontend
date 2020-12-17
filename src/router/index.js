@@ -80,7 +80,12 @@ export const constantRoutes = [{
       affix: true
     }
   }]
-}
+},
+{
+  path: '/smart',
+  component: () => import('@/views/smart/index'),
+  hidden: true
+},
 ]
 
 /**

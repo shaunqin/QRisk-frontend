@@ -29,7 +29,8 @@
           <span v-else>-</span>
         </template>
       </el-table-column>
-      <el-table-column label="填报措施" min-width="150">
+      <!-- 第一轮 -->
+      <el-table-column label="填报措施" min-width="150" v-if="!measuresEnable">
         <template slot-scope="{ row }">
           <span v-if="!row.riskControlRiskVoList">-</span>
           <ul class="ul-risk" v-else>
@@ -37,7 +38,7 @@
           </ul>
         </template>
       </el-table-column>
-      <el-table-column label="截止日期" width="110">
+      <el-table-column label="截止日期" width="110" v-if="!measuresEnable">
         <template slot-scope="{ row }">
           <span v-if="!row.riskControlRiskVoList">-</span>
           <ul class="ul-risk" v-else>
@@ -45,12 +46,54 @@
           </ul>
         </template>
       </el-table-column>
-      <el-table-column label="部门" min-width="120">
+      <el-table-column label="部门" min-width="120" v-if="!measuresEnable">
         <template slot-scope="{ row }">
           <span v-if="!row.riskControlRiskVoList">-</span>
           <ul class="ul-risk" v-else>
             <li v-for="item in row.riskControlRiskVoList" :key="item.id">{{ item.respDeptName }}</li>
           </ul>
+        </template>
+      </el-table-column>
+      <!-- 第二轮 -->
+       <el-table-column label="填报措施" min-width="150" v-if="measuresEnable">
+        <template slot-scope="{ row }">
+          <span v-if="!row.riskControlMeasuresVoList">-</span>
+          <ul class="ul-risk" v-else>
+            <li v-for="item in row.riskControlMeasuresVoList" :key="item.id">{{ item.riskMeasures }}</li>
+          </ul>
+        </template>
+      </el-table-column>
+      <el-table-column label="截止日期" width="110" v-if="measuresEnable">
+        <template slot-scope="{ row }">
+          <span v-if="!row.riskControlMeasuresVoList">-</span>
+          <ul class="ul-risk" v-else>
+            <li v-for="item in row.riskControlMeasuresVoList" :key="item.id">{{ item.deadline }}</li>
+          </ul>
+        </template>
+      </el-table-column>
+      <el-table-column label="部门" min-width="120" v-if="measuresEnable">
+        <template slot-scope="{ row }">
+          <span v-if="!row.riskControlMeasuresVoList">-</span>
+          <ul class="ul-risk" v-else>
+            <li v-for="item in row.riskControlMeasuresVoList" :key="item.id">{{ item.respDeptName }}</li>
+          </ul>
+        </template>
+      </el-table-column>
+      <el-table-column label="落实情况" min-width="150" v-if="measuresEnable">
+        <template slot-scope="{ row }">
+          <span v-if="!row.riskControlMeasuresVoList">-</span>
+          <ul class="ul-risk" v-else>
+            <li
+              v-for="item in row.riskControlMeasuresVoList"
+              :key="item.id"
+            >{{ item.implementationMeasures }}</li>
+          </ul>
+        </template>
+      </el-table-column>
+      <el-table-column label="填报人" v-if="measuresEnable">
+        <template slot-scope="{ row }">
+          <span v-if="!row.fillerName">-</span>
+          <span v-else>{{`${row.fillerName}[${row.filler}]`}}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -68,7 +111,16 @@ export default {
       position: 0
     }
   },
-  props: ["data"],
+  props: {
+    data: {
+      type: Array,
+      defalut: () => []
+    },
+    measuresEnable: {
+      type: Boolean,
+      default: false
+    }
+  },
   created() {
     this.getRowSpan(this.data);
   },

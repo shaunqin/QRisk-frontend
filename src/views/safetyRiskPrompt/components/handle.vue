@@ -7,6 +7,8 @@
     v-loading="dialogLoading"
     title="处理待办"
     custom-class="big_dialog"
+    :fullscreen="fullscreen"
+    :show-close="!fullscreen"
   >
     <step1 v-if="step==1" :data="data" :form="form" @change="formChange" />
     <step2 ref="step2" v-if="step==2" :data="data" :form="form" @change="formChange" />
@@ -15,7 +17,7 @@
     <step5 ref="step5" v-if="step==5" :data="data" :form="form" @change="formChange" />
     <hairdown ref="hairdown" :data="data" :form="form" />
     <div slot="footer" class="dialog-footer">
-      <el-button type="text" @click="cancel">取消</el-button>
+      <el-button type="text" @click="cancel" v-if="!fullscreen">取消</el-button>
       <el-button v-if="step==1||step==4" :loading="loading" type="primary" @click="doSubmit">确认</el-button>
       <el-button v-if="step==2" :loading="loading" type="primary" @click="doSave">保存</el-button>
       <el-button v-if="step==2" :loading="loading" type="success" @click="doSubmit">提交</el-button>
@@ -49,6 +51,13 @@ import hairdown from './hairdown';
 import ccPerson from './ccPerson';
 export default {
   components: { step1, step2, step3, step4, step5, hairdown, ccPerson },
+  props: {
+    /**smart平台跳转过来,处理待办,全屏显示弹窗,隐藏关闭按钮 */
+    fullscreen: {
+      type: Boolean,
+      default: false
+    },
+  },
   data() {
     return {
       loading: false,

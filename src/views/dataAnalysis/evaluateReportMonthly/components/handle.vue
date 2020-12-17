@@ -6,6 +6,7 @@
     :visible.sync="dialog"
     title="处理待办"
     custom-class="big_dialog"
+    :fullscreen="fullscreen"
   >
     <step1 v-if="step==1" :data="data" :form="form" />
     <step2 ref="step2" v-if="step==2" :data="data" :form="form" />
@@ -48,6 +49,12 @@ import hairdown from './hairdown';
 import ccPerson from './ccPerson';
 export default {
   components: { step1, step2, step3, step4, step5, hairdown, ccPerson },
+  props: {
+    fullscreen: {
+      type: Boolean,
+      default: false
+    },
+  },
   data() {
     return {
       loading: false,

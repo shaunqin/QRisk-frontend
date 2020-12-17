@@ -18,7 +18,7 @@
         <editer ref="background" v-model="data.background" v-if="dialog" />
       </el-form-item>
       <el-form-item label="安全风险">
-        <editer ref="existingRisk" v-model="data.existingRisk"  v-if="dialog" />
+        <editer ref="existingRisk" v-model="data.existingRisk" v-if="dialog" />
       </el-form-item>
 
       <el-form-item label="风险防范措施">
@@ -34,6 +34,7 @@
               @change="deptChange($event,item)"
               :multiple="true"
               style="line-height:20px"
+              :deptPath="data.deptPath"
             />
           </el-col>
           <el-col :span="5">
@@ -84,7 +85,7 @@
 import department from "@/components/Department/deptByRole";
 import editer from '@/components/Tinymce'
 export default {
-  components: { department ,editer},
+  components: { department, editer },
   data() {
     return {
       baseUrl: process.env.VUE_APP_BASE_API,
@@ -109,7 +110,7 @@ export default {
         this.$emit("change", val);
       },
     },
-    dialog(){
+    dialog() {
       return this.$parent.$parent.dialog;
     }
   },

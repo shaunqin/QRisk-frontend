@@ -23,7 +23,7 @@
             <editer ref="background" v-model="detailForm.background" v-if="dialog" />
           </el-form-item>
           <el-form-item label="存在的安全风险" prop="existingRisk">
-            <editer ref="existingRisk" v-model="detailForm.existingRisk"  v-if="dialog" />
+            <editer ref="existingRisk" v-model="detailForm.existingRisk" v-if="dialog" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -43,6 +43,7 @@
               :limit="1"
               :flat="true"
               style="line-height:20px"
+              :deptPath="data.deptPath"
             />
           </el-col>
           <el-col :span="5">
@@ -54,12 +55,14 @@
               @change="formChangeStatus"
             ></el-date-picker>
           </el-col>
-          <el-col :span="10">
+          <el-col :span="11">
             <el-input
               v-model="item.content"
               style="width: 100%;"
               placeholder="措施内容"
               @keyup.native="formChangeStatus"
+              type="textarea"
+              rows="3"
             />
           </el-col>
           <el-col :span="2">
@@ -91,7 +94,7 @@ import { format } from "@/utils/datetime";
 import leaderApprvalRecord from '../leaderApprvalRecord'
 import editer from '@/components/Tinymce'
 export default {
-  components: { department, leaderApprvalRecord ,editer},
+  components: { department, leaderApprvalRecord, editer },
   data() {
     return {
       loading: false,
@@ -124,7 +127,7 @@ export default {
   props: {
     data: {
       type: Object,
-      default: null,
+      default: () => { },
     },
     form: {
       type: Object,
@@ -141,7 +144,7 @@ export default {
         this.$emit("change", val);
       },
     },
-    dialog(){
+    dialog() {
       return this.$parent.$parent.dialog;
     }
   },
@@ -149,6 +152,7 @@ export default {
     data: {
       deep: true,
       handler(data) {
+        console.log(data)
         this.detailForm = {
           id: data.id,
           no: data.no,

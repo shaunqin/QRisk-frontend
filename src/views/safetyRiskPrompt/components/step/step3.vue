@@ -94,8 +94,10 @@ export default {
       deep: true,
       handler(val) {
         this.form.comment = val.summary;
+        // 重置附件
+        this.accessory = this.data.deptMeasure ? this.data.deptMeasure.accessory : [];
       }
-    }
+    },
   },
   created() {
     this.form.comment = this.data.summary;

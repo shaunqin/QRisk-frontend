@@ -98,6 +98,15 @@ export default {
       },
     },
   },
+  watch: {
+    data: {
+      deep: true,
+      handler(val) {
+        // 重置附件
+        this.accessory = this.data.deptMeasure ? this.data.deptMeasure.accessory : [];
+      }
+    },
+  },
   mounted() { },
   methods: {
     success(res, row) {

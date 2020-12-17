@@ -69,9 +69,6 @@
           <el-form-item label="主题">
             <el-input v-model="form.title" placeholder="请输入主题" style="width:120px"></el-input>
           </el-form-item>
-          <el-form-item label="填报人">
-            <el-input v-model="form.filler" placeholder="请输入填报人" style="width:120px"></el-input>
-          </el-form-item>
           <el-form-item label="发起人">
             <el-input v-model="form.createBy" placeholder="请输入发起人" style="width:120px"></el-input>
           </el-form-item>
@@ -82,9 +79,6 @@
               @change="deptChange($event,'dept')"
               style="width:220px"
             />
-          </el-form-item>
-          <el-form-item label="措施内容">
-            <el-input v-model="form.content" placeholder="请输入措施内容" style="width:120px"></el-input>
           </el-form-item>
           <el-form-item label>
             <el-button type="success" icon="el-icon-search" @click="toQuery">查询</el-button>

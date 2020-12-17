@@ -24,6 +24,7 @@ export default {
     },
   },
   created() {
+    this.otherQuery = this.getOtherQuery(this.$route.query);
     this.login();
   },
   methods: {
@@ -43,10 +44,13 @@ export default {
           this.$loading().close();
           if (res) {
             this.$router.push({
-              path: "/",
+              path: "/smart",
               query: this.otherQuery,
+            }, () => {
+              // 重新获取用户信息
+              // location.reload();
+              this.$store.dispatch("user/getInfo");
             });
-            location.reload();
           } else {
             this.$router.replace({
               path: "/login",
@@ -62,7 +66,7 @@ export default {
     },
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
-        if (cur !== "redirect") {
+        if (cur !== "token") {
           acc[cur] = query[cur];
         }
         return acc;
