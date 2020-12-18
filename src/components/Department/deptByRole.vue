@@ -94,6 +94,10 @@ export default {
       if (val)
         this.loadData();
     },
+    value(val) {
+      this.selectValue = val
+      this.$forceUpdate()
+    }
   },
   created() {
     this.loadData();

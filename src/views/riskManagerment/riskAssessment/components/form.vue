@@ -41,6 +41,18 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
+          <el-form-item prop="releasePath" label="发起部门">
+            <el-select v-model="form.releasePath" style="width: 100%">
+              <el-option
+                v-for="item in deptList"
+                :key="item.deptPath"
+                :label="item.deptNameCn"
+                :value="item.deptPath"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
           <el-form-item prop="issueDepts">
             <template slot="label">
               {{ form.type != '2' ? '下发部门' : '分析单位' }}
@@ -48,6 +60,7 @@
             <deptByRole
               v-if="form.type != '2'"
               :value="form.issueDepts"
+              :deptPath="form.releasePath"
               :multiple="true"
               @change="deptChange($event, 'issueDepts')"
             ></deptByRole>
@@ -442,7 +455,11 @@
             <el-table-column type="index" width="50" />
             <el-table-column label="控制措施">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.controlMeasure" type="textarea" rows="3"></el-input>
+                <el-input
+                  v-model="scope.row.controlMeasure"
+                  type="textarea"
+                  rows="3"
+                ></el-input>
               </template>
             </el-table-column>
             <el-table-column label="责任单位">
@@ -510,6 +527,7 @@ import {
   specialRiskAdd,
   specialRiskModify,
   specialRiskQueryRiskLevel,
+  queryRiskMgrDept,
 } from '@/api/risk'
 import { queryDictByName } from '@/api/dict'
 import { queryHazardList } from '@/api/standard'
@@ -530,6 +548,7 @@ export default {
         endTime: '', // 截止日期
         noteContent: '', // 通知内容
         issueDepts: null, // 下发部门
+        releasePath: '', // 发起部门
         identificationUnit: null, // 识别单位
         assType: '', // 评估类别
         analysisTitle: '', // 分析标题
@@ -587,9 +606,12 @@ export default {
       totalhazardList: [], // 全部危险源
       hazardList: [], // 危险源
       possibleRisksList: [], // 可能导致的风险列表
+      deptList: [],
       formRules: {
         title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
-        issueDepts: [{ required: true, message: '部门/单位不能为空', trigger: 'blur' }],
+        issueDepts: [
+          { required: true, message: '部门/单位不能为空', trigger: 'blur' },
+        ],
       },
       assessmentType: '',
       pickerOptions: {
@@ -609,6 +631,11 @@ export default {
     'form.type'(val) {
       this.form.issueDepts = null
     },
+    'form.releasePath'(val) {
+      if(this.form.type=='1') {
+        this.form.issueDepts = null
+      }
+    },
   },
   created() {
     // 危险源
@@ -624,6 +651,20 @@ export default {
         )
       })
     })
+    // 发起部门
+    queryRiskMgrDept().then((res) => {
+      if (res.code != '200') {
+        this.$message.error(res.msg)
+      } else {
+        if (res.obj.length > 0) {
+          this.deptList = res.obj
+          // 设置默认选中
+          if (res.obj.length > 0) {
+            this.form.releasePath = res.obj[0].deptPath
+          }
+        }
+      }
+    })
   },
   methods: {
     cancel() {
@@ -637,7 +678,7 @@ export default {
             this.doAdd(sqlUserId)
           } else this.doModify()
         } else {
-          this.$message.error("请填写完整！")
+          this.$message.error('请填写完整！')
         }
       })
     },
@@ -648,7 +689,7 @@ export default {
           // _this.id = this.selections[0];
           _this.dialog = true
         } else {
-          this.$message.error("请填写完整！")
+          this.$message.error('请填写完整！')
         }
       })
     },
@@ -711,6 +752,7 @@ export default {
         endTime: '', // 截止日期
         noteContent: '', // 通知内容
         issueDepts: null, // 下发部门
+        releasePath: this.deptList[0].deptPath,
         assType: '', // 评估类别
         analysisTitle: '', // 分析标题
         analysisNo: '', // 分析编号

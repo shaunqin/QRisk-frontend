@@ -13,6 +13,7 @@
         <el-form-item label="截止日期">{{
           formatShortDate(data.endTime)
         }}</el-form-item>
+        <el-form-item label="发布部门">{{ data.releasePathName }}</el-form-item>
         <el-form-item label="下发部门">{{ data.issueDeptName }}</el-form-item>
         <el-row class="fill-row">
           <el-col :span="24">
