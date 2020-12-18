@@ -193,7 +193,7 @@
               ></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="责任单位" width="160">
+          <el-table-column label="责任单位" width="380">
             <template slot-scope="{ row }">
               <treeselect
                 v-loading="loadingTree"

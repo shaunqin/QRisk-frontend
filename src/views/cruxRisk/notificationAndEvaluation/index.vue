@@ -175,7 +175,6 @@ export default {
 <style lang="scss" scoped>
 @import "~@/styles/variables.scss";
 .app-container {
-  min-height: calc(100vh - 56px);
   padding: 20px 0 0 20px;
 }
 .filter-item {

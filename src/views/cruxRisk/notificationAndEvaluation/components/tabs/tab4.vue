@@ -82,11 +82,12 @@ export default {
     },
     subHandle(row) {
       this.loading = true;
+      let _this = this.$refs.handle;
+      _this.dialogLoading = true;
       specialRiskFill(row.taskId).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
-          let _this = this.$refs.handle;
           _this.data = res.obj
           _this.data.approvalDate = formatShortDate(res.obj.approvalDate);
           if (res.obj.hazardVoList && res.obj.hazardVoList.length > 0) {
@@ -101,6 +102,7 @@ export default {
           _this.form.formId = res.obj.id;
           this.loading = false;
           _this.dialog = true;
+          _this.dialogLoading = false;
         }
       });
     },

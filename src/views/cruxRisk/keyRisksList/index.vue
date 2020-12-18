@@ -1,29 +1,32 @@
 <template>
-  <div>
-     <div class="head-container">
-          <el-form size="mini" inline>
-            <el-form-item label="发布日期">
-              <el-date-picker
-                v-model="date"
-                unlink-panels
-                type="daterange"
-                placeholder
-                value-format="yyyy-MM-dd"
-                style="width:220px"
-              ></el-date-picker>
-            </el-form-item>
-            <el-form-item label>
-              <el-button type="success" icon="el-icon-search" @click="toQuery">查询</el-button>
-              <el-button
-                class="filter-item"
-                size="mini"
-                type="success"
-                icon="el-icon-refresh"
-                @click="refresh"
-              >{{$t('global.reset')}}</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
+  <div class="app-container">
+    <div class="head-container">
+      <el-form size="mini" inline>
+        <el-form-item label="发起时间">
+          <el-date-picker
+            v-model="date"
+            unlink-panels
+            type="daterange"
+            placeholder
+            value-format="yyyy-MM-dd"
+            style="width: 220px"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label>
+          <el-button type="success" icon="el-icon-search" @click="toQuery"
+            >查询</el-button
+          >
+          <el-button
+            class="filter-item"
+            size="mini"
+            type="success"
+            icon="el-icon-refresh"
+            @click="refresh"
+            >{{ $t('global.reset') }}</el-button
+          >
+        </el-form-item>
+      </el-form>
+    </div>
     <el-table
       v-loading="loading"
       :data="data"
@@ -32,9 +35,7 @@
       :highlight-current-row="true"
       style="width: 100%"
     >
-      <el-table-column
-        type="index"
-        width="50">
+      <el-table-column type="index" width="50">
         <template slot="header">
           <span>序列</span>
         </template>
@@ -52,7 +53,7 @@
         </template>
         <el-table-column
           v-if="column.prop != 'riskName'"
-          :key="column.children.nameCN+index"
+          :key="column.children.nameCN + index"
           :label="column.children.nameCN"
           :prop="column.children.prop"
         >
@@ -75,20 +76,20 @@ export default {
       data: [],
       columns: [],
       list: {
-        headers: [{nameEN: ''}]
+        headers: [{ nameEN: '' }],
       },
       form: {},
-      date: ""
+      date: '',
     }
   },
   watch: {
     date(val) {
       if (val) {
-        this.form.startTime = val[0];
-        this.form.endTime = val[1];
+        this.form.startTime = val[0]
+        this.form.endTime = val[1]
       } else {
-        this.form.startTime = "";
-        this.form.endTime = "";
+        this.form.startTime = ''
+        this.form.endTime = ''
       }
     },
   },
@@ -98,9 +99,9 @@ export default {
   methods: {
     toQuery() {
       this.loading = true
-      queryTableList().then(res => {
+      queryTableList({ ...this.form }).then((res) => {
         this.list = res.obj
-        this.data = res.obj.datas.map(item => {
+        this.data = res.obj.datas.map((item) => {
           item = Object.assign(item, item.children)
           return item
         })
@@ -111,6 +112,18 @@ export default {
     detail(row, item) {
       console.log(row, item)
     },
+    refresh() {
+      this.form = {}
+      this.date = ''
+      this.toQuery()
+    },
   },
 }
 </script>
+<style lang="scss" scoped>
+@import "~@/styles/variables.scss";
+.app-container {
+  min-height: calc(100vh - 56px);
+  padding: 20px 0 0 20px;
+}
+</style>
