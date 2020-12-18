@@ -16,12 +16,7 @@
         <el-table-column label="风险等级" prop="riskLevelName" />
         <el-table-column label="管理流程" prop="managementProcess" />
         <el-table-column label="问题描述" prop="hazardSource" />
-        <el-table-column
-          label="根原因分析"
-          prop="rootCauseAnalysis"
-          width="140"
-          show-overflow-tooltip
-        />
+        <el-table-column label="根原因分析" prop="rootCauseAnalysis" width="140" show-overflow-tooltip />
         <el-table-column
           label="可能导致的风险"
           prop="possibleRisksName"
@@ -34,9 +29,7 @@
               <li v-for="item in row.specialRiskMeasureList" :key="item.id">
                 <el-popover trigger="hover" v-if="true" placement="top">
                   <span>{{ item.controlMeasure }}</span>
-                  <div class="text" slot="reference">
-                    {{ item.controlMeasure }}
-                  </div>
+                  <div class="text" slot="reference">{{ item.controlMeasure }}</div>
                 </el-popover>
               </li>
             </ul>
@@ -48,9 +41,7 @@
               <li v-for="item in row.specialRiskMeasureList" :key="item.id">
                 <el-popover trigger="hover" v-if="true" placement="top">
                   <span>{{ item.reponsibleDeptName }}</span>
-                  <div class="text" slot="reference">
-                    {{ item.reponsibleDeptName }}
-                  </div>
+                  <div class="text" slot="reference">{{ item.reponsibleDeptName }}</div>
                 </el-popover>
               </li>
             </ul>
@@ -62,9 +53,7 @@
               <li v-for="item in row.specialRiskMeasureList" :key="item.id">
                 <el-popover trigger="hover" v-if="true" placement="top">
                   <span>{{ item.completionName }}</span>
-                  <div class="text" slot="reference">
-                    {{ item.completionName }}
-                  </div>
+                  <div class="text" slot="reference">{{ item.completionName }}</div>
                 </el-popover>
               </li>
             </ul>
@@ -76,9 +65,7 @@
               <li v-for="item in row.specialRiskMeasureList" :key="item.id">
                 <el-popover trigger="hover" v-if="true" placement="top">
                   <span>{{ formatShortDate(item.deadline) }}</span>
-                  <div class="text" slot="reference">
-                    {{ formatShortDate(item.deadline) }}
-                  </div>
+                  <div class="text" slot="reference">{{ formatShortDate(item.deadline) }}</div>
                 </el-popover>
               </li>
             </ul>
@@ -93,12 +80,7 @@
             <el-radio label="1">同意</el-radio>
             <el-radio label="2">驳回</el-radio>
           </el-radio-group>
-          <el-input
-            v-model="form.comment"
-            type="textarea"
-            rows="3"
-            placeholder="请输入备注"
-          ></el-input>
+          <el-input v-model="form.comment" type="textarea" rows="3" placeholder="请输入备注"></el-input>
         </el-form-item>
       </el-form>
     </el-card>
@@ -109,8 +91,7 @@
         :loading="loading"
         type="primary"
         @click="doSubmit"
-        >确认</el-button
-      >
+      >确认</el-button>
     </div>
     <!-- 抄送 -->
     <ccPerson ref="ccPerson" :deptPath="deptPath" @subCC="subCC" />
@@ -215,13 +196,15 @@ export default {
         } else {
           this.$message.success('操作成功')
           this.resetForm()
-          const obj = { taskId: this.parentTaskId }
-          if (this.$parent.$parent.$parent.$parent.$parent.step == 1) {
-            this.$parent.$parent.$parent.$parent.$parent.$parent.subHandle(obj)
+          if (this.source == 'smart') {
+            this.$parent.$parent.$parent.$parent.$parent.$parent.speciaRisk()
           } else {
-            this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.subHandle(
-              obj
-            )
+            const obj = { taskId: this.parentTaskId }
+            if (this.$parent.$parent.$parent.$parent.$parent.step == 1) {
+              this.$parent.$parent.$parent.$parent.$parent.$parent.subHandle(obj)
+            } else {
+              this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.subHandle(obj)
+            }
           }
         }
         this.loading = false

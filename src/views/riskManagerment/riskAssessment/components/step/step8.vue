@@ -1,6 +1,6 @@
 <template>
   <div>
-    <info :data="data" form="form" :assessmentType="assessmentType" />
+    <info :data="data" form="form" :assessmentType="assessmentType" :source="source" />
     <el-card>
       <el-radio-group v-model="form.processFlag">
         <el-radio label="1">同意</el-radio>
@@ -18,7 +18,24 @@ export default {
   components: {
     info,
   },
-  props: ["data", "form", "assessmentType"],
+  props: {
+    data: {
+      type: Object,
+      default: () => { }
+    },
+    form: {
+      type: Object,
+      default: () => { }
+    },
+    assessmentType: {
+      type: String,
+      default: ""
+    },
+    source: {
+      type: String,
+      default: ""
+    }
+  },
   methods: {
     formatShortDate,
   }
@@ -28,7 +45,7 @@ export default {
 <style lang="scss" scoped>
 .el-card {
   margin-top: 20px;
-  .com{
+  .com {
     margin-top: 8px;
   }
 }

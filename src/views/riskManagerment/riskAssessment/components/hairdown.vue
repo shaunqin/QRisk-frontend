@@ -53,6 +53,10 @@ export default {
     issue: {
       type: Boolean,
       default: true
+    },
+    source: {
+      type: String,
+      default: ""
     }
   },
   created() {
@@ -71,7 +75,7 @@ export default {
       this.resetForm();
     },
     doSubmit() {
-      if(this.issue) {
+      if (this.issue) {
         this.doComplete()
       } else {
         this.doIssue()
@@ -85,8 +89,12 @@ export default {
           this.$message.error(res.msg);
         } else {
           this.resetForm();
-          this.$parent.$parent.resetForm();
-          this.$parent.$parent.$parent.init(); // 刷新父页面
+          if (this.source == 'smart') {
+            this.$parent.$parent.$parent.speciaRisk()
+          } else {
+            this.$parent.$parent.resetForm();
+            this.$parent.$parent.$parent.init(); // 刷新父页面
+          }
         }
         this.loading = false;
       })
@@ -98,11 +106,15 @@ export default {
           this.$message.error(res.msg);
         } else {
           this.resetForm();
-          const params = { taskId: this.form.taskId}
-          if(this.$parent.$parent.$parent.step == 1) {
-            this.$parent.$parent.$parent.$parent.subHandle(params)
+          if (this.source == 'smart') {
+            this.$parent.$parent.$parent.speciaRisk()
           } else {
-            this.$parent.$parent.$parent.$parent.$parent.subHandle(params)
+            const params = { taskId: this.form.taskId }
+            if (this.$parent.$parent.$parent.step == 1) {
+              this.$parent.$parent.$parent.$parent.subHandle(params)
+            } else {
+              this.$parent.$parent.$parent.$parent.$parent.subHandle(params)
+            }
           }
         }
         this.loading = false;
@@ -114,7 +126,7 @@ export default {
       this.form.pathAndDeadLines = [];
     },
     deptChange(val) {
-      if(this.multiple) {
+      if (this.multiple) {
         this.form.pathAndDeadLines = val;
       } else {
         this.form.pathAndDeadLines[0] = val;

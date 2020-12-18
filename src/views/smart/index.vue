@@ -15,6 +15,8 @@
       ref="monthEvaluateReportHandle"
       :fullscreen="true"
     />
+    <!-- 专项风险 -->
+    <riskAssessmentHandle v-if="processType==2" ref="riskAssessmentHandle" :fullscreen="true" />
   </div>
 </template>
 
@@ -23,15 +25,17 @@ import riskNoticeHanfle from '@/views/safetyRiskPrompt/components/handle'
 import hazardsHandle from '@/views/hazardsInvestigation/safetyHazardsReport/components/handle'
 import hazardsHandleRun from '@/views/hazardsInvestigation/safetyHazardsReport/components/handleRun'
 import monthEvaluateReportHandle from '@/views/dataAnalysis/evaluateReportMonthly/components/handle'
-import { riskNoticeQueryTask, riskControlQueryDetailTask } from "@/api/risk";
+import riskAssessmentHandle from '@/views/riskManagerment/riskAssessment/components/handle'
+import { riskNoticeQueryTask, riskControlQueryDetailTask, specialRiskFill } from "@/api/risk";
 import { queryHazards, queryHazards2 } from "@/api/hazards";
+import { formatShortDate } from '@/utils/datetime'
 export default {
   components: {
-    riskNoticeHanfle, hazardsHandle, hazardsHandleRun, monthEvaluateReportHandle
+    riskNoticeHanfle, hazardsHandle, hazardsHandleRun, monthEvaluateReportHandle, riskAssessmentHandle
   },
   data() {
     return {
-      /** 1:风险提示 5,6,7:隐患排查 3:月度评价报告 */
+      /** 1:风险提示 5,6,7:隐患排查 2:专项风险 3:月度评价报告 */
       processType: this.$route.query.processType,
       taskId: this.$route.query.businessNo,
       formId: 0
@@ -44,10 +48,12 @@ export default {
       case "6":
       case "7": this.hazards2(); break;
       case "3": this.monthEvaluateReport(); break;
+      case "2": this.speciaRisk(); break;
       default: break;
     }
   },
   methods: {
+    formatShortDate,
     riskNotice() {
       let _this = this.$refs.riskNoticeHanfle;
       _this.dialog = true;
@@ -117,6 +123,32 @@ export default {
           if (res.obj.riskVoList && res.obj.riskVoList.length > 0) {
             _this.form.riskControlRisk = res.obj.riskVoList;
           }
+        }
+        _this.dialogLoading = false;
+      });
+    },
+    speciaRisk() {
+      let _this = this.$refs.riskAssessmentHandle;
+      _this.dialog = true;
+      _this.dialogLoading = true;
+      specialRiskFill(this.taskId).then((res) => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          _this.assessmentType = this.assessmentType;
+          _this.data = res.obj
+          _this.data.endTime = formatShortDate(res.obj.endTime)
+          _this.data.approvalDate = formatShortDate(res.obj.approvalDate);
+          if (res.obj.hazardVoList && res.obj.hazardVoList.length > 0) {
+            _this.data.hazardList = res.obj.hazardVoList.map(item => {
+              item.specialRiskMeasureList.map(childItem => {
+                childItem.deadline = formatShortDate(childItem.deadline)
+              })
+              return item
+            })
+          } else { _this.data.hazardList = [] }
+          _this.form.taskId = this.taskId;
+          _this.form.formId = res.obj.id;
         }
         _this.dialogLoading = false;
       });
