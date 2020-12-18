@@ -23,6 +23,12 @@ import step4 from "./step/step4";
 import ccPerson from './ccPerson';
 export default {
   components: { step4, ccPerson },
+  props: {
+    source: {
+      type: String,
+      default: "",
+    },
+  },
   data() {
     return {
       loading: false,
@@ -93,7 +99,11 @@ export default {
         } else {
           this.$message.success("操作成功");
           this.resetForm();
-          this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.subHandle({ taskId: this.parentTaskId, formId: this.form.formId });
+          if (this.source == 'smart') {
+            this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.monthEvaluateReport();
+          } else {
+            this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.subHandle({ taskId: this.parentTaskId, formId: this.form.formId });
+          }
         }
         this.loading = false;
       });

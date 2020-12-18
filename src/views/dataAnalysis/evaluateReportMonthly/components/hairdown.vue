@@ -44,7 +44,20 @@ export default {
       }
     };
   },
-  props: ["data", "form"],
+  props: {
+    data: {
+      type: Object,
+      default: () => { },
+    },
+    form: {
+      type: Object,
+      default: () => { },
+    },
+    source: {
+      type: String,
+      default: ''
+    }
+  },
   created() {
     this.measureId = this.data.deptRisk ? this.data.deptRisk.id : "";
   },
@@ -73,7 +86,11 @@ export default {
         } else {
           this.$message.success("下发成功")
           this.resetForm();
-          this.$parent.$parent.$parent.subHandle(this.form);
+          if (this.source == 'smart') {
+            this.$parent.$parent.$parent.monthEvaluateReport();
+          } else {
+            this.$parent.$parent.$parent.subHandle(this.form);
+          }
         }
         this.loading = false;
       })

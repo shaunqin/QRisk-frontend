@@ -26,6 +26,12 @@ import ccPerson from './ccPerson';
 
 export default {
   components: { hairdown, step2, ccPerson },
+  props: {
+    source: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       loading: false,
@@ -36,7 +42,8 @@ export default {
         formId: 0,
         processFlag: "1",
         sqlUserId: "",
-        hiddenDangerList: []
+        hiddenDangerList: [],
+        noHiddenDanger: "0"
       },
       data: {}, // 父组件赋值
       password: "",
@@ -52,7 +59,7 @@ export default {
     },
     deptPath() {
       return this.data.deptPath || ""
-    }
+    },
   },
   methods: {
     cancel() {
@@ -91,8 +98,10 @@ export default {
         return;
       }
       // 获取领导修改的填报数据
+      this.form.hiddenDangerList = [];
       if (this.$refs.step2) {
-        this.form.hiddenDangerList = this.$refs.step2.$refs.fillinForm.fillinData;
+        if (this.$refs.step2.$refs.fillinForm)
+          this.form.hiddenDangerList = this.$refs.step2.$refs.fillinForm.fillinData;
       }
       this.loading = true;
       hazardsComplete({ ...this.form, ...params }).then((res) => {
@@ -101,8 +110,12 @@ export default {
         } else {
           this.$message.success("操作成功");
           this.resetForm();
-          // 刷新父页面-已下发措施
-          this.$parent.$parent.$parent.$parent.$parent.$parent.subHandle({ taskId: this.parentTaskId, formId: this.form.formId });
+          if (this.source == "smart") {
+            this.$parent.$parent.$parent.$parent.$parent.$parent.hazards();
+          } else {
+            // 刷新父页面-已下发措施
+            this.$parent.$parent.$parent.$parent.$parent.$parent.subHandle({ taskId: this.parentTaskId, formId: this.form.formId });
+          }
         }
         this.loading = false;
       });

@@ -65,7 +65,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <ehandle ref="ehandle" />
+    <ehandle ref="ehandle" :source="source" />
     <cmdIssue ref="cmdIssue" />
   </div>
 </template>
@@ -84,7 +84,16 @@ export default {
       loading: false
     }
   },
-  props: ["data"],
+  props: {
+    data: {
+      type: Array,
+      default: () => [],
+    },
+    source: {
+      type: String,
+      default: "",
+    },
+  },
   created() {
     this.getRowSpan(this.data);
   },

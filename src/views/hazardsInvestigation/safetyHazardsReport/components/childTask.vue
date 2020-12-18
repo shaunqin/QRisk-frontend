@@ -58,7 +58,7 @@
       </el-table-column>
     </el-table>
     <list2copy ref="list2copy" :readonly="readonly" />
-    <handle ref="handle" />
+    <handle ref="handle" :source="source" />
     <cmdIssue ref="cmdIssue" />
   </div>
 </template>
@@ -91,6 +91,10 @@ export default {
       type: Boolean,
       default: false
     },
+    source: {
+      type: String,
+      default: ''
+    },
   },
   methods: {
     formatShortDate,
@@ -115,6 +119,7 @@ export default {
           _this.form.taskId = row.runTaskId;
           _this.form.formId = row.formId;
           _this.parentTaskId = row.parentTaskId;
+          _this.noHiddenDanger = res.obj.noHiddenDanger;
           if (res.obj.step != 4) {
             _this.form.comment = res.obj.deptMeasure ? (res.obj.deptMeasure.implementStatus || "") : "";
           }

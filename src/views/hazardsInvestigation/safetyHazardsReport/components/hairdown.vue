@@ -51,6 +51,10 @@ export default {
       type: Object,
       default: () => { },
     },
+    source: {
+      type: String,
+      default: ''
+    }
   },
   watch: {
     data: {
@@ -82,11 +86,16 @@ export default {
         this.loading = false;
         if (res.code != '200') {
           this.$message.error(res.msg);
+          this.$parent.$parent.$parent.hazards();
         } else {
           this.$message.success("下发成功");
           this.resetForm();
-          // 刷新父页面
-          this.$parent.$parent.$parent.subHandle(this.form);
+          if (this.source == 'smart') {
+            this.$parent.$parent.$parent.hazards();
+          } else {
+            // 刷新父页面
+            this.$parent.$parent.$parent.subHandle(this.form);
+          }
         }
       })
     },

@@ -7,13 +7,15 @@
     v-loading="dialogLoading"
     title="处理待办"
     custom-class="big_dialog"
+    :fullscreen="fullscreen"
+    :show-close="!fullscreen"
   >
-    <step1 ref="step1" v-if="step==1" :data="data" :form="form" />
+    <step1 ref="step1" v-if="step==1" :data="data" :form="form" :fullscreen="fullscreen" />
     <step2 ref="step2" v-if="step==2" :data="data" :form="form" />
     <step3 ref="step3" v-if="step==3" :data="data" :form="form" />
-    <hairdown ref="hairdown" :data="data" :form="form" />
+    <hairdown ref="hairdown" :data="data" :form="form" :source="fullscreen?'smart':''" />
     <div slot="footer" class="dialog-footer">
-      <el-button type="text" @click="cancel">取消</el-button>
+      <el-button type="text" @click="cancel" v-if="!fullscreen">取消</el-button>
       <el-button v-if="(step==1||step==3)&&!hiddenFill" type="primary" @click="doReport">填报</el-button>
       <el-button v-if="step==2" :loading="loading" type="primary" @click="doSubmit">确认</el-button>
       <el-button
@@ -39,6 +41,13 @@ import ccPerson from './ccPerson';
 
 export default {
   components: { step1, hairdown, step2, step3, ccPerson },
+  props: {
+    /**smart平台跳转过来,处理待办,全屏显示弹窗,隐藏关闭按钮 */
+    fullscreen: {
+      type: Boolean,
+      default: false
+    },
+  },
   data() {
     return {
       loading: false,
@@ -117,8 +126,10 @@ export default {
         } else {
           this.$message.success("操作成功");
           this.resetForm();
-          this.$parent.init();
-          this.loadCount();
+          if (!this.fullscreen) {
+            this.$parent.init();
+            this.loadCount();
+          }
         }
         this.loading = false;
       });
@@ -133,6 +144,9 @@ export default {
         sqlUserId: "",
         hiddenDangerList: []
       };
+      if (this.fullscreen) {
+        window.close();
+      }
     },
     doHairdown() {
       this.$refs.hairdown.dialog = true;
@@ -158,8 +172,10 @@ export default {
           this.$message.success("填报成功!");
           this.resetForm(); // 关闭主弹窗
           _this.resetForm();  // 关闭子弹窗
-          this.$parent.init();
-          this.loadCount();
+          if (!this.fullscreen) {
+            this.$parent.init();
+            this.loadCount();
+          }
         }
       })
     },

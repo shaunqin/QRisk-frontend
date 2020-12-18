@@ -38,7 +38,7 @@
       </el-form-item>
       <!-- 下发措施 -->
       <el-form-item key="childRisk" label="下发措施" v-if="childRisk.length>0">
-        <childRisk :data="childRisk" />
+        <childRisk :data="childRisk" :source="source" />
       </el-form-item>
       <el-form-item label="措施填报" v-if="!hiddenFill&&!fillRiskMeasuresEnable">
         <el-row
@@ -107,6 +107,10 @@ export default {
     form: {
       type: Object,
       default: () => { },
+    },
+    source: {
+      type: String,
+      default: "",
     },
   },
   computed: {

@@ -15,7 +15,7 @@
     <step3 ref="step3" v-if="step==3" :data="data" :form="form" @change="formChange" :fullscreen="fullscreen" />
     <step4 ref="step4" v-if="step==4" :data="data" :form="form" @change="formChange" />
     <step5 ref="step5" v-if="step==5" :data="data" :form="form" @change="formChange" />
-    <hairdown ref="hairdown" :data="data" :form="form" />
+    <hairdown ref="hairdown" :data="data" :form="form" :source="fullscreen?'smart':''" />
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel" v-if="!fullscreen">取消</el-button>
       <el-button v-if="step==1||step==4" :loading="loading" type="primary" @click="doSubmit">确认</el-button>

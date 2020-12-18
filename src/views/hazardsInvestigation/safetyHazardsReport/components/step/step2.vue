@@ -7,7 +7,7 @@
       <el-option label="本月有新增" value="0"></el-option>
       <el-option label="本月无新增" value="1"></el-option>
     </el-select>
-    <fillinForm ref="fillinForm" :disabled="disabled" :data="data" v-if="data.noHiddenDanger!=1" />
+    <fillinForm ref="fillinForm" :disabled="disabled" :data="data" v-show="data.noHiddenDanger!=1" />
     <el-card>
       <el-radio-group v-model="form.processFlag">
         <el-radio label="1">同意</el-radio>

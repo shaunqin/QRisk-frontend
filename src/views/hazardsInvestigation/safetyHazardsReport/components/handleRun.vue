@@ -6,11 +6,14 @@
     :visible.sync="dialog"
     title="处理待办"
     custom-class="big_dialog"
+    v-loading="dialogLoading"
+    :fullscreen="fullscreen"
+    :show-close="!fullscreen"
   >
     <step2 ref="step2" v-if="step==2" :data="data" :form="form" />
     <step3 ref="step3" v-if="step==3" :data="data" :form="form" />
     <div slot="footer" class="dialog-footer">
-      <el-button type="text" @click="cancel">取消</el-button>
+      <el-button type="text" @click="cancel" v-if="!fullscreen">取消</el-button>
       <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
     </div>
   </el-dialog>
@@ -24,6 +27,13 @@ import step3 from "./stepRun/step3";
 
 export default {
   components: { step2, step3 },
+  props: {
+    /**smart平台跳转过来,处理待办,全屏显示弹窗,隐藏关闭按钮 */
+    fullscreen: {
+      type: Boolean,
+      default: false
+    },
+  },
   data() {
     return {
       loading: false,
@@ -34,7 +44,8 @@ export default {
         processFlag: "1",
       },
       data: {}, // 父组件赋值
-      password: ""
+      password: "",
+      dialogLoading: false
     };
   },
   computed: {
@@ -84,7 +95,7 @@ export default {
           }
         }).catch(() => { })
       } else {
-        this.submitStep1();
+        this.submitStep2();
       }
     },
     submitStep2() {
@@ -99,8 +110,10 @@ export default {
         } else {
           this.$message.success("操作成功");
           this.resetForm();
-          this.$parent.init();
-          this.loadCount();
+          if (!this.fullscreen) {
+            this.$parent.init();
+            this.loadCount();
+          }
         }
         this.loading = false;
       });
@@ -113,8 +126,10 @@ export default {
         } else {
           this.$message.success("操作成功");
           this.resetForm();
-          this.$parent.init();
-          this.loadCount();
+          if (!this.fullscreen) {
+            this.$parent.init();
+            this.loadCount();
+          }
         }
         this.loading = false;
       });
@@ -129,6 +144,9 @@ export default {
         sqlUserId: "",
         hiddenDangerList: []
       };
+      if (this.fullscreen) {
+        window.close();
+      }
     },
     loadCount() {
       this.$parent.$parent.$parent.$parent.loadCount();

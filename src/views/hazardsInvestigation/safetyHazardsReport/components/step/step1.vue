@@ -4,7 +4,7 @@
       <baseinfo :data="data" />
     </el-card>
     <el-card header="下发任务" key="childTask" v-if="childTask.length>0">
-      <childTask :data="childTask" :hiddenField="[]" />
+      <childTask :data="childTask" :hiddenField="[]" :source="fullscreen?'smart':''" />
     </el-card>
     <el-select v-model="form.noHiddenDanger" placeholder size="mini" style="margin:10px 0">
       <el-option label="本月有新增" value="0"></el-option>
@@ -34,7 +34,11 @@ export default {
     form: {
       type: Object,
       default: () => { }
-    }
+    },
+    fullscreen: {
+      type: Boolean,
+      default: false
+    },
   },
   computed: {
     childTask() {

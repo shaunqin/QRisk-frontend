@@ -6,16 +6,18 @@
     :visible.sync="dialog"
     title="处理待办"
     custom-class="big_dialog"
+    v-loading="dialogLoading"
     :fullscreen="fullscreen"
+    :show-close="!fullscreen"
   >
     <step1 v-if="step==1" :data="data" :form="form" />
     <step2 ref="step2" v-if="step==2" :data="data" :form="form" />
-    <step3 ref="step3" v-if="step==3" :data="data" :form="form" />
-    <step4 ref="step4" v-if="step==4" :data="data" :form="form" />
+    <step3 ref="step3" v-if="step==3" :data="data" :form="form" :source="fullscreen?'smart':''" />
+    <step4 ref="step4" v-if="step==4" :data="data" :form="form" :source="fullscreen?'smart':''" />
     <step5 ref="step5" v-if="step==5" :data="data" :form="form" />
-    <hairdown ref="hairdown" :data="data" :form="form" />
+    <hairdown ref="hairdown" :data="data" :form="form" :source="fullscreen?'smart':''" />
     <div slot="footer" class="dialog-footer">
-      <el-button type="text" @click="cancel">取消</el-button>
+      <el-button type="text" @click="cancel" v-if="!fullscreen">取消</el-button>
       <el-button v-if="step==1||step==4" :loading="loading" type="primary" @click="doSubmit">确认</el-button>
       <el-button v-if="step==2" :loading="loading" type="primary" @click="doSave">保存</el-button>
       <el-button v-if="step==2" :loading="loading" type="success" @click="doSubmit">提交</el-button>
@@ -59,6 +61,7 @@ export default {
     return {
       loading: false,
       dialog: false,
+      dialogLoading: false,
       form: {
         comment: "", // 驳回备注
         taskId: 0,
@@ -135,8 +138,10 @@ export default {
         } else {
           this.$message.success("操作成功");
           this.resetForm();
-          this.$parent.init();
-          this.loadCount();
+          if (!this.fullscreen) {
+            this.$parent.init();
+            this.loadCount();
+          }
         }
         this.loading = false;
       });
@@ -161,6 +166,9 @@ export default {
         riskControlRisk: [], // 风险措施
         riskControlMeasures: [], // 落实情况
       }
+      if (this.fullscreen) {
+        window.close()
+      }
     },
     formChange(form) {
       console.log(form);
@@ -182,8 +190,10 @@ export default {
         } else {
           this.$message.success("操作成功");
           this.resetForm();
-          this.$parent.init();
-          this.loadCount();
+          if (!this.fullscreen) {
+            this.$parent.init();
+            this.loadCount();
+          }
         }
         this.loading = false;
       });
@@ -198,8 +208,10 @@ export default {
         } else {
           this.$message.success("操作成功");
           this.resetForm();
-          this.$parent.init();
-          this.loadCount();
+          if (!this.fullscreen) {
+            this.$parent.init();
+            this.loadCount();
+          }
         }
         this.loading = false;
       });
@@ -213,8 +225,10 @@ export default {
         } else {
           this.$message.success("操作成功");
           this.resetForm();
-          this.$parent.init();
-          this.loadCount();
+          if (!this.fullscreen) {
+            this.$parent.init();
+            this.loadCount();
+          }
         }
         this.loading = false;
       });
