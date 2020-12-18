@@ -442,7 +442,7 @@
             <el-table-column type="index" width="50" />
             <el-table-column label="控制措施">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.controlMeasure"></el-input>
+                <el-input v-model="scope.row.controlMeasure" type="textarea" rows="3"></el-input>
               </template>
             </el-table-column>
             <el-table-column label="责任单位">

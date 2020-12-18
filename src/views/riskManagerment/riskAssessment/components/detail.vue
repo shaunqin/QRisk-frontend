@@ -154,7 +154,10 @@
             <template slot-scope="{ row }">
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
-                  {{ item.controlMeasure }}
+                  <el-popover trigger="hover" v-if="true" placement="top">
+                    <span>{{item.controlMeasure}}</span>
+                    <div class="text" slot="reference">{{item.controlMeasure}}</div>
+                  </el-popover>
                 </li>
               </ul>
             </template>
@@ -163,7 +166,10 @@
             <template slot-scope="{ row }">
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
-                  {{ item.reponsibleDeptName }}
+                  <el-popover trigger="hover" v-if="true" placement="top">
+                    <span>{{item.reponsibleDeptName}}</span>
+                    <div class="text" slot="reference">{{item.reponsibleDeptName}}</div>
+                  </el-popover>
                 </li>
               </ul>
             </template>
@@ -172,7 +178,10 @@
             <template slot-scope="{ row }">
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
-                  {{ item.completionName }}
+                  <el-popover trigger="hover" v-if="true" placement="top">
+                    <span>{{item.completionName}}</span>
+                    <div class="text" slot="reference">{{item.completionName}}</div>
+                  </el-popover>
                 </li>
               </ul>
             </template>
@@ -208,7 +217,10 @@
             <template slot-scope="{ row }">
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
-                  {{ item.controlMeasure }}
+                  <el-popover trigger="hover" v-if="true" placement="top">
+                    <span>{{item.controlMeasure}}</span>
+                    <div class="text" slot="reference">{{item.controlMeasure}}</div>
+                  </el-popover>
                 </li>
               </ul>
             </template>
@@ -221,7 +233,10 @@
             <template slot-scope="{ row }">
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
-                  {{ item.reponsibleDeptName }}
+                  <el-popover trigger="hover" v-if="true" placement="top">
+                    <span>{{item.reponsibleDeptName}}</span>
+                    <div class="text" slot="reference">{{item.reponsibleDeptName}}</div>
+                  </el-popover>
                 </li>
               </ul>
             </template>
@@ -234,7 +249,10 @@
             <template slot-scope="{ row }">
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
-                  {{ item.completionName }}
+                  <el-popover trigger="hover" v-if="true" placement="top">
+                    <span>{{item.completionName}}</span>
+                    <div class="text" slot="reference">{{item.completionName}}</div>
+                  </el-popover>
                 </li>
               </ul>
             </template>
@@ -247,7 +265,10 @@
             <template slot-scope="{ row }">
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
-                  {{ formatShortDate(item.deadline) }}
+                  <el-popover trigger="hover" v-if="true" placement="top">
+                    <span>{{formatShortDate(item.deadline)}}</span>
+                    <div class="text" slot="reference">{{formatShortDate(item.deadline)}}</div>
+                  </el-popover>
                 </li>
               </ul>
             </template>

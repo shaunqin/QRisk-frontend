@@ -52,7 +52,7 @@
         </template>
         <template slot-scope="{row}">{{formatShortDate(row.createDate)}}</template>
       </el-table-column>
-      <el-table-column key="detail" label width="100" fixed="right" v-if="assessmentType=='1' || assessmentType=='3'">
+      <el-table-column key="detail" label="操作" width="100" fixed="right" v-if="assessmentType=='1' || assessmentType=='3'">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="detail(row)">查看详情</el-button>
         </template>
