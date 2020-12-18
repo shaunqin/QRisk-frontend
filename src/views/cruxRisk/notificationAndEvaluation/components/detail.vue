@@ -9,21 +9,24 @@
   >
     <el-card header="详细信息">
       <el-form size="small" label-width="80px" class="info" inline>
-        <el-form-item label="编号">{{data.no}}</el-form-item>
-        <el-form-item label="截止日期">{{formatShortDate(data.endTime)}}</el-form-item>
-        <el-form-item label="下发部门">{{data.issueDeptName}}</el-form-item>
+        <el-form-item label="编号">{{ data.no }}</el-form-item>
+        <el-form-item label="截止日期">{{
+          formatShortDate(data.endTime)
+        }}</el-form-item>
+        <el-form-item label="下发部门">{{ data.issueDeptName }}</el-form-item>
         <el-row class="fill-row">
           <el-col :span="24">
-            <el-form-item label="标题">{{data.title}}</el-form-item>
-            <el-form-item label="通知内容">{{data.noteContent}}</el-form-item>
+            <el-form-item label="标题">{{ data.title }}</el-form-item>
+            <el-form-item label="通知内容">{{ data.noteContent }}</el-form-item>
             <el-form-item label="附件">
               <span v-for="(item, index) in data.file" :key="index">
                 <el-link
                   type="primary"
-                  v-show="item!=null"
-                  :href="getUrl(item?item.filePath:'')"
+                  v-show="item != null"
+                  :href="getUrl(item ? item.filePath : '')"
                   target="_blank"
-                >{{item?item.originFileName:''}}</el-link>
+                  >{{ item ? item.originFileName : '' }}</el-link
+                >
               </span>
             </el-form-item>
           </el-col>
@@ -31,18 +34,26 @@
       </el-form>
     </el-card>
     <!-- 系统和工作分析记录表 -->
-    <el-card header="系统和工作分析记录表" key="specialRiskAnalyses" v-if="data.assType==1||data.assType==2">
+    <el-card
+      header="系统和工作分析记录表"
+      key="specialRiskAnalyses"
+      v-if="data.assType == 1 || data.assType == 2"
+    >
       <el-form size="mini" class="info2" inline>
         <el-row class="fill-row">
           <el-col :span="24">
-            <el-form-item label="标题">{{data.analysisTitle}}</el-form-item>
+            <el-form-item label="标题">{{ data.analysisTitle }}</el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="编号">{{data.analysisNo}}</el-form-item>
-        <el-form-item label="分析人">{{data.analysis}}</el-form-item>
-        <el-form-item label="分析单位">{{data.analysisDeptName}}</el-form-item>
-        <el-form-item label="批准人">{{data.approval}}</el-form-item>
-        <el-form-item label="批准日期">{{formatShortDate(data.approvalDate)}}</el-form-item>
+        <el-form-item label="编号">{{ data.analysisNo }}</el-form-item>
+        <el-form-item label="分析人">{{ data.analysis }}</el-form-item>
+        <el-form-item label="分析单位">{{
+          data.analysisDeptName
+        }}</el-form-item>
+        <el-form-item label="批准人">{{ data.approval }}</el-form-item>
+        <el-form-item label="批准日期">{{
+          formatShortDate(data.approvalDate)
+        }}</el-form-item>
         <el-table :data="data.specialRiskAnalyses" size="mini" max-height="500">
           <el-table-column label="系统" prop="productName" />
           <el-table-column label="子系统" prop="subSystemName" />
@@ -67,7 +78,13 @@
     <el-card key="hazardVoList" class="chead">
       <div slot="header" class="hslot">
         <span>危险源</span>
-        <el-button type="text" icon="el-icon-tickets" @click="showReport" :disabled="!data.hiddenReport">风险报告</el-button>
+        <el-button
+          type="text"
+          icon="el-icon-tickets"
+          @click="showReport"
+          :disabled="!data.hiddenReport"
+          >风险报告</el-button
+        >
       </div>
       <el-table :data="data.hazardVoList" size="mini">
         <el-table-column label="系统" prop="productName" />
@@ -77,7 +94,12 @@
         <el-table-column label="风险等级" prop="riskLevelName" />
         <el-table-column label="管理流程" prop="managementProcess" />
         <el-table-column label="问题描述" prop="hazardSource" />
-        <el-table-column label="根原因分析" prop="rootCauseAnalysis" width="140" show-overflow-tooltip />
+        <el-table-column
+          label="根原因分析"
+          prop="rootCauseAnalysis"
+          width="140"
+          show-overflow-tooltip
+        />
         <el-table-column
           label="可能导致的风险"
           prop="possibleRisksName"
@@ -85,50 +107,76 @@
           show-overflow-tooltip
         />
         <el-table-column label="风险控制措施" width="160" show-overflow-tooltip>
-          <template slot-scope="{row}">
+          <template slot-scope="{ row }">
             <ul class="tab-ul">
-              <li v-for="item in row.specialRiskMeasureList" :key="item.id">{{item.controlMeasure}}</li>
+              <li v-for="item in row.specialRiskMeasureList" :key="item.id">
+                <el-popover trigger="hover" v-if="true" placement="top">
+                  <span>{{ item.controlMeasure }}</span>
+                  <div class="text" slot="reference">
+                    {{ item.controlMeasure }}
+                  </div>
+                </el-popover>
+              </li>
             </ul>
           </template>
         </el-table-column>
         <el-table-column label="风险责任单位" width="160" show-overflow-tooltip>
-          <template slot-scope="{row}">
+          <template slot-scope="{ row }">
             <ul class="tab-ul">
-              <li
-                v-for="item in row.specialRiskMeasureList"
-                :key="item.id"
-              >{{item.reponsibleDeptName}}</li>
+              <li v-for="item in row.specialRiskMeasureList" :key="item.id">
+                <el-popover trigger="hover" v-if="true" placement="top">
+                  <span>{{ item.reponsibleDeptName }}</span>
+                  <div class="text" slot="reference">
+                    {{ item.reponsibleDeptName }}
+                  </div>
+                </el-popover>
+              </li>
             </ul>
           </template>
         </el-table-column>
         <el-table-column label="风险控制状态" width="160" show-overflow-tooltip>
-          <template slot-scope="{row}">
+          <template slot-scope="{ row }">
             <ul class="tab-ul">
-              <li v-for="item in row.specialRiskMeasureList" :key="item.id">{{item.completionName}}</li>
+              <li v-for="item in row.specialRiskMeasureList" :key="item.id">
+                <el-popover trigger="hover" v-if="true" placement="top">
+                  <span>{{ item.completionName }}</span>
+                  <div class="text" slot="reference">
+                    {{ item.completionName }}
+                  </div>
+                </el-popover>
+              </li>
             </ul>
           </template>
         </el-table-column>
         <el-table-column label="风险完成期限" width="160" show-overflow-tooltip>
-          <template slot-scope="{row}">
+          <template slot-scope="{ row }">
             <ul class="tab-ul">
-              <li
-                v-for="item in row.specialRiskMeasureList"
-                :key="item.id"
-              >{{formatShortDate(item.deadline)}}</li>
+              <li v-for="item in row.specialRiskMeasureList" :key="item.id">
+                <el-popover trigger="hover" v-if="true" placement="top">
+                  <span>{{ formatShortDate(item.deadline) }}</span>
+                  <div class="text" slot="reference">
+                    {{ formatShortDate(item.deadline) }}
+                  </div>
+                </el-popover>
+              </li>
             </ul>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
 
-    <el-card header="办理人" key="reviewerInfo" v-if="data.reviewerInfo&&data.reviewerInfo.length>0">
+    <el-card
+      header="办理人"
+      key="reviewerInfo"
+      v-if="data.reviewerInfo && data.reviewerInfo.length > 0"
+    >
       <transactor :data="data.reviewerInfo" width="100%" />
     </el-card>
 
     <el-card
       header="审批记录"
       key="noticeComments"
-      v-if="data.noticeComments&&data.noticeComments.length>0"
+      v-if="data.noticeComments && data.noticeComments.length > 0"
     >
       <apprvalRecord :data="data.noticeComments" />
     </el-card>
@@ -137,43 +185,48 @@
       <el-button type="primary" @click="cancel">取消</el-button>
     </div>
 
-    <report ref="report" :formId="formId" :disabled="true" @change="formIdChange" />
+    <report
+      ref="report"
+      :formId="formId"
+      :disabled="true"
+      @change="formIdChange"
+    />
   </el-dialog>
 </template>
 
 <script>
 import { formatShortDate } from '@/utils/datetime'
-import apprvalRecord from "./apprvalRecord";
-import report from "./report";
+import apprvalRecord from './apprvalRecord'
+import report from './report'
 import transactor from '@/components/common/transactor'
 export default {
   components: { apprvalRecord, report, transactor },
   data() {
     return {
-      formId: "",
+      formId: '',
       dialog: false,
-      data: {}
+      data: {},
     }
   },
   methods: {
     formatShortDate,
     showReport() {
-      this.formId = this.data.id;
-      this.$refs.report.dialog = true;
+      this.formId = this.data.id
+      this.$refs.report.dialog = true
     },
     cancel() {
-      this.resetForm();
+      this.resetForm()
     },
     resetForm() {
-      this.dialog = false;
+      this.dialog = false
     },
     getUrl(url) {
-      return process.env.VUE_APP_BASE_API + url;
+      return process.env.VUE_APP_BASE_API + url
     },
     formIdChange(val) {
-      this.formId = val;
+      this.formId = val
     },
-  }
+  },
 }
 </script>
 

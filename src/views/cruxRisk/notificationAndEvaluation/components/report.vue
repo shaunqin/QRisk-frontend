@@ -9,16 +9,18 @@
   >
     <el-card>
       <el-form class="form" size="mini" label-width="85px">
-        <el-form-item label="标题">{{form.analysisTitle}}</el-form-item>
+        <el-form-item label="标题">{{ form.analysisTitle }}</el-form-item>
         <el-row :gutter="16">
           <el-col :span="8">
-            <el-form-item label="编号">{{form.analysisNo}}</el-form-item>
+            <el-form-item label="编号">{{ form.analysisNo }}</el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="批准人">{{form.approval}}</el-form-item>
+            <el-form-item label="批准人">{{ form.approval }}</el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="日期">{{formatShortDate(form.approvalDate)}}</el-form-item>
+            <el-form-item label="日期">{{
+              formatShortDate(form.approvalDate)
+            }}</el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="16">
@@ -27,7 +29,7 @@
               <department
                 class="mini"
                 :value="form.evaluationUnit"
-                @change="deptChange($event,'evaluationUnit')"
+                @change="deptChange($event, 'evaluationUnit')"
                 :disabled="disabled"
               />
             </el-form-item>
@@ -37,7 +39,7 @@
               <department
                 class="mini"
                 :value="form.distributeDept"
-                @change="deptChange($event,'distributeDept')"
+                @change="deptChange($event, 'distributeDept')"
                 :disabled="disabled"
               />
             </el-form-item>
@@ -47,14 +49,19 @@
               <department
                 class="mini"
                 :value="form.copyDept"
-                @change="deptChange($event,'copyDept')"
+                @change="deptChange($event, 'copyDept')"
                 :disabled="disabled"
               />
             </el-form-item>
           </el-col>
         </el-row>
         <el-form-item label="背景描述">
-          <el-input v-model="form.background" type="textarea" rows="5" :disabled="disabled"></el-input>
+          <el-input
+            v-model="form.background"
+            type="textarea"
+            rows="5"
+            :disabled="disabled"
+          ></el-input>
         </el-form-item>
       </el-form>
     </el-card>
@@ -80,7 +87,12 @@
           <template slot-scope="{ row }">
             <ul class="tab-ul">
               <li v-for="item in row.specialRiskMeasureList" :key="item.id">
-                {{ item.controlMeasure }}
+                <el-popover trigger="hover" v-if="true" placement="top">
+                  <span>{{ item.controlMeasure }}</span>
+                  <div class="text" slot="reference">
+                    {{ item.controlMeasure }}
+                  </div>
+                </el-popover>
               </li>
             </ul>
           </template>
@@ -89,7 +101,12 @@
           <template slot-scope="{ row }">
             <ul class="tab-ul">
               <li v-for="item in row.specialRiskMeasureList" :key="item.id">
-                {{ item.reponsibleDeptName }}
+                <el-popover trigger="hover" v-if="true" placement="top">
+                  <span>{{ item.reponsibleDeptName }}</span>
+                  <div class="text" slot="reference">
+                    {{ item.reponsibleDeptName }}
+                  </div>
+                </el-popover>
               </li>
             </ul>
           </template>
@@ -107,7 +124,12 @@
           <template slot-scope="{ row }">
             <ul class="tab-ul">
               <li v-for="item in row.specialRiskMeasureList" :key="item.id">
-                {{ formatShortDate(item.deadline) }}
+                <el-popover trigger="hover" v-if="true" placement="top">
+                  <span>{{ formatShortDate(item.deadline) }}</span>
+                  <div class="text" slot="reference">
+                    {{ formatShortDate(item.deadline) }}
+                  </div>
+                </el-popover>
               </li>
             </ul>
           </template>
@@ -116,18 +138,21 @@
     </el-card>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
-      <el-button v-if="!disabled" :loading="loading" type="primary" @click="doSubmit">确定</el-button>
+      <el-button
+        v-if="!disabled"
+        :loading="loading"
+        type="primary"
+        @click="doSubmit"
+        >确定</el-button
+      >
     </div>
   </el-dialog>
 </template>
 
 <script>
-import {
-  specialRiskGetEvalReport,
-  specialRiskSaveEvalReport,
-} from "@/api/risk";
-import { formatShortDate } from "@/utils/datetime";
-import department from "@/components/Department";
+import { specialRiskGetEvalReport, specialRiskSaveEvalReport } from '@/api/risk'
+import { formatShortDate } from '@/utils/datetime'
+import department from '@/components/Department'
 
 export default {
   components: { department },
@@ -136,12 +161,12 @@ export default {
       loading: false,
       dialog: false,
       form: {},
-    };
+    }
   },
   props: {
     formId: {
       type: String,
-      default: "",
+      default: '',
     },
     disabled: {
       type: Boolean,
@@ -151,57 +176,57 @@ export default {
   computed: {
     _formId: {
       get() {
-        return this.formId;
+        return this.formId
       },
       set(val) {
-        this.$emit("change", val);
+        this.$emit('change', val)
       },
     },
   },
   watch: {
     _formId(val) {
       if (val) {
-        this.loadData(val);
+        this.loadData(val)
       }
-    }
+    },
   },
   methods: {
     formatShortDate,
     cancel() {
-      this.resetForm();
+      this.resetForm()
     },
     doSubmit() {
       specialRiskSaveEvalReport(this.form).then((res) => {
-        if (res.code != "200") {
-          this.$message.error(res.msg);
+        if (res.code != '200') {
+          this.$message.error(res.msg)
         } else {
-          this.$message.success("操作成功");
-          this.resetForm();
-          this.$parent.$parent.resetForm();
-          this.$parent.$parent.$parent.init();
+          this.$message.success('操作成功')
+          this.resetForm()
+          this.$parent.$parent.resetForm()
+          this.$parent.$parent.$parent.init()
         }
-      });
+      })
     },
     resetForm() {
-      this.dialog = false;
-      this.form = {};
-      this._formId = "";
+      this.dialog = false
+      this.form = {}
+      this._formId = ''
     },
     loadData(formId) {
       specialRiskGetEvalReport(formId).then((res) => {
-        if (res.code != "200") {
-          this.$message.error(res.msg);
+        if (res.code != '200') {
+          this.$message.error(res.msg)
         } else {
-          this._formId = "";
-          this.form = res.obj;
+          this._formId = ''
+          this.form = res.obj
         }
-      });
+      })
     },
     deptChange(val, key) {
-      this.form[key] = val;
+      this.form[key] = val
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

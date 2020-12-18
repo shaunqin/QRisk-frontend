@@ -12,7 +12,7 @@
       :model="form"
       :rules="formRules"
       size="small"
-      label-width="80px"
+      label-width="100px"
     >
       <el-row :gutter="16">
         <el-col :span="12">
@@ -41,7 +41,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item>
+          <el-form-item prop="issueDepts">
             <template slot="label">
               {{ form.type != '2' ? '下发部门' : '分析单位' }}
             </template>
@@ -126,7 +126,7 @@
                 v-model="form.approvalDate"
                 value-format="yyyy-MM-dd"
                 style="width: 100%"
-                :disabled="true"
+                :picker-options="pickerOptions"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -291,7 +291,7 @@
             <el-table-column type="index" width="50" />
             <el-table-column label="控制措施">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.controlMeasure"></el-input>
+                <el-input v-model="scope.row.controlMeasure" type="textarea" rows="3"></el-input>
               </template>
             </el-table-column>
             <el-table-column label="责任单位">
@@ -390,7 +390,7 @@ export default {
         type: '1', // 类别,1:通知,2:评估
         specialRiskAnalyses: [
           {
-            product: '', // 产品
+            product: '维修工程', // 产品
             subSystem: '', // 子系统
             managementProcess: '', // 管理流程
             reponsibleUnit: null, // 责任单位
@@ -426,7 +426,7 @@ export default {
               },
             ],
             subSystem: '',
-            product: '',
+            product: '维修工程',
           },
         ],
         file: [],
@@ -438,6 +438,7 @@ export default {
       possibleRisksList: [], // 可能导致的风险列表
       formRules: {
         title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
+        issueDepts: [{ required: true, message: '部门/单位不能为空', trigger: 'blur' }],
       },
       pickerOptions: {
         disabledDate(time) {
@@ -483,13 +484,21 @@ export default {
           if (this.isAdd) {
             this.doAdd(sqlUserId)
           } else this.doModify()
+        } else {
+          this.$message.error("请填写完整！")
         }
       })
     },
     submit() {
-      let _this = this.$refs.selectEmplotee
-      // _this.id = this.selections[0];
-      _this.dialog = true
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          let _this = this.$refs.selectEmplotee
+          // _this.id = this.selections[0];
+          _this.dialog = true
+        } else {
+          this.$message.error("请填写完整！")
+        }
+      })
     },
     doAdd(sqlUserId) {
       let submit
@@ -560,7 +569,7 @@ export default {
         type: '1', // 类别,1:通知,2:评估
         specialRiskAnalyses: [
           {
-            product: '', // 产品
+            product: '维修工程', // 产品
             subSystem: '', // 子系统
             managementProcess: '', // 管理流程
             reponsibleUnit: null, // 责任单位
@@ -595,7 +604,7 @@ export default {
               },
             ],
             subSystem: '',
-            product: '',
+            product: '维修工程',
           },
         ],
         file: [],
@@ -609,7 +618,7 @@ export default {
     },
     addCol() {
       this.form.specialRiskAnalyses.push({
-        product: '', // 产品
+        product: '维修工程', // 产品
         subSystem: '', // 子系统
         managementProcess: '', // 管理流程
         reponsibleUnit: null, // 责任单位
@@ -656,7 +665,7 @@ export default {
           },
         ],
         subSystem: '',
-        product: '',
+        product: '维修工程',
       })
     },
     delHazard(index) {
