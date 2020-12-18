@@ -112,6 +112,7 @@ export default {
       switch (this.step) {
         case 1:
         case 3:
+        case 4:
         case 5:
         case 7:
           this.submitStep1()
