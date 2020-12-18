@@ -65,7 +65,7 @@
                 v-model="data.approvalDate"
                 value-format="yyyy-MM-dd"
                 style="width: 100%"
-                :disabled="true"
+                :picker-options="pickerOptions"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -400,8 +400,8 @@ export default {
     showChildNotes() {
       const bool = !(
         (this.data.step == 1 && this.data.hiddenIssue) ||
-        this.data.step == 4 ||
         this.data.step == 2 ||
+        this.data.step == 4 ||
         this.data.step == 6 ||
         this.data.step == 7 ||
         this.data.step == 8

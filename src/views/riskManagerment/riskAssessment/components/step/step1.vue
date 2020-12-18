@@ -57,7 +57,7 @@
                 v-model="data.approvalDate"
                 value-format="yyyy-MM-dd"
                 style="width: 100%"
-                :disabled="true"
+                :picker-options="pickerOptions"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -275,7 +275,7 @@
                 v-model="data.approvalDate"
                 value-format="yyyy-MM-dd"
                 style="width: 100%"
-                :disabled="true"
+                :picker-options="pickerOptions"
               ></el-date-picker>
             </el-form-item>
           </el-col>
