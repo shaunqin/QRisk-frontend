@@ -95,6 +95,12 @@ export const queryHasDoneDetail = (formId) => {
         method: 'get',
     })
 }
+export const queryHasDoneDetail2 = (id) => {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/query/hasDoneDetail2/${id}`,
+        method: 'get',
+    })
+}
 // 复制到自己
 export const copyHiddenDanger = (hiddenDangerId) => {
     return request({

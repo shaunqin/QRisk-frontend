@@ -35,16 +35,18 @@
     />
     <!-- 详情 -->
     <edetail ref="edetail" />
+    <edetail2 ref="edetail2" />
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
-import { queryHasDoneDetail } from "@/api/hazards";
+import { queryHasDoneDetail, queryHasDoneDetail2 } from "@/api/hazards";
 import edetail from "../detail";
+import edetail2 from "../detail2";
 export default {
   mixins: [initData],
-  components: { edetail },
+  components: { edetail, edetail2 },
   mounted() {
     this.init();
   },
@@ -64,15 +66,28 @@ export default {
       return true;
     },
     detail(row) {
-      queryHasDoneDetail(row.formId).then((res) => {
-        if (res.code != "200") {
-          this.$message.error(res.msg);
-        } else {
-          let _this = this.$refs.edetail;
-          _this.data = res.obj;
-          _this.dialog = true;
-        }
-      });
+      if (row.businessType == 5) {
+        queryHasDoneDetail(row.formId).then((res) => {
+          if (res.code != "200") {
+            this.$message.error(res.msg);
+          } else {
+            let _this = this.$refs.edetail;
+            _this.data = res.obj;
+            _this.dialog = true;
+          }
+        });
+      } else {
+        queryHasDoneDetail2(row.id).then((res) => {
+          if (res.code != "200") {
+            this.$message.error(res.msg);
+          } else {
+            let _this = this.$refs.edetail2;
+            _this.data = res.obj;
+            _this.queryForm.runTaskId = res.obj.runTaskId;
+            _this.dialog = true;
+          }
+        });
+      }
     },
     renderTbCol(row) {
       if (row.fillerName && row.filler) {
