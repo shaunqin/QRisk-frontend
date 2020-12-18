@@ -6,7 +6,11 @@
     <el-card header="下发任务" key="childTask" v-if="childTask.length>0">
       <childTask :data="childTask" :hiddenField="[]" />
     </el-card>
-    <fillinForm ref="fillinForm" :data="data" />
+    <el-select v-model="form.noHiddenDanger" placeholder size="mini" style="margin:10px 0">
+      <el-option label="本月有新增" value="0"></el-option>
+      <el-option label="本月无新增" value="1"></el-option>
+    </el-select>
+    <fillinForm ref="fillinForm" :data="data" v-if="form.noHiddenDanger!=1" />
   </div>
 </template>
 
@@ -16,7 +20,7 @@ import fillinForm from '../fillinForm'
 import childTask from '../childTask'
 import baseinfo from './baseinfo'
 export default {
-  components: { fillinForm, childTask ,baseinfo},
+  components: { fillinForm, childTask, baseinfo },
   data() {
     return {
       baseApi: process.env.VUE_APP_BASE_API

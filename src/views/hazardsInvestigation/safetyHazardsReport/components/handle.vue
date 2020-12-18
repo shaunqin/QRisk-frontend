@@ -50,7 +50,8 @@ export default {
         formId: 0,
         processFlag: "1",
         sqlUserId: "",
-        hiddenDangerList: []
+        hiddenDangerList: [],
+        noHiddenDanger: "0"
       },
       data: {}, // 父组件赋值
       password: ""
@@ -104,8 +105,10 @@ export default {
         return;
       }
       // 获取领导修改的填报数据
+      this.form.hiddenDangerList = [];
       if (this.$refs.step2) {
-        this.form.hiddenDangerList = this.$refs.step2.$refs.fillinForm.fillinData;
+        if (this.$refs.step2.$refs.fillinForm)
+          this.form.hiddenDangerList = this.$refs.step2.$refs.fillinForm.fillinData;
       }
       this.loading = true;
       hazardsComplete({ ...this.form, ...params }).then((res) => {
@@ -136,13 +139,15 @@ export default {
     },
     doReport() {
       let _this;
+      this.form.hiddenDangerList = [];
       if (this.step == 1) {
         _this = this.$refs.step1.$refs.fillinForm;
       } else if (this.step == 3) {
         _this = this.$refs.step3.$refs.fillinForm;
       }
       // let _this = this.$refs.step1.$refs.fillinForm;
-      this.form.hiddenDangerList = _this.fillinData;
+      if (_this)
+        this.form.hiddenDangerList = _this.fillinData;
       console.log(this.form);
       this.$loading();
       hazardsComplete(this.form).then(res => {

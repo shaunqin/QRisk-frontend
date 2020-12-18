@@ -12,7 +12,7 @@
   >
     <step1 v-if="step==1" :data="data" :form="form" @change="formChange" />
     <step2 ref="step2" v-if="step==2" :data="data" :form="form" @change="formChange" />
-    <step3 ref="step3" v-if="step==3" :data="data" :form="form" @change="formChange" />
+    <step3 ref="step3" v-if="step==3" :data="data" :form="form" @change="formChange" :fullscreen="fullscreen" />
     <step4 ref="step4" v-if="step==4" :data="data" :form="form" @change="formChange" />
     <step5 ref="step5" v-if="step==5" :data="data" :form="form" @change="formChange" />
     <hairdown ref="hairdown" :data="data" :form="form" />
@@ -167,8 +167,10 @@ export default {
         } else {
           this.$message.success("操作成功");
           this.resetForm();
-          this.$parent.init();
-          this.loadCount();
+          if (!this.fullscreen) {
+            this.$parent.init();
+            this.loadCount();
+          }
         }
         this.loading = false;
       });
@@ -193,6 +195,9 @@ export default {
         processFlag: "1",
         implementStatus: "" // 落实情况
       }
+      if (this.fullscreen) {
+        window.close();
+      }
     },
     formChange(form) {
       console.log(form);
@@ -214,8 +219,10 @@ export default {
         } else {
           this.$message.success("操作成功");
           this.resetForm();
-          this.$parent.init();
-          this.loadCount();
+          if (!this.fullscreen) {
+            this.$parent.init();
+            this.loadCount();
+          }
         }
         this.loading = false;
       });
@@ -235,8 +242,10 @@ export default {
         } else {
           this.$message.success("操作成功");
           this.resetForm();
-          this.$parent.init();
-          this.loadCount();
+          if (!this.fullscreen) {
+            this.$parent.init();
+            this.loadCount();
+          }
         }
         this.loading = false;
       });
@@ -250,8 +259,10 @@ export default {
         } else {
           this.$message.success("操作成功");
           this.resetForm();
-          this.$parent.init();
-          this.loadCount();
+          if (!this.fullscreen) {
+            this.$parent.init();
+            this.loadCount();
+          }
         }
         this.loading = false;
       });

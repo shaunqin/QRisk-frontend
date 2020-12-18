@@ -3,8 +3,11 @@
     <el-card header="详情">
       <baseinfo :data="data" />
     </el-card>
-
-    <fillinForm ref="fillinForm" :disabled="disabled" :data="data" />
+    <el-select v-model="data.noHiddenDanger" placeholder size="mini" style="margin:10px 0" disabled>
+      <el-option label="本月有新增" value="0"></el-option>
+      <el-option label="本月无新增" value="1"></el-option>
+    </el-select>
+    <fillinForm ref="fillinForm" :disabled="disabled" :data="data" v-if="data.noHiddenDanger!=1" />
     <el-card>
       <el-radio-group v-model="form.processFlag">
         <el-radio label="1">同意</el-radio>

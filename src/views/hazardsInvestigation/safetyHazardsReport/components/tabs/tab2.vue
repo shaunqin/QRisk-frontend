@@ -87,6 +87,7 @@ export default {
             _this.data = res.obj;
             _this.form.taskId = row.taskId;
             _this.form.formId = row.formId;
+            _this.form.noHiddenDanger = res.obj.noHiddenDanger;
             if (res.obj.step != 4) {
               _this.form.comment = res.obj.deptMeasure ? (res.obj.deptMeasure.implementStatus || "") : "";
             }

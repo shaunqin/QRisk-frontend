@@ -9,7 +9,11 @@
     <el-card header="审批记录" key="comments" v-if="comments.length>0">
       <approvalRecord :data="comments" />
     </el-card>
-    <fillinForm ref="fillinForm" :data="data" />
+    <el-select v-model="form.noHiddenDanger" placeholder size="mini" style="margin:10px 0">
+      <el-option label="本月有新增" value="0"></el-option>
+      <el-option label="本月无新增" value="1"></el-option>
+    </el-select>
+    <fillinForm ref="fillinForm" :data="data" v-if="form.noHiddenDanger!=1" />
   </div>
 </template>
 

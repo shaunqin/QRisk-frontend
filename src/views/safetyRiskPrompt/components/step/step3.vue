@@ -55,7 +55,7 @@
         </el-table>
       </el-form-item>
       <el-form-item label="已下发措施" v-if="data.childMeasures!=null">
-        <childMeasures :data="data.childMeasures" />
+        <childMeasures :data="data.childMeasures" :source="fullscreen?'smart':''" />
       </el-form-item>
     </el-form>
   </div>
@@ -83,6 +83,10 @@ export default {
       type: Object,
       default: () => { },
     },
+    fullscreen: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     deptMeasure() {
