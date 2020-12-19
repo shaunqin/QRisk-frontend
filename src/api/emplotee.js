@@ -107,3 +107,12 @@ export const riskControlQueryNextOperator = (params) => {
     params
   })
 }
+
+// 查询指定部门的风险管理员
+export const queryDeptRiskManager = (deptPath) => {
+  return request({
+    url: `/process/query/queryDeptRiskManager`,
+    method: 'get',
+    params: { deptPath }
+  })
+}

@@ -94,7 +94,7 @@ export default {
             this.$parent.$parent.$parent.hazards();
           } else {
             // 刷新父页面
-            this.$parent.$parent.$parent.subHandle(this.form);
+            this.$parent.$parent.$parent.subHandle({ ...this.form, businessType: 5 });
           }
         }
       })

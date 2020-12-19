@@ -199,6 +199,14 @@ export function needSubmit2Leader(deptPath) {
     params: { deptPath }
   })
 }
+// 提醒风险管理员
+export function noticeRiskManger(data) {
+  return request({
+    url: `/riskmgr_mgr/hidden_danger/noticeRiskManger`,
+    method: 'post',
+    data
+  })
+}
 // =========  风险提示 end ==============
 
 // ======== 专项风险 =======
