@@ -4,10 +4,9 @@
       <el-form size="small" label-width="80px" class="info" inline>
         <el-form-item label="编号">{{ data.no }}</el-form-item>
         <el-form-item label="截止日期">
-          {{
-          formatShortDate(data.endTime)
-          }}
+          {{ formatShortDate(data.endTime) }}
         </el-form-item>
+        <el-form-item label="发布部门">{{ data.releasePathName }}</el-form-item>
         <el-form-item label="下发部门">{{ data.issueDeptName }}</el-form-item>
         <el-row class="fill-row">
           <el-col :span="24">
@@ -18,12 +17,18 @@
       </el-form>
     </el-card>
     <!-- 系统和工作分析记录表 -->
-    <el-card header="系统和工作分析记录表" v-if="assessmentType == '1' || assessmentType == '2'">
+    <el-card
+      header="系统和工作分析记录表"
+      v-if="assessmentType == '1' || assessmentType == '2'"
+    >
       <el-form size="mini" label-width="80px" :disabled="formEnable">
         <el-row :gutter="8">
           <el-col :span="8">
             <el-form-item label="标题">
-              <el-input v-model="data.analysisTitle" :disabled="formEnable"></el-input>
+              <el-input
+                v-model="data.analysisTitle"
+                :disabled="formEnable"
+              ></el-input>
             </el-form-item>
             <el-form-item label="编号">
               <el-input :disabled="true" v-model="data.analysisNo"></el-input>
@@ -31,7 +36,10 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="分析人">
-              <el-input v-model="data.analysis" :disabled="formEnable"></el-input>
+              <el-input
+                v-model="data.analysis"
+                :disabled="formEnable"
+              ></el-input>
             </el-form-item>
             <el-form-item label="批准人">
               <el-input :disabled="true" v-model="data.approval"></el-input>
@@ -65,13 +73,19 @@
             icon="el-icon-plus"
             @click="addCol"
             :disabled="formEnable"
-          >新增一行</el-button>
+            >新增一行</el-button
+          >
         </el-col>
       </el-row>
       <el-table :data="data.specialRiskAnalyses" size="mini" max-height="500">
         <el-table-column label="系统" min-width="130">
           <template slot-scope="{ row }">
-            <el-select v-model="row.product" placeholder="请选择系统" :disabled="riskEnable" clearable>
+            <el-select
+              v-model="row.product"
+              placeholder="请选择系统"
+              :disabled="riskEnable"
+              clearable
+            >
               <el-option label="维修工程" value="维修工程"></el-option>
             </el-select>
           </template>
@@ -88,7 +102,11 @@
         </el-table-column>
         <el-table-column label="管理流程" min-width="130">
           <template slot-scope="{ row }">
-            <el-input v-model="row.managementProcess" placeholder :disabled="riskEnable"></el-input>
+            <el-input
+              v-model="row.managementProcess"
+              placeholder
+              :disabled="riskEnable"
+            ></el-input>
           </template>
         </el-table-column>
         <el-table-column label="责任单位" min-width="200">
@@ -102,7 +120,11 @@
         </el-table-column>
         <el-table-column label="岗位" min-width="130">
           <template slot-scope="{ row }">
-            <el-input v-model="row.post" placeholder :disabled="riskEnable"></el-input>
+            <el-input
+              v-model="row.post"
+              placeholder
+              :disabled="riskEnable"
+            ></el-input>
           </template>
         </el-table-column>
         <el-table-column label="流程要素">
@@ -209,13 +231,21 @@
           icon="el-icon-tickets"
           @click="showReport"
           :disabled="!data.hiddenReport"
-        >风险报告</el-button>
+          >风险报告</el-button
+        >
       </div>
-      <el-form size="mini" label-width="80px" v-if="assessmentType != '1' && assessmentType != '2'">
+      <el-form
+        size="mini"
+        label-width="80px"
+        v-if="assessmentType != '1' && assessmentType != '2'"
+      >
         <el-row :gutter="8">
           <el-col :span="8">
             <el-form-item label="标题">
-              <el-input :disabled="formEnable" v-model="data.analysisTitle"></el-input>
+              <el-input
+                :disabled="formEnable"
+                v-model="data.analysisTitle"
+              ></el-input>
             </el-form-item>
             <el-form-item label="编号">
               <el-input :disabled="true" v-model="data.analysisNo"></el-input>
@@ -223,7 +253,10 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="分析人">
-              <el-input :disabled="formEnable" v-model="data.analysis"></el-input>
+              <el-input
+                :disabled="formEnable"
+                v-model="data.analysis"
+              ></el-input>
             </el-form-item>
             <el-form-item label="批准人">
               <el-input :disabled="true" v-model="data.approval"></el-input>
@@ -250,12 +283,28 @@
         </el-row>
       </el-form>
       <div v-if="assessmentType == '4'">
-        <el-table :data="list" size="mini" :span-method="objectSpanMethod" border height="550">
+        <el-table
+          :data="list"
+          size="mini"
+          :span-method="objectSpanMethod"
+          border
+          height="550"
+        >
           <el-table-column label="系统" prop="product" />
           <el-table-column label="子系统" prop="subSystem" />
           <el-table-column label="管理流程" prop="managementProcess" />
-          <el-table-column label="危险源描述" prop="hazardSource" min-width="300" show-overflow-tooltip />
-          <el-table-column label="危险源" prop="hazardSources" min-width="200" show-overflow-tooltip />
+          <el-table-column
+            label="危险源描述"
+            prop="hazardSource"
+            min-width="300"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            label="危险源"
+            prop="hazardSources"
+            min-width="200"
+            show-overflow-tooltip
+          />
           <el-table-column label="ID" prop="hazard" />
           <el-table-column label="可能性" width="110">
             <template slot-scope="{ row }">
@@ -276,9 +325,17 @@
             </template>
           </el-table-column>
           <el-table-column label="严重性" prop="seriousness" />
-          <el-table-column label="可能导致的风险" prop="possibleRisks" min-width="140">
+          <el-table-column
+            label="可能导致的风险"
+            prop="possibleRisks"
+            min-width="140"
+          >
             <template slot-scope="{ row }">
-              <el-select v-model="row.possibleRisks" style="width: 120px" :disabled="true">
+              <el-select
+                v-model="row.possibleRisks"
+                style="width: 120px"
+                :disabled="true"
+              >
                 <el-option
                   v-for="childItem in possibleRisksList"
                   :key="childItem.riskNo"
@@ -291,14 +348,21 @@
           <el-table-column label="风险等级" prop="riskLevel" />
           <el-table-column label="根原因分析" width="200">
             <template slot-scope="{ row }">
-              <el-input v-model="row.rootCauseAnalysis" placeholder @input="forceUpdate()"></el-input>
+              <el-input
+                v-model="row.rootCauseAnalysis"
+                placeholder
+                @input="forceUpdate()"
+              ></el-input>
             </template>
           </el-table-column>
           <el-table-column label="控制措施" min-width="210">
             <template slot-scope="{ row }">
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
-                  <el-input v-model="item.controlMeasure" placeholder></el-input>
+                  <el-input
+                    v-model="item.controlMeasure"
+                    placeholder
+                  ></el-input>
                 </li>
               </ul>
             </template>
@@ -326,7 +390,10 @@
           <el-table-column label="控制状态" min-width="160">
             <template slot-scope="{ row }">
               <ul class="tab-ul">
-                <li v-for="(item, index) in row.specialRiskMeasureList" :key="item.id">
+                <li
+                  v-for="(item, index) in row.specialRiskMeasureList"
+                  :key="item.id"
+                >
                   <el-select v-model="item.completion" style="width: 75%">
                     <el-option label="未控制" value="1"></el-option>
                     <el-option label="控制中" value="2"></el-option>
@@ -335,7 +402,11 @@
                   <el-popconfirm
                     title="确定删除吗？"
                     @onConfirm="delSpecial(row, item, index)"
-                    v-if="item.controlMeasure||item.reponsibleDept||item.completion"
+                    v-if="
+                      item.controlMeasure ||
+                      item.reponsibleDept ||
+                      item.completion
+                    "
                   >
                     <i
                       slot="reference"
@@ -356,11 +427,20 @@
           size="mini"
           @click="addHazard"
           style="margin-bottom: 10px"
-        >新增危险源</el-button>
-        <el-card shadow="never" v-for="(item, index) in data.hazardList" :key="index">
+          >新增危险源</el-button
+        >
+        <el-card
+          shadow="never"
+          v-for="(item, index) in data.hazardList"
+          :key="index"
+        >
           <el-form size="mini" inline label-width="70px" :disabled="formEnable">
             <el-form-item label="系统">
-              <el-select v-model="item.product" placeholder="请选择系统" clearable>
+              <el-select
+                v-model="item.product"
+                placeholder="请选择系统"
+                clearable
+              >
                 <el-option label="维修工程" value="维修工程"></el-option>
               </el-select>
             </el-form-item>
@@ -373,7 +453,10 @@
               />
             </el-form-item>
             <el-form-item label="管理流程">
-              <el-input v-model="item.managementProcess" @input="$forceUpdate()"></el-input>
+              <el-input
+                v-model="item.managementProcess"
+                @input="$forceUpdate()"
+              ></el-input>
             </el-form-item>
             <el-form-item label="危险源层级一" label-width="115px">
               <el-select
@@ -494,8 +577,13 @@
             size="mini"
             class="at"
             @click="addRow(item)"
-          >新增一行</el-button>
-          <el-table :data="item.specialRiskMeasureList" size="small" max-height="400px">
+            >新增一行</el-button
+          >
+          <el-table
+            :data="item.specialRiskMeasureList"
+            size="small"
+            max-height="400px"
+          >
             <el-table-column type="index" width="50" />
             <el-table-column label="控制措施">
               <template slot-scope="scope">
@@ -519,7 +607,10 @@
             </el-table-column>
             <el-table-column label="控制状态" v-if="data.step != 7">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.status" :disabled="completionEnable">
+                <el-select
+                  v-model="scope.row.status"
+                  :disabled="completionEnable"
+                >
                   <el-option label="未控制" value="1"></el-option>
                   <el-option label="在控" value="2"></el-option>
                   <el-option label="关闭" value="3"></el-option>
@@ -561,13 +652,19 @@
               icon="el-icon-delete"
               size="mini"
               @click="delHazard(index)"
-            >删除</el-button>
+              >删除</el-button
+            >
           </div>
         </el-card>
       </div>
     </el-card>
 
-    <report ref="report" :formId="formId" :disabled="true" @change="formIdChange" />
+    <report
+      ref="report"
+      :formId="formId"
+      :disabled="true"
+      @change="formIdChange"
+    />
     <!-- <ehandle ref="ehandle" />
     <hairdown ref="formHairdown" :data="data" :form="formHairdown" :multiple="false" :issue="false" />-->
 
@@ -1103,20 +1200,20 @@ export default {
   props: {
     data: {
       type: Object,
-      default: () => { }
+      default: () => {},
     },
     form: {
       type: Object,
-      default: () => { }
+      default: () => {},
     },
     assessmentType: {
       type: String,
-      default: ""
+      default: '',
     },
     source: {
       type: String,
-      default: ""
-    }
+      default: '',
+    },
   },
   computed: {
     type() {
@@ -1216,7 +1313,7 @@ export default {
     })
   },
   mounted() {
-    console.log("step1", this.source);
+    console.log('step1', this.source)
   },
   methods: {
     formatShortDate,
