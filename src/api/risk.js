@@ -357,6 +357,13 @@ export function queryTableList() {
     method: 'get',
   })
 }
+// 发起单位
+export function querySpeRiskMgrDept() {
+  return request({
+    url: `/risk_mgr/special_risk_notice_mgr/query/riskMgrDepts`,
+    method: 'get',
+  })
+}
 // ======== 专项风险 end =======
 
 // 风险提示编号

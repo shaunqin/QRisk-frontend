@@ -15,25 +15,25 @@
 </template>
 
 <script>
-import Treeselect from "@riophae/vue-treeselect";
-import "@riophae/vue-treeselect/dist/vue-treeselect.css";
-import { queryDepartmentTree } from "@/api/emplotee";
+import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import { queryDepts } from '@/api/emplotee'
 export default {
   components: { Treeselect },
   data() {
     return {
       options: [],
       treeData: [],
-      loading: false
-    };
+      loading: false,
+    }
   },
   computed: {
     selectValue: {
       get() {
-        return this.value;
+        return this.value
       },
       set(val) {
-        this.$emit("change", val);
+        this.$emit('change', val)
       },
     },
   },
@@ -60,35 +60,43 @@ export default {
     },
     path: {
       type: String,
-      default: ""
+      default: '',
     },
     defaultExpand: {
       type: Number,
-      default: 1
-    }
+      default: 1,
+    },
+    url: {
+      type: String,
+      default: '/sys_mgr/department_mgr/query/tree',
+    },
   },
-  created() {
-    let params = {};
-    if (this.path) params = { path: this.path };
-    this.loading = true;
-    queryDepartmentTree(params).then((res) => {
-      this.loading = false;
-      this.options = res.obj;
-    });
+  mounted() {
+    this.loadData()
   },
   methods: {
+    loadData() {
+      let params = {}
+      if (this.path) params = { path: this.path }
+      this.loading = true
+      console.log(this.url)
+      queryDepts(this.url, params).then((res) => {
+        this.loading = false
+        this.options = res.obj
+      })
+    },
     normalizer(node) {
       if (node.children && !node.children.length) {
-        delete node.children;
+        delete node.children
       }
       return {
         id: node.key,
         label: node.name,
         children: node.children,
-      };
+      }
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

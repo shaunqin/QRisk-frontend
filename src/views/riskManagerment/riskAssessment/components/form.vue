@@ -295,18 +295,24 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-button
-          type="primary"
-          size="mini"
-          @click="addHazard"
-          style="margin-bottom: 10px"
-          >新增危险源</el-button
-        >
+        <el-badge :value="form.hazardList.length">
+          <el-button
+            type="primary"
+            size="mini"
+            @click="addHazard"
+            style="margin-bottom: 10px"
+            >新增危险源</el-button
+          >
+        </el-badge>
         <el-card
           shadow="never"
+          class="chead"
           v-for="(item, index) in form.hazardList"
           :key="index"
         >
+        <div slot="header" class="clearfix">
+          <span>危险源{{index+1}}</span>
+        </div>
           <el-form size="mini" inline label-width="70px">
             <el-form-item label="系统">
               <el-select
@@ -527,7 +533,7 @@ import {
   specialRiskAdd,
   specialRiskModify,
   specialRiskQueryRiskLevel,
-  queryRiskMgrDept,
+  querySpeRiskMgrDept,
 } from '@/api/risk'
 import { queryDictByName } from '@/api/dict'
 import { queryHazardList } from '@/api/standard'
@@ -652,7 +658,7 @@ export default {
       })
     })
     // 发起部门
-    queryRiskMgrDept().then((res) => {
+    querySpeRiskMgrDept().then((res) => {
       if (res.code != '200') {
         this.$message.error(res.msg)
       } else {
@@ -963,5 +969,15 @@ export default {
 }
 .at {
   margin-bottom: 8px;
+}
+.chead {
+  /deep/ .el-card__header {
+    padding: 5px 20px;
+  }
+  .hslot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 </style>

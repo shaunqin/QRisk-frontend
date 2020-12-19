@@ -51,6 +51,8 @@
                 :value="data.analysisDept"
                 @change="deptAnalysisChange($event, 'analysisDept')"
                 :disabled="formEnable"
+                :url="deptPath"
+                :path="departmentParams"
               ></department>
             </el-form-item>
             <el-form-item label="批准日期">
@@ -268,6 +270,7 @@
                 :value="data.analysisDept"
                 @change="deptAnalysisChange($event, 'analysisDept')"
                 :disabled="formEnable"
+                :url="deptPath"
                 :path="departmentParams"
               ></department>
             </el-form-item>
@@ -421,19 +424,23 @@
         </el-table>
       </div>
       <div v-else>
-        <el-button
-          :disabled="formEnable"
-          type="primary"
-          size="mini"
-          @click="addHazard"
-          style="margin-bottom: 10px"
-          >新增危险源</el-button
-        >
+        <el-badge :value="data.hazardList.length">
+          <el-button
+            type="primary"
+            size="mini"
+            @click="addHazard"
+            style="margin-bottom: 10px"
+            >新增危险源</el-button
+          >
+        </el-badge>
         <el-card
           shadow="never"
           v-for="(item, index) in data.hazardList"
           :key="index"
         >
+          <div slot="header" class="clearfix">
+            <span>危险源{{ index + 1 }}</span>
+          </div>
           <el-form size="mini" inline label-width="70px" :disabled="formEnable">
             <el-form-item label="系统">
               <el-select
@@ -707,7 +714,7 @@ import {
 } from '@/api/risk'
 import { queryDictByName } from '@/api/dict'
 import { queryHazardList } from '@/api/standard'
-import { queryDepartmentTree } from '@/api/emplotee'
+import { queryDepts } from '@/api/emplotee'
 
 export default {
   components: {
@@ -1189,6 +1196,7 @@ export default {
         0,
       ],
       reviewLoading: false,
+      deptPath: '/risk_mgr/special_risk_notice_mgr/query/tree',
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() < Date.now() - 8.64e7
@@ -1300,7 +1308,8 @@ export default {
     })
 
     this.loadingTree = true
-    queryDepartmentTree({}).then((res) => {
+    const url = '/sys_mgr/department_mgr/query/tree'
+    queryDepts(url).then((res) => {
       this.loadingTree = false
       this.options = res.obj
     })

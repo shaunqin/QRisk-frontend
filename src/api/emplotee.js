@@ -52,13 +52,14 @@ export const findCurrentUser = () => {
   })
 }
 // 查询部门
-export const queryDepartmentTree = (params) => {
+/* export const queryDepartmentTree = (url, params) => {
   return request({
-    url: `/sys_mgr/department_mgr/query/tree`,
+    // url: `/sys_mgr/department_mgr/query/tree`,
+    url,
     method: 'get',
     params
   })
-}
+} */
 // 查询部门 根据角色
 export const queryDepartmentTreeByRole = () => {
   return request({
@@ -66,7 +67,7 @@ export const queryDepartmentTreeByRole = () => {
     method: 'post'
   })
 }
-// 查询下发子部门
+// 查询部门(根据url查询部门或子部门)
 export const queryDepts = (url, params) => {
   return request({
     // url: `/riskmgr_mgr/safety_risk_notice_mgr/query/depts`,
