@@ -595,7 +595,6 @@ export default {
             seriousness: '1',
             specialRiskMeasureList: [
               {
-                completion: '',
                 controlMeasure: '',
                 deadline: '',
                 reponsibleDept: null,
@@ -797,7 +796,6 @@ export default {
             seriousness: '1',
             specialRiskMeasureList: [
               {
-                completion: '',
                 controlMeasure: '',
                 deadline: '',
                 reponsibleDept: null,
@@ -858,7 +856,6 @@ export default {
         seriousness: '1',
         specialRiskMeasureList: [
           {
-            completion: '',
             controlMeasure: '',
             deadline: '',
             reponsibleDept: null,
@@ -873,7 +870,6 @@ export default {
     },
     addSrmRow(item) {
       item.specialRiskMeasureList.push({
-        completion: '',
         controlMeasure: '',
         deadline: '',
         reponsibleDept: null,

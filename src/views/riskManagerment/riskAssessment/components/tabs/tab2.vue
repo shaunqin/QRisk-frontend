@@ -151,7 +151,6 @@ export default {
               title: obj.title,
               endTime: formatShortDate(obj.endTime),
               noteContent: obj.noteContent,
-              issueDept: obj.issueDept,
               identificationUnit: obj.identificationUnit,
               assType: obj.assType,
               analysisTitle: obj.analysisTitle,
@@ -160,6 +159,7 @@ export default {
               analysis: obj.analysis,
               approval: obj.approval,
               approvalDate: formatShortDate(obj.approvalDate),
+              releasePath: obj.releasePath,
               type: obj.type
             };
             if (obj.hazardVoList && obj.hazardVoList.length > 0) {
@@ -190,7 +190,13 @@ export default {
               output: "", // 输出
             }] }
             await this.getRiskListMgr()
+            if(obj.type=='1') {
+              _this.form.issueDepts = obj.issueDept.split(',')
+            } else {
+              _this.form.issueDepts = obj.issueDept
+            }
             _this.dialog = true;
+            console.log(_this.form.issueDepts, obj.issueDept)
           }
         }
       });

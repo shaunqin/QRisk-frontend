@@ -397,10 +397,11 @@
                   v-for="(item, index) in row.specialRiskMeasureList"
                   :key="item.id"
                 >
-                  <el-select v-model="item.completion" style="width: 75%">
-                    <el-option label="未控制" value="1"></el-option>
-                    <el-option label="控制中" value="2"></el-option>
-                    <el-option label="关闭" value="3"></el-option>
+                  <el-select v-model="item.status" style="width: 75%" :disabled="true">
+                    <el-option label="措施待填报" value="11"></el-option>
+                    <el-option label="措施审核中" value="12"></el-option>
+                    <el-option label="措施已关闭" value="13"></el-option>
+                    <el-option label="措施已驳回" value="14"></el-option>
                   </el-select>
                   <el-popconfirm
                     title="确定删除吗？"
@@ -408,7 +409,7 @@
                     v-if="
                       item.controlMeasure ||
                       item.reponsibleDept ||
-                      item.completion
+                      item.status
                     "
                   >
                     <i
@@ -756,7 +757,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -773,7 +774,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -790,7 +791,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -807,7 +808,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -824,7 +825,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -841,7 +842,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -858,7 +859,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -875,7 +876,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -892,7 +893,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -909,7 +910,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -926,7 +927,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -943,7 +944,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -960,7 +961,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -977,7 +978,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -994,7 +995,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -1011,7 +1012,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -1028,7 +1029,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -1045,7 +1046,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -1062,7 +1063,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -1079,7 +1080,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -1096,7 +1097,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -1113,7 +1114,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -1130,7 +1131,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -1147,7 +1148,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -1164,7 +1165,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, completion: '' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
       ],
@@ -1368,7 +1369,7 @@ export default {
         seriousness: '1',
         specialRiskMeasureList: [
           {
-            completion: '2',
+            status: '11',
             controlMeasure: '',
             deadline: '',
             reponsibleDept: null,
@@ -1392,7 +1393,7 @@ export default {
     },
     addRow(item) {
       item.specialRiskMeasureList.push({
-        completion: '2',
+        status: '11',
         controlMeasure: '',
         deadline: '',
         reponsibleDept: null,
@@ -1486,7 +1487,7 @@ export default {
       } else if (row.specialRiskMeasureList.length == 1) {
         row.specialRiskMeasureList[0].controlMeasure = ''
         row.specialRiskMeasureList[0].reponsibleDept = null
-        row.specialRiskMeasureList[0].completion = ''
+        row.specialRiskMeasureList[0].status = '11'
       }
     },
     forceUpdate() {
