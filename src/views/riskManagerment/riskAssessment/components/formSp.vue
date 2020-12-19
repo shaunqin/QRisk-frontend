@@ -255,7 +255,7 @@
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { delUpload } from '@/api/upload'
-import { queryDepartmentTree } from '@/api/emplotee'
+import { queryDepts } from '@/api/emplotee'
 import { queryDictByName } from '@/api/dict'
 import { specialRiskAdd, specialRiskModify, queryRiskListMgr, queryRiskMgrDept } from '@/api/risk'
 import department from '@/components/Department'
@@ -773,7 +773,8 @@ export default {
     this.queryDictByName()
 
     this.loadingTree = true
-    queryDepartmentTree({}).then((res) => {
+    const url = '/sys_mgr/department_mgr/query/tree'
+    queryDepts(url).then((res) => {
       this.loadingTree = false
       this.options = res.obj
     })
