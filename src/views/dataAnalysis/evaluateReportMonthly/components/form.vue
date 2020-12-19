@@ -9,10 +9,13 @@
   >
     <el-form v-model="form" ref="form" size="mini" inline :rules="formRules">
       <el-row class="full-row">
-        <el-col :span="24">
+        <el-col :span="20">
           <el-form-item label="标题">
             <el-input v-model="form.riskControl.title" placeholder></el-input>
           </el-form-item>
+        </el-col>
+        <el-col :span="4" v-if="chartsData.length>0">
+          <el-button type="primary" size="mini" @click="showCharts">月度评价报告图</el-button>
         </el-col>
       </el-row>
       <el-card
@@ -69,7 +72,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="备注">
-              <el-input v-model="item.remark" placeholder></el-input>
+              <el-input v-model="item.remark" type="textarea" rows="3"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24" style="text-align:center">
@@ -93,6 +96,7 @@
       <el-button :loading="save_loading" type="success" @click="doSave">保存</el-button>
       <el-button :loading="loading" type="primary" @click="handleEmp">提交</el-button>
     </div>
+    <charts ref="charts" :data="chartsData" />
   </el-dialog>
 </template>
 
@@ -102,8 +106,9 @@ import department from "@/components/Department";
 import { format } from "@/utils/datetime";
 import riskSelect from '@/views/dataAnalysis/riskEvaluateMonthly/components/riskSelect'
 import selectEmp from './selectEmplotee'
+import charts from './charts'
 export default {
-  components: { department, riskSelect, selectEmp },
+  components: { department, riskSelect, selectEmp, charts },
   data() {
     return {
       loading: false,
@@ -116,6 +121,7 @@ export default {
           title: "",
           year: "",
           month: "",
+          riskControlChartList: [],
           riskControlExpList: [
             {
               remark: "",// 图备注
@@ -139,7 +145,8 @@ export default {
         { label: '1-5、关键风险TOP3状态(各单位)', value: '1_5' },
         { label: '1-6、关键风险TOP3关联危险源', value: '1_6' }
       ],
-      imageRiskList: []
+      imageRiskList: [],
+      chartsData: [],
     };
   },
   props: {
@@ -154,6 +161,7 @@ export default {
       getRiskAssessmentChartData({ dateValue1: val, dateValue2: this.form.riskControl.month, dateType: 2 }).then(res => {
         this.cdLoading = false;
         if (res.code == '200') {
+          this.chartsData = res.obj;
           this.imageRiskList = res.obj.map(item => {
             return {
               name: item.imageNo,
@@ -247,6 +255,13 @@ export default {
     },
     picSourceChange(val, item) {
       item.risk = "";
+    },
+    showCharts() {
+      let _this = this.$refs.charts;
+      this.form.riskControl.riskControlChartList.map(item => {
+        _this.desc[item.label] = item.remark;
+      })
+      _this.dialog = true;
     }
   },
 };

@@ -2,11 +2,14 @@
   <div>
     <el-form ref="form" size="small" label-width="auto">
       <el-row :gutter="16">
-        <el-col :span="12">
+        <el-col :span="10">
           <el-form-item label="编号">{{data.no}}</el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="8">
           <el-form-item label="拟制人">{{data.issuerName}}[{{data.issuer}}]</el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-button type="primary" size="mini" v-if="noticeEnable" @click="noticeManager">提醒风险管理员办理</el-button>
         </el-col>
       </el-row>
       <el-form-item label="适用范围">{{data.applyScope}}</el-form-item>
@@ -58,6 +61,8 @@
         <childMeasures :data="data.childMeasures" :source="fullscreen?'smart':''" />
       </el-form-item>
     </el-form>
+
+    <selectManager ref="selectManager" :deptPath="data.deptMeasure.deptPath" @on-submit="doSubmit" />
   </div>
 </template>
 
@@ -66,8 +71,10 @@ import { delUpload } from "@/api/upload"
 import upload from "../upload";
 import childMeasures from '../childMeasures'
 import htmlContent from '@/components/common/htmlContent'
+import selectManager from '@/components/common/selectManager'
+import { riskNoticeRiskManger } from '@/api/risk'
 export default {
-  components: { upload, childMeasures, htmlContent },
+  components: { upload, childMeasures, htmlContent, selectManager },
   data() {
     return {
       accessory: this.data.deptMeasure ? this.data.deptMeasure.accessory : [],
@@ -91,6 +98,11 @@ export default {
   computed: {
     deptMeasure() {
       return [{ ...this.data.deptMeasure }]
+    },
+    noticeEnable() {
+      if (this.data.hiddenFill && (this.data.childMeasures == null || this.data.childMeasures.length == 0)) {
+        return true;
+      } return false;
     }
   },
   watch: {
@@ -129,6 +141,20 @@ export default {
         }
       })
     },
+    noticeManager() {
+      this.$refs.selectManager.dialog = true;
+    },
+    doSubmit(params) {
+      params.id = this.data.deptMeasure.id;
+      console.log(params)
+      riskNoticeRiskManger(params).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          this.$message.success("提醒发送成功");
+        }
+      })
+    }
   },
 };
 </script>

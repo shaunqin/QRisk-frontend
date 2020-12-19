@@ -207,6 +207,14 @@ export function noticeRiskManger(data) {
     data
   })
 }
+// 提醒风险管理员
+export function riskNoticeRiskManger(data) {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/noticeRiskManger`,
+    method: 'post',
+    data
+  })
+}
 // =========  风险提示 end ==============
 
 // ======== 专项风险 =======

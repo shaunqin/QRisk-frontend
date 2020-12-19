@@ -110,6 +110,7 @@ export default {
               title: obj.title,
               year: obj.year,
               month: obj.month,
+              riskControlChartList: obj.riskControlChartList,
               riskControlExpList: obj.riskControlExpVoList
             }
           };
