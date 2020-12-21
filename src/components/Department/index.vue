@@ -79,7 +79,6 @@ export default {
       let params = {}
       if (this.path) params = { path: this.path }
       this.loading = true
-      console.log(this.url)
       queryDepts(this.url, params).then((res) => {
         this.loading = false
         this.options = res.obj
