@@ -236,16 +236,18 @@
             <el-date-picker
               v-model="item.fillDeadline"
               value-format="yyyy-MM-dd"
+              :picker-options="{disabledDate:date=>date.getTime() < Date.now() - 8.64e7}"
               style="width:140px"
             ></el-date-picker>
           </el-form-item>
-          <el-form-item label="落实截止日期">
+          <!-- <el-form-item label="落实截止日期">
             <el-date-picker
               v-model="item.implementDeadline"
               value-format="yyyy-MM-dd"
+              :picker-options="{disabledDate:date=>date.getTime() < Date.now() - 8.64e7}"
               style="width:140px"
             ></el-date-picker>
-          </el-form-item>
+          </el-form-item> -->
           <el-row class="full-row">
             <el-col :span="24">
               <el-form-item label="责任单位">
@@ -280,7 +282,7 @@
       >新增</el-button>
     </div>
     <br />
-    <el-button type="primary" @click="submit" :loading="loading">提交</el-button>
+    <el-button type="primary" @click="submit" :loading="loading">暂存</el-button>
   </div>
 </template>
 

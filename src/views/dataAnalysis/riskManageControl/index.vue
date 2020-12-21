@@ -27,24 +27,13 @@
       <el-table-column label="拟制人">
         <template slot-scope="{row}">{{`${row.issueName}[${row.issuer}]`}}</template>
       </el-table-column>
-      <el-table-column label="待办部门" prop="todoDeptPathName" />
-      <el-table-column label="待办状态">
-        <template slot-scope="{row}">
-          <span v-if="row.todoStatus==0">待处理</span>
-          <span v-if="row.todoStatus==1">已下发</span>
-          <span v-if="row.todoStatus==2">已上报</span>
-          <span v-if="row.todoStatus==3">同意</span>
-          <span v-if="row.todoStatus==4">驳回</span>
-        </template>
-      </el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="{row}">{{formatShortDate(row.createTime)}}</template>
       </el-table-column>
-      <el-table-column label="操作" width="140px" fixed="right">
+      <el-table-column label="操作" width="90" fixed="right">
         <template slot-scope="scope">
           <el-button-group>
             <el-button size="mini" type="primary" @click="detail(scope.row)">详情</el-button>
-            <el-button size="mini" type="warning" @click="sendNotice(scope.row)">通知</el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -58,17 +47,17 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-    <detail ref="detail"></detail>
+    <list ref="list" />
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
-import detail from "../evaluateReportMonthly/components/detail"; // 取月度评价报告的详情
+import list from "./components/list";
 import { formatShortDate } from '@/utils/datetime'
 import { riskControlDetailByFormId, riskControlSendDealNotice } from '@/api/risk'
 export default {
-  components: { detail },
+  components: { list },
   mixins: [initData],
   data() {
     return {
@@ -82,7 +71,7 @@ export default {
   methods: {
     formatShortDate,
     beforeInit() {
-      this.url = `/riskControlManage/riskControlManage/query/pageTodoList/${this.page}/${this.size}`;
+      this.url = `/riskControlManage/riskControlManage/query/mainTodo/${this.page}/${this.size}`;
       this.params = { ...this.params };
       return true;
     },
@@ -96,15 +85,9 @@ export default {
       this.toQuery();
     },
     detail(row) {
-      riskControlDetailByFormId(row.todoId).then(res => {
-        if (res.code != '200') {
-          this.$message.error(res.msg);
-        } else {
-          let _this = this.$refs.detail;
-          _this.data = res.obj;
-          _this.dialog = true;
-        }
-      })
+      let _this = this.$refs.list;
+      _this.riskControlId = row.id;
+      _this.dialog = true
     },
     sendNotice(row) {
       this.$confirm("确认发送通知吗?").then(() => {

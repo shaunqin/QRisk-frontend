@@ -40,3 +40,11 @@ export const queryRiskLevelStandard = (params) => {
     params
   })
 }
+
+// 其他标准 detail
+export const detailOtherStand = (id) => {
+  return request({
+    url: `/info_mgr/other_standard_mgr/query/detail/${id}`,
+    method: 'get'
+  })
+}

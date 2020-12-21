@@ -7,9 +7,6 @@
       <el-table-column label="填报截止日期">
         <template slot-scope="{ row }">{{ formatShortDate(row.fillDeadline) }}</template>
       </el-table-column>
-      <el-table-column label="落实截止日期">
-        <template slot-scope="{ row }">{{ formatShortDate(row.implementDeadline) }}</template>
-      </el-table-column>
       <el-table-column label="办理人" width="100">
         <template slot-scope="{ row }">
           <span v-if="!row.reviewerInfo">-</span>
@@ -55,7 +52,7 @@
         </template>
       </el-table-column>
       <!-- 第二轮 -->
-       <el-table-column label="填报措施" min-width="150" v-if="measuresEnable">
+      <el-table-column label="填报措施" min-width="150" v-if="measuresEnable">
         <template slot-scope="{ row }">
           <span v-if="!row.riskControlMeasuresVoList">-</span>
           <ul class="ul-risk" v-else>

@@ -487,6 +487,14 @@ export function riskControlrRespDeptTree(params) {
     method: 'get',
   })
 }
+// 提醒风险管理员
+export function rriskControlrNoticeRiskManger(data) {
+  return request({
+    url: `/riskControlManage/riskControlManage/noticeRiskManger`,
+    method: 'post',
+    data
+  })
+}
 // ======= 在控风险管理 end ========
 
 // =========  风险措施管控  ==============

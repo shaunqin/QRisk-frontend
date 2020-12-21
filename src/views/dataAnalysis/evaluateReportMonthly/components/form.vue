@@ -48,15 +48,21 @@
           />
         </el-form-item>
         <el-form-item label="填报截止日期">
-          <el-date-picker v-model="item.fillDeadline" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="落实截止日期">
           <el-date-picker
-            v-model="item.implementDeadline"
+            v-model="item.fillDeadline"
             value-format="yyyy-MM-dd"
+            :picker-options="{disabledDate:date=>date.getTime() < Date.now() - 8.64e7}"
             style="width:140px"
           ></el-date-picker>
         </el-form-item>
+        <!-- <el-form-item label="落实截止日期">
+          <el-date-picker
+            v-model="item.implementDeadline"
+            value-format="yyyy-MM-dd"
+            :picker-options="{disabledDate:date=>date.getTime() < Date.now() - 8.64e7}"
+            style="width:140px"
+          ></el-date-picker>
+        </el-form-item> -->
         <el-row class="full-row">
           <el-col :span="24">
             <el-form-item label="责任单位">

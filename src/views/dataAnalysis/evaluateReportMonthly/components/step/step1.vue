@@ -1,22 +1,7 @@
 <template>
   <div>
     <el-form ref="form" size="small" label-width="auto">
-      <el-row :gutter="16">
-        <el-col :span="8">
-          <el-form-item label="编号">{{data.no}}</el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="年份">{{`${data.year}-${data.month}`}}</el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="拟制人">{{data.issueName}}[{{data.issuer}}]</el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <el-form-item label-width="0">
-            <el-link type="primary" target="_blank" :href="baseUrl+data.filePath">查看PDF</el-link>
-          </el-form-item>
-        </el-col>
-      </el-row>
+      <baseinfo :data="data" />
       <el-form-item label="标题">{{data.title}}</el-form-item>
       <el-form-item label="风险措施">
         <el-table :data="data.riskControlExpVoList" size="mini">
@@ -25,9 +10,6 @@
           <el-table-column label="备注" prop="remark" />
           <el-table-column label="填报截止日期">
             <template slot-scope="{row}">{{formatShortDate(row.fillDeadline)}}</template>
-          </el-table-column>
-          <el-table-column label="落实截止日期">
-            <template slot-scope="{row}">{{formatShortDate(row.implementDeadline)}}</template>
           </el-table-column>
         </el-table>
       </el-form-item>
@@ -46,8 +28,9 @@
 <script>
 import department from "@/components/Department/deptByRole";
 import { formatShortDate } from '@/utils/datetime'
+import baseinfo from './baseInfo'
 export default {
-  components: { department },
+  components: { department, baseinfo },
   data() {
     return {
       baseUrl: process.env.VUE_APP_BASE_API,

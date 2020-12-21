@@ -82,7 +82,7 @@ export default {
     // }
   }
   /deep/ .scrollbar-wrapper{
-    height: calc(100vh - 60px);
+    height: calc(100vh - 77px);
     padding-right: 10px;
   }
 }

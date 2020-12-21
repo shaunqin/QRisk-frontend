@@ -1,70 +1,10 @@
 <template>
   <div>
     <el-form ref="form" size="small" label-width="auto">
-      <el-row :gutter="16">
-        <el-col :span="8">
-          <el-form-item label="编号">{{data.no}}</el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="年份">{{`${data.year}-${data.month}`}}</el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="拟制人">{{data.issueName}}[{{data.issuer}}]</el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <el-form-item label-width="0">
-            <el-link type="primary" target="_blank" :href="baseUrl+data.filePath">查看PDF</el-link>
-          </el-form-item>
-        </el-col>
-      </el-row>
+      <baseinfo :data="data" />
       <el-form-item label="标题">{{data.title}}</el-form-item>
       <el-form-item label="风险措施">
-        <el-table
-          :data="data.riskControlExpVoList"
-          size="mini"
-          :span-method="objectSpanMethod"
-          border
-        >
-          <el-table-column label="下发单位" prop="deptPathCn" />
-          <el-table-column label="风险" prop="riskName" />
-          <el-table-column label="备注" prop="remark" />
-          <el-table-column
-            v-if="fillRiskMeasuresEnable"
-            label="落实情况"
-            prop="implementationMeasures"
-            min-width="200"
-          />
-          <el-table-column label="填报截止日期">
-            <template slot-scope="{row}">{{formatShortDate(row.fillDeadline)}}</template>
-          </el-table-column>
-          <el-table-column label="落实截止日期">
-            <template slot-scope="{row}">{{formatShortDate(row.implementDeadline)}}</template>
-          </el-table-column>
-          <el-table-column label="填报人" width="130">
-            <template slot-scope="{ row }">
-              <span v-if="row.fillerName">{{row.fillerName}}[{{row.filler}}]</span>
-              <span v-else>-</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="状态" width="80">
-            <template slot-scope="{row}">
-              <span v-if="row.status==0">待处理</span>
-              <span v-else-if="row.status==1">已下发</span>
-              <span v-else-if="row.status==2">已上报</span>
-              <span v-else-if="row.status==3">同意</span>
-              <span v-else-if="row.status==4">驳回</span>
-              <span v-else>-</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="填报措施" min-width="150">
-            <template slot-scope="{row}">
-              <span v-if="!row.riskControlRiskVoList">-</span>
-              <ul class="ul-risk" v-else>
-                <li v-for="item in row.riskControlRiskVoList" :key="item.id">{{ item.riskMeasures }}</li>
-              </ul>
-            </template>
-          </el-table-column>
-        </el-table>
+        <cmpRiskControl :data="data.riskControlExpVoList" :measuresEnable="fillRiskMeasuresEnable" />
       </el-form-item>
 
       <el-form-item label>
@@ -81,8 +21,9 @@
 <script>
 import { formatShortDate } from '@/utils/datetime'
 import cmpRiskControl from '../cmpRiskControl'
+import baseinfo from './baseInfo'
 export default {
-  components: { cmpRiskControl, },
+  components: { cmpRiskControl, baseinfo },
   data() {
     return {
       spanArr: [],

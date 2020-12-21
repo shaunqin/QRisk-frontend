@@ -98,7 +98,7 @@
         <i class="el-icon-view el-icon--right"></i>
       </el-link>
       <el-button type="info" @click="cancel">取消</el-button>
-      <el-button :loading="save_loading" type="success" @click="doSave">保存</el-button>
+      <el-button :loading="save_loading" type="success" @click="doSave">暂存</el-button>
       <el-button :loading="loading" type="primary" @click="handleEmp">{{needLeader?'提交':'下发'}}</el-button>
     </div>
   </el-dialog>

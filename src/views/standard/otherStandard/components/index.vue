@@ -12,17 +12,12 @@
       <el-table-column prop="standardNo" :label="$t('standard.no')" />
       <el-table-column :label="$t('standard.name')">
         <template slot-scope="scope">
-          <el-button type="text">{{scope.row.name}}</el-button>
+          <el-button type="text" @click="detail(scope.row)">>{{scope.row.name}}</el-button>
         </template>
       </el-table-column>
       <el-table-column prop="remark" :label="$t('standard.remark')" />
       <el-table-column :label="$t('standard.createTime')">
         <template slot-scope="{row}">{{format(row.createTime)}}</template>
-      </el-table-column>
-      <el-table-column :label="$t('standard.preview')" width="100">
-        <template slot-scope="{row}">
-          <el-button type="text" icon="el-icon-view" @click="preview(row)"></el-button>
-        </template>
       </el-table-column>
     </el-table>
     <!--分页组件-->
@@ -34,14 +29,18 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
+    <eform ref="form" />
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
 import { format } from "@/utils/datetime";
+import eform from './form'
+import { detailOtherStand, } from "@/api/standard";
 export default {
   mixins: [initData],
+  components: { eform, },
   data() {
     return {
       isSuperAdmin: false,
@@ -67,7 +66,26 @@ export default {
       //   return;
       // }
     },
-    preview(row) { },
+    detail(row) {
+      this.isAdd = false;
+      let _this = this.$refs.form;
+      detailOtherStand(row.id).then(res => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          let { id, standardNo, name, remark, enable, files } = res.obj;
+          _this.form = {
+            id,
+            standardNo,
+            name,
+            remark,
+            enable
+          };
+          _this.files = files;
+          _this.dialog = true;
+        }
+      });
+    },
   },
 };
 </script>

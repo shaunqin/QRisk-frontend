@@ -71,7 +71,11 @@
           <department style="width:540px" />
         </el-form-item>
         <el-form-item label="截止时间">
-          <el-date-picker v-model="hairdownForm.aa" value-format="yyyy-MM-dd" placeholder></el-date-picker>
+          <el-date-picker
+            v-model="hairdownForm.aa"
+            value-format="yyyy-MM-dd"
+            :picker-options="{disabledDate:date=>date.getTime() < Date.now() - 8.64e7}"
+          ></el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

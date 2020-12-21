@@ -27,7 +27,7 @@
             <el-date-picker
               v-model="item.deadline"
               value-format="yyyy-MM-dd"
-              placeholder
+              :picker-options="{disabledDate:date=>date.getTime() < Date.now() - 8.64e7}"
               style="width:100%"
             ></el-date-picker>
           </el-form-item>

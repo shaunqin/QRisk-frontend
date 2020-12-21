@@ -202,11 +202,9 @@
           <template slot="prepend">注释：</template>
         </el-input>
       </div>
-
     </div>
     <div slot="footer" class="dialog-footer">
-      <el-button type="text" @click="cancel">取消</el-button>
-      <el-button type="primary" @click="doSubmit">确定</el-button>
+      <el-button type="primary" @click="cancel">取消</el-button>
     </div>
   </el-dialog>
 </template>

@@ -1,22 +1,7 @@
 <template>
   <div>
     <el-form ref="form" size="small" label-width="auto">
-      <el-row :gutter="16">
-        <el-col :span="8">
-          <el-form-item label="编号">{{data.no}}</el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="年份">{{`${data.year}-${data.month}`}}</el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="拟制人">{{data.issueName}}[{{data.issuer}}]</el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <el-form-item label-width="0">
-            <el-link type="primary" target="_blank" :href="baseUrl+data.filePath">查看PDF</el-link>
-          </el-form-item>
-        </el-col>
-      </el-row>
+      <baseinfo :data="data" />
       <el-form-item label="标题">{{data.title}}</el-form-item>
       <el-form-item label="风险措施">
         <el-table :data="data.riskControlExpVoList" size="mini">
@@ -30,9 +15,6 @@
           </el-table-column>
           <el-table-column label="填报截止日期">
             <template slot-scope="{row}">{{formatShortDate(row.fillDeadline)}}</template>
-          </el-table-column>
-          <el-table-column label="落实截止日期">
-            <template slot-scope="{row}">{{formatShortDate(row.implementDeadline)}}</template>
           </el-table-column>
         </el-table>
       </el-form-item>
@@ -52,10 +34,16 @@
               <el-option v-for="r in riskList" :key="r.value" :label="r.label" :value="r.value"></el-option>
             </el-select>
           </el-col>
-          <el-col :span="8">
-            <el-input size="mini" v-model="item.riskMeasures" placeholder="请填写措施"></el-input>
+          <el-col :span="4">
+            <el-date-picker
+              size="mini"
+              v-model="item.deadline"
+              value-format="yyyy-MM-dd"
+              style="width:100%"
+              :picker-options="{disabledDate:date=>date.getTime() < Date.now() - 8.64e7}"
+            ></el-date-picker>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="14">
             <department
               class="mini"
               :value="item.respDeptList"
@@ -67,21 +55,24 @@
               :defaultExpand="Infinity"
             />
           </el-col>
-          <el-col :span="4">
-            <el-date-picker
-              size="mini"
-              v-model="item.deadline"
-              value-format="yyyy-MM-dd"
-              style="width:100%"
-            ></el-date-picker>
-          </el-col>
           <el-col :span="2">
             <el-button type="danger" size="mini" icon="el-icon-delete" @click="delRow(index)"></el-button>
+          </el-col>
+          <el-col :span="24">
+            <el-input
+              size="mini"
+              v-model="item.riskMeasures"
+              placeholder="请填写措施"
+              type="textarea"
+              rows="3"
+            ></el-input>
           </el-col>
         </el-row>
         <el-button class="add-btn" size="mini" icon="el-icon-plus" @click="addRow">新增</el-button>
       </el-form-item>
     </el-form>
+
+    <selectManager ref="selectManager" :deptPath="data.deptRisk.deptPath" @on-submit="doSubmit" />
   </div>
 </template>
 
@@ -89,8 +80,11 @@
 import { formatShortDate } from '@/utils/datetime';
 import childRisk from '../childRisk'
 import department from '../department'
+import selectManager from '@/components/common/selectManager'
+import { rriskControlrNoticeRiskManger } from '@/api/risk'
+import baseinfo from './baseInfo'
 export default {
-  components: { childRisk, department },
+  components: { childRisk, department, selectManager, baseinfo },
   data() {
     return {
       accessory: {},
@@ -138,6 +132,11 @@ export default {
         return false
       }
     },
+    noticeEnable() {
+      if (this.hiddenFill && this.childRisk.length == 0) {
+        return true;
+      } return false;
+    }
   },
   watch: {
     measuresObj: {
@@ -188,6 +187,20 @@ export default {
     },
     deptChange(val, item) {
       item.respDeptList = val;
+    },
+    noticeManager() {
+      this.$refs.selectManager.dialog = true;
+    },
+    doSubmit(params) {
+      params.id = this.data.deptRisk.id;
+      console.log(params)
+      rriskControlrNoticeRiskManger(params).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          this.$message.success("提醒发送成功");
+        }
+      })
     }
   },
 };

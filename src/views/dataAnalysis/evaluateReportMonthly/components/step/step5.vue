@@ -1,22 +1,7 @@
 <template>
   <div>
     <el-form ref="form" size="small" label-width="auto">
-      <el-row :gutter="16">
-        <el-col :span="8">
-          <el-form-item label="编号">{{data.no}}</el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="年份">{{`${data.year}-${data.month}`}}</el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="拟制人">{{data.issueName}}[{{data.issuer}}]</el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <el-form-item label-width="0">
-            <el-link type="primary" target="_blank" :href="baseUrl+data.filePath">查看PDF</el-link>
-          </el-form-item>
-        </el-col>
-      </el-row>
+      <baseinfo :data="data" />
       <el-form-item label="标题">{{data.title}}</el-form-item>
       <el-form-item label="风险措施">
         <el-table :data="data.riskControlExpVoList" size="mini">
@@ -55,10 +40,16 @@
               <el-option v-for="r in riskList" :key="r.value" :label="r.label" :value="r.value"></el-option>
             </el-select>
           </el-col>
-          <el-col :span="8">
-            <el-input size="mini" v-model="item.riskMeasures" placeholder="请填写措施"></el-input>
+          <el-col :span="4">
+            <el-date-picker
+              size="mini"
+              v-model="item.deadline"
+              value-format="yyyy-MM-dd"
+              style="width:100%"
+              :picker-options="{disabledDate:date=>date.getTime() < Date.now() - 8.64e7}"
+            ></el-date-picker>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="14">
             <department
               class="mini"
               :value="item.respDeptList"
@@ -70,16 +61,17 @@
               :defaultExpand="Infinity"
             />
           </el-col>
-          <el-col :span="4">
-            <el-date-picker
-              size="mini"
-              v-model="item.deadline"
-              value-format="yyyy-MM-dd"
-              style="width:100%"
-            ></el-date-picker>
-          </el-col>
           <el-col :span="2">
             <el-button type="danger" size="mini" icon="el-icon-delete" @click="delRow(index)"></el-button>
+          </el-col>
+          <el-col :span="24">
+            <el-input
+              size="mini"
+              v-model="item.riskMeasures"
+              placeholder="请填写措施"
+              type="textarea"
+              rows="3"
+            ></el-input>
           </el-col>
         </el-row>
         <el-button class="add-btn" size="mini" icon="el-icon-plus" @click="addRow">新增</el-button>
@@ -93,8 +85,9 @@ import { formatShortDate } from '@/utils/datetime'
 import childRisk from '../childRisk'
 import apprvalRecord from '../apprvalRecord'
 import department from '../department'
+import baseinfo from './baseInfo'
 export default {
-  components: { childRisk, apprvalRecord, department },
+  components: { childRisk, apprvalRecord, department, baseinfo },
   data() {
     return {
       dialog: false,

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form ref="form" size="mini" inline>
+    <el-form ref="form" size="mini" inline label-position="left">
       <el-row class="full-row">
         <el-col :span="24">
           <el-form-item label="标题">
@@ -8,7 +8,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="审批记录" key="noticeComments" v-if="noticeComments.length>0">
+          <el-form-item label="审批记录" key="noticeComments" v-if="noticeComments.length>0" label-width="80px">
             <apprvalRecord :data="noticeComments" />
           </el-form-item>
         </el-col>
@@ -43,12 +43,10 @@
           />
         </el-form-item>
         <el-form-item label="填报截止日期">
-          <el-date-picker v-model="item.fillDeadline" value-format="yyyy-MM-dd" style="width:140px"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="落实截止日期">
           <el-date-picker
-            v-model="item.implementDeadline"
+            v-model="item.fillDeadline"
             value-format="yyyy-MM-dd"
+            :picker-options="{disabledDate:date=>date.getTime() < Date.now() - 8.64e7}"
             style="width:140px"
           ></el-date-picker>
         </el-form-item>
