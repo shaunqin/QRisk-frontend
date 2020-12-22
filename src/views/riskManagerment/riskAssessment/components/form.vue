@@ -53,7 +53,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item prop="issueDepts">
+          <el-form-item prop="issueDepts" key="issueDepts">
             <template slot="label">
               {{ form.type != '2' ? '下发部门' : '分析单位' }}
             </template>
@@ -320,6 +320,7 @@
                 style="width: 130px"
                 placeholder="请选择系统"
                 clearable
+                @change="$forceUpdate()"
               >
                 <el-option label="维修工程" value="维修工程"></el-option>
               </el-select>
@@ -333,7 +334,7 @@
               />
             </el-form-item>
             <el-form-item label="管理流程">
-              <el-input v-model="item.managementProcess"></el-input>
+              <el-input v-model="item.managementProcess" @input="$forceUpdate()"></el-input>
             </el-form-item>
             <el-form-item label="危险源层级一" label-width="115px">
               <el-select
@@ -435,6 +436,7 @@
                     v-model="item.hazardSource"
                     type="textarea"
                     rows="3"
+                    @input="$forceUpdate()"
                   ></el-input>
                 </el-form-item>
               </el-col>
@@ -444,6 +446,7 @@
                     v-model="item.rootCauseAnalysis"
                     type="textarea"
                     rows="3"
+                    @input="$forceUpdate()"
                   ></el-input>
                 </el-form-item>
               </el-col>
@@ -655,6 +658,7 @@ export default {
           this.form.hazardList[0].riskLevel1,
           this.form.hazardList[0]
         )
+        this.$forceUpdate()
       })
     })
     // 发起部门
@@ -677,27 +681,17 @@ export default {
       this.resetForm()
     },
     doSubmit(sqlUserId) {
-      this.$refs['form'].validate((valid) => {
-        if (valid) {
-          this.loading = true
-          if (this.isAdd) {
-            this.doAdd(sqlUserId)
-          } else this.doModify(sqlUserId)
-        } else {
-          this.$message.error('请填写完整！')
-        }
-      })
+      if(!this.form.issueDepts || !this.form.title) return this.$message.error('请填写完整！')
+      this.loading = true
+      if (this.isAdd) {
+        this.doAdd(sqlUserId)
+      } else this.doModify(sqlUserId)
     },
     submit() {
-      this.$refs['form'].validate((valid) => {
-        if (valid) {
-          let _this = this.$refs.selectEmplotee
-          // _this.id = this.selections[0];
-          _this.dialog = true
-        } else {
-          this.$message.error('请填写完整！')
-        }
-      })
+      if(!this.form.issueDepts || !this.form.title) return this.$message.error('请填写完整！')
+      let _this = this.$refs.selectEmplotee
+      // _this.id = this.selections[0];
+      _this.dialog = true
     },
     doAdd(sqlUserId) {
       let submit
@@ -819,9 +813,11 @@ export default {
     },
     deptChange(val, key) {
       this.form[key] = val
+      this.$forceUpdate()
     },
     deptChangeOnTb(val, row) {
       row.reponsibleUnit = val
+      this.$forceUpdate()
     },
     addCol() {
       this.form.specialRiskAnalyses.push({
@@ -847,6 +843,7 @@ export default {
       if (key == 'possibility' || key == 'seriousness') {
         this.queryRiskLevel(item.possibility, item.seriousness, item)
       }
+      this.$forceUpdate()
       /* if (key == 'hazard' || key == 'possibleRisks') {
         this.queryRiskLevel(item.hazard, item.possibleRisks, item);
       } */
@@ -889,6 +886,7 @@ export default {
     },
     srmDeptChange(val, row) {
       row.reponsibleDept = val
+      this.$forceUpdate()
     },
     /**查询风险 */
     queryRiskLevel(hazard, risk, item) {
@@ -898,6 +896,7 @@ export default {
             /* item.possibility = res.obj.possibility;
             item.seriousness = res.obj.seriousness; */
             item.riskLevel = `${res.obj}`
+            this.$forceUpdate()
           }
         })
       }
@@ -910,6 +909,7 @@ export default {
         }
         item.riskLevel2 = this.riskLevel2List[0].value
         this.chooseRiskLevel2(item.riskLevel2, item)
+        this.$forceUpdate()
       }
     },
     chooseRiskLevel2(val, item) {
@@ -918,6 +918,7 @@ export default {
         this.hazardList = list
       }
       item.hazard = this.hazardList[0] ? this.hazardList[0].diskNo : ''
+      this.$forceUpdate()
     },
     success(res) {
       if (res.code != '200') {

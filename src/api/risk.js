@@ -364,6 +364,14 @@ export function querySpeRiskMgrDept() {
     method: 'get',
   })
 }
+// 提醒风险管理员
+export function specialNoticeRiskManger(data) {
+  return request({
+    url: `/risk_mgr/special_risk_notice_mgr/noticeRiskManger`,
+    method: 'post',
+    data
+  })
+}
 // ======== 专项风险 end =======
 
 // 风险提示编号

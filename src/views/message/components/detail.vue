@@ -9,6 +9,7 @@
   >
     <hiddenDanger v-if="msgType=='hidden_danger_control'" ref="hiddenDanger" :data="data" />
     <safetyRiskPrompt v-if="msgType=='safety_risk_notice'" ref="safetyRiskPrompt" :data="data" />
+    <specialRiskNote v-if="msgType=='special_risk_note'" ref="specialRiskNote" :data="data" />
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="cancel">确定</el-button>
     </div>
@@ -18,8 +19,9 @@
 <script>
 import hiddenDanger from './hiddenDanger';
 import safetyRiskPrompt from './safetyRiskPrompt';
+import specialRiskNote from './specialRiskNote';
 export default {
-  components: { hiddenDanger, safetyRiskPrompt },
+  components: { hiddenDanger, safetyRiskPrompt, specialRiskNote },
   data() {
     return {
       loading: false,

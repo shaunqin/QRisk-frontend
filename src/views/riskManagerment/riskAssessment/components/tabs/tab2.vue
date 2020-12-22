@@ -138,9 +138,7 @@ export default {
               _that.list.map((item, index) => {
                 item.possibility = obj.hazardVoList[index].possibility
                 item.rootCauseAnalysis = obj.hazardVoList[index].rootCauseAnalysis
-                item.specialRiskMeasureList[0].controlMeasure = obj.hazardVoList[index].specialRiskMeasureList[0].controlMeasure
-                item.specialRiskMeasureList[0].reponsibleDept = obj.hazardVoList[index].specialRiskMeasureList[0].reponsibleDept
-                item.specialRiskMeasureList[0].completion = obj.hazardVoList[index].specialRiskMeasureList[0].completion
+                item.specialRiskMeasureList = obj.hazardVoList[index].specialRiskMeasureList
               })
             }
             _that.dialog = true;

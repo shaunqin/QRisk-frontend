@@ -143,33 +143,6 @@ export default {
           }
         }
       })
-      /* specialRiskDetail(row.id).then((res) => {
-        if (res.code != "200") {
-          this.$message.error(res.msg);
-        } else {
-          let _this = this.$refs.edetail;
-          if(this.assessmentType == '4') {
-            _this.assessmentType = this.assessmentType;
-            _this.data = { ...res.obj }
-            if (res.obj.hazardVoList && res.obj.hazardVoList.length > 0) {
-              // _this.list = [...res.obj.hazardVoList]
-              _this.list.map((item, index) => {
-                item.possibility = res.obj.hazardVoList[index].possibility
-                item.rootCauseAnalysis = res.obj.hazardVoList[index].rootCauseAnalysis
-                item.specialRiskMeasureList[0].controlMeasure = res.obj.hazardVoList[index].specialRiskMeasureList[0].controlMeasure
-                item.specialRiskMeasureList[0].reponsibleDept = res.obj.hazardVoList[index].specialRiskMeasureList[0].reponsibleDept
-                item.specialRiskMeasureList[0].completion = res.obj.hazardVoList[index].specialRiskMeasureList[0].completion
-              })
-            }
-            _this.dialog = true;
-          } else {
-            _this.data = res.obj;
-            _this.data.endTime = formatShortDate(res.obj.endTime)
-            _this.assessmentType = this.assessmentType
-            _this.dialog = true;
-          }
-        }
-      }); */
     },
     renderType(row) {
       let type = "";

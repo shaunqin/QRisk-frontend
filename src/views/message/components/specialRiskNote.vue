@@ -1,12 +1,5 @@
 <template>
-  <el-dialog
-    :append-to-body="true"
-    :close-on-click-modal="false"
-    :before-close="cancel"
-    :visible.sync="dialog"
-    title="详情"
-    custom-class="big_dialog"
-  >
+  <div>
     <el-card header="详细信息">
       <el-form size="small" label-width="80px" class="info" inline>
         <el-form-item label="编号">{{ data.no }}</el-form-item>
@@ -109,7 +102,7 @@
         }}</el-form-item>
       </el-form>
 
-      <div v-if="assessmentType == '4'">
+      <div v-if="data.assType == '4'">
         <el-table
           :data="list"
           size="mini"
@@ -180,8 +173,8 @@
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
                   <el-popover trigger="hover" v-if="true" placement="top">
-                    <span>{{item.measureStatus}}</span>
-                    <div class="text" slot="reference">{{item.measureStatus}}</div>
+                    <span>{{item.completionName}}</span>
+                    <div class="text" slot="reference">{{item.completionName}}</div>
                   </el-popover>
                 </li>
               </ul>
@@ -251,8 +244,8 @@
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
                   <el-popover trigger="hover" v-if="true" placement="top">
-                    <span>{{item.measureStatus}}</span>
-                    <div class="text" slot="reference">{{item.measureStatus}}</div>
+                    <span>{{item.completionName}}</span>
+                    <div class="text" slot="reference">{{item.completionName}}</div>
                   </el-popover>
                 </li>
               </ul>
@@ -285,16 +278,9 @@
     >
       <transactor :data="data.reviewerInfo" width="100%" />
     </el-card>
-    <el-card header="下发通知" key="childNotes" v-if="showChildNotes">
+    <el-card header="下发通知" key="childNotes">
       <childNotes :data="data" :showIssueRecord="true" />
     </el-card>
-    <!-- <el-card
-      header="下发措施"
-      key="firstLevelMeasure"
-      v-if="showChildMeasures"
-    >
-      <childMeasures :data="data" :showIssueRecord="true" />
-    </el-card> -->
 
     <el-card
       header="审批记录"
@@ -304,45 +290,29 @@
       <apprvalRecord :data="data.noticeComments" />
     </el-card>
 
-    <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="cancel">取消</el-button>
-    </div>
-
     <report
       ref="report"
       :formId="formId"
       :disabled="true"
       @change="formIdChange"
     />
-  </el-dialog>
+  </div>
 </template>
 
 <script>
 import { formatShortDate } from '@/utils/datetime'
-import apprvalRecord from './apprvalRecord'
-import childMeasures from './childMeasures'
-import childNotes from './childNotes'
-import report from './report'
+import apprvalRecord from '@/views/riskManagerment/riskAssessment/components/apprvalRecord'
+import childNotes from '@/views/riskManagerment/riskAssessment/components/childNotes'
+import report from '@/views/riskManagerment/riskAssessment/components/report'
 import transactor from '@/components/common/transactor'
 export default {
-  components: { apprvalRecord, report, transactor, childMeasures, childNotes },
-  props: {
-    showChildNotes: {
-      type: Boolean,
-      default: true,
-    },
-    showChildMeasures: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  components: { apprvalRecord, report, transactor, childNotes },
+  props: ["data"],
   data() {
     return {
       formId: '',
       dialog: false,
-      data: {},
-      assessmentType: '',
-      list: [
+      listArr: [
         {
           product: '维修工程',
           subSystem: '维修计划和控制',
@@ -357,7 +327,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -374,7 +344,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -391,7 +361,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -408,7 +378,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -425,7 +395,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -442,7 +412,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -459,7 +429,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -476,7 +446,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -493,7 +463,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -510,7 +480,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -527,7 +497,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -544,7 +514,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -561,7 +531,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -578,7 +548,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -595,7 +565,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -612,7 +582,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -629,7 +599,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -646,7 +616,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -663,7 +633,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -680,7 +650,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -697,7 +667,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -714,7 +684,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -731,7 +701,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -748,7 +718,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
         {
@@ -765,7 +735,7 @@ export default {
           riskLevel: '1',
           rootCauseAnalysis: '',
           specialRiskMeasureList: [
-            { controlMeasure: '', reponsibleDept: null, measureStatus: '2' },
+            { controlMeasure: '', reponsibleDept: null, status: '11' },
           ],
         },
       ],
@@ -798,14 +768,31 @@ export default {
       ],
     }
   },
+  computed: {
+    list() {
+      let arr = []
+      if (this.data.hazardVoList.length == 25) {
+        arr = this.listArr.map((item, index) => {
+          item.possibility = this.data.hazardVoList[index].possibility
+          item.rootCauseAnalysis = this.data.hazardVoList[
+            index
+          ].rootCauseAnalysis
+          item.specialRiskMeasureList = this.data.hazardVoList[
+            index
+          ].specialRiskMeasureList
+          return item
+        })
+      } else {
+        arr = deepClone([...this.listArr])
+      }
+      return arr
+    },
+  },
   methods: {
     formatShortDate,
     showReport() {
       this.formId = this.data.id
       this.$refs.report.dialog = true
-    },
-    cancel() {
-      this.resetForm()
     },
     resetForm() {
       this.dialog = false

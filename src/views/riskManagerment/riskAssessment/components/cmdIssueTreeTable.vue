@@ -45,7 +45,7 @@
           <span v-if="row.status==2">待审批</span>
           <span v-if="row.status==3">驳回</span>
           <span v-if="row.status==4">审批已上报</span>
-          <span v-if="row.status==5">措施带创建</span>
+          <span v-if="row.status==5">措施待创建</span>
           <span v-if="row.status==6">措施待填报</span>
           <span v-if="row.status==7">措施待验证</span>
           <span v-if="row.status==8">措施已上报</span>
