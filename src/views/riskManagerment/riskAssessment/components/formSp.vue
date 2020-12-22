@@ -841,7 +841,7 @@ export default {
       this.loading = true
       if (this.isAdd) {
         this.doAdd(sqlUserId)
-      } else this.doModify()
+      } else this.doModify(sqlUserId)
     },
     submit() {
       let _this = this.$refs.selectEmplotee
@@ -882,8 +882,16 @@ export default {
           this.loading = false
         })
     },
-    doModify() {
-      const params = { ...this.form, hazardList: this.list }
+    doModify(sqlUserId) {
+      let submit
+      let issueDepts = []
+      if (this.form.type == '2') {
+        submit = sqlUserId ? '1' : '2'
+        issueDepts.push(this.form.issueDepts)
+      } else {
+        issueDepts = this.form.issueDepts
+      }
+      const params = { ...this.form, hazardList: this.list, submit: submit, staffno: sqlUserId, issueDepts: issueDepts }
       specialRiskModify(params)
         .then((res) => {
           if (res.code === '200') {

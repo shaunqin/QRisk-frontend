@@ -532,6 +532,7 @@ import { delUpload } from '@/api/upload'
 import {
   specialRiskAdd,
   specialRiskModify,
+  specialRiskSubmit,
   specialRiskQueryRiskLevel,
   querySpeRiskMgrDept,
 } from '@/api/risk'
@@ -681,7 +682,7 @@ export default {
           this.loading = true
           if (this.isAdd) {
             this.doAdd(sqlUserId)
-          } else this.doModify()
+          } else this.doModify(sqlUserId)
         } else {
           this.$message.error('请填写完整！')
         }
@@ -730,8 +731,16 @@ export default {
           this.loading = false
         })
     },
-    doModify() {
-      specialRiskModify(this.form)
+    doModify(sqlUserId) {
+      let submit
+      let issueDepts = []
+      if (this.form.type == '2') {
+        submit = sqlUserId ? '1' : '2'
+        issueDepts.push(this.form.issueDepts)
+      } else {
+        issueDepts = this.form.issueDepts
+      }
+      specialRiskModify({...this.form, submit: submit, staffno: sqlUserId, issueDepts: issueDepts})
         .then((res) => {
           if (res.code === '200') {
             this.$message({
@@ -757,7 +766,7 @@ export default {
         endTime: '', // 截止日期
         noteContent: '', // 通知内容
         issueDepts: null, // 下发部门
-        releasePath: this.deptList[0].deptPath,
+        releasePath: this.deptList.length>0?this.deptList[0].deptPath:'',
         assType: '', // 评估类别
         analysisTitle: '', // 分析标题
         analysisNo: '', // 分析编号

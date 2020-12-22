@@ -329,7 +329,7 @@ export default {
   props: {
     showChildNotes: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     showChildMeasures: {
       type: Boolean,
