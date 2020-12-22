@@ -9,7 +9,7 @@ export default {
       token: this.$route.query.token,
       username: this.$route.query.username,
       localToken: this.$store.getters.token,
-      redirect: undefined,
+      redirect: this.$route.query.redirect,
       otherQuery: {},
     };
   },
