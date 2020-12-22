@@ -87,7 +87,7 @@
 
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel" v-if="!fullscreen">取消</el-button>
-      <el-button :loading="loading" type="warning" @click="doSubmitSave"
+      <el-button :loading="loading" type="warning" @click="doSubmitSave" v-if="!onlyLeader"
         >暂存</el-button
       >
       <el-button :loading="loading" type="primary" @click="doSubmit"
@@ -106,6 +106,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { specialRiskComplete, specialRiskSaveHazard } from '@/api/risk'
 import step1 from './step/step1'
 import step2 from './step/step2'
@@ -160,6 +161,14 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(["roles"]),
+    onlyLeader() {
+      if (this.roles.length == 2 && (this.roles.includes('RISK_MANAGER_LEADER') || this.roles.includes('MANAGER'))) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     step() {
       return this.data.step
     },

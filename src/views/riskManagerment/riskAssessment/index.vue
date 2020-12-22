@@ -107,13 +107,13 @@
           </el-form>
         </div>
         <el-tabs v-model="tabIndex">
-          <el-tab-pane name="1" label="全部">
+          <el-tab-pane name="1" label="全部" v-if="!onlyLeader">
             <tab1 v-if="tabIndex=='1'" :assessmentType="assessmentType" :queryForm="queryForm" />
           </el-tab-pane>
-          <el-tab-pane name="2" label="草稿">
+          <el-tab-pane name="2" label="草稿" v-if="!onlyLeader">
             <tab2 v-if="tabIndex=='2'" :assessmentType="assessmentType" :queryForm="queryForm" />
           </el-tab-pane>
-          <el-tab-pane name="3" label="我拟制的">
+          <el-tab-pane name="3" label="我拟制的" v-if="!onlyLeader">
             <tab3 v-if="tabIndex=='3'" :assessmentType="assessmentType" :queryForm="queryForm" />
           </el-tab-pane>
           <el-tab-pane name="4">
@@ -133,6 +133,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import tab1 from './components/tabs/tab1';
 import tab2 from './components/tabs/tab2';
 import tab3 from './components/tabs/tab3';
@@ -163,6 +164,18 @@ export default {
       },
       date: ""
     };
+  },
+  computed: {
+    ...mapGetters(["roles"]),
+    onlyLeader() {
+      if (this.roles.length == 2 && this.roles.includes('RISK_MANAGER_LEADER')) {
+        this.tabIndex = "4";
+        return true;
+      } else {
+        this.tabIndex = "1";
+        return false;
+      }
+    }
   },
   watch: {
     $route(route) {
