@@ -54,20 +54,25 @@
     />
     <eform ref="form" :isAdd="isAdd" />
     <selectEmp ref="selectEmp" @on-submit="submit" />
+    <charts ref="charts" :data="chartsData" :showSubmit="true" />
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
 import eform from "../form";
-import { riskControlDetail, riskControlDelete, riskControlSubmit } from "@/api/risk";
+import { riskControlDetail, riskControlDelete, riskControlSubmit, getRiskAssessmentChartData } from "@/api/risk";
 import { formatShortDate } from "@/utils/datetime";
 import selectEmp from '../selectEmplotee'
+import charts from '../charts'
 export default {
-  components: { eform, selectEmp },
+  components: { eform, selectEmp, charts },
   data() {
     return {
       selections: [],
+      currentRow: {},
+      chartsData: [],
+      form: {},
     };
   },
   mixins: [initData],
@@ -93,6 +98,9 @@ export default {
     // 选择切换
     selectionChange: function (selections) {
       this.selections = selections.map((r) => r.id);
+      if (selections.length > 0) {
+        this.currentRow = selections[selections.length - 1];
+      }
     },
     edit() {
       this.isAdd = false;
@@ -134,7 +142,47 @@ export default {
         .catch(() => { });
     },
     selectLeader() {
-      this.$refs.selectEmp.dialog = true;
+      // this.$refs.selectEmp.dialog = true;
+      this.loading = true;
+      // 获取记录详情,拿到图注释
+      let id = this.selections[0];
+      let _this = this.$refs.charts;
+      riskControlDetail(id).then((res) => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+          this.loading=false;
+          return false
+        } else {
+          const { obj } = res;
+          _this.formData = {
+            riskControl: {
+              id: obj.id,
+              fileId: obj.fileId,
+              title: obj.title,
+              year: obj.year,
+              month: obj.month,
+              riskControlChartList: obj.riskControlChartList,
+              riskControlExpList: obj.riskControlExpVoList
+            }
+          };
+          _this.formData.riskControl.riskControlChartList.map(item => {
+            _this.desc[item.label] = item.remark;
+          })
+        }
+        return true
+      }).then((data) => {
+        if (data) {
+          // 画图弹窗
+          getRiskAssessmentChartData({ dateValue1: this.currentRow.year, dateValue2: this.currentRow.month, dateType: 2 }).then(res => {
+            this.loading = false;
+            if (res.code == '200') {
+              this.chartsData = res.obj;
+              _this.dialog = true;
+            }
+          })
+        }
+      });
+
     },
     submit(sqlUserId) {
       let id = this.selections[0];

@@ -62,7 +62,7 @@
             :picker-options="{disabledDate:date=>date.getTime() < Date.now() - 8.64e7}"
             style="width:140px"
           ></el-date-picker>
-        </el-form-item> -->
+        </el-form-item>-->
         <el-row class="full-row">
           <el-col :span="24">
             <el-form-item label="责任单位">
@@ -96,13 +96,13 @@
       @click="addRow"
     >新增</el-button>
 
-    <selectEmp ref="selectEmp" @on-submit="doSubmit" />
+    <!-- <selectEmp ref="selectEmp" @on-submit="doSubmit" /> -->
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button :loading="save_loading" type="success" @click="doSave">保存</el-button>
-      <el-button :loading="loading" type="primary" @click="handleEmp">提交</el-button>
+      <el-button :loading="loading" type="primary" @click="doSubmit">提交</el-button>
     </div>
-    <charts ref="charts" :data="chartsData" />
+    <charts ref="charts" :data="chartsData" :showSubmit="showSubmit" source="form" />
   </el-dialog>
 </template>
 
@@ -153,6 +153,7 @@ export default {
       ],
       imageRiskList: [],
       chartsData: [],
+      showSubmit: false
     };
   },
   props: {
@@ -204,18 +205,26 @@ export default {
       this.$refs.selectEmp.dialog = true;
     },
     doSubmit(sqlUserId) {
-      this.loading = true;
-      this.form.riskControl.sqlUserId = sqlUserId;
-      riskControlUpdateAndSubmit(this.form).then((res) => {
-        if (res.code != "200") {
-          this.$message.error(res.msg);
-        } else {
-          this.$message.success("提交成功");
-          this.resetForm();
-          this.$parent.init();
-        }
-        this.loading = false;
-      });
+      this.showSubmit = true;
+      let _this = this.$refs.charts;
+      _this.formData = this.form;
+      _this.formData.riskControl.riskControlChartList.map(item => {
+        _this.desc[item.label] = item.remark;
+      })
+      _this.dialog = true;
+      // =============
+      // this.loading = true;
+      // this.form.riskControl.sqlUserId = sqlUserId;
+      // riskControlUpdateAndSubmit(this.form).then((res) => {
+      //   if (res.code != "200") {
+      //     this.$message.error(res.msg);
+      //   } else {
+      //     this.$message.success("提交成功");
+      //     this.resetForm();
+      //     this.$parent.init();
+      //   }
+      //   this.loading = false;
+      // });
     },
 
     resetForm() {
@@ -239,6 +248,7 @@ export default {
           ]
         }
       };
+      this.chartsData = [];
     },
     addRow() {
       this.form.riskControl.riskControlExpList.push({
@@ -263,6 +273,7 @@ export default {
       item.risk = "";
     },
     showCharts() {
+      this.showSubmit = false;
       let _this = this.$refs.charts;
       this.form.riskControl.riskControlChartList.map(item => {
         _this.desc[item.label] = item.remark;

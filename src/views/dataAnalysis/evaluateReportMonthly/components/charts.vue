@@ -204,23 +204,26 @@
       </div>
     </div>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="cancel">取消</el-button>
+      <el-button type="text" @click="cancel">取消</el-button>
+      <el-button v-if="showSubmit" type="primary" @click="submit">提交</el-button>
     </div>
+    <selectEmp ref="selectEmp" @on-submit="doSubmitHandle" />
   </el-dialog>
 </template>
 
 <script>
 import echart from "@/components/Charts";
-import { getRiskAssessmentChartData, riskControlAdd } from "@/api/risk";
+import { getRiskAssessmentChartData, riskControlAdd, riskControlModify, riskControlSubmit } from "@/api/risk";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import { mapGetters } from "vuex";
 import { uploadProcessPDF } from '@/api/upload'
+import selectEmp from './selectEmplotee'
 
 const monthString = "1月,2月,3月,4月,5月,6月,7月,8月,9月,10月,11月,12月";
 const monthxAxis = monthString.split(",");
 export default {
-  components: { echart },
+  components: { echart, selectEmp },
   data() {
     return {
       loading: false,
@@ -281,6 +284,14 @@ export default {
       type: Array,
       default: () => [],
     },
+    showSubmit: {
+      type: Boolean,
+      default: false
+    },
+    source: {
+      type: String,
+      default: 'tab2'
+    }
   },
   watch: {
     data: {
@@ -332,14 +343,18 @@ export default {
       item.deptPathList = val;
     },
     submit() {
+      this.$refs.selectEmp.dialog = true;
+
+    },
+    doSubmitHandle(sqlUserId) {
       this.$loading();
       // Timeout优化加载状态
       let time = setTimeout(() => {
         window.clearTimeout(time);
-        this.exportPDF();
+        this.exportPDF(sqlUserId);
       }, 1000);
     },
-    exportPDF() {
+    exportPDF(sqlUserId) {
       let dom = document.getElementsByClassName("toPDF");
       // 计算总页数
       let totalPage = 0;
@@ -411,18 +426,39 @@ export default {
                 this.$loading().close();
               } else {
                 this.formData.riskControl.fileId = res.obj.id;
-                let paramsD = { ...this.formData, year: this.form.dateValue1, month: this.form.dateValue2 };
-                riskControlAdd(paramsD).then(res => {
-                  this.$loading().close();
-                  if (res.code != '200') {
-                    this.$message.error(res.msg);
-                    this.loading = false;
+                // 格式化获取图的注释
+                let riskControlChartList = [];
+                for (let x in this.desc) {
+                  riskControlChartList.push({
+                    label: x,
+                    remark: this.desc[x]
+                  })
+                }
+                this.formData.riskControl.riskControlChartList = riskControlChartList;
+                // 保存附件id
+                riskControlModify(this.formData).then((res) => {
+                  if (res.code === "200") {
+                    // 提交
+                    riskControlSubmit(this.formData.riskControl.id, { sqlUserId }).then((res) => {
+                      this.$loading().close();
+                      if (res.code != "200") {
+                        this.$message.error(res.msg);
+                      } else {
+                        this.$message.success("提交成功");
+                        this.resetForm()
+                        if (this.source == 'form') {
+                          this.$parent.$parent.resetForm();
+                          this.$parent.$parent.$parent.init();
+                        } else {
+                          this.$parent.init();
+                        }
+                      }
+                    });
                   } else {
-                    this.$message.success("提交成功");
-                    // pdf.save("月度风险评价报告.pdf");
+                    this.$message.error(res.msg);
                     this.$loading().close();
                   }
-                })
+                });
               }
             })
           }
@@ -1054,9 +1090,6 @@ export default {
       }
     },
     cancel() {
-      this.resetForm();
-    },
-    doSubmit() {
       this.resetForm();
     },
     resetForm() {

@@ -43,8 +43,9 @@ export default {
         .then((res) => {
           this.$loading().close();
           if (res) {
+            let url = this.redirect == 'index' ? '/' : '/smart';
             this.$router.push({
-              path: "/smart",
+              path: url,
               query: this.otherQuery,
             }, () => {
               // 重新获取用户信息
