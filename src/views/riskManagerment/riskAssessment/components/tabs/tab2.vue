@@ -19,7 +19,7 @@
         size="mini"
         type="success"
         icon="el-icon-upload"
-        @click="submit"
+        @click="doSubmit()"
         :disabled="selections.length!=1"
       >提交</el-button>
     </div>
@@ -224,10 +224,10 @@ export default {
     },
     chooseAndSubmit(sqlUserId) {
       let id = this.selections[0];
-      const params = {
+      /* const params = {
         staffno: sqlUserId
-      }
-      specialRiskSubmit(id, params).then((res) => {
+      } */
+      specialRiskSubmit(id).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {

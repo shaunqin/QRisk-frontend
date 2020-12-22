@@ -1337,7 +1337,7 @@ export default {
       return this.data.issueDept
     },
     noticeEnable() {
-      if (this.data.step == '1' && this.roles.length == 2 && this.roles.includes('RISK_MANAGER_LEADER') && (this.data.childNotes == null || this.data.childNotes.length == 0)) {
+      if (this.data.step == '1' && (this.roles.length == 2 || this.roles.length > 2) && this.roles.includes('RISK_MANAGER_LEADER') && (this.data.childNotes == null || this.data.childNotes.length == 0)) {
         return true;
       } return false;
     }

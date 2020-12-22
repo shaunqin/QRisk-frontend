@@ -15,20 +15,37 @@
       label-width="100px"
     >
       <el-row :gutter="16">
-        <el-col :span="12">
-          <el-form-item label="标题" prop="title">
-            <el-input v-model="form.title"></el-input>
+        <el-col :span="12" v-if="isAdd">
+          <el-form-item label="类型">
+            <el-select
+              v-model="form.type"
+              placeholder="请选择类型"
+              :disabled="assessmentType == '1' || assessmentType == '3'"
+              style="width: 100%"
+            >
+              <el-option label="通知" value="1"></el-option>
+              <el-option label="评估" value="2"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="截止日期">
-            <el-date-picker
-              v-model="form.endTime"
-              value-format="yyyy-MM-dd"
-              style="width: 100%"
-              :picker-options="pickerOptions"
-            ></el-date-picker>
-          </el-form-item>
+        <el-col :span="24">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="标题" prop="title">
+                <el-input v-model="form.title"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="截止日期">
+                <el-date-picker
+                  v-model="form.endTime"
+                  value-format="yyyy-MM-dd"
+                  style="width: 100%"
+                  :picker-options="pickerOptions"
+                ></el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-col>
         <el-col :span="24">
           <el-form-item label="通知内容">
@@ -91,18 +108,6 @@
                 ></i>
               </el-popconfirm>
             </span>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24" v-if="isAdd">
-          <el-form-item label="类型">
-            <el-select
-              v-model="form.type"
-              placeholder="请选择类型"
-              :disabled="assessmentType == '1' || assessmentType == '3'"
-            >
-              <el-option label="通知" value="1"></el-option>
-              <el-option label="评估" value="2"></el-option>
-            </el-select>
           </el-form-item>
         </el-col>
       </el-row>
@@ -310,9 +315,9 @@
           v-for="(item, index) in form.hazardList"
           :key="index"
         >
-        <div slot="header" class="clearfix">
-          <span>危险源{{index+1}}</span>
-        </div>
+          <div slot="header" class="clearfix">
+            <span>危险源{{ index + 1 }}</span>
+          </div>
           <el-form size="mini" inline label-width="70px">
             <el-form-item label="系统">
               <el-select
@@ -334,7 +339,10 @@
               />
             </el-form-item>
             <el-form-item label="管理流程">
-              <el-input v-model="item.managementProcess" @input="$forceUpdate()"></el-input>
+              <el-input
+                v-model="item.managementProcess"
+                @input="$forceUpdate()"
+              ></el-input>
             </el-form-item>
             <el-form-item label="危险源层级一" label-width="115px">
               <el-select
@@ -515,13 +523,13 @@
 
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
-      <el-button :loading="loading" type="primary" @click="doSubmit()">{{
+      <el-button :loading="loading" type="primary" @click="doSubmit(false)">{{
         form.type == '2' ? '暂存' : '确认'
       }}</el-button>
       <el-button
         v-if="form.type == '2'"
         type="success"
-        @click="submit"
+        @click="doSubmit(true)"
         :loading="loading"
         >提交</el-button
       >
@@ -641,7 +649,7 @@ export default {
       this.form.issueDepts = null
     },
     'form.releasePath'(val) {
-      if(this.form.type=='1') {
+      if (this.form.type == '1') {
         this.form.issueDepts = null
       }
     },
@@ -681,14 +689,16 @@ export default {
       this.resetForm()
     },
     doSubmit(sqlUserId) {
-      if(!this.form.issueDepts || !this.form.title) return this.$message.error('请填写完整！')
+      if (!this.form.issueDepts || !this.form.title)
+        return this.$message.error('请填写完整！')
       this.loading = true
       if (this.isAdd) {
         this.doAdd(sqlUserId)
       } else this.doModify(sqlUserId)
     },
     submit() {
-      if(!this.form.issueDepts || !this.form.title) return this.$message.error('请填写完整！')
+      if (!this.form.issueDepts || !this.form.title)
+        return this.$message.error('请填写完整！')
       let _this = this.$refs.selectEmplotee
       // _this.id = this.selections[0];
       _this.dialog = true
@@ -705,7 +715,6 @@ export default {
       specialRiskAdd({
         ...this.form,
         submit: submit,
-        staffno: sqlUserId,
         issueDepts: issueDepts,
       })
         .then((res) => {
@@ -734,7 +743,11 @@ export default {
       } else {
         issueDepts = this.form.issueDepts
       }
-      specialRiskModify({...this.form, submit: submit, staffno: sqlUserId, issueDepts: issueDepts})
+      specialRiskModify({
+        ...this.form,
+        submit: submit,
+        issueDepts: issueDepts,
+      })
         .then((res) => {
           if (res.code === '200') {
             this.$message({
@@ -760,7 +773,7 @@ export default {
         endTime: '', // 截止日期
         noteContent: '', // 通知内容
         issueDepts: null, // 下发部门
-        releasePath: this.deptList.length>0?this.deptList[0].deptPath:'',
+        releasePath: this.deptList.length > 0 ? this.deptList[0].deptPath : '',
         assType: '', // 评估类别
         analysisTitle: '', // 分析标题
         analysisNo: '', // 分析编号
