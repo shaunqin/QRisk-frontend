@@ -35,17 +35,21 @@
       </el-table-column> -->
       <el-table-column prop="releasePathName" label="发起部门" width="130" />
       <el-table-column prop="createBy" label="发起人" width="130" />
-      <el-table-column prop="createTime" label="发起时间" width="140" />
+      <el-table-column prop="createTime" label="发起时间" width="140">
+        <template slot-scope="{row}">
+          {{format(row.createTime)}}
+        </template>
+      </el-table-column>
       <el-table-column prop="issueDeptName" label="下发部门" width="130" />
       <el-table-column prop="status" label="状态" width="130">
         <template slot-scope="{ row }">
           <span v-if="row.status == 0"><el-tag type="warning">创建提交</el-tag></span>
           <span v-if="row.status == 1"><el-tag type="warning">下发中</el-tag></span>
-          <span v-if="row.status == 2"><el-tag type="warning">其他</el-tag></span>
+          <span v-if="row.status == 2"><el-tag type="warning">待审批</el-tag></span>
           <span v-if="row.status == 3"><el-tag type="warning">领导驳回</el-tag></span>
           <span v-if="row.status == 4"><el-tag type="warning">上报中</el-tag></span>
           <span v-if="row.status == 5"><el-tag type="warning">措施待填报</el-tag></span>
-          <span v-if="row.status == 6"><el-tag type="warning">其他</el-tag></span>
+          <span v-if="row.status == 6"><el-tag type="warning">措施下发</el-tag></span>
           <span v-if="row.status == 7"><el-tag type="warning">措施待审核</el-tag></span>
           <span v-if="row.status == 8"><el-tag type="warning">措施审核中</el-tag></span>
           <span v-if="row.status == 9"><el-tag type="warning">措施驳回中</el-tag></span>

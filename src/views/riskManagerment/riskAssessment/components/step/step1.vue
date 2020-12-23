@@ -370,6 +370,8 @@
                 v-model="row.rootCauseAnalysis"
                 placeholder
                 @input="forceUpdate()"
+                type="textarea"
+                rows="2"
               ></el-input>
             </template>
           </el-table-column>
@@ -380,6 +382,8 @@
                   <el-input
                     v-model="item.controlMeasure"
                     placeholder
+                    type="textarea"
+                    rows="2"
                   ></el-input>
                 </li>
               </ul>
@@ -551,32 +555,20 @@
               <dict-select
                 :clearable="false"
                 :value="item.possibility"
+                :showName="true"
                 type="probability_level"
                 @change="dictChange($event, item, 'possibility')"
                 style="width: 130px"
               />
-              <!-- <el-select
-                v-model="item.possibility"
-                style="width: 100%"
-                @change="forceUpdate()"
-                :disabled="false"
-              >
-                <el-option
-                  v-for="itemDict in dictList"
-                  :key="itemDict.key"
-                  :label="`${itemDict.value}(${itemDict.name})`"
-                  :value="itemDict.value"
-                ></el-option>
-              </el-select> -->
             </el-form-item>
             <el-form-item label="严重性">
               <dict-select
                 :clearable="false"
                 :value="item.seriousness"
+                :showName="true"
                 type="severity_level_matrix_graph"
                 @change="dictChange($event, item, 'seriousness')"
               />
-              
             </el-form-item>
             <el-form-item label="风险等级">
               <dict-select
@@ -586,19 +578,6 @@
                 style="width: 130px"
                 :disabled="true"
               />
-              <!-- <el-select
-                v-model="item.riskLevel"
-                style="width: 100%"
-                @change="forceUpdate()"
-                :disabled="false"
-              >
-                <el-option
-                  v-for="itemDict in dictList"
-                  :key="itemDict.key"
-                  :label="`${itemDict.value}(${itemDict.name})`"
-                  :value="itemDict.value"
-                ></el-option>
-              </el-select> -->
             </el-form-item>
             <el-row :gutter="16" class="fill-row">
               <el-col :span="12">
@@ -716,7 +695,6 @@
     <report
       ref="report"
       :formId="formId"
-      :disabled="true"
       @change="formIdChange"
     />
     <!-- <ehandle ref="ehandle" />
@@ -1386,10 +1364,12 @@ export default {
     formatShortDate,
     showReport() {
       this.formId = this.data.id
+      this.$refs.report.disabled = this.data.step != '1'
       this.$refs.report.dialog = true
     },
     formIdChange(val) {
       this.formId = val
+      this.$forceUpdate()
     },
     addCol() {
       this.data.specialRiskAnalyses.push({
@@ -1406,9 +1386,11 @@ export default {
         input: '', // 输入
         output: '', // 输出
       })
+      this.$forceUpdate()
     },
     delAnalysesCol(index) {
       this.data.specialRiskAnalyses.splice(index, 1)
+      this.$forceUpdate()
     },
     addHazard() {
       this.data.hazardList.push({
@@ -1455,6 +1437,7 @@ export default {
         deadline: '',
         reponsibleDept: null,
       })
+      this.$forceUpdate()
     },
     delCol(index, item) {
       item.specialRiskMeasureList.splice(index, 1)
@@ -1546,6 +1529,7 @@ export default {
         row.specialRiskMeasureList[0].reponsibleDept = null
         row.specialRiskMeasureList[0].measureStatus = '2'
       }
+      this.$forceUpdate()
     },
     forceUpdate() {
       this.data.hazardList = this.list

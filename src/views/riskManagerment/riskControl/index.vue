@@ -160,7 +160,7 @@ export default {
     detail(row) {
       let _this = this.$refs.detail;
       const params = {
-        noteId: row.noteId
+        measureId: row.id
       }
       getEvalReport(params).then(res => {
         if (res.code != '200') {

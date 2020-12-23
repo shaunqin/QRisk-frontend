@@ -823,6 +823,7 @@ export default {
         ],
         file: [],
       }
+      this.$forceUpdate()
     },
     deptChange(val, key) {
       this.form[key] = val
@@ -847,9 +848,11 @@ export default {
         input: '', // 输入
         output: '', // 输出
       })
+      this.$forceUpdate()
     },
     delCol(index) {
       this.form.specialRiskAnalyses.splice(index, 1)
+      this.$forceUpdate()
     },
     dictChange(val, item, key) {
       item[key] = val
@@ -883,9 +886,11 @@ export default {
         subSystem: '',
         product: '维修工程',
       })
+      this.$forceUpdate()
     },
     delHazard(index) {
       this.form.hazardList.splice(index, 1)
+      this.$forceUpdate()
     },
     addSrmRow(item) {
       item.specialRiskMeasureList.push({
@@ -893,9 +898,11 @@ export default {
         deadline: '',
         reponsibleDept: null,
       })
+      this.$forceUpdate()
     },
     delSrmRow(index, item) {
       item.specialRiskMeasureList.splice(index, 1)
+      this.$forceUpdate()
     },
     srmDeptChange(val, row) {
       row.reponsibleDept = val
@@ -939,6 +946,7 @@ export default {
       } else {
         this.form.file = this.form.file ? this.form.file : []
         this.form.file.push(res.obj)
+        this.$forceUpdate()
       }
     },
     getUrl(url) {
@@ -958,6 +966,7 @@ export default {
             ),
             1
           )
+          this.$forceUpdate()
         }
       })
     },

@@ -107,7 +107,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { specialRiskComplete, specialRiskSaveHazard } from '@/api/risk'
+import { specialRiskComplete, specialRiskSaveHazard, queryIsLM } from '@/api/risk'
 import step1 from './step/step1'
 import step2 from './step/step2'
 import step3 from './step/step3'
@@ -269,7 +269,14 @@ export default {
     },
     doHairdown() {
       if (this.step == 1) {
-        this.$refs.hairdown.dialog = true
+        queryIsLM(this.data.id).then(res => {
+          if (res.code != '200') {
+            this.$message.error(res.msg)
+          } else {
+            this.$refs.hairdown.deptBool = res.obj
+            this.$refs.hairdown.dialog = true
+          }
+        })
       } else {
         // 措施下发
         this.form.processFlag = '3'
@@ -347,7 +354,8 @@ export default {
         } else {
           if (res.obj) {
             this.formId = this.data.id
-            this.$refs.reportRef.dialog = true
+            this.$refs.reportRef.disabled = this.data.step != '1'
+            this.$refs.reportRef.dialog = this.data.hiddenReport?false:true
           } else {
             this.$message.success('填报成功')
             this.$parent.init()

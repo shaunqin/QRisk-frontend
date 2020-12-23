@@ -100,7 +100,6 @@
 
 <script>
 import { specialRiskComplete } from '@/api/risk'
-import hairdown from './hairdown'
 import ccPerson from './ccPerson'
 import { formatShortDate } from '@/utils/datetime'
 export default {
