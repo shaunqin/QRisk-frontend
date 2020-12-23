@@ -7,7 +7,15 @@
     title="风险评价报告"
     custom-class="big_dialog"
   >
-    <el-card>
+    <div style="text-align: right; margin-bottom: 5px;">
+    <el-button
+      class="mb"
+      type="warning"
+      icon="el-icon-download"
+      @click="doExport()"
+    >导出</el-button>
+    </div>
+    <el-card header="详细信息">
       <el-form class="form" size="mini" label-width="85px">
         <el-form-item label="标题">{{ form.analysisTitle }}</el-form-item>
         <el-row :gutter="16">
@@ -150,7 +158,7 @@
 </template>
 
 <script>
-import { specialRiskGetEvalReport, specialRiskSaveEvalReport } from '@/api/risk'
+import { specialRiskGetEvalReport, specialRiskSaveEvalReport, exportEvalReport } from '@/api/risk'
 import { formatShortDate } from '@/utils/datetime'
 import department from '@/components/Department'
 
@@ -161,16 +169,13 @@ export default {
       loading: false,
       dialog: false,
       form: {},
+      disabled: false,
     }
   },
   props: {
     formId: {
       type: String,
       default: '',
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
     },
   },
   computed: {
@@ -224,6 +229,18 @@ export default {
     },
     deptChange(val, key) {
       this.form[key] = val
+    },
+    doExport() {
+      this.$loading();
+      exportEvalReport(this.form.id).then(res => {
+        this.$loading().close();
+        if (res.code != '200') {
+          this.$message.error(res.obj);
+        } else {
+          let url = `${process.env.VUE_APP_BASE_API}${res.obj}`;
+          location.href = url;
+        }
+      })
     },
   },
 }

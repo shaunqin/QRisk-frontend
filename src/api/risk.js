@@ -320,6 +320,13 @@ export function specialRiskSaveEvalReport(data) {
     data
   })
 }
+// 导出当前风险评价报告
+export function exportEvalReport(id) {
+  return request({
+    url: `/risk_mgr/special_risk_notice_mgr/export/evalReport/${id}`,
+    method: 'get'
+  })
+}
 // 查询风险等级
 export function specialRiskQueryRiskLevel(hazard, risk) {
   return request({
@@ -361,6 +368,21 @@ export function queryTableList() {
 export function querySpeRiskMgrDept() {
   return request({
     url: `/risk_mgr/special_risk_notice_mgr/query/riskMgrDepts`,
+    method: 'get',
+  })
+}
+// 提醒风险管理员
+export function specialNoticeRiskManger(data) {
+  return request({
+    url: `/risk_mgr/special_risk_notice_mgr/noticeRiskManger`,
+    method: 'post',
+    data
+  })
+}
+// 发起单位
+export function queryIsLM(id) {
+  return request({
+    url: `/risk_mgr/special_risk_notice_mgr/isLM/${id}`,
     method: 'get',
   })
 }

@@ -3,14 +3,21 @@
     <el-table :data="data.childNotes" size="mini">
       <el-table-column label="截止日期" prop="endTime" width="100">
         <template slot-scope="{ row }">
-          {{
-          formatShortDate(row.endTime) || '-'
-          }}
+          {{ formatShortDate(row.endTime) || '-' }}
         </template>
       </el-table-column>
-      <el-table-column label="下发部门" prop="issueDeptName" width="110" show-overflow-tooltip />
+      <el-table-column
+        label="下发部门"
+        prop="issueDeptName"
+        width="110"
+        show-overflow-tooltip
+      />
       <el-table-column label="通知内容" prop="noteContent" />
-      <el-table-column label="上报人" prop="reporter" width="120"></el-table-column>
+      <el-table-column
+        label="上报人"
+        prop="reporter"
+        width="120"
+      ></el-table-column>
       <el-table-column label="附件预览" width="120">
         <template slot-scope="{ row }">
           <div v-for="(item, index) in row.accessory" :key="index">
@@ -19,7 +26,8 @@
               v-if="item != null"
               :href="getUrl(item.filePath)"
               target="_blank"
-            >{{ item.originFileName }}</el-link>
+              >{{ item.originFileName }}</el-link
+            >
           </div>
         </template>
       </el-table-column>
@@ -52,7 +60,10 @@
           <div v-if="row.noteComment == null">-</div>
           <el-popover v-else placement="left" width="1000">
             <el-button type="text" size="mini" slot="reference">详情</el-button>
-            <leaderApprvalRecord :data="row.noteComment" type="safety_measures" />
+            <leaderApprvalRecord
+              :data="row.noteComment"
+              type="safety_measures"
+            />
           </el-popover>
         </template>
       </el-table-column>
@@ -65,7 +76,8 @@
             size="mini"
             @click="doHandle(row)"
             :loading="reviewLoading"
-          >办理</el-button>
+            >办理</el-button
+          >
           <!-- <el-button
             v-if="row.hiddenSubIssue"
             type="primary"
@@ -76,8 +88,14 @@
         </template>
       </el-table-column>
       <el-table-column label="通知记录" v-if="showIssueRecord">
-        <template slot-scope="{row}">
-          <el-button size="mini" type="primary" @click="issueRecord(row)" :loading="tbLoading">查询</el-button>
+        <template slot-scope="{ row }">
+          <el-button
+            size="mini"
+            type="primary"
+            @click="issueRecord(row)"
+            :loading="tbLoading"
+            >查询</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -93,15 +111,21 @@
   </div>
 </template>
 <script>
-import leaderApprvalRecord from "./leaderApprvalRecord";
-import handleNotes from "./handleTo4";
+import leaderApprvalRecord from './leaderApprvalRecord'
+import handleNotes from './handleTo4'
 import hairdown from './hairdown'
-import { specialRiskFill, queryIssueTreeNoteData } from "@/api/risk";
+import { specialRiskFill, queryIssueTreeNoteData, queryIsLM } from '@/api/risk'
 import cmdIssue from './cmdIssueTreeTable'
 import { format, formatShortDate } from '@/utils/datetime'
 import transactor from '@/components/common/transactor'
 export default {
-  components: { leaderApprvalRecord, handleNotes, cmdIssue, hairdown, transactor },
+  components: {
+    leaderApprvalRecord,
+    handleNotes,
+    cmdIssue,
+    hairdown,
+    transactor,
+  },
   props: {
     data: {
       type: Object,
@@ -109,25 +133,25 @@ export default {
     },
     source: {
       type: String,
-      default: ''
+      default: '',
     },
     showIssueRecord: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
       reviewLoading: false,
       tbLoading: false,
-      formHairdown: {}
+      formHairdown: {},
     }
   },
   methods: {
     format,
     formatShortDate,
     getUrl(url) {
-      return process.env.VUE_APP_BASE_API + url;
+      return process.env.VUE_APP_BASE_API + url
     },
     doHandle(row) {
       this.reviewLoading = true
@@ -157,25 +181,32 @@ export default {
       })
     },
     doHairdown(row) {
-      this.formHairdown.formId = row.id
-      this.formHairdown.taskId = row.parentTaskId
-      this.formHairdown.pathAndDeadLines = []
-      this.$refs.noteHairdown.dialog = true;
-    },
-    issueRecord(row) {
-      this.tbLoading = true;
-      const issueType = '1';
-      queryIssueTreeNoteData(issueType, row.parentId).then(res => {
-        this.tbLoading = false;
+      queryIsLM(this.data.id).then((res) => {
         if (res.code != '200') {
-          this.$message.error(res.msg);
+          this.$message.error(res.msg)
         } else {
-          let _this = this.$refs.cmdIssueNotes;
-          _this.data = res.obj;
-          _this.dialog = true;
+          this.$refs.noteHairdown.deptBool = res.obj
+          this.formHairdown.formId = row.id
+          this.formHairdown.taskId = row.parentTaskId
+          this.formHairdown.pathAndDeadLines = []
+          this.$refs.noteHairdown.dialog = true
         }
       })
-    }
+    },
+    issueRecord(row) {
+      this.tbLoading = true
+      const issueType = '1'
+      queryIssueTreeNoteData(issueType, row.parentId).then((res) => {
+        this.tbLoading = false
+        if (res.code != '200') {
+          this.$message.error(res.msg)
+        } else {
+          let _this = this.$refs.cmdIssueNotes
+          _this.data = res.obj
+          _this.dialog = true
+        }
+      })
+    },
   },
 }
 </script>

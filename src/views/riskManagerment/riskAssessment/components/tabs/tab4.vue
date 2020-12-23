@@ -27,6 +27,7 @@
       </el-table-column>
       <el-table-column prop="createBy" label="发起人" width="130" />
       <el-table-column prop="createTime" label="发起时间" width="140" />
+      <el-table-column prop="daysRemained" label="剩余天数" width="140" show-overflow-tooltip />
       <el-table-column label="操作" width="100" fixed="right">
         <template slot-scope="{row}">
           <!-- <el-button type="primary" size="mini" @click="doFillin(row)">填报</el-button> -->

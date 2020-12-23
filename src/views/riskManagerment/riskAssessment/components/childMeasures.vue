@@ -110,7 +110,7 @@
 import leaderApprvalRecord from "./leaderApprvalRecord";
 import handleMeasures from "./handleTo4";
 import hairdown from './hairdown'
-import { specialRiskFill, queryIssueTreeNoteData } from "@/api/risk";
+import { specialRiskFill, queryIssueTreeNoteData, queryIsLM } from "@/api/risk";
 import cmdIssue from './cmdIssueTreeTable'
 import { format, formatShortDate } from '@/utils/datetime'
 export default {
@@ -170,10 +170,17 @@ export default {
       })
     },
     doHairdown(row) {
-      this.formHairdown.formId = row.id
-      this.formHairdown.taskId = row.parentTaskId
-      this.formHairdown.pathAndDeadLines = []
-      this.$refs.formHairdown.dialog = true;
+      queryIsLM(this.data.id).then(res => {
+          if (res.code != '200') {
+            this.$message.error(res.msg)
+          } else {
+            this.$refs.formHairdown.deptBool = res.obj
+            this.formHairdown.formId = row.id
+            this.formHairdown.taskId = row.parentTaskId
+            this.formHairdown.pathAndDeadLines = []
+            this.$refs.formHairdown.dialog = true;
+          }
+        })
     },
     issueRecord(row) {
       this.tbLoading = true;

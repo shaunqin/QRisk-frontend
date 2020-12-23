@@ -19,7 +19,7 @@
         size="mini"
         type="success"
         icon="el-icon-upload"
-        @click="submit"
+        @click="doSubmit()"
         :disabled="selections.length!=1"
       >提交</el-button>
     </div>
@@ -138,9 +138,7 @@ export default {
               _that.list.map((item, index) => {
                 item.possibility = obj.hazardVoList[index].possibility
                 item.rootCauseAnalysis = obj.hazardVoList[index].rootCauseAnalysis
-                item.specialRiskMeasureList[0].controlMeasure = obj.hazardVoList[index].specialRiskMeasureList[0].controlMeasure
-                item.specialRiskMeasureList[0].reponsibleDept = obj.hazardVoList[index].specialRiskMeasureList[0].reponsibleDept
-                item.specialRiskMeasureList[0].completion = obj.hazardVoList[index].specialRiskMeasureList[0].completion
+                item.specialRiskMeasureList = obj.hazardVoList[index].specialRiskMeasureList
               })
             }
             _that.dialog = true;
@@ -226,10 +224,10 @@ export default {
     },
     chooseAndSubmit(sqlUserId) {
       let id = this.selections[0];
-      const params = {
+      /* const params = {
         staffno: sqlUserId
-      }
-      specialRiskSubmit(id, params).then((res) => {
+      } */
+      specialRiskSubmit(id).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {

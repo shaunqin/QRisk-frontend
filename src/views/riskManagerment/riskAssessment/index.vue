@@ -168,7 +168,7 @@ export default {
   computed: {
     ...mapGetters(["roles"]),
     onlyLeader() {
-      if (this.roles.length == 2 && this.roles.includes('RISK_MANAGER_LEADER')) {
+      if ((this.roles.length == 2 || this.roles.length > 2) && this.roles.includes('RISK_MANAGER_LEADER')) {
         this.tabIndex = "4";
         return true;
       } else {

@@ -158,9 +158,7 @@ export default {
               _this.list.map((item, index) => {
                 item.possibility = res.obj.hazardVoList[index].possibility
                 item.rootCauseAnalysis = res.obj.hazardVoList[index].rootCauseAnalysis
-                item.specialRiskMeasureList[0].controlMeasure = res.obj.hazardVoList[index].specialRiskMeasureList[0].controlMeasure
-                item.specialRiskMeasureList[0].reponsibleDept = res.obj.hazardVoList[index].specialRiskMeasureList[0].reponsibleDept
-                item.specialRiskMeasureList[0].completion = res.obj.hazardVoList[index].specialRiskMeasureList[0].completion
+                item.specialRiskMeasureList = res.obj.hazardVoList[index].specialRiskMeasureList
               })
             }
             _this.dialog = true;

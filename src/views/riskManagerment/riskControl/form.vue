@@ -17,7 +17,6 @@
             <el-input type="textarea" :rows="4" v-model="form.bb" style="width: 100%;" />
           </el-form-item>
         </el-col>
-         
       </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">

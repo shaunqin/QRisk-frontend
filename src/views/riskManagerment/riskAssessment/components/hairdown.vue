@@ -9,6 +9,14 @@
     <el-form ref="form" :model="form" size="small">
       <el-form-item label="选择部门" label-width="80px">
         <department
+          v-if="deptBool"
+          :value="multiple?form.pathAndDeadLines:''"
+          :multiple="multiple"
+          @change="deptChange"
+          style="width:100%"
+        />
+        <deptByRole
+          v-else
           :value="multiple?form.pathAndDeadLines:''"
           :multiple="multiple"
           @change="deptChange"
@@ -27,16 +35,18 @@
 
 <script>
 import { specialRiskComplete, specialRiskIssue } from "@/api/risk";
-import department from '@/components/Department/deptByRole'
+import deptByRole from '@/components/Department/deptByRole'
+import department from '@/components/Department'
 
 export default {
-  components: { department },
+  components: { deptByRole, department },
   data() {
     return {
       loading: false,
       dialog: false,
       measureId: "",
-      parentTaskId: ""
+      parentTaskId: "",
+      deptBool: false
     };
   },
   props: {

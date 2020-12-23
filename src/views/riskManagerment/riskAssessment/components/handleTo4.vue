@@ -52,8 +52,8 @@
             <ul class="tab-ul">
               <li v-for="item in row.specialRiskMeasureList" :key="item.id">
                 <el-popover trigger="hover" v-if="true" placement="top">
-                  <span>{{ item.completionName }}</span>
-                  <div class="text" slot="reference">{{ item.completionName }}</div>
+                  <span>{{ item.measureStatus }}</span>
+                  <div class="text" slot="reference">{{ item.measureStatus }}</div>
                 </el-popover>
               </li>
             </ul>
@@ -100,7 +100,6 @@
 
 <script>
 import { specialRiskComplete } from '@/api/risk'
-import hairdown from './hairdown'
 import ccPerson from './ccPerson'
 import { formatShortDate } from '@/utils/datetime'
 export default {
