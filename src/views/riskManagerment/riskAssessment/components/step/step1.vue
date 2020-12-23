@@ -453,6 +453,7 @@
             size="mini"
             @click="addHazard"
             style="margin-bottom: 10px"
+            :disabled="formEnable"
             >新增危险源</el-button
           >
         </el-badge>
