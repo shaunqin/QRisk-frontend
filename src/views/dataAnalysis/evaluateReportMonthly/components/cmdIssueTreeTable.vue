@@ -15,29 +15,32 @@
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
       <el-table-column label="部门" prop="deptName" width="200" align="left" show-overflow-tooltip />
-      <el-table-column label="截止日期">
-        <template slot-scope="{row}">{{row.data.deadline}}</template>
+      <el-table-column label="措施内容" v-if="!implementEnable">
+        <template slot-scope="{row}">
+          <span v-if="!row.data.riskVoList">-</span>
+          <ul class="ul-risk" v-else>
+            <li v-for="item in row.data.riskVoList" :key="item.id">{{item.riskMeasures}}</li>
+          </ul>
+        </template>
       </el-table-column>
-      <el-table-column label="措施内容">
-        <template slot-scope="{row}">{{row.data.content}}</template>
+      <el-table-column label="截止日期" v-if="!implementEnable">
+        <template slot-scope="{row}">
+          <span v-if="!row.data.riskVoList">-</span>
+          <ul class="ul-risk" v-else>
+            <li v-for="item in row.data.riskVoList" :key="item.id">{{item.deadline}}</li>
+          </ul>
+        </template>
       </el-table-column>
-      <el-table-column label="落实情况">
-        <template slot-scope="{row}">{{row.data.impl}}</template>
+      <el-table-column label="落实情况" v-if="implementEnable">
+        <template slot-scope="{row}">
+          <span v-if="!row.data.measuresVoList">-</span>
+          <ul class="ul-risk" v-else>
+            <li v-for="item in row.data.measuresVoList" :key="item.id">{{item.implementationMeasures}}</li>
+          </ul>
+        </template>
       </el-table-column>
       <el-table-column label="下发人" prop="issuer" width="130" />
       <el-table-column label="上报人" prop="filler" width="130" />
-      <el-table-column label="附件预览">
-        <template slot-scope="{row}">
-          <div v-for="(item, index) in row.data.files" :key="index">
-            <el-link
-              type="primary"
-              v-if="item!=null"
-              :href="getUrl(item.filePath)"
-              target="_blank"
-            >{{item.originFileName}}</el-link>
-          </div>
-        </template>
-      </el-table-column>
       <el-table-column label="状态" width="80">
         <template slot-scope="{row}">
           <span v-if="row.status==0">待填</span>
@@ -84,6 +87,14 @@ export default {
       data: []
     }
   },
+  computed: {
+    implementEnable() {
+      if (this.data.length > 0) {
+        return this.data[0].data.tag == '1'
+      }
+      return false
+    }
+  },
   methods: {
     cancel() {
       this.resetForm();
@@ -102,4 +113,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.ul-risk {
+  list-style: decimal;
+  text-align: left;
+  margin: 0;
+  padding-left: 10px;
+}
 </style>

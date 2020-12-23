@@ -6,24 +6,31 @@
       :data="data"
       size="small"
       :highlight-current-row="true"
-      style="width: 100%;"
+      style="width: 100%"
       @selection-change="selectionChange"
     >
       <el-table-column prop="no" label="编号" width="130" />
       <el-table-column label="主题" min-width="150" show-overflow-tooltip>
-        <template slot-scope="{row}">
-          <el-button type="text" @click="detail(row)">{{row.title}}</el-button>
+        <template slot-scope="{ row }">
+          <el-link
+            size="mini"
+            v-if="row.pdfUrl"
+            type="primary"
+            :href="pdfUrl(row)"
+            target="_blank"
+          >{{ row.title }}</el-link>
+          <span v-else>{{ row.title }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="background" label="背景" min-width="150" show-overflow-tooltip />
       <el-table-column prop="existingRisk" label="安全风险" min-width="150" show-overflow-tooltip />
       <el-table-column prop="responseDept" label="责任单位" show-overflow-tooltip />
       <el-table-column label="拟制人">
-        <template slot-scope="{row}">{{row.issueName}}[{{row.issuer}}]</template>
+        <template slot-scope="{ row }">{{ row.issueName }}[{{ row.issuer }}]</template>
       </el-table-column>
-      <el-table-column label>
-        <template slot-scope="{row}" v-if="row.pdfUrl!=null">
-          <el-link type="primary" :href="pdfUrl(row)" target="_blank">查看PDF</el-link>
+      <el-table-column label="操作" width="80">
+        <template slot-scope="{ row }">
+          <el-button size="mini" type="text" @click="detail(row)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -31,7 +38,7 @@
     <el-pagination
       :total="total"
       :current-page="page"
-      style="margin-top: 8px;text-align: right"
+      style="margin-top: 8px; text-align: right"
       layout="total, prev, pager, next, sizes"
       @size-change="sizeChange"
       @current-change="pageChange"
@@ -48,8 +55,7 @@ export default {
   components: { edetail },
   mixins: [initData],
   data() {
-    return {
-    };
+    return {};
   },
   mounted() {
     this.init();
@@ -60,8 +66,8 @@ export default {
       deep: true,
       handler() {
         this.init();
-      }
-    }
+      },
+    },
   },
   methods: {
     beforeInit() {
@@ -75,7 +81,7 @@ export default {
       this.$emit("selectionChange", { selections: selections });
     },
     detail(row) {
-      riskNoticeSubDetail(row.id).then(res => {
+      riskNoticeSubDetail(row.id).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
@@ -83,14 +89,13 @@ export default {
           _this.form = res.obj;
           _this.dialog = true;
         }
-      })
+      });
     },
     pdfUrl(row) {
-      return `${process.env.VUE_APP_BASE_API}${row.pdfUrl}`
-    }
+      return `${process.env.VUE_APP_BASE_API}${row.pdfUrl}`;
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

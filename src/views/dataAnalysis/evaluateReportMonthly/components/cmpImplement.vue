@@ -5,6 +5,12 @@
       <el-table-column label="风险" prop="riskName" />
       <el-table-column label="填报措施" prop="riskMeasures" />
       <el-table-column label="落实情况" prop="implementationMeasures" />
+      <el-table-column label="填报人">
+        <template slot-scope="{row}">
+          <span v-if="row.fillerName">{{`${row.fillerName}[${row.filler}]`}}</span>
+          <span v-else>-</span>
+        </template>
+      </el-table-column>
       <el-table-column label="办理人" width="80">
         <template slot-scope="{row}">
           <span v-if="!row.reviewerInfo">-</span>

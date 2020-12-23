@@ -21,9 +21,16 @@
       @selection-change="selectionChange"
     >
       <el-table-column prop="no" label="编号" width="130" />
-      <el-table-column label width="80">
-        <template slot-scope="{ row }" v-if="row.pdfUrl != null">
-          <el-link type="primary" :href="pdfUrl(row)" target="_blank">查看PDF</el-link>
+      <el-table-column label="主题" min-width="150" show-overflow-tooltip>
+        <template slot-scope="{row}">
+          <el-link
+           size="mini"
+            v-if="row.pdfUrl"
+            type="primary"
+            :href="pdfUrl(row)"
+            target="_blank"
+          >{{ row.title }}</el-link>
+          <span v-else>{{ row.title }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="background" label="背景" min-width="150" show-overflow-tooltip />
@@ -36,9 +43,9 @@
         <template slot-scope="{ row }">{{ formatShortDate(row.publishTime) }}</template>
       </el-table-column>
       <el-table-column label="发布单位" prop="dept"></el-table-column>
-      <el-table-column label="主题" min-width="150" show-overflow-tooltip>
+      <el-table-column label="操作" width="80">
         <template slot-scope="{row}">
-          <el-button type="text" @click="detail(row)">{{ row.title }}</el-button>
+          <el-button  size="mini" type="text" @click="detail(row)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>

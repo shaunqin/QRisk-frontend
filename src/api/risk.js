@@ -488,11 +488,19 @@ export function riskControlrRespDeptTree(params) {
   })
 }
 // 提醒风险管理员
-export function rriskControlrNoticeRiskManger(data) {
+export function riskControlrNoticeRiskManger(data) {
   return request({
     url: `/riskControlManage/riskControlManage/noticeRiskManger`,
     method: 'post',
     data
+  })
+}
+// 历史版本详情
+export function riskControlOriginFormByCommentId(params) {
+  return request({
+    url: `/riskControlManage/riskControlManage/getOriginFormByCommentId`,
+    method: 'get',
+    params
   })
 }
 // ======= 在控风险管理 end ========

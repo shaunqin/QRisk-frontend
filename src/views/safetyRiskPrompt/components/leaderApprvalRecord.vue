@@ -14,7 +14,7 @@
         </template>
       </el-table-column>
       <el-table-column label="备注" prop="remark" />
-      <el-table-column width="80">
+      <el-table-column width="80" label="操作">
         <template slot-scope="{row}">
           <el-button type="text" size="mini" @click="commentsDetail(row)">详情</el-button>
         </template>

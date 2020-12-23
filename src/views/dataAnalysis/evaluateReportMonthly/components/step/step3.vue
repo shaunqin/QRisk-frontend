@@ -81,7 +81,7 @@ import { formatShortDate } from '@/utils/datetime';
 import childRisk from '../childRisk'
 import department from '../department'
 import selectManager from '@/components/common/selectManager'
-import { rriskControlrNoticeRiskManger } from '@/api/risk'
+import { riskControlrNoticeRiskManger } from '@/api/risk'
 import baseinfo from './baseInfo'
 export default {
   components: { childRisk, department, selectManager, baseinfo },
@@ -194,7 +194,7 @@ export default {
     doSubmit(params) {
       params.id = this.data.deptRisk.id;
       console.log(params)
-      rriskControlrNoticeRiskManger(params).then(res => {
+      riskControlrNoticeRiskManger(params).then(res => {
         if (res.code != '200') {
           this.$message.error(res.msg);
         } else {

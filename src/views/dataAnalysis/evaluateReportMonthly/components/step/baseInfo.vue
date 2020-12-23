@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { rriskControlrNoticeRiskManger } from '@/api/risk'
+import { riskControlrNoticeRiskManger } from '@/api/risk'
 export default {
   data() {
     return {

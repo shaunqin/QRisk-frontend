@@ -14,19 +14,22 @@
         </template>
       </el-table-column>
       <el-table-column label="备注" prop="remark" />
-      <el-table-column width="80">
+      <el-table-column width="80" label="操作">
         <template slot-scope="{row}">
           <el-button type="text" size="mini" @click="commentsDetail(row)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <commentDetail ref="commentDetail" />
   </div>
 </template>
 
 <script>
-import { getOriginFormByCommentId } from "@/api/risk";
+import { riskControlOriginFormByCommentId } from "@/api/risk";
 import { format } from '@/utils/datetime'
+import commentDetail from './commentDetail'
 export default {
+  components: { commentDetail, },
   props: ["data", "type"],// type:safety_risk_notice,safety_measures
   methods: {
     format,
@@ -36,12 +39,12 @@ export default {
         formId: row.id,
         formName: row.formName
       }
-      getOriginFormByCommentId(params).then(res => {
+      riskControlOriginFormByCommentId(params).then(res => {
         if (res.code != '200') {
           this.$message.error(res.msg);
         } else {
           if (res.obj != null) {
-            _this.form = res.obj;
+            _this.data = res.obj;
             _this.dialog = true;
           } else {
             this.$message("无历史版本!")
