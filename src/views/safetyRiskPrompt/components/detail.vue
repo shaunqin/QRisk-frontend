@@ -6,6 +6,10 @@
     :visible.sync="dialog"
     :title="'详情'"
     custom-class="big_dialog"
+    v-loading="dialogLoading"
+    :fullscreen="fullscreen"
+    :close-on-press-escape="!fullscreen"
+    :show-close="!fullscreen"
   >
     <el-form ref="form" :model="form" size="small" label-width="auto">
       <el-row :gutter="16">
@@ -30,7 +34,7 @@
         </ul>
       </el-form-item>
       <el-form-item label="下发措施" v-if="form.firstLevelMeasure!=null">
-        <childMeasures :data="form.firstLevelMeasure" source="myIssued" />
+        <childMeasures :data="form.firstLevelMeasure" :source="fullscreen?'smart':'myIssued'" />
       </el-form-item>
       <el-form-item label="处理记录" v-if="noticeComments.length>0">
         <leaderApprvalRecord
@@ -43,7 +47,7 @@
         <transactor :data="form.reviewerInfo" width="100%" />
       </el-form-item>
     </el-form>
-    <div slot="footer" class="dialog-footer">
+    <div slot="footer" class="dialog-footer" v-if="!fullscreen">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
     </div>
@@ -62,10 +66,16 @@ export default {
     return {
       loading: false,
       dialog: false,
+      dialogLoading: false,
       form: {},
     };
   },
-  props: {},
+  props: {
+    fullscreen: {
+      type: Boolean,
+      default: false
+    }
+  },
   computed: {
     noticeComments() {
       if (this.form.noticeComments) {

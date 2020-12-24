@@ -6,6 +6,10 @@
     :visible.sync="dialog"
     title="详情"
     custom-class="big_dialog"
+    v-loading="dialogLoading"
+    :fullscreen="fullscreen"
+    :close-on-press-escape="!fullscreen"
+    :show-close="!fullscreen"
   >
     <el-card header="详细信息">
       <el-form size="small" label-width="80px" class="info" inline>
@@ -304,7 +308,7 @@
       <apprvalRecord :data="data.noticeComments" />
     </el-card>
 
-    <div slot="footer" class="dialog-footer">
+    <div slot="footer" class="dialog-footer" v-if="!fullscreen">
       <el-button type="primary" @click="cancel">取消</el-button>
     </div>
 
@@ -335,11 +339,16 @@ export default {
       type: Boolean,
       default: false,
     },
+    fullscreen:{
+      type:Boolean,
+      default:false
+    }
   },
   data() {
     return {
       formId: '',
       dialog: false,
+      dialogLoading:false,
       data: {},
       assessmentType: '',
       list: [

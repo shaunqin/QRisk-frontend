@@ -6,6 +6,10 @@
     :visible.sync="dialog"
     title="已办详情"
     custom-class="big_dialog"
+    v-loading="dialogLoading"
+    :fullscreen="fullscreen"
+    :close-on-press-escape="!fullscreen"
+    :show-close="!fullscreen"
   >
     <el-form ref="form" size="small" label-width="auto">
       <el-row :gutter="16">
@@ -46,7 +50,7 @@
         <cmpImplement :data="riskMeasuresExpVoList" />
       </el-form-item>
     </el-form>
-    <div slot="footer" class="dialog-footer">
+    <div slot="footer" class="dialog-footer" v-if="!fullscreen">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button type="primary" @click="doSubmit">确认</el-button>
     </div>
@@ -64,9 +68,16 @@ export default {
   data() {
     return {
       dialog: false,
+      dialogLoading: false,
       data: {},
       baseUrl: process.env.VUE_APP_BASE_API,
     };
+  },
+  props: {
+    fullscreen: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     childRisk() {
@@ -83,8 +94,8 @@ export default {
       }
     },
     riskMeasuresExpVoList() {
-      if (this.data.riskMeasuresExpVoList) {
-        return this.data.riskMeasuresExpVoList
+      if (this.data.riskControlMeasuresVoList) {
+        return this.data.riskControlMeasuresVoList
       } return []
     },
     measuresEnable() {

@@ -481,6 +481,12 @@ export function riskControlHasDoneDetail(taskId, formId) {
     method: 'get'
   })
 }
+export function riskControlHasDoneDetailByFormId(formId) {
+  return request({
+    url: `/riskControlManage/riskControlManage/query/queryHasDoneDetailByFormId/${formId}`,
+    method: 'get'
+  })
+}
 // 查询在控风险详情
 export function riskControlDetailByFormId(formId) {
   return request({

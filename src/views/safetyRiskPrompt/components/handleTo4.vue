@@ -113,8 +113,7 @@ export default {
             if (this.source == 'myIssued') {
               this.$parent.$parent.$parent.$parent.$parent.$parent.detail({ id: this.form.formId });
             } else if (this.source == "smart") {
-              debugger
-              this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.riskNotice();
+              location.reload();
             }
             else {
               this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.subHandle({ taskId: this.parentTaskId, formId: this.form.formId });

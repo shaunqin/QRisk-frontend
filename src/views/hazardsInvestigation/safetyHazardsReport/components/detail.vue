@@ -6,6 +6,10 @@
     :visible.sync="dialog"
     title="任务详情"
     custom-class="big_dialog"
+    v-loading="dialogLoading"
+    :fullscreen="fullscreen"
+    :close-on-press-escape="!fullscreen"
+    :show-close="!fullscreen"
   >
     <el-card header="详情">
       <el-form inline class="detail-form">
@@ -66,7 +70,7 @@
       key="detailFillin"
     />
 
-    <div slot="footer" class="dialog-footer">
+    <div slot="footer" class="dialog-footer" v-if="!fullscreen">
       <el-button type="primary" @click="cancel">确定</el-button>
     </div>
   </el-dialog>
@@ -85,10 +89,17 @@ export default {
     return {
       loading: false,
       dialog: false,
+      dialogLoading: false,
       data: {}, // 父组件赋值
       baseApi: process.env.VUE_APP_BASE_API,
       detailData: {},
       detailFillinData: []
+    }
+  },
+  props: {
+    fullscreen: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

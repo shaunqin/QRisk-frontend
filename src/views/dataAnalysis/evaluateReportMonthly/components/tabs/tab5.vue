@@ -9,7 +9,7 @@
       style="width: 100%;"
       @selection-change="selectionChange"
     >
-      <el-table-column prop="businessTitle" label="任务标题" show-overflow-tooltip />
+      <el-table-column prop="title" label="任务标题" show-overflow-tooltip />
       <el-table-column prop="createBy" label="发起人"  />
       <el-table-column prop="createTime" label="发起时间"  />
       <el-table-column label width="100">
@@ -34,7 +34,7 @@
 <script>
 import initData from "@/mixins/initData";
 import { format } from "@/utils/datetime";
-import { riskControlHasDoneDetail } from '@/api/risk';
+import { riskControlHasDoneDetailByFormId } from '@/api/risk';
 import edetail from '../doneDetail'
 export default {
   components: { edetail },
@@ -54,7 +54,7 @@ export default {
   methods: {
     format,
     beforeInit() {
-      this.url = `/riskControlManage/riskControlManage/query/hasDone/${this.page}/${this.size}`;
+      this.url = `/riskControlManage/riskControlManage/query/queryHasDone/${this.page}/${this.size}`;
       this.params = { ...this.queryForm };
       return true;
     },
@@ -64,7 +64,7 @@ export default {
       this.$emit("selectionChange", { selections: selections });
     },
     detail(row) {
-      riskControlHasDoneDetail(row.taskId, row.formId).then(res => {
+      riskControlHasDoneDetailByFormId(row.id).then(res => {
         if (res.code != '200') {
           this.$message.error(res.msg);
         } else {

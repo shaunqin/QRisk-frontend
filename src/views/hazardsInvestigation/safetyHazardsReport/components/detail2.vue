@@ -6,6 +6,10 @@
     :visible.sync="dialog"
     title="任务详情"
     custom-class="big_dialog"
+    v-loading="dialogLoading"
+    :fullscreen="fullscreen"
+    :close-on-press-escape="!fullscreen"
+    :show-close="!fullscreen"
   >
     <el-card>
       <div slot="header">
@@ -38,7 +42,7 @@
           <el-button type="primary" icon="el-icon-search" @click="toQuery">搜索</el-button>
           <el-button type="primary" icon="el-icon-refresh" @click="reset">重置</el-button>
         </el-form-item>
-      </el-form> -->
+      </el-form>-->
 
       <el-table v-loading="tbLoading" :data="tbList" size="small" style="width: 100%">
         <el-table-column type="index" label="序号"></el-table-column>
@@ -148,7 +152,7 @@
       </el-table>
     </el-card>
 
-    <div slot="footer" class="dialog-footer">
+    <div slot="footer" class="dialog-footer" v-if="!fullscreen">
       <el-button type="primary" @click="cancel">确定</el-button>
     </div>
   </el-dialog>
@@ -163,6 +167,7 @@ export default {
   data() {
     return {
       dialog: false,
+      dialogLoading: false,
       baseApi: process.env.VUE_APP_BASE_API,
       disabled: false,
       tbLoading: false,
@@ -174,6 +179,12 @@ export default {
         hiddenNo: ""
       },
       data: {}
+    }
+  },
+  props: {
+    fullscreen: {
+      type: Boolean,
+      default: false
     }
   },
   watch: {
