@@ -118,7 +118,7 @@
 </template>
 
 <script>
-import { specialRiskComplete } from '@/api/risk'
+import { keyRiskComplete } from '@/api/risk'
 import hairdown from './hairdown'
 import ccPerson from './ccPerson'
 import { formatShortDate } from '@/utils/datetime'
@@ -209,7 +209,7 @@ export default {
         return
       }
       this.loading = true
-      specialRiskComplete({ ...this.form, ...params }).then((res) => {
+      keyRiskComplete({ ...this.form, ...params }).then((res) => {
         if (res.code != '200') {
           this.$message.error(res.msg)
         } else {

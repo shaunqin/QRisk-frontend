@@ -10,7 +10,11 @@
       @selection-change="selectionChange"
     >
       <el-table-column prop="no" label="编号" width="140" />
-      <el-table-column prop="title" label="标题" min-width="140" show-overflow-tooltip />
+      <el-table-column label="标题" min-width="140" show-overflow-tooltip>
+        <template slot-scope="{row}">
+          <el-button type="text" size="mini" @click="detail(row)">{{row.title}}</el-button>
+        </template>
+      </el-table-column>
       <el-table-column prop="noteContent" label="通知内容" min-width="150" show-overflow-tooltip />
       <el-table-column prop="issueDept" label="下发部门" />
       <el-table-column label="拟制人">
@@ -29,17 +33,17 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-    <!-- <edetail ref="detail" /> -->
+    <edetail ref="detail" />
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
-// import edetail from "./detail";
-import { riskNoticeSubDetail } from "@/api/risk";
+import edetail from "../detail";
+import { keyRiskDetail } from "@/api/risk";
 import { formatShortDate } from "@/utils/datetime";
 export default {
-  // components: { edetail },
+  components: { edetail },
   mixins: [initData],
   data() {
     return {
@@ -72,12 +76,12 @@ export default {
       this.$emit("selectionChange", { selections: selections });
     },
     detail(row) {
-      riskNoticeSubDetail(row.id).then(res => {
+      keyRiskDetail(row.id).then(res => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
           let _this = this.$refs.detail;
-          _this.form = res.obj;
+          _this.data = res.obj;
           _this.dialog = true;
         }
       })

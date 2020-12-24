@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { specialRiskComplete } from "@/api/risk";
+import { keyRiskComplete } from "@/api/risk";
 import department from '@/components/Department/deptByRole'
 
 export default {
@@ -57,7 +57,7 @@ export default {
     doSubmit() {
       this.form.processFlag = "3";
       this.loading = true;
-      specialRiskComplete(this.form).then(res => {
+      keyRiskComplete(this.form).then(res => {
         if (res.code != '200') {
           this.$message.error(res.msg);
         } else {

@@ -52,7 +52,7 @@ import initData from "@/mixins/initData";
 import { formatShortDate } from "@/utils/datetime";
 import eform from "../form";
 import edetail from "../detail";
-import { specialRiskDetail, queryRiskListMgr } from "@/api/risk";
+import { keyRiskDetail, queryRiskListMgr } from "@/api/risk";
 export default {
   components: { eform, edetail },
   mixins: [initData],
@@ -96,7 +96,7 @@ export default {
       _this.dialog = true;
     },
     detail(row) {
-      specialRiskDetail(row.id).then((res) => {
+      keyRiskDetail(row.id).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
@@ -115,7 +115,7 @@ export default {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
-          _this.form.hazardList[0].possibleRisks = res.obj[0].riskNo
+          // _this.form.keyRiskLists[0].possibleRisks = res.obj[0].riskNo
           _this.possibleRisksList = res.obj
         }
       })

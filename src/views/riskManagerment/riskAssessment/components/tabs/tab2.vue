@@ -194,7 +194,6 @@ export default {
               _this.form.issueDepts = obj.issueDept
             }
             _this.dialog = true;
-            console.log(_this.form.issueDepts, obj.issueDept)
           }
         }
       });

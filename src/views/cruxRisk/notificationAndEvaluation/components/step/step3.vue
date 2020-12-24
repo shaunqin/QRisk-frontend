@@ -1,6 +1,6 @@
 <template>
   <div>
-    <info :data="data" form="form" />
+    <info :data="data" :form="form" />
   </div>
 </template>
 

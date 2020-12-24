@@ -1,6 +1,6 @@
 <template>
   <div>
-    <info :data="data" form="form" :assessmentType="assessmentType" />
+    <info :data="data" :form="form" :assessmentType="assessmentType" />
     <el-card>
       <el-radio-group v-model="form.processFlag">
         <el-radio label="1">同意</el-radio>

@@ -63,9 +63,9 @@ import initData from "@/mixins/initData";
 import eform from "../form";
 import selectEmplotee from "../selectEmplotee";
 import {
-  specialRiskDetail,
-  specialRiskDelete,
-  specialRiskSubmit,
+  keyRiskDetail,
+  keyRiskDelete,
+  keyRiskSubmit,
   queryRiskListMgr,
 } from "@/api/risk";
 import { formatShortDate } from "@/utils/datetime";
@@ -106,7 +106,7 @@ export default {
       this.isAdd = false;
       let id = this.selections[0];
       let _this = this.$refs.form;
-      specialRiskDetail(id).then(async (res) => {
+      keyRiskDetail(id).then(async (res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
@@ -125,36 +125,29 @@ export default {
             analysis: obj.analysis,
             approval: obj.approval,
             approvalDate: formatShortDate(obj.approvalDate),
+            releasePath: obj.releasePath,
             type: obj.type
           };
-          if (obj.hazardVoList && obj.hazardVoList.length > 0) {
-            _this.form.hazardList = obj.hazardVoList.map(item => {
-              item.specialRiskMeasureList.map(childItem => {
-                childItem.deadline = formatShortDate(childItem.deadline)
+          if (res.obj.keyRiskListVoLists && res.obj.keyRiskListVoLists.length > 0) {
+            _this.form.keyRiskLists = res.obj.keyRiskListVoLists.map(item => {
+              item.hazardList.map(hazardItem=> {
+                hazardItem.specialRiskMeasureList.map(childItem => {
+                  childItem.deadline = formatShortDate(childItem.deadline)
+                })
               })
               return item
             })
-          } else { _this.form.hazardList = [] }
+          } else { _this.form.keyRiskLists = [] }
           if (obj.file && obj.file.length > 0) {
             _this.form.file = [...obj.file]
           } else { _this.form.file = [] }
-          if(obj.specialRiskAnalyses &&  obj.specialRiskAnalyses.length > 0) {
-            _this.form.specialRiskAnalyses = [...obj.specialRiskAnalyses]
-          } else { _this.form.specialRiskAnalyses = [{
-            product: "",  // 产品
-            subSystem: "", // 子系统
-            managementProcess: "", // 管理流程
-            reponsibleUnit: null, // 责任单位
-            post: "", // 岗位
-            processHuman: "", // 人
-            processMachine: "", // 机
-            processMaterial: "", // 料
-            processRegulation: "", // 法
-            processEnvironment: "", // 环
-            input: "", // 输入
-            output: "", // 输出
-          }] }
           await this.getRiskListMgr()
+          if(obj.type=='1') {
+            _this.form.issueDepts = obj.issueDept.split(',')
+          } else {
+            _this.form.issueDepts = obj.issueDept
+          }
+          console.log(_this.form)
           _this.dialog = true;
         }
       });
@@ -163,7 +156,7 @@ export default {
       let id = this.selections[0];
       this.$confirm("确定删除嘛？")
         .then(() => {
-          specialRiskDelete(id).then((res) => {
+          keyRiskDelete(id).then((res) => {
             if (res.code != "200") {
               this.$message.error(res.msg);
             } else {
@@ -187,7 +180,7 @@ export default {
       const params = {
         staffno: sqlUserId
       }
-      specialRiskSubmit(id, params).then((res) => {
+      keyRiskSubmit(id, params).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
@@ -202,30 +195,26 @@ export default {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
-          if(_this.form.hazardList.length == 0) {
-            _this.form.hazardList.push({
-              hazardSource: "",
-              managementProcess: "",
-              riskLevel1: "", //危险源层级1
-              riskLevel2: "", //危险源层级2
-              hazard: "", // 危险源
-              possibility: "1",
-              possibleRisks: "", // 可能导致的风险
-              riskLevel: "1",
-              rootCauseAnalysis: "",
-              seriousness: "1",
-              specialRiskMeasureList: [
-                {
-                  completion: "",
-                  controlMeasure: "",
-                  deadline: formatShortDate(null),
-                  reponsibleDept: null
-                }],
-              subSystem: "",
-              product: ""
+          if(_this.form.keyRiskLists.length == 0) {
+            _this.form.keyRiskLists.push({
+              possibleRisks: '',
+              riskLevel: '1',
+              seriousness: '1',
+              appliance: '0',
+              hazardList: [{
+                hazardSource: '',
+                possibility: '',
+                riskLevel: '1',
+                specialRiskMeasureList: [
+                  {
+                    controlMeasure: '',
+                    deadline: '',
+                    reponsibleDept: null,
+                  },
+                ],
+              }],
             })
           }
-          _this.form.hazardList[0].possibleRisks = res.obj[0].riskNo
           _this.possibleRisksList = res.obj
         }
       })
