@@ -17,8 +17,6 @@
       <step7 ref="step7" v-if="step == 7" :data="data" :form="form" />
       <step8 ref="step8" v-if="step == 8" :data="data" :form="form" />
       <hairdown ref="hairdown" :data="data" :form="form" />
-      <!-- 风险评价报告 -->
-      <report ref="reportRef" :formId="formId" />
       <!-- 抄送 -->
       <ccPerson ref="ccPerson" :deptPath="deptPath" @subCC="subCC" />
     </div>
@@ -43,7 +41,7 @@
 </template>
 
 <script>
-import { specialRiskComplete, specialRiskSaveHazard } from '@/api/risk'
+import { keyRiskComplete, keyRiskSaveHazard } from '@/api/risk'
 import step1 from './step/step1'
 import step2 from './step/step2'
 import step3 from './step/step3'
@@ -54,7 +52,6 @@ import step7 from './step/step7'
 import step8 from './step/step8'
 import hairdown from './hairdown'
 import ccPerson from './ccPerson'
-import report from './report'
 export default {
   components: {
     step1,
@@ -67,7 +64,6 @@ export default {
     step8,
     hairdown,
     ccPerson,
-    report,
   },
   data() {
     return {
@@ -141,13 +137,12 @@ export default {
       this.dialog = false
     },
     formChange(form) {
-      console.log(form)
       this.form = form
     },
     submitStep1() {
       this.loading = true
       const commentModel = { ...this.form, processFlag: '' }
-      specialRiskSaveHazard({ ...this.data, commentModel }).then((res) => {
+      keyRiskSaveHazard({ ...this.data, commentModel }).then((res) => {
         if (res.code != '200') {
           this.$message.error(res.msg)
         } else {
@@ -159,36 +154,14 @@ export default {
         this.loading = false
       })
     },
-    submitStep2() {
-      if (this.form.processFlag == '') {
-        this.$message.error('请选择同意/驳回！')
-        return
-      }
-      if (this.form.processFlag == '2' && this.form.comment == '') {
-        this.$message.error('请输入驳回备注！')
-        return
-      }
-      this.loading = true
-      specialRiskComplete(this.form).then((res) => {
-        if (res.code != '200') {
-          this.$message.error(res.msg)
-        } else {
-          this.$message.success('操作成功')
-          this.resetForm()
-          this.$parent.init()
-          this.loadCount()
-        }
-        this.loading = false
-      })
-    },
+
     doHairdown() {
       if (this.step == 1) {
         this.$refs.hairdown.dialog = true
       } else {
-        // 措施下发
         this.form.processFlag = '3'
         this.hdLoading = true
-        specialRiskComplete(this.form).then((res) => {
+        keyRiskComplete(this.form).then((res) => {
           if (res.code != '200') {
             this.$message.error(res.msg)
           } else {
@@ -205,7 +178,7 @@ export default {
     },
     judgeCC() {
       // 领导审核同意
-      if (this.data.leaderApprove && this.form.processFlag == '1') {
+      if (this.data.leaderApprove && this.form.processFlag == '1' && this.needCC) {
         this.$refs.ccPerson.dialog = true
       } else if (
         !this.data.leaderApprove &&
@@ -233,7 +206,7 @@ export default {
       }
       this.loading = true
       const commentModel = { ...this.form, ...params }
-      specialRiskSaveHazard({ ...this.data, commentModel }).then((res) => {
+      keyRiskSaveHazard({ ...this.data, commentModel }).then((res) => {
         if (res.code != '200') {
           this.$message.error(res.msg)
         } else {
@@ -247,18 +220,13 @@ export default {
     },
     doSubmitSave() {
       this.loading = true
-      specialRiskSaveHazard(this.data).then((res) => {
+      keyRiskSaveHazard(this.data).then((res) => {
         if (res.code != '200') {
           this.$message.error(res.msg)
         } else {
-          if (res.obj) {
-            this.formId = this.data.id
-            this.$refs.reportRef.dialog = true
-          } else {
-            this.$message.success('填报成功')
-            this.$parent.init()
-            this.resetForm()
-          }
+          this.$message.success('填报成功')
+          this.$parent.init()
+          this.resetForm()
         }
         this.loading = false
       })

@@ -75,11 +75,11 @@
           >下发</el-button> -->
         </template>
       </el-table-column>
-      <el-table-column label="通知记录" v-if="showIssueRecord">
+      <!-- <el-table-column label="通知记录" v-if="showIssueRecord">
         <template slot-scope="{row}">
           <el-button size="mini" type="primary" @click="issueRecord(row)" :loading="tbLoading">查询</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     <hairdown
       ref="noteHairdown"

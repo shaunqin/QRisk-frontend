@@ -1,39 +1,14 @@
 <template>
   <div class="app-container">
-    <div class="head-container">
-      <el-form size="mini" inline>
-        <el-form-item label="发起时间">
-          <el-date-picker
-            v-model="date"
-            unlink-panels
-            type="daterange"
-            placeholder
-            value-format="yyyy-MM-dd"
-            style="width: 220px"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item label>
-          <el-button type="success" icon="el-icon-search" @click="toQuery"
-            >查询</el-button
-          >
-          <el-button
-            class="filter-item"
-            size="mini"
-            type="success"
-            icon="el-icon-refresh"
-            @click="refresh"
-            >{{ $t('global.reset') }}</el-button
-          >
-        </el-form-item>
-      </el-form>
-    </div>
     <el-table
       v-loading="loading"
       :data="data"
       size="small"
       :stripe="true"
-      :highlight-current-row="true"
+      :highlight-current-row="false"
       style="width: 100%"
+      cell-class-name="detail"
+      @cell-dblclick="detailCell"
     >
       <el-table-column type="index" width="50">
         <template slot="header">
@@ -58,18 +33,19 @@
           :prop="column.children.prop"
         >
           <template slot-scope="{ row }">
-            <div @click="detail(row, column.children)">
-              {{ row[column.children.prop] }}
-            </div>
+            {{ row[column.children.prop] }}
           </template>
         </el-table-column>
       </el-table-column>
     </el-table>
+    <detail ref="detail" />
   </div>
 </template>
 <script>
-import { queryTableList } from '@/api/risk'
+import { queryTableList, keyRiskDetail } from '@/api/risk'
+import detail from '@/views/cruxRisk/notificationAndEvaluation/components/detail'
 export default {
+  components: {detail},
   data() {
     return {
       loading: false,
@@ -109,8 +85,8 @@ export default {
         this.loading = false
       })
     },
-    detail(row, item) {
-      console.log(row, item)
+    detailCell(row, column, cell, event) {
+      console.log(row, column, cell, event)
     },
     refresh() {
       this.form = {}
@@ -125,5 +101,10 @@ export default {
 .app-container {
   min-height: calc(100vh - 56px);
   padding: 20px 0 0 20px;
+  /deep/ .detail {
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
 </style>

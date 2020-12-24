@@ -1,6 +1,6 @@
 <template>
   <div>
-    <info :data="data" form="form" :assessmentType="assessmentType" />
+    <info :data="data" :form="form" :assessmentType="assessmentType" />
   </div>
 </template>
 

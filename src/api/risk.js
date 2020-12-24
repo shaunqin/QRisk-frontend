@@ -357,13 +357,6 @@ export function queryIssueTreeNoteData(type, id) {
   })
 }
 
-// 查询关键风险清单
-export function queryTableList() {
-  return request({
-    url: '/risk_mgr/special_risk_notice_mgr/tableList',
-    method: 'get',
-  })
-}
 // 发起单位
 export function querySpeRiskMgrDept() {
   return request({
@@ -387,6 +380,100 @@ export function queryIsLM(id) {
   })
 }
 // ======== 专项风险 end =======
+
+// ======= 关键风险 ============
+// 添加通知
+export function keyRiskAdd(data) {
+  return request({
+    url: `/risk_mgr/key_risk_mgr/add`,
+    method: 'post',
+    data
+  })
+}
+
+// 修改
+export function keyRiskModify(data) {
+  return request({
+    url: `/risk_mgr/key_risk_mgr/modify`,
+    method: 'put',
+    data
+  })
+}
+// 删除
+export function keyRiskDelete(id) {
+  return request({
+    url: `/risk_mgr/key_risk_mgr/delete/${id}`,
+    method: 'delete'
+  })
+}
+// 提交
+export function keyRiskSubmit(id, params) {
+  return request({
+    url: `/risk_mgr/key_risk_mgr/submit/${id}`,
+    method: 'get',
+    params
+  })
+}
+// 详情
+export function keyRiskDetail(id) {
+  return request({
+    url: `/risk_mgr/key_risk_mgr/query/detail/${id}`,
+    method: 'get',
+  })
+}
+// 根据风险查询严重性
+export function getKeyRiskSeriousnessLevel(possibleRisks) {
+  return request({
+    url: `/risk_mgr/key_risk_mgr/getRiskLevel/${possibleRisks}`,
+    method: 'get',
+  })
+}
+// 查询风险等级
+export function getKeyRiskLevel(possibility, seriousness) {
+  return request({
+    url: `/risk_mgr/key_risk_mgr/getRiskLevel/${possibility}/${seriousness}`,
+    method: 'get',
+  })
+}
+// 待办数量
+export function keyRiskQueryTodoCount(params) {
+  return request({
+    url: `/risk_mgr/key_risk_mgr/query/queryTodoCount`,
+    method: 'get',
+    params
+  })
+}
+// 处理待办
+export function keyRiskComplete(data) {
+  return request({
+    url: `/risk_mgr/key_risk_mgr/complete`,
+    method: 'post',
+    data
+  })
+}
+// 根据任务流程返回对应数据
+export function keyRiskFill(taskId) {
+  return request({
+    url: `/risk_mgr/key_risk_mgr/fill/${taskId}`,
+    method: 'get'
+  })
+}
+// 填报危险源清单
+export function keyRiskSaveHazard(data) {
+  return request({
+    url: `/risk_mgr/key_risk_mgr/saveHazard`,
+    method: 'post',
+    data
+  })
+}
+// 查询关键风险清单
+export function queryTableList() {
+  return request({
+    url: '/risk_mgr/key_risk_mgr/tableList',
+    method: 'get',
+  })
+}
+// ======== 关键风险 end =======
 
 // 风险提示编号
 export function getRiskNoticeNo(deptPath) {

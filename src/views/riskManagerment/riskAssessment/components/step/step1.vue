@@ -1541,7 +1541,6 @@ export default {
     },
     doSubmit(params) {
       params.id = this.data.id;
-      console.log(params)
       specialNoticeRiskManger(params).then(res => {
         if (res.code != '200') {
           this.$message.error(res.msg);

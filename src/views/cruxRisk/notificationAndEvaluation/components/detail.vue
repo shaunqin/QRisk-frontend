@@ -33,136 +33,87 @@
         </el-row>
       </el-form>
     </el-card>
-    <!-- 系统和工作分析记录表 -->
-    <el-card
-      header="系统和工作分析记录表"
-      key="specialRiskAnalyses"
-      v-if="data.assType == 1 || data.assType == 2"
-    >
-      <el-form size="mini" class="info2" inline>
-        <el-row class="fill-row">
-          <el-col :span="24">
-            <el-form-item label="标题">{{ data.analysisTitle }}</el-form-item>
-          </el-col>
-        </el-row>
-        <el-form-item label="编号">{{ data.analysisNo }}</el-form-item>
-        <el-form-item label="分析人">{{ data.analysis }}</el-form-item>
-        <el-form-item label="分析单位">{{
-          data.analysisDeptName
-        }}</el-form-item>
-        <el-form-item label="批准人">{{ data.approval }}</el-form-item>
-        <el-form-item label="批准日期">{{
-          formatShortDate(data.approvalDate)
-        }}</el-form-item>
-        <el-table :data="data.specialRiskAnalyses" size="mini" max-height="500">
-          <el-table-column label="系统" prop="productName" />
-          <el-table-column label="子系统" prop="subSystemName" />
-          <el-table-column label="管理流程" prop="managementProcess" />
-          <el-table-column label="责任单位" prop="reponsibleUnitName" />
-          <el-table-column label="岗位" prop="post" />
-          <el-table-column label="流程要素">
-            <el-table-column label="人" prop="processHuman" />
-            <el-table-column label="机" prop="processMachine" />
-            <el-table-column label="料" prop="processMaterial" />
-            <el-table-column label="法" prop="processRegulation" />
-            <el-table-column label="环" prop="processEnvironment" />
+    <!-- 风险 -->
+    <el-card key="keyRiskListVoLists" header="风险">
+      <el-card
+        shadow="never"
+        v-for="(item, index) in data.keyRiskListVoLists"
+        :key="index"
+        class="chead"
+      >
+        <div slot="header" class="clearfix">
+          <span>风险{{ index + 1 }}</span>
+        </div>
+        <el-form size="mini" inline label-width="70px" class="info">
+          <el-form-item label="可能导致的风险" label-width="125px">
+            {{ item.possibleRisksName }}
+          </el-form-item>
+          <el-form-item label="严重性">
+            {{ item.seriousnessName }}
+          </el-form-item>
+          <el-form-item label="风险等级">
+            {{ item.riskLevelName }}
+          </el-form-item>
+        </el-form>
+        <el-table :data="item.hazardList" size="mini">
+          <el-table-column label="危险源描述" prop="hazardSource" width="200" show-overflow-tooltip />
+          <el-table-column label="可能性" prop="possibilityName" width="160" />
+          <el-table-column label="风险等级" prop="riskLevelName" width="160" />
+          <el-table-column
+            label="风险控制措施"
+            show-overflow-tooltip
+          >
+            <template slot-scope="{ row }">
+              <ul class="tab-ul">
+                <li v-for="item in row.specialRiskMeasureList" :key="item.id">
+                  <el-popover trigger="hover" v-if="true" placement="top">
+                    <span>{{ item.controlMeasure }}</span>
+                    <div class="text" slot="reference">
+                      {{ item.controlMeasure }}
+                    </div>
+                  </el-popover>
+                </li>
+              </ul>
+            </template>
           </el-table-column>
-          <el-table-column label="流程分析">
-            <el-table-column label="输入" prop="input" />
-            <el-table-column label="输出" prop="output" />
+          <el-table-column
+            label="风险责任单位"
+            width="160"
+            show-overflow-tooltip
+          >
+            <template slot-scope="{ row }">
+              <ul class="tab-ul">
+                <li v-for="item in row.specialRiskMeasureList" :key="item.id">
+                  <el-popover trigger="hover" v-if="true" placement="top">
+                    <span>{{ item.reponsibleDeptName }}</span>
+                    <div class="text" slot="reference">
+                      {{ item.reponsibleDeptName }}
+                    </div>
+                  </el-popover>
+                </li>
+              </ul>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="风险完成期限"
+            width="160"
+            show-overflow-tooltip
+          >
+            <template slot-scope="{ row }">
+              <ul class="tab-ul">
+                <li v-for="item in row.specialRiskMeasureList" :key="item.id">
+                  <el-popover trigger="hover" v-if="true" placement="top">
+                    <span>{{ formatShortDate(item.deadline) }}</span>
+                    <div class="text" slot="reference">
+                      {{ formatShortDate(item.deadline) }}
+                    </div>
+                  </el-popover>
+                </li>
+              </ul>
+            </template>
           </el-table-column>
         </el-table>
-      </el-form>
-    </el-card>
-    <!-- 危险源 -->
-    <el-card key="hazardVoList" class="chead">
-      <div slot="header" class="hslot">
-        <span>危险源</span>
-        <el-button
-          type="text"
-          icon="el-icon-tickets"
-          @click="showReport"
-          :disabled="!data.hiddenReport"
-          >风险报告</el-button
-        >
-      </div>
-      <el-table :data="data.hazardVoList" size="mini">
-        <el-table-column label="系统" prop="productName" />
-        <el-table-column label="子系统" prop="subSystemName" />
-        <el-table-column label="可能性" prop="possibilityName" />
-        <el-table-column label="严重性" prop="seriousnessName" />
-        <el-table-column label="风险等级" prop="riskLevelName" />
-        <el-table-column label="管理流程" prop="managementProcess" />
-        <el-table-column label="问题描述" prop="hazardSource" />
-        <el-table-column
-          label="根原因分析"
-          prop="rootCauseAnalysis"
-          width="140"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          label="可能导致的风险"
-          prop="possibleRisksName"
-          width="160"
-          show-overflow-tooltip
-        />
-        <el-table-column label="风险控制措施" width="160" show-overflow-tooltip>
-          <template slot-scope="{ row }">
-            <ul class="tab-ul">
-              <li v-for="item in row.specialRiskMeasureList" :key="item.id">
-                <el-popover trigger="hover" v-if="true" placement="top">
-                  <span>{{ item.controlMeasure }}</span>
-                  <div class="text" slot="reference">
-                    {{ item.controlMeasure }}
-                  </div>
-                </el-popover>
-              </li>
-            </ul>
-          </template>
-        </el-table-column>
-        <el-table-column label="风险责任单位" width="160" show-overflow-tooltip>
-          <template slot-scope="{ row }">
-            <ul class="tab-ul">
-              <li v-for="item in row.specialRiskMeasureList" :key="item.id">
-                <el-popover trigger="hover" v-if="true" placement="top">
-                  <span>{{ item.reponsibleDeptName }}</span>
-                  <div class="text" slot="reference">
-                    {{ item.reponsibleDeptName }}
-                  </div>
-                </el-popover>
-              </li>
-            </ul>
-          </template>
-        </el-table-column>
-        <el-table-column label="风险控制状态" width="160" show-overflow-tooltip>
-          <template slot-scope="{ row }">
-            <ul class="tab-ul">
-              <li v-for="item in row.specialRiskMeasureList" :key="item.id">
-                <el-popover trigger="hover" v-if="true" placement="top">
-                  <span>{{ item.completionName }}</span>
-                  <div class="text" slot="reference">
-                    {{ item.completionName }}
-                  </div>
-                </el-popover>
-              </li>
-            </ul>
-          </template>
-        </el-table-column>
-        <el-table-column label="风险完成期限" width="160" show-overflow-tooltip>
-          <template slot-scope="{ row }">
-            <ul class="tab-ul">
-              <li v-for="item in row.specialRiskMeasureList" :key="item.id">
-                <el-popover trigger="hover" v-if="true" placement="top">
-                  <span>{{ formatShortDate(item.deadline) }}</span>
-                  <div class="text" slot="reference">
-                    {{ formatShortDate(item.deadline) }}
-                  </div>
-                </el-popover>
-              </li>
-            </ul>
-          </template>
-        </el-table-column>
-      </el-table>
+      </el-card>
     </el-card>
 
     <el-card
@@ -171,6 +122,10 @@
       v-if="data.reviewerInfo && data.reviewerInfo.length > 0"
     >
       <transactor :data="data.reviewerInfo" width="100%" />
+    </el-card>
+    
+    <el-card header="下发通知" key="childNotes">
+      <childNotes :data="data" :showIssueRecord="true" />
     </el-card>
 
     <el-card
@@ -184,23 +139,16 @@
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="cancel">取消</el-button>
     </div>
-
-    <report
-      ref="report"
-      :formId="formId"
-      :disabled="true"
-      @change="formIdChange"
-    />
   </el-dialog>
 </template>
 
 <script>
 import { formatShortDate } from '@/utils/datetime'
 import apprvalRecord from './apprvalRecord'
-import report from './report'
+import childNotes from './childNotes'
 import transactor from '@/components/common/transactor'
 export default {
-  components: { apprvalRecord, report, transactor },
+  components: { apprvalRecord, transactor, childNotes },
   data() {
     return {
       formId: '',
@@ -210,10 +158,6 @@ export default {
   },
   methods: {
     formatShortDate,
-    showReport() {
-      this.formId = this.data.id
-      this.$refs.report.dialog = true
-    },
     cancel() {
       this.resetForm()
     },
@@ -222,9 +166,6 @@ export default {
     },
     getUrl(url) {
       return process.env.VUE_APP_BASE_API + url
-    },
-    formIdChange(val) {
-      this.formId = val
     },
   },
 }

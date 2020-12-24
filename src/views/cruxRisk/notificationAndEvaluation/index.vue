@@ -76,13 +76,13 @@
         </div>
         <!-- <tab1 v-if="tabIndex=='1'" :queryForm="queryForm" /> -->
         <el-tabs v-model="tabIndex">
-          <el-tab-pane name="1" label="已下发">
+          <el-tab-pane name="1" label="全部" v-if="!onlyLeader">
             <tab1 v-if="tabIndex=='1'" :queryForm="queryForm" />
           </el-tab-pane>
-          <el-tab-pane name="2" label="草稿">
+          <el-tab-pane name="2" label="草稿" v-if="!onlyLeader">
             <tab2 v-if="tabIndex=='2'" :queryForm="queryForm" />
           </el-tab-pane>
-          <el-tab-pane name="3" label="我拟制的">
+          <el-tab-pane name="3" label="我拟制的" v-if="!onlyLeader">
             <tab3 v-if="tabIndex=='3'" :queryForm="queryForm" />
           </el-tab-pane>
           <el-tab-pane name="4">
@@ -99,12 +99,13 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import tab1 from './components/tabs/tab1';
 import tab2 from './components/tabs/tab2';
 import tab3 from './components/tabs/tab3';
 import tab4 from './components/tabs/tab4';
 import tab5 from './components/tabs/tab5';
-import { specialRiskQueryTodoCount } from '@/api/risk'
+import { keyRiskQueryTodoCount } from '@/api/risk'
 import department from '@/components/Department'
 export default {
   components: { tab1, tab2, tab3, tab4, tab5, department },
@@ -120,6 +121,18 @@ export default {
       },
       date: ""
     };
+  },
+  computed: {
+    ...mapGetters(["roles"]),
+    onlyLeader() {
+      if ((this.roles.length == 2 || this.roles.length > 2) && this.roles.includes('RISK_MANAGER_LEADER')) {
+        this.tabIndex = "4";
+        return true;
+      } else {
+        this.tabIndex = "1";
+        return false;
+      }
+    }
   },
   watch: {
     date(val) {
@@ -157,7 +170,7 @@ export default {
       const params = {
         assType: '5'
       }
-      specialRiskQueryTodoCount(params).then(res => {
+      keyRiskQueryTodoCount(params).then(res => {
         if (res.code != '200') {
           this.$message.error(res.msg);
         } else {
