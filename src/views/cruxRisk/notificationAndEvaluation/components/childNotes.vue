@@ -96,7 +96,7 @@
 import leaderApprvalRecord from "./leaderApprvalRecord";
 import handleNotes from "./handleTo4";
 import hairdown from './hairdown'
-import { specialRiskFill, queryIssueTreeNoteData } from "@/api/risk";
+import { keyRiskFill, queryIssueTreeNoteData } from "@/api/risk";
 import cmdIssue from './cmdIssueTreeTable'
 import { format, formatShortDate } from '@/utils/datetime'
 import transactor from '@/components/common/transactor'
@@ -131,7 +131,7 @@ export default {
     },
     doHandle(row) {
       this.reviewLoading = true
-      specialRiskFill(row.taskId).then((res) => {
+      keyRiskFill(row.taskId).then((res) => {
         this.reviewLoading = false
         if (res.code != '200') {
           this.$message.error(res.msg)
