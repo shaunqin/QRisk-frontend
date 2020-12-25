@@ -19,7 +19,7 @@
         size="mini"
         type="success"
         icon="el-icon-upload"
-        @click="submit"
+        @click="doSubmit()"
         :disabled="selections.length!=1"
       >提交</el-button>
     </div>
@@ -130,6 +130,11 @@ export default {
           };
           if (res.obj.keyRiskListVoLists && res.obj.keyRiskListVoLists.length > 0) {
             _this.form.keyRiskLists = res.obj.keyRiskListVoLists.map(item => {
+              if(item.appliance == '0') {
+                item.disabledRisk = false
+              } else if(item.appliance == '1') {
+                item.disabledRisk = true
+              }
               item.hazardList.map(hazardItem=> {
                 hazardItem.specialRiskMeasureList.map(childItem => {
                   childItem.deadline = formatShortDate(childItem.deadline)
@@ -145,9 +150,8 @@ export default {
           if(obj.type=='1') {
             _this.form.issueDepts = obj.issueDept.split(',')
           } else {
-            _this.form.issueDepts = obj.issueDept
+            _this.form.issueDepts = obj.analysisDept
           }
-          console.log(_this.form)
           _this.dialog = true;
         }
       });
@@ -177,10 +181,10 @@ export default {
     },
     chooseAndSubmit(sqlUserId) {
       let id = this.selections[0];
-      const params = {
+      /* const params = {
         staffno: sqlUserId
-      }
-      keyRiskSubmit(id, params).then((res) => {
+      } */
+      keyRiskSubmit(id).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {

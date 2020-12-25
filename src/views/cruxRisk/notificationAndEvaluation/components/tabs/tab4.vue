@@ -27,6 +27,7 @@
       </el-table-column>
       <el-table-column prop="createBy" label="发起人" width="130" />
       <el-table-column prop="createTime" label="发起时间" width="140" />
+      <el-table-column prop="daysRemained" label="剩余天数" width="140" show-overflow-tooltip />
       <el-table-column label="操作" width="100" fixed="right">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="subHandle(row)">办理</el-button>
@@ -88,6 +89,13 @@ export default {
           _this.data.approvalDate = formatShortDate(res.obj.approvalDate);
           if (res.obj.keyRiskListVoLists && res.obj.keyRiskListVoLists.length > 0) {
             _this.data.keyRiskLists = res.obj.keyRiskListVoLists.map(item => {
+              if(item.appliance == '0') {
+                item.disabledRisk = false
+                item.disabledAppliance = false
+              } else if(item.appliance == '1') {
+                item.disabledRisk = true
+                item.disabledAppliance = true
+              }
               item.hazardList.map(hazardItem=> {
                 hazardItem.specialRiskMeasureList.map(childItem => {
                   childItem.deadline = formatShortDate(childItem.deadline)

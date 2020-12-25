@@ -10,7 +10,7 @@
       cell-class-name="detail"
       @cell-dblclick="detailCell"
     >
-      <el-table-column type="index" width="50">
+      <el-table-column type="index" width="50" fixed="left">
         <template slot="header">
           <span>序列</span>
         </template>
@@ -20,6 +20,7 @@
         :key="column.nameEN + index"
         :label="column.nameEN"
         :prop="column.prop ? column.prop : null"
+        :fixed="column.prop ? 'left' : null"
         show-overflow-tooltip
         width="150px"
       >
@@ -42,7 +43,7 @@
         </el-table-column>
       </el-table-column>
     </el-table>
-    <detail ref="detail" />
+    <detail ref="detail" :showChildNotes="false" />
   </div>
 </template>
 <script>
@@ -113,6 +114,9 @@ export default {
           this.$message.error(res.msg)
         } else {
           console.log(res)
+          let _this = this.$refs.detail;
+          _this.data = res.obj;
+          _this.dialog = true;
         }
       })
     },
@@ -127,7 +131,7 @@ export default {
 <style lang="scss" scoped>
 @import "~@/styles/variables.scss";
 .app-container {
-  min-height: calc(100vh - 56px);
+  /* min-height: calc(100vh - 56px); */
   padding: 20px 0 0 20px;
   /deep/ .detail {
     padding: 0;
