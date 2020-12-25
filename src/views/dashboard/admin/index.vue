@@ -13,10 +13,12 @@
         <div class="notice">
           <span class="t">公告栏</span>
           <ul class="u">
+            <li>
+              <a href="javascript:;">Q-Risk风险管理系统用户手册</a>
+            </li>
             <li>书连西高第光么万认斗本比圆定合历土心 到近听里信细难</li>
             <li>此院能认器温求按形气看更多系况团压眼向规住论给象始划议世部织他区此所法候者用火多切众造率老都。</li>
             <li>么领着种育及话业题样百电取口天表打等织日事进府使备治。</li>
-            <li>最查北争力没力九油也度委周分者次被。</li>
           </ul>
         </div>
       </el-col>
@@ -34,7 +36,7 @@
         </router-link>
       </el-col>
       <el-col :span="6">
-        <router-link to="/infoDatabase" class="bottom">
+        <router-link to="/dataAnalysis/infoDatabase/supervision" class="bottom">
           <div class="img">
             <img src="@/assets/images/home-02.png" />
           </div>
@@ -45,18 +47,18 @@
         </router-link>
       </el-col>
       <el-col :span="6">
-        <router-link to="/dangerManagerment" class="bottom">
+        <router-link to="/riskManagerment/page/riskAssessment" class="bottom">
           <div class="img">
             <img src="@/assets/images/home-03.png" />
           </div>
           <div class="b">
-            <span class="b-t">风险管理</span>
+            <span class="b-t">专项风险</span>
             <span class="b-desc">风险评价数据输出、安全风险提示和风险评价流程。</span>
           </div>
         </router-link>
       </el-col>
       <el-col :span="6">
-        <router-link to="/hiddenDangerInvestigation" class="bottom">
+        <router-link to="/hazardsInvestigation/index/safetyHazardsReport" class="bottom">
           <div class="img">
             <img src="@/assets/images/home-04.png" />
           </div>

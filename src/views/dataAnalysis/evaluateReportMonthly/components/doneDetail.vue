@@ -37,6 +37,10 @@
       <el-form-item label="风险措施">
         <cmpRiskControl :data="data.riskControlExpVoList||[]" :measuresEnable="measuresEnable" />
       </el-form-item>
+      <!-- 下发记录 -->
+      <el-form-item label="下发记录">
+        <cmpIssueRecord :data="data.treeDataList" />
+      </el-form-item>
       <!-- 审批记录 -->
       <el-form-item label="审批记录" key="apprvalRecord" v-if="noticeComments.length > 0">
         <apprvalRecord :data="noticeComments" />
@@ -63,8 +67,9 @@ import childRisk from "./childRisk";
 import apprvalRecord from "./apprvalRecord";
 import cmpRiskControl from './cmpRiskControl'
 import cmpImplement from './cmpImplement'
+import cmpIssueRecord from './cmpIssueRecord'
 export default {
-  components: { childRisk, apprvalRecord, cmpRiskControl, cmpImplement },
+  components: { childRisk, apprvalRecord, cmpRiskControl, cmpImplement, cmpIssueRecord },
   data() {
     return {
       dialog: false,
