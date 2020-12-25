@@ -2,72 +2,24 @@
   <div>
     <el-form ref="form" :model="_form" size="small" label-width="auto">
       <el-row :gutter="16">
-        <el-col :span="12">
-          <el-form-item label="编号">
-            <el-input v-model="data.no" style="width: 100%;" disabled />
-          </el-form-item>
+        <el-col :span="8">
+          <el-form-item label="编号">{{data.no}}</el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="拟制人">{{data.issuerName}}[{{data.issuer}}]</el-form-item>
         </el-col>
+        <el-col :span="4">
+          <el-button size="mini" icon="el-icon-edit" @click="edit">编辑风险提示</el-button>
+        </el-col>
       </el-row>
       <el-form-item label="主题">
-        <el-input v-model="data.title" style="width: 100%;" />
-      </el-form-item>
-      <el-form-item label="背景">
-        <editer ref="background" v-model="data.background" v-if="dialog" />
-      </el-form-item>
-      <el-form-item label="安全风险">
-        <editer ref="existingRisk" v-model="data.existingRisk" v-if="dialog" />
-      </el-form-item>
-
-      <el-form-item label="风险防范措施">
-        <el-row
-          v-for="(item,index) in data.measures"
-          :key="index"
-          style="margin-bottom: 10px;display:flex"
-          :gutter="8"
-        >
-          <el-col :span="6">
-            <department
-              :value="!item.deptPath?[]:item.deptPath.split(',')"
-              @change="deptChange($event,item)"
-              :multiple="true"
-              style="line-height:20px"
-              :deptPath="data.deptPath"
-            />
-          </el-col>
-          <el-col :span="5">
-            <el-date-picker
-              v-model="item.deadline"
-              value-format="yyyy-MM-dd"
-              placeholder="为空则是长期选项"
-              style="width:100%"
-            ></el-date-picker>
-          </el-col>
-          <el-col :span="11">
-            <el-input
-              v-model="item.content"
-              style="width: 100%;"
-              placeholder="措施内容"
-              type="textarea"
-              rows="3"
-            />
-          </el-col>
-          <el-col :span="2">
-            <el-button type="text" icon="el-icon-delete" size="mini" @click="delRisk(index)"></el-button>
-          </el-col>
-        </el-row>
-        <el-row style="margin-top:10px">
-          <el-col :span="24">
-            <el-button
-              plain
-              icon="el-icon-plus"
-              style="width: 100%;border-style: dashed;"
-              @click="addRisk"
-            >添加</el-button>
-          </el-col>
-        </el-row>
+        <span v-if="!data.pdf">{{data.title}}</span>
+        <el-link
+          v-else
+          :href="baseUrl+data.pdf.filePath"
+          target="_blank"
+          type="primary"
+        >{{data.title}}</el-link>
       </el-form-item>
 
       <el-form-item label>
@@ -78,16 +30,88 @@
         <el-input v-model="_form.comment" type="textarea" rows="3" placeholder="请输入备注"></el-input>
       </el-form-item>
     </el-form>
+    <el-dialog
+      :append-to-body="true"
+      :close-on-click-modal="false"
+      :before-close="cancel"
+      :visible.sync="dialog"
+      :title="'编辑'"
+      custom-class="big_dialog"
+    >
+      <el-form size="small" label-width="100px">
+        <el-form-item label="背景">
+          <editer ref="background" v-model="data.background" v-if="dialog" />
+        </el-form-item>
+        <el-form-item label="安全风险">
+          <editer ref="existingRisk" v-model="data.existingRisk" v-if="dialog" />
+        </el-form-item>
+        <el-form-item label="风险防范措施">
+          <el-row
+            v-for="(item,index) in data.measures"
+            :key="index"
+            style="margin-bottom: 10px;display:flex"
+            :gutter="8"
+          >
+            <el-col :span="6">
+              <department
+                :value="!item.deptPath?[]:item.deptPath.split(',')"
+                @change="deptChange($event,item)"
+                :multiple="true"
+                style="line-height:20px"
+                :deptPath="data.deptPath"
+              />
+            </el-col>
+            <el-col :span="5">
+              <el-date-picker
+                v-model="item.deadline"
+                value-format="yyyy-MM-dd"
+                placeholder="为空则是长期选项"
+                style="width:100%"
+              ></el-date-picker>
+            </el-col>
+            <el-col :span="11">
+              <el-input
+                v-model="item.content"
+                style="width: 100%;"
+                placeholder="措施内容"
+                type="textarea"
+                rows="3"
+              />
+            </el-col>
+            <el-col :span="2">
+              <el-button type="text" icon="el-icon-delete" size="mini" @click="delRisk(index)"></el-button>
+            </el-col>
+          </el-row>
+          <el-row style="margin-top:10px">
+            <el-col :span="24">
+              <el-button
+                plain
+                icon="el-icon-plus"
+                style="width: 100%;border-style: dashed;"
+                @click="addRisk"
+              >添加</el-button>
+            </el-col>
+          </el-row>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="text" @click="cancel">取消</el-button>
+        <el-button :loading="loading" type="primary" @click="doSubmit">保存</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import department from "@/components/Department/deptByRole";
 import editer from '@/components/Tinymce'
+import { riskNoticeModify } from '@/api/risk'
 export default {
   components: { department, editer },
   data() {
     return {
+      dialog: false,
+      loading: false,
       baseUrl: process.env.VUE_APP_BASE_API,
     };
   },
@@ -110,9 +134,6 @@ export default {
         this.$emit("change", val);
       },
     },
-    dialog() {
-      return this.$parent.$parent.dialog;
-    }
   },
   mounted() {
     // console.log(this.baseUrl);
@@ -132,6 +153,22 @@ export default {
     deptChange(val, item) {
       item.deptPath = val.join(",");
     },
+    edit() {
+      this.dialog = true;
+    },
+    cancel() {
+      this.dialog = false;
+    },
+    doSubmit() {
+      let data = { ...this.data, genPdf: false };
+      riskNoticeModify(data).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          this.dialog = false;
+        }
+      })
+    }
   },
 };
 </script>

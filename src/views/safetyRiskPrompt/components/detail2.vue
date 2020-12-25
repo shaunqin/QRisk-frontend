@@ -34,17 +34,39 @@
         </ul>
       </el-form-item>
       <el-form-item label="下发措施" v-if="form.firstLevelMeasure!=null">
-        <childMeasures :data="form.firstLevelMeasure" :source="fullscreen?'smart':'myIssued'" />
-      </el-form-item>
-      <el-form-item label="处理记录" v-if="noticeComments.length>0">
-        <leaderApprvalRecord
-          key="leaderApprvalRecord"
-          :data="noticeComments"
-          type="safety_risk_notice"
-        />
-      </el-form-item>
-      <el-form-item label="办理人" v-if="form.reviewerInfo!=null">
-        <transactor :data="form.reviewerInfo" width="100%" />
+        <el-table v-loading="tbLoading" :data="form.firstLevelMeasure" size="mini">
+          <el-table-column label="下发部门" prop="deptName" width="110" show-overflow-tooltip />
+          <el-table-column label="截止日期" prop="deadline" width="100" />
+          <el-table-column label="措施内容" prop="content" />
+          <el-table-column label="落实情况" prop="implementStatus" />
+          <el-table-column label="上报人" width="120">
+            <template
+              slot-scope="{row}"
+              v-if="row.filler!=null"
+            >{{`${row.fillerName}[${row.filler}]`}}</template>
+          </el-table-column>
+          <el-table-column label="附件预览" min-width="120">
+            <template slot-scope="{row}">
+              <div v-for="(item, index) in row.accessory" :key="index">
+                <el-link
+                  type="primary"
+                  v-if="item!=null"
+                  :href="getUrl(item.filePath)"
+                  target="_blank"
+                >{{item.originFileName}}</el-link>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="状态" width="100">
+            <template slot-scope="{row}">
+              <span v-if="row.status==0">待填</span>
+              <span v-if="row.status==1">待填</span>
+              <span v-if="row.status==2">待审核</span>
+              <span v-if="row.status==3">通过</span>
+              <span v-if="row.status==4">驳回</span>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer" v-if="!fullscreen">
