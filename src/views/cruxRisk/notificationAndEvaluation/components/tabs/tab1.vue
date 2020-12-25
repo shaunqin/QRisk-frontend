@@ -52,7 +52,7 @@ import initData from "@/mixins/initData";
 import { formatShortDate } from "@/utils/datetime";
 import eform from "../form";
 import edetail from "../detail";
-import { keyRiskDetail, queryRiskListMgr } from "@/api/risk";
+import { keyRiskDetail, queryKeyRiskListMgr } from "@/api/risk";
 export default {
   components: { eform, edetail },
   mixins: [initData],
@@ -111,7 +111,7 @@ export default {
     },
     async getRiskListMgr() {
       let _this = this.$refs.form;
-      await queryRiskListMgr().then(res => {
+      await queryKeyRiskListMgr().then(res => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {

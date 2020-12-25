@@ -4,7 +4,7 @@
       v-loading="loading"
       :data="data"
       size="small"
-      :stripe="true"
+      :stripe="false"
       :highlight-current-row="false"
       style="width: 100%"
       cell-class-name="detail"
@@ -20,6 +20,8 @@
         :key="column.nameEN + index"
         :label="column.nameEN"
         :prop="column.prop ? column.prop : null"
+        show-overflow-tooltip
+        width="150px"
       >
         <template slot-scope="{ row }" v-if="column.prop == 'riskName'">
           <div>
@@ -33,7 +35,9 @@
           :prop="column.children.prop"
         >
           <template slot-scope="{ row }">
-            {{ row[column.children.prop] }}
+            <div :style="{backgroundColor: row.children2[column.children.prop]}">
+              {{ row[column.children.prop] }}
+            </div>
           </template>
         </el-table-column>
       </el-table-column>
@@ -42,7 +46,7 @@
   </div>
 </template>
 <script>
-import { queryTableList, keyRiskDetail } from '@/api/risk'
+import { queryTableList, getTableData } from '@/api/risk'
 import detail from '@/views/cruxRisk/notificationAndEvaluation/components/detail'
 export default {
   components: {detail},
@@ -79,6 +83,14 @@ export default {
         this.list = res.obj
         this.data = res.obj.datas.map((item) => {
           item = Object.assign(item, item.children)
+          res.obj.headers.map(headItem => {
+            const keyArr = !!item.children2 ? Object.keys(item.children2) : []
+            const bool = keyArr.includes(headItem.nameEN)
+            if(!bool && headItem.nameEN!=="关键风险项目") {
+              item.children2 = item.children2?item.children2:{}
+              item.children2[headItem.nameEN] = '#fff'
+            }
+          })
           return item
         })
         this.columns = res.obj.headers
@@ -87,6 +99,22 @@ export default {
     },
     detailCell(row, column, cell, event) {
       console.log(row, column, cell, event)
+      if(!row[column.property]) return this.$message.error("无数据！")
+      let params = {
+        riskNo: row.riskNo
+      }
+      this.columns.map(item => {
+        if(item.nameEN == column.property) {
+          params.deptPath = item.path
+        }
+      })
+      getTableData(params).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg)
+        } else {
+          console.log(res)
+        }
+      })
     },
     refresh() {
       this.form = {}
@@ -102,8 +130,18 @@ export default {
   min-height: calc(100vh - 56px);
   padding: 20px 0 0 20px;
   /deep/ .detail {
+    padding: 0;
+    height: 40px;
     &:hover {
       cursor: pointer;
+    }
+    .cell {
+      padding: 0;
+      height: 40px;
+    }
+    div {
+      height: 40px;
+      line-height: 40px;
     }
   }
 }

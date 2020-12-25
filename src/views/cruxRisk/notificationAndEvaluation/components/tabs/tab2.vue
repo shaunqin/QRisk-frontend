@@ -66,7 +66,7 @@ import {
   keyRiskDetail,
   keyRiskDelete,
   keyRiskSubmit,
-  queryRiskListMgr,
+  queryKeyRiskListMgr,
 } from "@/api/risk";
 import { formatShortDate } from "@/utils/datetime";
 export default {
@@ -191,7 +191,7 @@ export default {
     },
     async getRiskListMgr() {
       let _this = this.$refs.form;
-      await queryRiskListMgr().then(res => {
+      await queryKeyRiskListMgr().then(res => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
