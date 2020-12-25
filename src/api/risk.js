@@ -428,6 +428,14 @@ export function getKeyRiskSeriousnessLevel(possibleRisks) {
     method: 'get',
   })
 }
+
+// 查询关键风险不分页
+export function queryKeyRiskListMgr() {
+  return request({
+    url: '/info_mgr/riskList_mgr/query/criticalRisk',
+    method: 'get',
+  })
+}
 // 查询风险等级
 export function getKeyRiskLevel(possibility, seriousness) {
   return request({
@@ -471,6 +479,14 @@ export function queryTableList() {
   return request({
     url: '/risk_mgr/key_risk_mgr/tableList',
     method: 'get',
+  })
+}
+// 详情
+export function getTableData(data) {
+  return request({
+    url: `/risk_mgr/key_risk_mgr/getTableData`,
+    method: 'post',
+    data
   })
 }
 // ======== 关键风险 end =======

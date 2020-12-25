@@ -242,7 +242,7 @@ import childNotes from '../childNotes'
 import {
   getKeyRiskLevel,
   getKeyRiskSeriousnessLevel,
-  queryRiskListMgr,
+  queryKeyRiskListMgr,
 } from '@/api/risk'
 import { queryDictByName } from '@/api/dict'
 import { queryHazardList } from '@/api/standard'
@@ -321,7 +321,7 @@ export default {
       this.totalhazardList = res.obj
       this.hazardList = this.totalhazardList
     })
-    queryRiskListMgr().then((res) => {
+    queryKeyRiskListMgr().then((res) => {
       if (res.code != '200') {
         this.$message.error(res.msg)
       } else {
