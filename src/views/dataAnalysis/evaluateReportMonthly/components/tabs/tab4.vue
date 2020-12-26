@@ -8,14 +8,15 @@
       :highlight-current-row="true"
       style="width: 100%;"
     >
-      <el-table-column prop="name" label="流程状态" width="260">
+      <el-table-column prop="name" label="流程状态" min-width="100">
         <template slot-scope="{row}">
           <el-tag type="warning">{{row.name}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="businessTitle" label="任务标题" show-overflow-tooltip />
-      <el-table-column prop="createBy" label="发起人" width="130" />
-      <el-table-column prop="createTime" label="发起时间" width="140" />
+      <el-table-column prop="createBy" label="发起人" />
+      <el-table-column prop="createTime" label="发起时间" />
+      <el-table-column prop="daysRemained" label="剩余天数" />
       <el-table-column label="操作" width="100">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="subHandle(row)">办理</el-button>

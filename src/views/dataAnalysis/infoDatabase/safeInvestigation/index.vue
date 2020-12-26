@@ -55,8 +55,8 @@
         width="120"
         show-overflow-tooltip
       />
-      <el-table-column prop="risk" :label="$t('analysis.risk')" width="120" />
-      <el-table-column prop="incentive" :label="$t('analysis.incentive')" width="120" />
+      <el-table-column prop="riskText" :label="$t('analysis.risk')" min-width="160" show-overflow-tooltip />
+      <el-table-column prop="incentiveText" :label="$t('analysis.incentive')" min-width="200" show-overflow-tooltip />
       <el-table-column :label="$t('global.operation')" width="150" fixed="right">
         <template slot-scope="{row}">
           <el-button-group v-if="row.status=='1'">

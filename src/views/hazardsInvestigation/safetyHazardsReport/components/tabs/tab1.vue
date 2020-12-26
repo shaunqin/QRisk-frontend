@@ -84,7 +84,7 @@
     />
     <task ref="task" :is-add="isAdd" />
     <hazardsList ref="hazardsList" :taskId="taskId" :type="type" :showOpera="showOpera" />
-    <hazardsStatistics ref="hazardsStatistics"></hazardsStatistics>
+    <hazardsStatistics ref="hazardsStatistics" :taskId="taskId" :type="type"></hazardsStatistics>
   </div>
 </template>
 
@@ -158,7 +158,10 @@ export default {
       this.$refs.hazardsList.dialog = true;
     },
     showHazardsStatistics(row) {
-      this.$refs.hazardsStatistics.dialog = true;
+      let _this = this.$refs.hazardsStatistics;
+      _this.queryForm.id = row.id;
+      _this.queryForm.type = row.taskType;
+      _this.dialog = true;
     },
     subCancel(row) {
       this.loading = true;

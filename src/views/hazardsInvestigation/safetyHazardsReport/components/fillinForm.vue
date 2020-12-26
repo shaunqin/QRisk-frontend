@@ -18,13 +18,6 @@
       </el-form-item>
     </el-form>
     <!-- 填报 -->
-    <el-button
-      type="info"
-      size="mini"
-      style="margin-bottom: 10px"
-      @click="addRow"
-      v-if="!disabled"
-    >新增</el-button>
     <el-card style="margin-bottom: 20px" v-for="(item, index) in fillinData" :key="index">
       <el-form ref="form" size="mini" inline label-width="80px">
         <el-row class="fill-row">
@@ -231,6 +224,13 @@
         <el-button type="danger" size="small" icon="el-icon-delete" @click="delRow(index, item.no)">删除</el-button>
       </div>
     </el-card>
+    <el-button
+      type="info"
+      size="mini"
+      style="margin-top: 10px"
+      @click="addRow"
+      v-if="!disabled"
+    >新增</el-button>
     <emplotee ref="emplotee" :deptName="data.deptName" @subPerson="subPerson" />
   </el-card>
 </template>

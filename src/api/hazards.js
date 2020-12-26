@@ -213,3 +213,20 @@ export function signApprove(data) {
         data
     })
 }
+
+// 隐患排查表
+export function getStatistics(data) {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/getStatistics`,
+        method: 'post',
+        data
+    })
+}
+// 提交隐患排查表
+export function updateStatistics(data) {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/updateStatistics`,
+        method: 'put',
+        data
+    })
+}
