@@ -6,7 +6,7 @@
         <el-form-item label="截止日期">{{
           formatShortDate(data.endTime)
         }}</el-form-item>
-        <el-form-item label="下发部门">{{ data.issueDeptName }}</el-form-item>
+        <el-form-item :label="data.type=='1'?'下发部门':'分析单位'">{{ data.type=='1'?data.issueDeptName:data.analysisDeptName }}</el-form-item>
         <el-row class="fill-row">
           <el-col :span="24">
             <el-form-item label="标题">{{ data.title }}</el-form-item>
@@ -42,8 +42,8 @@
               是否适用于本单位
               <span style="margin: 0px 15px;">
                 <el-radio-group v-model="item.appliance" @change="changeAppliance(item.appliance, item)">
-                  <el-radio label="0" :disabled="formEnable">是</el-radio>
-                  <el-radio label="1" :disabled="formEnable">否</el-radio>
+                  <el-radio label="0" :disabled="formEnable || !!item.disabledAppliance">是</el-radio>
+                  <el-radio label="1" :disabled="formEnable || !!item.disabledAppliance">否</el-radio>
                 </el-radio-group>
               </span>
             </span>
@@ -188,6 +188,7 @@
                   :path="data.issueDept"
                   @change="deptChange($event, scope.row)"
                   :disabled="riskEnable || item.disabledRisk"
+                  :url="'/risk_mgr/key_risk_mgr/query/tree'"
                 />
               </template>
             </el-table-column>
@@ -278,7 +279,6 @@ export default {
     },
     formEnable() {
       return (
-        this.data.step == 2 ||
         this.data.step == 4 ||
         this.data.step == 5 ||
         this.data.step == 6 ||
@@ -288,7 +288,6 @@ export default {
     },
     riskEnable() {
       return (
-        this.data.step == 2 ||
         this.data.step == 4 ||
         this.data.step == 5 ||
         this.data.step == 6 ||

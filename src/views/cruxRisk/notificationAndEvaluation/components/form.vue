@@ -197,39 +197,45 @@
                   >
                 </span>
               </div>
-              <el-form
-                size="mini"
-                inline
-                label-width="70px"
-              >
-                <el-form-item label="危险源描述" label-width="115px">
-                  <el-input
-                    v-model="itemHazard.hazardSource"
-                    type="textarea"
-                    rows="2"
-                    style="width: 178px"
-                    @input="$forceUpdate()"
-                  ></el-input>
-                </el-form-item>
-                <el-form-item label="可能性">
-                  <dict-select
-                    :clearable="false"
-                    :showName="true"
-                    :value="itemHazard.possibility"
-                    type="probability_level"
-                    @change="dictChange($event, item, 'possibility', itemHazard)"
-                    style="width: 178px"
-                  />
-                </el-form-item>
-                <el-form-item label="风险等级">
-                  <dict-select
-                    :value="itemHazard.riskLevel"
-                    type="risk_level"
-                    @change="dictChange($event, itemHazard, 'riskLevel')"
-                    style="width: 178px"
-                    :disabled="true"
-                  />
-                </el-form-item>
+              <el-form size="mini" inline label-width="70px">
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label="危险源描述" label-width="100px">
+                      <el-input
+                        v-model="itemHazard.hazardSource"
+                        type="textarea"
+                        rows="2"
+                        style="width: 178px"
+                        @input="$forceUpdate()"
+                      ></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="可能性">
+                      <dict-select
+                        :clearable="false"
+                        :showName="true"
+                        :value="itemHazard.possibility"
+                        type="probability_level"
+                        @change="
+                          dictChange($event, item, 'possibility', itemHazard)
+                        "
+                        style="width: 178px"
+                      />
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="风险等级">
+                      <dict-select
+                        :value="itemHazard.riskLevel"
+                        type="risk_level"
+                        @change="dictChange($event, itemHazard, 'riskLevel')"
+                        style="width: 178px"
+                        :disabled="true"
+                      />
+                    </el-form-item>
+                  </el-col>
+                </el-row>
               </el-form>
               <!-- 风险表格 -->
               <el-button
@@ -427,17 +433,16 @@ export default {
     doAdd(sqlUserId) {
       let submit
       let issueDepts = []
+      const params = { ...this.form, submit: submit }
       if (this.form.type == '2') {
-        submit = sqlUserId ? '1' : '2'
-        issueDepts.push(this.form.issueDepts)
+        params.submit = sqlUserId ? '1' : '2'
+        params.analysisDept = this.form.issueDepts
+        params.issueDepts = []
       } else {
-        issueDepts = this.form.issueDepts
+        params.issueDepts = this.form.issueDepts
+        params.analysisDept = ''
       }
-      keyRiskAdd({
-        ...this.form,
-        submit: submit,
-        issueDepts: issueDepts,
-      })
+      keyRiskAdd(params)
         .then((res) => {
           if (res.code === '200') {
             this.$message({
@@ -458,17 +463,16 @@ export default {
     doModify(sqlUserId) {
       let submit
       let issueDepts = []
+      const params = { ...this.form, submit: submit }
       if (this.form.type == '2') {
-        submit = sqlUserId ? '1' : '2'
-        issueDepts.push(this.form.issueDepts)
+        params.submit = sqlUserId ? '1' : '2'
+        params.analysisDept = this.form.issueDepts
+        params.issueDepts = []
       } else {
-        issueDepts = this.form.issueDepts
+        params.issueDepts = this.form.issueDepts
+        params.analysisDept = ''
       }
-      keyRiskModify({
-        ...this.form,
-        submit: submit,
-        issueDepts: issueDepts,
-      })
+      keyRiskModify(params)
         .then((res) => {
           if (res.code === '200') {
             this.$message({
@@ -529,39 +533,59 @@ export default {
     },
     async dictChange(val, item, key, itemHazard) {
       console.log(key)
-      if(!!itemHazard) { itemHazard[key] = val } else { item[key] = val }
+      if (!!itemHazard) {
+        itemHazard[key] = val
+      } else {
+        item[key] = val
+      }
       if (key == 'possibleRisks') {
         await this.querySeriousness(item.possibleRisks, item)
-        item.hazardList.map(serItem => {
-          if(serItem.possibility !== '') {
-            this.queryRiskLevel(serItem.possibility, item.seriousness, serItem);
+        item.hazardList.map((serItem) => {
+          if (serItem.possibility !== '') {
+            this.queryRiskLevel(serItem.possibility, item.seriousness, serItem)
           }
         })
       }
       if (key == 'possibility') {
-        await this.queryRiskLevel(itemHazard.possibility, item.seriousness, itemHazard);
+        await this.queryRiskLevel(
+          itemHazard.possibility,
+          item.seriousness,
+          itemHazard
+        )
       }
       this.$forceUpdate()
     },
     addRisk() {
-      this.form.keyRiskLists.push({
-        possibleRisks: '',
-        riskLevel: '',
-        seriousness: '',
-        appliance: '0',
-        hazardList: [{
-          hazardSource: '',
-          possibility: '',
+      if (this.form.type == '1') {
+        this.form.keyRiskLists.push({
+          possibleRisks: '',
           riskLevel: '',
-          specialRiskMeasureList: [
+          seriousness: '',
+          appliance: '0',
+          hazardList: [],
+        })
+      } else {
+        this.form.keyRiskLists.push({
+          possibleRisks: '',
+          riskLevel: '',
+          seriousness: '',
+          appliance: '0',
+          hazardList: [
             {
-              controlMeasure: '',
-              deadline: '',
-              reponsibleDept: null,
+              hazardSource: '',
+              possibility: '',
+              riskLevel: '',
+              specialRiskMeasureList: [
+                {
+                  controlMeasure: '',
+                  deadline: '',
+                  reponsibleDept: null,
+                },
+              ],
             },
           ],
-        }],
-      })
+        })
+      }
       this.$forceUpdate()
     },
     delRisk(index) {
@@ -581,13 +605,6 @@ export default {
           },
         ],
       })
-      this.form.keyRiskLists[
-        this.form.keyRiskLists.length - 1
-      ].riskLevel1 = this.riskLevel1List[0].value
-      /* this.chooseRiskLevel1(
-        this.form.keyRiskLists[this.form.keyRiskLists.length - 1].riskLevel1,
-        this.form.keyRiskLists[this.form.keyRiskLists.length - 1]
-      ) */
       this.$forceUpdate()
     },
     delHazard(item, indexHazard) {

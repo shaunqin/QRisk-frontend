@@ -13,7 +13,7 @@
         <el-form-item label="截止日期">{{
           formatShortDate(data.endTime)
         }}</el-form-item>
-        <el-form-item label="下发部门">{{ data.issueDeptName }}</el-form-item>
+        <el-form-item :label="data.type=='1'?'下发部门':'分析单位'">{{ data.type=='1'?data.issueDeptName:data.analysisDeptName }}</el-form-item>
         <el-row class="fill-row">
           <el-col :span="24">
             <el-form-item label="标题">{{ data.title }}</el-form-item>
@@ -124,7 +124,7 @@
       <transactor :data="data.reviewerInfo" width="100%" />
     </el-card>
     
-    <el-card header="下发通知" key="childNotes">
+    <el-card header="下发通知" key="childNotes" v-if="showChildNotes">
       <childNotes :data="data" :showIssueRecord="true" />
     </el-card>
 
@@ -149,6 +149,12 @@ import childNotes from './childNotes'
 import transactor from '@/components/common/transactor'
 export default {
   components: { apprvalRecord, transactor, childNotes },
+  props: {
+    showChildNotes: {
+      type: Boolean,
+      default: true,
+    },
+  },
   data() {
     return {
       formId: '',

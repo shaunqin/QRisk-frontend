@@ -15,7 +15,7 @@
           formatShortDate(data.endTime)
           }}
         </el-form-item>
-        <el-form-item label="下发部门">{{ data.issueDeptName }}</el-form-item>
+        <el-form-item :label="data.type=='1'?'下发部门':'分析单位'">{{ data.type=='1'?data.issueDeptName:data.analysisDeptName }}</el-form-item>
         <el-row class="fill-row">
           <el-col :span="24">
             <el-form-item label="标题">{{ data.title }}</el-form-item>
