@@ -130,7 +130,20 @@ export default {
           this.$message.error("未配置参数");
           return false;
         } else {
-          this.columns = [...res.obj];
+          if(this.queryForm.year >= '2020' && this.queryForm.month >= 10) {
+            this.columns = res.obj.map(item => {
+              if(item.name == "客户机队") {
+                item.children.map((childrenItem, index) => {
+                  if(childrenItem.name == "客户满意度调查平均值") {
+                    item.children.splice(index, '1')
+                  }
+                })
+              }
+              return item
+            })
+          } else {
+            this.columns = [...res.obj];
+          }
           return true;
         }
       }).then(data => {

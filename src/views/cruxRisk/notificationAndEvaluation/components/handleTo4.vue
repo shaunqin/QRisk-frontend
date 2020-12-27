@@ -49,6 +49,9 @@
           <el-form-item label="可能导致的风险" label-width="125px">{{ item.possibleRisksName }}</el-form-item>
           <el-form-item label="严重性">{{ item.seriousnessName }}</el-form-item>
           <el-form-item label="风险等级">{{ item.riskLevelName }}</el-form-item>
+          <el-form-item label="是否适用于本单位" label-width="125px">
+            {{ item.appliance == '1' ? '否' : '是' }}
+          </el-form-item>
         </el-form>
         <el-table :data="item.hazardList" size="mini">
           <el-table-column label="危险源描述" prop="hazardSource" width="200" show-overflow-tooltip />

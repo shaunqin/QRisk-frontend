@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <eform ref="form" :isAdd="isAdd" />
-    <approval ref="approval" />
+    <approval ref="approval" :isApprove="isApprove" />
     <div class="head-container">
       <search />
       <!-- <el-button class="filter-item" size="mini" type="success" icon="el-icon-plus" @click="add">新增</el-button> -->
@@ -18,18 +18,22 @@
         <template slot-scope="{row}">{{formatShortDate(row.dueDate)}}</template>
       </el-table-column>
       <el-table-column prop="productValue" label="产品" />
-      <el-table-column label="操作" width="130px" align="center" fixed="right">
+      <el-table-column label="操作" width="150px" align="center" fixed="right">
         <template slot-scope="scope">
           <el-button-group v-if="scope.row.status==2">
             <el-button size="mini" icon="el-icon-edit" @click="edit(scope.row)"></el-button>
+            <el-button size="mini" icon="el-icon-view" @click="view(scope.row)"></el-button>
             <el-button size="mini" icon="el-icon-delete" @click="subDelete(scope.row.id)"></el-button>
           </el-button-group>
-          <el-button
-            v-if="scope.row.status==3"
-            size="mini"
-            type="primary"
-            @click="approval(scope.row)"
-          >审批</el-button>
+          <el-button-group v-if="scope.row.status==3 && onlyLeader">
+            <el-button
+              size="mini"
+              type="primary"
+              @click="approval(scope.row)"
+            >审批</el-button>
+            <el-button size="mini" @click="view(scope.row)">详情</el-button>
+          </el-button-group>
+          <el-button v-if="scope.row.status!=2 && !(scope.row.status==3 && onlyLeader)" size="mini" icon="el-icon-view" @click="view(scope.row)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -46,17 +50,30 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import initData from "@/mixins/initData";
 import { formatShortDate } from "@/utils/datetime";
-import eform from "./compenents/form";
-import approval from "./compenents/approval";
+import eform from "./components/form";
+import approval from "./components/approval";
 import { monthTaskDetail, fillInMonthTask } from '@/api/quality'
-import search from './compenents/search'
+import search from './components/search'
 export default {
   components: { eform, search, approval },
   mixins: [initData],
   data() {
-    return {};
+    return {
+      isApprove: true
+    };
+  },
+  computed: {
+    ...mapGetters(["roles"]),
+    onlyLeader() {
+      if ((this.roles.length == 2 || this.roles.length > 2) && this.roles.includes('QUALITY_EVALUATION_FEEDBACK_LEADER')) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   },
   created() {
     this.init();
@@ -89,7 +106,24 @@ export default {
       })
     },
     subDelete(id) { },
+    view(row) {
+      this.isApprove = false
+      let _this = this.$refs.approval;
+      monthTaskDetail(row.monthTaskId).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg)
+        } else {
+          const { obj } = res;
+          _this.product = obj.productValue;
+          _this.fillInDate = formatShortDate(obj.fillInDate);
+          _this.monthTaskId = obj.monthTaskId;
+          _this.params = obj.params || {};
+          _this.dialog = true;
+        }
+      })
+    },
     approval(row) {
+      this.isApprove = true
       let _this = this.$refs.approval;
       monthTaskDetail(row.monthTaskId).then(res => {
         if (res.code != '200') {

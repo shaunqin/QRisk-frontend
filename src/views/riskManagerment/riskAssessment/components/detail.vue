@@ -22,7 +22,7 @@
         <el-row class="fill-row">
           <el-col :span="24">
             <el-form-item label="标题">{{ data.title }}</el-form-item>
-            <el-form-item label="通知内容">{{ data.noteContent }}</el-form-item>
+            <el-form-item label="通知内容" v-if="data.type!='2'">{{ data.noteContent }}</el-form-item>
             <el-form-item label="附件">
               <span v-for="(item, index) in data.file" :key="index">
                 <el-link

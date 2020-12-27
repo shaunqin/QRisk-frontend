@@ -99,7 +99,6 @@ export default {
       })
     },
     detailCell(row, column, cell, event) {
-      console.log(row, column, cell, event)
       if(!row[column.property]) return this.$message.error("无数据！")
       let params = {
         riskNo: row.riskNo
@@ -113,7 +112,6 @@ export default {
         if (res.code != '200') {
           this.$message.error(res.msg)
         } else {
-          console.log(res)
           let _this = this.$refs.detail;
           _this.data = res.obj;
           _this.dialog = true;

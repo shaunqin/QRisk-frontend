@@ -35,14 +35,14 @@
       <el-form-item label>
         <el-table :data="productIndex">
           <el-table-column label prop="name" />
-          <el-table-column label="客户机队" v-if="product=='1'||product=='4'">
-            <template slot-scope="{row}" v-if="row.key1!=null">
-              <el-input-number v-model="row.value1" placeholder></el-input-number>
-            </template>
-          </el-table-column>
           <el-table-column label="国航机队" v-if="product=='1'||product=='4'">
             <template slot-scope="{row}" v-if="row.key0!=null">
               <el-input-number v-model="row.value0" placeholder></el-input-number>
+            </template>
+          </el-table-column>
+          <el-table-column label="客户机队" v-if="product=='1'||product=='4'">
+            <template slot-scope="{row}" v-if="row.key1!=null">
+              <el-input-number v-model="row.value1" placeholder></el-input-number>
             </template>
           </el-table-column>
           <el-table-column label="值" v-if="product=='2'||product=='3'">
@@ -120,8 +120,9 @@ export default {
           { name: '国航出厂一周机械原因不正常航班数量', value0: 'outWeekMechanicalNum', value1: null },
           { name: '维修差错及质量调查数量', value0: 'repairErrorAndQauditNum0', value1: 'repairErrorAndQauditNum1' },
           { name: '客户质量投诉数量', value0: null, value1: 'customerQuComplaintNum' },
-          { name: '客户满意度调查全月份数', value0: null, value1: 'custSatisfactionMonthSurveyNum' },
-          { name: '客户满意度调查全月份数总分数之和', value0: null, value1: 'custSatisfactionMonthSurveyScoresSum' },
+          { name: '三方定检总工时', value0: null, value1: 'outPlanTotalWorkingHours1' },
+          /* { name: '客户满意度调查全月份数', value0: null, value1: 'custSatisfactionMonthSurveyNum' },
+          { name: '客户满意度调查全月份数总分数之和', value0: null, value1: 'custSatisfactionMonthSurveyScoresSum' }, */
         ]
       },
       {
