@@ -41,7 +41,7 @@
             </el-col>
           </el-row>
         </el-col>
-        <el-col :span="24">
+        <el-col :span="24" v-if="form.type != '2'" key="noteContent">
           <el-form-item label="通知内容">
             <el-input
               v-model="form.noteContent"
@@ -112,35 +112,44 @@
       <el-card header="危险源" key="2" style="margin-top: 20px" v-if="form.type == '2'">
         <el-row :gutter="8">
           <el-col :span="8">
-            <el-form-item label="标题">
-              <el-input v-model="form.analysisTitle"></el-input>
+            <el-form-item label="分析人">
+              <el-input
+                v-model="data.analysis"
+                :disabled="formEnable"
+              ></el-input>
             </el-form-item>
             <el-form-item label="编号">
-              <el-input :disabled="true" v-model="form.analysisNo"></el-input>
+              <el-input :disabled="true" v-model="data.analysisNo"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="分析人">
-              <el-input v-model="form.analysis"></el-input>
-            </el-form-item>
-            <el-form-item label="批准人">
-              <el-input :disabled="true" v-model="form.approval"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="分析单位">
+            <!-- <el-form-item label="分析单位">
               <department
-                :value="form.analysisDept"
-                @change="deptChange($event, 'analysisDept')"
+                :value="data.analysisDept"
+                @change="deptAnalysisChange($event, 'analysisDept')"
+                :disabled="formEnable"
+                :url="deptPath"
+                :path="departmentParams"
               ></department>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="批准日期">
               <el-date-picker
-                v-model="form.approvalDate"
+                v-model="data.approvalDate"
                 value-format="yyyy-MM-dd"
                 style="width: 100%"
                 :picker-options="pickerOptions"
               ></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <!-- <el-form-item label="标题">
+              <el-input
+                v-model="data.analysisTitle"
+                :disabled="formEnable"
+              ></el-input>
+            </el-form-item> -->
+            <el-form-item label="批准人">
+              <el-input :disabled="true" v-model="data.approval"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -858,8 +867,11 @@ export default {
       let issueDepts = []
       if (this.form.type == '2') {
         issueDepts.push(this.form.issueDepts)
+        this.form.analysisTitle = this.form.title
+        this.form.analysisDept = this.form.releasePath
       } else {
         issueDepts = this.form.issueDepts
+        this.form.analysisDept = this.form.releasePath
       }
       const params = {
         ...this.form,
@@ -892,8 +904,11 @@ export default {
       if (this.form.type == '2') {
         submit = sqlUserId ? '1' : '2'
         issueDepts.push(this.form.issueDepts)
+        this.form.analysisTitle = this.form.title
+        this.form.analysisDept = this.form.releasePath
       } else {
         issueDepts = this.form.issueDepts
+        this.form.analysisDept = this.form.releasePath
       }
       const params = { ...this.form, hazardList: this.list, submit: submit, issueDepts: issueDepts }
       specialRiskModify(params)

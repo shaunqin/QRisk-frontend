@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :before-close="cancel"
     :visible.sync="dialog"
-    title="审批"
+    :title="isApprove?'审批':'详情'"
     custom-class="big_dialog"
   >
     <el-form ref="form" :model="form" label-width="auto">
@@ -53,19 +53,19 @@
           </el-table-column>
         </el-table>
       </el-form-item>
-      <el-form-item label>
+      <el-form-item label v-if="isApprove">
         <el-radio-group v-model="form.agree">
           <el-radio label="1">同意</el-radio>
           <el-radio label="0">驳回</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label>
+      <el-form-item label v-if="isApprove">
         <el-input v-model="form.reason" type="textarea" rows="3" placeholder="请输入备注"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
-      <el-button :loading="loading" type="primary" @click="doSubmit">确定</el-button>
+      <el-button :loading="loading" type="primary" @click="doSubmit" v-if="isApprove">确定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -99,6 +99,10 @@ export default {
     };
   },
   props: {
+    isApprove: {
+      type: Boolean,
+      default: true
+    }
   },
   computed: {
     productIndex() {

@@ -439,7 +439,7 @@ export function getKeyRiskSeriousnessLevel(possibleRisks) {
 // 查询关键风险不分页
 export function queryKeyRiskListMgr() {
   return request({
-    url: '/info_mgr/riskList_mgr/query/criticalRisk',
+    url: '/risk_mgr/key_risk_mgr/query/list',
     method: 'get',
   })
 }

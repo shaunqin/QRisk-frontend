@@ -46,7 +46,7 @@
             </el-col>
           </el-row>
         </el-col>
-        <el-col :span="24">
+        <el-col :span="24" v-if="form.type != '2'" key="noteContent">
           <el-form-item label="通知内容">
             <el-input
               v-model="form.noteContent"
@@ -146,7 +146,7 @@
                 v-model="item.possibleRisks"
                 clearable
                 placeholder="请选择可能导致的风险"
-                style="width: 280px"
+                style="width: 178px"
                 @change="dictChange(item.possibleRisks, item, 'possibleRisks')"
               >
                 <el-option
@@ -164,9 +164,18 @@
                 :value="item.seriousness"
                 :showName="true"
                 :disabled="true"
-                style="width: 280px"
+                style="width: 178px"
                 type="severity_level"
                 @change="dictChange($event, item, 'seriousness')"
+              />
+            </el-form-item>
+            <el-form-item label="风险等级" v-if="form.type=='2'">
+              <dict-select
+                :value="item.riskLevel"
+                type="risk_level"
+                @change="dictChange($event, item, 'riskLevel')"
+                style="width: 178px"
+                :disabled="true"
               />
             </el-form-item>
           </el-form>
@@ -441,6 +450,9 @@ export default {
       } else {
         params.issueDepts = this.form.issueDepts
         params.analysisDept = ''
+        params.keyRiskLists.map(item => {
+          item.riskLevel = ''
+        })
       }
       keyRiskAdd(params)
         .then((res) => {
@@ -471,6 +483,9 @@ export default {
       } else {
         params.issueDepts = this.form.issueDepts
         params.analysisDept = ''
+        params.keyRiskLists.map(item => {
+          item.riskLevel = ''
+        })
       }
       keyRiskModify(params)
         .then((res) => {
@@ -532,7 +547,6 @@ export default {
       this.$forceUpdate()
     },
     async dictChange(val, item, key, itemHazard) {
-      console.log(key)
       if (!!itemHazard) {
         itemHazard[key] = val
       } else {
@@ -553,13 +567,24 @@ export default {
           itemHazard
         )
       }
+      setTimeout(() => {
+        const arr = item.hazardList.map(serItem => {
+          if(serItem.riskLevel !== '' && serItem.riskLevel !== null && serItem.riskLevel !== undefined) {
+            return serItem.riskLevel
+          }
+          return ''
+        })
+        item.riskLevel = Math.max.apply(null,arr) + ''
+        if(item.riskLevel == '-Infinity') item.riskLevel = '1'
+        this.$forceUpdate()
+      }, 500);
       this.$forceUpdate()
     },
     addRisk() {
       if (this.form.type == '1') {
         this.form.keyRiskLists.push({
           possibleRisks: '',
-          riskLevel: '',
+          riskLevel: '1',
           seriousness: '',
           appliance: '0',
           hazardList: [],
@@ -567,7 +592,7 @@ export default {
       } else {
         this.form.keyRiskLists.push({
           possibleRisks: '',
-          riskLevel: '',
+          riskLevel: '1',
           seriousness: '',
           appliance: '0',
           hazardList: [
@@ -609,6 +634,18 @@ export default {
     },
     delHazard(item, indexHazard) {
       item.hazardList.splice(indexHazard, 1)
+      setTimeout(() => {
+        const arr = item.hazardList.map(serItem => {
+          if(serItem.riskLevel !== '' && serItem.riskLevel !== null && serItem.riskLevel !== undefined) {
+            return serItem.riskLevel
+          }
+          return ''
+        })
+        item.riskLevel = Math.max.apply(null,arr) + ''
+        if(item.riskLevel == '-Infinity') item.riskLevel = '1'
+        console.log(item.riskLevel)
+        this.$forceUpdate()
+      }, 500);
       this.$forceUpdate()
     },
     srmDeptChange(val, row) {

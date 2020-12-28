@@ -26,7 +26,7 @@
         <el-row class="fill-row">
           <el-col :span="24">
             <el-form-item label="标题">{{ data.title }}</el-form-item>
-            <el-form-item label="通知内容">{{ data.noteContent }}</el-form-item>
+            <el-form-item label="通知内容" v-if="data.type!='2'">{{ data.noteContent }}</el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -39,9 +39,9 @@
       <el-form size="mini" label-width="80px" :disabled="formEnable">
         <el-row :gutter="8">
           <el-col :span="8">
-            <el-form-item label="标题">
+            <el-form-item label="分析人">
               <el-input
-                v-model="data.analysisTitle"
+                v-model="data.analysis"
                 :disabled="formEnable"
               ></el-input>
             </el-form-item>
@@ -50,18 +50,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="分析人">
-              <el-input
-                v-model="data.analysis"
-                :disabled="formEnable"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="批准人">
-              <el-input :disabled="true" v-model="data.approval"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="分析单位">
+            <!-- <el-form-item label="分析单位">
               <department
                 :value="data.analysisDept"
                 @change="deptAnalysisChange($event, 'analysisDept')"
@@ -69,7 +58,7 @@
                 :url="deptPath"
                 :path="departmentParams"
               ></department>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="批准日期">
               <el-date-picker
                 v-model="data.approvalDate"
@@ -77,6 +66,17 @@
                 style="width: 100%"
                 :picker-options="pickerOptions"
               ></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <!-- <el-form-item label="标题">
+              <el-input
+                v-model="data.analysisTitle"
+                :disabled="formEnable"
+              ></el-input>
+            </el-form-item> -->
+            <el-form-item label="批准人">
+              <el-input :disabled="true" v-model="data.approval"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -258,10 +258,10 @@
       >
         <el-row :gutter="8">
           <el-col :span="8">
-            <el-form-item label="标题">
+            <el-form-item label="分析人">
               <el-input
+                v-model="data.analysis"
                 :disabled="formEnable"
-                v-model="data.analysisTitle"
               ></el-input>
             </el-form-item>
             <el-form-item label="编号">
@@ -269,18 +269,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="分析人">
-              <el-input
-                :disabled="formEnable"
-                v-model="data.analysis"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="批准人">
-              <el-input :disabled="true" v-model="data.approval"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="分析单位">
+            <!-- <el-form-item label="分析单位">
               <department
                 :value="data.analysisDept"
                 @change="deptAnalysisChange($event, 'analysisDept')"
@@ -288,7 +277,7 @@
                 :url="deptPath"
                 :path="departmentParams"
               ></department>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="批准日期">
               <el-date-picker
                 v-model="data.approvalDate"
@@ -296,6 +285,17 @@
                 style="width: 100%"
                 :picker-options="pickerOptions"
               ></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <!-- <el-form-item label="标题">
+              <el-input
+                v-model="data.analysisTitle"
+                :disabled="formEnable"
+              ></el-input>
+            </el-form-item> -->
+            <el-form-item label="批准人">
+              <el-input :disabled="true" v-model="data.approval"></el-input>
             </el-form-item>
           </el-col>
         </el-row>

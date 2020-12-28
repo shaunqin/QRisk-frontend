@@ -4,7 +4,7 @@
     <el-card class="my-card">
       <span class="title">风险管理系统前台</span>
       <el-form ref="loginForm" :model="loginForm" :rules="loginRules" status-icon>
-        <el-form-item label>
+        <!-- <el-form-item label>
           <el-select v-model="loginForm.userName" size="mini" placeholder="测试账号" clearable>
             <el-option label="NewAmeco风险管理员" value="00089715"></el-option>
             <el-option label="NewAmeco领导" value="00048117"></el-option>
@@ -12,7 +12,7 @@
             <el-option label="华北领导" value="00804084"></el-option>
             <el-option label="空客维修风险管理员" value="00074427"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item prop="userName">
           <el-input v-model="loginForm.userName" placeholder="请输入用户名" clearable>
             <i slot="prefix" class="el-icon-user-solid el-input__icon icon userName" />

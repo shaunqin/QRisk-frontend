@@ -10,7 +10,7 @@
         <el-row class="fill-row">
           <el-col :span="24">
             <el-form-item label="标题">{{ data.title }}</el-form-item>
-            <el-form-item label="通知内容">{{ data.noteContent }}</el-form-item>
+            <el-form-item label="通知内容" v-if="data.type!='2'">{{ data.noteContent }}</el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -220,7 +220,7 @@
       </el-card>
     </el-card>
 
-    <el-card header="已下发通知" key="childNotes" v-if="showChildNotes">
+    <el-card header="已下发通知" key="childNotes" v-if="data.hiddenSubNotes">
       <childNotes :data="data" />
     </el-card>
     <el-card
@@ -394,12 +394,12 @@ export default {
       setTimeout(() => {
         const arr = item.hazardList.map(serItem => {
           if(serItem.riskLevel !== '' && serItem.riskLevel !== null && serItem.riskLevel !== undefined) {
-            console.log(serItem.riskLevel)
             return serItem.riskLevel
           }
           return ''
         })
         item.riskLevel = Math.max.apply(null,arr) + ''
+        if(item.riskLevel == '-Infinity') item.riskLevel = '1'
         this.$forceUpdate()
       }, 500);
       this.$forceUpdate()
@@ -417,7 +417,6 @@ export default {
       this.$forceUpdate()
     },
     async dictChange(val, item, key, itemHazard) {
-      console.log(key)
       if(!!itemHazard) { itemHazard[key] = val } else { item[key] = val }
       if (key == 'possibleRisks') {
         await this.querySeriousness(item.possibleRisks, item)
@@ -439,6 +438,7 @@ export default {
           return ''
         })
         item.riskLevel = Math.max.apply(null,arr) + ''
+        if(item.riskLevel == '-Infinity') item.riskLevel = '1'
         this.$forceUpdate()
       }, 500);
       this.$forceUpdate()
