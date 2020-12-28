@@ -124,10 +124,17 @@ export const cancelHiddenDanger = (taskId, type) => {
         method: 'delete',
     })
 }
-// delete 取消任务
+// delete 删除任务
 export const deleteHiddenDanger = (taskId, type) => {
     return request({
         url: `/riskmgr_mgr/hidden_danger/delete/${taskId}/${type}`,
+        method: 'delete',
+    })
+}
+// delete 删除管控清单
+export const deleteHiddenDangerList = (id) => {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/delete/${id}`,
         method: 'delete',
     })
 }

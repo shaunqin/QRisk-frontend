@@ -93,7 +93,7 @@
 <script>
 import initData from '@/mixins/initData'
 import { formatShortDate } from '@/utils/datetime'
-import { deleteHiddenDanger } from "@/api/hazards";
+import { deleteHiddenDangerList } from "@/api/hazards";
 
 export default {
   mixins: [initData],
@@ -116,7 +116,7 @@ export default {
     },
     subDelete(id) {
       this.$confirm("确定删除吗？").then(() => {
-        deleteHiddenDanger(id).then(res => {
+        deleteHiddenDangerList(id).then(res => {
           if (res.code != '200') {
             this.$message.error(res.msg);
           } else {
