@@ -215,6 +215,13 @@ export function riskNoticeRiskManger(data) {
     data
   })
 }
+// 下发树形懒加载
+export function riskNoticeLazyLoadIssueTree(measureId) {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/subMeasures/${measureId}`,
+    method: 'get',
+  })
+}
 // =========  风险提示 end ==============
 
 // ======== 专项风险 =======

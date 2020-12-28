@@ -13,6 +13,8 @@
       row-key="id"
       default-expand-all
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      lazy
+      :load="loadTree"
     >
       <el-table-column label="部门" prop="deptName" width="200" align="left" show-overflow-tooltip />
       <el-table-column label="截止日期">
@@ -22,7 +24,9 @@
         <template slot-scope="{row}">{{row.data.content}}</template>
       </el-table-column>
       <el-table-column label="落实情况">
-        <template slot-scope="{row}">{{row.data.impl}}</template>
+        <template slot-scope="{row}">
+          {{row.data.impl}}
+        </template>
       </el-table-column>
       <el-table-column label="下发人" prop="issuer" width="130" />
       <el-table-column label="上报人" prop="filler" width="130" />
@@ -76,6 +80,7 @@
 <script>
 import leaderApprvalRecord from "./leaderApprvalRecord";
 import transactor from '@/components/common/transactor'
+import { riskNoticeLazyLoadIssueTree } from '@/api/risk'
 export default {
   components: { leaderApprvalRecord, transactor },
   data() {
@@ -97,6 +102,13 @@ export default {
     getUrl(url) {
       return process.env.VUE_APP_BASE_API + url;
     },
+    loadTree(tree, treeNode, resolve) {
+      console.log(tree);
+      riskNoticeLazyLoadIssueTree(tree.id).then(res => {
+        resolve(res.obj)
+      })
+
+    }
   },
 }
 </script>

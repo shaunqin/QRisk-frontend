@@ -12,7 +12,7 @@
       <el-table-column prop="title" label="任务标题" show-overflow-tooltip />
       <el-table-column prop="createBy" label="发起人" />
       <el-table-column prop="createTime" label="发起时间" />
-      <el-table-column label width="100">
+      <el-table-column label="操作" width="100">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="detail(row)">查看详情</el-button>
         </template>

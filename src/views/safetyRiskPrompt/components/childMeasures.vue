@@ -1,16 +1,31 @@
 <template>
   <div>
-    <el-table v-loading="tbLoading" :data="data" size="mini">
-      <el-table-column label="下发部门" prop="deptName" width="110" show-overflow-tooltip />
-      <el-table-column label="截止日期" prop="deadline" width="100" />
-      <el-table-column label="措施内容" prop="content" />
-      <el-table-column label="落实情况" prop="implementStatus" />
-      <el-table-column label="上报人" width="120">
-        <template slot-scope="{row}" v-if="row.filler!=null">{{`${row.fillerName}[${row.filler}]`}}</template>
+    <el-table
+      v-loading="tbLoading"
+      :data="data"
+      size="mini"
+      row-key="id"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      lazy
+      :load="loadTree"
+    >
+      <el-table-column label="下发部门" prop="deptName" width="160" align="left" />
+      <el-table-column label="截止日期"  width="100">
+        <template slot-scope="{row}">{{row.data.deadline}}</template>
       </el-table-column>
+      <el-table-column label="措施内容" min-width="150">
+        <template slot-scope="{row}">{{row.data.content}}</template>
+      </el-table-column>
+      <el-table-column label="落实情况" min-width="200" align="left">
+        <template slot-scope="{row}">
+          <span style="white-space: pre-wrap;">{{row.data.impl}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="下发人" width="120" prop="issuer" />
+      <el-table-column label="上报人" width="120" prop="filler" />
       <el-table-column label="附件预览" min-width="120">
         <template slot-scope="{row}">
-          <div v-for="(item, index) in row.accessory" :key="index">
+          <div v-for="(item, index) in row.data.files" :key="index">
             <el-link
               type="primary"
               v-if="item!=null"
@@ -20,7 +35,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="状态" width="100">
+      <el-table-column label="状态" width="80">
         <template slot-scope="{row}">
           <span v-if="row.status==0">待填</span>
           <span v-if="row.status==1">待填</span>
@@ -31,7 +46,7 @@
       </el-table-column>
       <el-table-column label="办理人" width="80">
         <template slot-scope="{row}">
-          <div v-if="row.reviewerInfo==null">-</div>
+          <div v-if="row.reviewerInfo==null||row.reviewerInfo.length==0">-</div>
           <el-popover v-else placement="left">
             <el-button type="text" size="mini" slot="reference">详情</el-button>
             <transactor :data="row.reviewerInfo" />
@@ -40,10 +55,10 @@
       </el-table-column>
       <el-table-column label="审批记录" width="100">
         <template slot-scope="{row}">
-          <div v-if="row.measureComment==null">-</div>
+          <div v-if="row.comments==null||row.reviewerInfo.length==0">-</div>
           <el-popover v-else placement="left" width="1000">
             <el-button type="text" size="mini" slot="reference">详情</el-button>
-            <leaderApprvalRecord :data="row.measureComment" type="safety_measures" />
+            <leaderApprvalRecord :data="row.comments" type="safety_measures" />
           </el-popover>
         </template>
       </el-table-column>
@@ -53,11 +68,11 @@
           <el-button v-else type="primary" size="mini" @click="doHandle(row)">办理</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="下发记录">
+      <!-- <el-table-column label="下发记录">
         <template slot-scope="{row}">
           <el-button size="mini" type="primary" @click="issueRecord(row)">查询</el-button>
         </template>
-      </el-table-column>
+      </el-table-column>-->
     </el-table>
     <ehandle ref="ehandle" :isSecChild="true" :source="source" />
     <cmdIssue ref="cmdIssue" />
@@ -67,7 +82,7 @@
 <script>
 import leaderApprvalRecord from "./leaderApprvalRecord";
 import ehandle from "./handleTo4";
-import { riskNoticeQueryTask, queryIssueTreeData } from "@/api/risk";
+import { riskNoticeQueryTask, queryIssueTreeData, riskNoticeLazyLoadIssueTree } from "@/api/risk";
 import cmdIssue from './cmdIssueTreeTable'
 import { format } from '@/utils/datetime'
 import transactor from '@/components/common/transactor'
@@ -130,6 +145,12 @@ export default {
           _this.data = res.obj;
           _this.dialog = true;
         }
+      })
+    },
+    loadTree(tree, treeNode, resolve) {
+      console.log(tree);
+      riskNoticeLazyLoadIssueTree(tree.id).then(res => {
+        resolve(res.obj)
       })
     }
   },

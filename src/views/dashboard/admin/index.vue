@@ -14,11 +14,11 @@
           <span class="t">公告栏</span>
           <ul class="u">
             <li>
-              <a href="javascript:;">Q-Risk风险管理系统用户手册</a>
+              <a :href="Manual.filePath" target="_blank">{{Manual.name}}</a>
             </li>
-            <li>书连西高第光么万认斗本比圆定合历土心 到近听里信细难</li>
-            <li>此院能认器温求按形气看更多系况团压眼向规住论给象始划议世部织他区此所法候者用火多切众造率老都。</li>
-            <li>么领着种育及话业题样百电取口天表打等织日事进府使备治。</li>
+            <li>整合各事业部、分公司、运行支持部门在 Q-Risk 系统中所有用到的各类规范、标准。</li>
+            <li>风险评价数据输出、安全风险提示和风险评价流程。</li>
+            <li>安全隐患管控清单、安全隐患统计输出和重大安全隐患跟踪。</li>
           </ul>
         </div>
       </el-col>
@@ -85,17 +85,32 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { queryOtherStand } from '@/api/standard';
 
 export default {
   name: "DashboardEditor",
   data() {
     return {
-      emptyGif:
-        "https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3"
+      Manual: {}
     };
   },
   computed: {
     ...mapGetters(["roles"])
+  },
+  created() {
+    queryOtherStand().then(res => {
+      if (res.code == '200') {
+        if (res.obj.length > 0) {
+          let Manual = {};
+          let item = res.obj[0];
+          Manual.name = item.name;
+          if (item.files.length > 0) {
+            Manual.filePath = process.env.VUE_APP_BASE_API + item.files[0].filePath
+          }
+          this.Manual = Manual
+        }
+      }
+    })
   }
 };
 </script>

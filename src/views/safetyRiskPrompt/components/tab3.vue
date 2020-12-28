@@ -81,11 +81,13 @@ export default {
       this.$emit("selectionChange", { selections: selections });
     },
     detail(row) {
+      let _this = this.$refs.detail;
+      _this.dialogLoading = true;
       riskNoticeSubDetail(row.id).then((res) => {
+        _this.dialogLoading = false;
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
-          let _this = this.$refs.detail;
           _this.form = res.obj;
           _this.dialog = true;
         }

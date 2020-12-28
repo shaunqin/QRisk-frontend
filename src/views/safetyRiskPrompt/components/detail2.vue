@@ -34,20 +34,30 @@
         </ul>
       </el-form-item>
       <el-form-item label="下发措施" v-if="form.firstLevelMeasure!=null">
-        <el-table v-loading="tbLoading" :data="form.firstLevelMeasure" size="mini">
-          <el-table-column label="下发部门" prop="deptName" width="110" show-overflow-tooltip />
-          <el-table-column label="截止日期" prop="deadline" width="100" />
-          <el-table-column label="措施内容" prop="content" />
-          <el-table-column label="落实情况" prop="implementStatus" />
-          <el-table-column label="上报人" width="120">
-            <template
-              slot-scope="{row}"
-              v-if="row.filler!=null"
-            >{{`${row.fillerName}[${row.filler}]`}}</template>
+        <el-table
+          :data="form.firstLevelMeasure"
+          size="mini"
+          row-key="id"
+          :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+          lazy
+          :load="loadTree"
+        >
+          <el-table-column label="下发部门" prop="deptName" width="160" align="left"  />
+          <el-table-column label="截止日期" width="100">
+            <template slot-scope="{row}">{{row.data.deadline}}</template>
           </el-table-column>
+          <el-table-column label="措施内容" min-width="150">
+            <template slot-scope="{row}">{{row.data.content}}</template>
+          </el-table-column>
+          <el-table-column label="落实情况" min-width="200" align="left">
+            <template slot-scope="{row}">
+              <span style="white-space: pre-wrap;">{{row.data.impl}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="上报人" width="120" prop="filler" />
           <el-table-column label="附件预览" min-width="120">
             <template slot-scope="{row}">
-              <div v-for="(item, index) in row.accessory" :key="index">
+              <div v-for="(item, index) in row.data.files" :key="index">
                 <el-link
                   type="primary"
                   v-if="item!=null"
@@ -82,6 +92,7 @@ import childMeasures from './childMeasures'
 import leaderApprvalRecord from './leaderApprvalRecord'
 import htmlContent from '@/components/common/htmlContent'
 import transactor from '@/components/common/transactor'
+import { riskNoticeLazyLoadIssueTree } from "@/api/risk";
 export default {
   components: { childMeasures, leaderApprvalRecord, htmlContent, transactor },
   data() {
@@ -119,6 +130,12 @@ export default {
     resetForm() {
       this.dialog = false;
     },
+    loadTree(tree, treeNode, resolve) {
+      console.log(tree);
+      riskNoticeLazyLoadIssueTree(tree.id).then(res => {
+        resolve(res.obj)
+      })
+    }
   },
 };
 </script>

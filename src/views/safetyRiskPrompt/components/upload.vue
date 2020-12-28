@@ -48,7 +48,10 @@ export default {
   },
   methods: {
     success(response, file, fileList) {
-      this.$emit("success", response);
+      if (response.code != '200') {
+        this.$message.error(response.msg);
+      } else
+        this.$emit("success", response);
     },
     error(err, file, fileList) {
       this.$message.error("上传失败");

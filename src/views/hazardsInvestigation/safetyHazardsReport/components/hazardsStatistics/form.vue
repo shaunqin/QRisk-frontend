@@ -174,7 +174,7 @@
         <el-input v-model="result.numOfUnrectified" disabled></el-input>
       </el-form-item>
       <el-form-item label="未按期关闭隐患率">
-        <el-input v-model="result.rateOfUnclosed" disabled></el-input>
+        <el-input v-model="result.rateOfUnclose" disabled></el-input>
       </el-form-item>
     </el-form>
 
@@ -272,7 +272,7 @@ export default {
           this.result = {
             numOfDue: obj.numOfDue,
             numOfUnrectified: obj.numOfUnrectified,
-            rateOfUnclosed: obj.rateOfUnclosed + "%",
+            rateOfUnclose: obj.rateOfUnclose + "%",
           };
           this.title = `(${obj.year}年1月1日 -- ${obj.curMonth}月${obj.curDays}日)`;
           this.form.id = obj.id;

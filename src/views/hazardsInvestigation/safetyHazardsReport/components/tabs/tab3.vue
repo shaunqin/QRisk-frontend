@@ -20,7 +20,7 @@
       <el-table-column prop="createTime" label="发起时间" width="140" />
       <el-table-column label="操作" width="110">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="detail(row)">查看</el-button>
+          <el-button type="primary" size="mini" @click="detail(row)">查看详情</el-button>
         </template>
       </el-table-column>
     </el-table>

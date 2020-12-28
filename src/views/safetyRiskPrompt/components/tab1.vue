@@ -24,7 +24,7 @@
       <el-table-column label="主题" min-width="150" show-overflow-tooltip>
         <template slot-scope="{row}">
           <el-link
-           size="mini"
+            size="mini"
             v-if="row.pdfUrl"
             type="primary"
             :href="pdfUrl(row)"
@@ -45,7 +45,7 @@
       <el-table-column label="发布单位" prop="dept"></el-table-column>
       <el-table-column label="操作" width="80">
         <template slot-scope="{row}">
-          <el-button  size="mini" type="text" @click="detail(row)">详情</el-button>
+          <el-button size="mini" type="text" @click="detail(row)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -67,7 +67,7 @@ import initData from "@/mixins/initData";
 import { format, formatShortDate } from "@/utils/datetime";
 import eform from "./form";
 import edetail from "./detail2";
-import { riskNoticeDetail, getRiskNoticeNo, queryRiskMgrDept, verifyPerms ,riskNoticeSubDetail} from "@/api/risk";
+import { riskNoticeDetail, getRiskNoticeNo, queryRiskMgrDept, verifyPerms, riskNoticeSubDetail } from "@/api/risk";
 import { mapGetters } from "vuex";
 export default {
   components: { eform, edetail },
@@ -131,7 +131,9 @@ export default {
         })
     },
     detail(row) {
+      this.loading = true;
       riskNoticeSubDetail(row.id).then((res) => {
+        this.loading = false;
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {

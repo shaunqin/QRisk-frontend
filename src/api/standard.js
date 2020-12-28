@@ -48,3 +48,12 @@ export const detailOtherStand = (id) => {
     method: 'get'
   })
 }
+// 查询其他标准 query
+export const queryOtherStand = (standardNo) => {
+  if (!standardNo) standardNo = "Manual";
+  return request({
+    url: `/info_mgr/other_standard_mgr/query/all`,
+    method: 'get',
+    params: { standardNo }
+  })
+}

@@ -12,7 +12,7 @@
       <el-table-column prop="standardNo" :label="$t('standard.no')" />
       <el-table-column :label="$t('standard.name')">
         <template slot-scope="scope">
-          <el-button type="text" @click="detail(scope.row)">>{{scope.row.name}}</el-button>
+          <el-button type="text" @click="detail(scope.row)">{{scope.row.name}}</el-button>
         </template>
       </el-table-column>
       <el-table-column prop="remark" :label="$t('standard.remark')" />
