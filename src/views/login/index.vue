@@ -12,19 +12,27 @@
             <el-option label="华北领导" value="00804084"></el-option>
             <el-option label="空客维修风险管理员" value="00074427"></el-option>
           </el-select>
-        </el-form-item> -->
+        </el-form-item>-->
         <el-form-item prop="userName">
-          <el-input v-model="loginForm.userName" placeholder="请输入用户名" clearable>
+          <el-input
+            ref="userName"
+            v-model="loginForm.userName"
+            placeholder="请输入用户名"
+            clearable
+            @keyup.enter.native="handleLogin"
+          >
             <i slot="prefix" class="el-icon-user-solid el-input__icon icon userName" />
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input
+            ref="password"
             v-model="loginForm.password"
             placeholder="请输入密码"
             clearable
             show-password
             maxlength="16"
+            @keyup.enter.native="handleLogin"
           >
             <i slot="prefix" class="el-input__icon icon pwd" />
           </el-input>
@@ -74,7 +82,7 @@ export default {
     };
     return {
       loginForm: {
-        userName: "admin",
+        userName: "",
         password: "Qwer1234",
       },
       loginRules: {

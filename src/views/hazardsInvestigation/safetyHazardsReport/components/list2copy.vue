@@ -16,7 +16,7 @@
       @selection-change="selectionChange"
     >
       <el-table-column type="selection" width="50" />
-      <el-table-column type="index" label="序号"></el-table-column>
+      <el-table-column type="index" label="序号" width="50"></el-table-column>
       <el-table-column prop="no" label="编号" width="120px" />
       <el-table-column prop="hiddenName" label="隐患名称" width="120px" show-overflow-tooltip />
       <el-table-column label="发现时间" width="100px">

@@ -38,16 +38,8 @@
     <el-card header="下发任务" key="childTask" v-if="childTask.length>0">
       <el-table :data="childTask" size="mini">
         <el-table-column prop="deptName" label="部门" />
-        <el-table-column label="填报日期">
-          <template slot-scope="{row}">
-            <span>{{formatShortDate(row.fillDate)}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="填报人">
-          <template slot-scope="{row}">
-            <span v-if="row.filler!=null">{{row.fillerName}}[{{row.filler}}]</span>
-          </template>
-        </el-table-column>
+        <el-table-column label="填报日期" prop="fillerDate" />
+        <el-table-column label="填报人" prop="filler" />
         <el-table-column label="状态">
           <template slot-scope="{row}">
             <span v-if="row.status==2">待办</span>
@@ -60,7 +52,7 @@
         </el-table-column>
         <el-table-column label="办理人">
           <template slot-scope="{row}">
-            <div v-if="row.reviewerInfo==null">-</div>
+            <div v-if="row.reviewerInfo==null||row.reviewerInfo.length==0">-</div>
             <el-popover v-else placement="left">
               <el-button type="text" slot="reference">详情</el-button>
               <transactor :data="row.reviewerInfo" />
@@ -74,7 +66,7 @@
         </el-table-column>
         <el-table-column label="审批记录" width="80">
           <template slot-scope="{row}">
-            <div v-if="row.comments==null">-</div>
+            <div v-if="row.comments==null||row.comments.length==0">-</div>
             <el-popover v-else placement="left" width="1000">
               <el-button type="text" slot="reference">详情</el-button>
               <approvalRecord :data="row.comments" />

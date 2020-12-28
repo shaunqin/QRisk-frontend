@@ -68,11 +68,6 @@
           <el-button v-else type="primary" size="mini" @click="doHandle(row)">办理</el-button>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="下发记录">
-        <template slot-scope="{row}">
-          <el-button size="mini" type="primary" @click="issueRecord(row)">查询</el-button>
-        </template>
-      </el-table-column>-->
     </el-table>
     <ehandle ref="ehandle" :isSecChild="true" :source="source" />
     <cmdIssue ref="cmdIssue" />
@@ -133,19 +128,6 @@ export default {
           _this.dialog = true;
         }
       });
-    },
-    issueRecord(row) {
-      this.tbLoading = true;
-      queryIssueTreeData(row.id).then(res => {
-        this.tbLoading = false;
-        if (res.code != '200') {
-          this.$message.error(res.msg);
-        } else {
-          let _this = this.$refs.cmdIssue;
-          _this.data = res.obj;
-          _this.dialog = true;
-        }
-      })
     },
     loadTree(tree, treeNode, resolve) {
       console.log(tree);

@@ -237,3 +237,10 @@ export function updateStatistics(data) {
         data
     })
 }
+// 查询树形下发措施
+export function querySubIssueTreeData(monthTaskId) {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/subMonthTask/${monthTaskId}`,
+        method: 'get',
+    })
+}

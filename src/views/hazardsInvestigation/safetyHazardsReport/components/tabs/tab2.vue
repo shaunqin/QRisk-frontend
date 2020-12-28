@@ -94,10 +94,10 @@ export default {
             }
             _this.form.implementStatus = res.obj.deptMeasure ? (res.obj.deptMeasure.implementStatus || "") : "";
             _this.dialog = true;
-            setTimeout(() => {
-              _this.dialogLoading = false
-            }, 500);
           }
+          setTimeout(() => {
+            _this.dialogLoading = false
+          }, 500);
         });
       } else {
         queryHazards2({ runTaskId: row.taskId }).then((res) => {
