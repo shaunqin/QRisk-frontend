@@ -109,13 +109,13 @@ export default {
           this.$message.error(res.msg);
         } else {
           this.$message.success("操作成功");
-          this.resetForm();
           if (this.source == "smart") {
             this.$parent.$parent.$parent.$parent.$parent.$parent.hazards();
           } else {
             // 刷新父页面-已下发措施
-            this.$parent.$parent.$parent.$parent.$parent.$parent.subHandle({ taskId: this.parentTaskId, formId: this.form.formId });
+            this.$parent.$parent.$parent.$parent.$parent.$parent.subHandle({ taskId: this.parentTaskId, formId: this.form.formId, businessType: 5 });
           }
+          this.resetForm();
         }
         this.loading = false;
       });

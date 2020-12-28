@@ -12,7 +12,14 @@
       <el-table-column prop="no" label="编号" width="130" />
       <el-table-column label="标题" min-width="150" show-overflow-tooltip>
         <template slot-scope="{row}">
-          <el-button type="text" size="mini" @click="detail(row)">{{row.title}}</el-button>
+          <span v-if="!row.filePath">{{row.title}}</span>
+          <el-link
+            v-else
+            type="primary"
+            size="mini"
+            :href="pdfUrl(row)"
+            target="_blank"
+          >{{row.title}}</el-link>
         </template>
       </el-table-column>
       <el-table-column prop="deptPathCn" label="下发部门" />
@@ -21,6 +28,11 @@
       </el-table-column>
       <el-table-column label="发布日期" width="100">
         <template slot-scope="{row}">{{formatShortDate(row.createTime)}}</template>
+      </el-table-column>
+      <el-table-column label="操作" width="100">
+        <template slot-scope="{row}">
+          <el-button type="text" size="mini" @click="detail(row)">详情</el-button>
+        </template>
       </el-table-column>
     </el-table>
     <!--分页组件-->
@@ -89,7 +101,7 @@ export default {
       });
     },
     pdfUrl(row) {
-      return `${process.env.VUE_APP_BASE_API}${row.pdfUrl}`
+      return `${process.env.VUE_APP_BASE_API}${row.filePath}`
     }
   },
 };

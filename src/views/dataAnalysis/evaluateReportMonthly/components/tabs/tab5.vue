@@ -9,6 +9,7 @@
       style="width: 100%;"
       @selection-change="selectionChange"
     >
+      <el-table-column prop="no" label="编号" />
       <el-table-column prop="title" label="任务标题" show-overflow-tooltip />
       <el-table-column prop="createBy" label="发起人" />
       <el-table-column prop="createTime" label="发起时间" />

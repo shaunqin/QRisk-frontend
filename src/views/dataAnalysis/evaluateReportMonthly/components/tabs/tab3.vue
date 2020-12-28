@@ -10,13 +10,29 @@
       @selection-change="selectionChange"
     >
       <el-table-column prop="no" label="编号" width="130" />
-      <el-table-column prop="title" label="标题" min-width="150" show-overflow-tooltip />
+      <el-table-column label="标题" min-width="150" show-overflow-tooltip>
+        <template slot-scope="{row}">
+          <span v-if="!row.filePath">{{row.title}}</span>
+          <el-link
+            v-else
+            type="primary"
+            size="mini"
+            :href="pdfUrl(row)"
+            target="_blank"
+          >{{row.title}}</el-link>
+        </template>
+      </el-table-column>
       <el-table-column prop="deptPathCn" label="下发部门" />
       <el-table-column label="拟制人">
         <template slot-scope="{ row }">{{ row.issueName }}[{{ row.issuer }}]</template>
       </el-table-column>
       <el-table-column label="发布日期" width="100">
         <template slot-scope="{ row }">{{ formatShortDate(row.createTime) }}</template>
+      </el-table-column>
+      <el-table-column label="操作" width="100">
+        <template slot-scope="{row}">
+          <el-button type="text" size="mini" @click="detail(row)">详情</el-button>
+        </template>
       </el-table-column>
     </el-table>
     <!--分页组件-->
@@ -28,17 +44,17 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-    <!-- <edetail ref="detail" /> -->
+    <edetail ref="detail" />
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
-// import edetail from "./detail";
-import { riskNoticeSubDetail } from "@/api/risk";
+import edetail from "../detail";
+import { riskControlDetail } from "@/api/risk";
 import { formatShortDate } from "@/utils/datetime";
 export default {
-  // components: { edetail },
+  components: { edetail },
   mixins: [initData],
   data() {
     return {};
@@ -68,18 +84,18 @@ export default {
       this.$emit("selectionChange", { selections: selections });
     },
     detail(row) {
-      riskNoticeSubDetail(row.id).then((res) => {
+      riskControlDetail(row.id).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
           let _this = this.$refs.detail;
-          _this.form = res.obj;
+          _this.data = res.obj;
           _this.dialog = true;
         }
       });
     },
     pdfUrl(row) {
-      return `${process.env.VUE_APP_BASE_API}${row.pdfUrl}`;
+      return `${process.env.VUE_APP_BASE_API}${row.filePath}`;
     },
   },
 };
