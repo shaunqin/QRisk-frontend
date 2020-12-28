@@ -36,14 +36,14 @@
       <el-form-item label>
         <el-table :data="productIndex">
           <el-table-column label prop="name" />
-          <el-table-column label="客户机对" v-if="product=='1'||product=='4'">
-            <template slot-scope="{row}" v-if="row.key1!=null">
-              <el-input-number v-model="row.value1" disabled></el-input-number>
-            </template>
-          </el-table-column>
-          <el-table-column label="国航机对" v-if="product=='1'||product=='4'">
+          <el-table-column label="国航机队" v-if="product=='1'||product=='4'">
             <template slot-scope="{row}" v-if="row.key0!=null">
               <el-input-number v-model="row.value0" disabled></el-input-number>
+            </template>
+          </el-table-column>
+          <el-table-column label="客户机队" v-if="product=='1'||product=='4'">
+            <template slot-scope="{row}" v-if="row.key1!=null">
+              <el-input-number v-model="row.value1" disabled></el-input-number>
             </template>
           </el-table-column>
           <el-table-column label="值" v-if="product=='2'||product=='3'">
@@ -84,6 +84,7 @@ export default {
       dialog: false,
       monthTaskId: "",
       fillInDate: "",
+      isNew: true,
       form: {
         agree: "",
         reason: ""
@@ -119,8 +120,314 @@ export default {
           });
         });
       }
-      console.log(arr)
       return arr;
+    },
+  },
+  watch: {
+    isNew(val) {
+      if (val) {
+        this.prodList = [
+          {
+            name: '定检产品',
+            value: '1',
+            children: [
+              {
+                name: '出厂检发现问题数量',
+                value0: 'outCheckProblemNum0',
+                value1: 'outCheckProblemNum1',
+              },
+              {
+                name: '出厂首班机械原因不正常航班数量',
+                value0: 'outFirstMechanicalNum0',
+                value1: 'outFirstMechanicalNum1',
+              },
+              {
+                name: '国航出厂一周机械原因不正常航班数量',
+                value0: 'outWeekMechanicalNum',
+                value1: null,
+              },
+              {
+                name: '维修差错及质量调查数量',
+                value0: 'repairErrorAndQauditNum0',
+                value1: 'repairErrorAndQauditNum1',
+              },
+              {
+                name: '客户质量投诉数量',
+                value0: null,
+                value1: 'customerQuComplaintNum',
+              },
+              {
+                name: '三方定检总工时',
+                value0: null,
+                value1: 'outPlanTotalWorkingHours1',
+              },
+              /* { name: '客户满意度调查全月份数', value0: null, value1: 'custSatisfactionMonthSurveyNum' },
+          { name: '客户满意度调查全月份数总分数之和', value0: null, value1: 'custSatisfactionMonthSurveyScoresSum' }, */
+            ],
+          },
+          {
+            name: '发动机/APU产品',
+            value: '2',
+            children: [
+              {
+                name: '全月出厂发动机/APU车台重复试车次数',
+                value0: 'outRepeatTestRunNum',
+                value1: null,
+              },
+              {
+                name: '全月出厂发动机/APU总台数',
+                value0: 'outTotalNum',
+                value1: null,
+              },
+              {
+                name: '发动机/APU在保修期全月返厂台数',
+                value0: 'returnWithinWarrantyPeriodNum',
+                value1: null,
+              },
+              {
+                name: '维修差错及质量调查数量',
+                value0: 'repairErrorAndQauditNum',
+                value1: null,
+              },
+              {
+                name: '客户质量投诉数量',
+                value0: 'customerQuComplaintNum',
+                value1: null,
+              },
+            ],
+          },
+          {
+            name: '附件修理产品',
+            value: '3',
+            children: [
+              {
+                name: '装机时间50小时以下非计划拆换的附件数量',
+                value0: 'fiftyHourComponentNum',
+                value1: null,
+              },
+              {
+                name: '全月出厂附件总数量',
+                value0: 'outComponentTotalNum',
+                value1: null,
+              },
+              {
+                name: '全月装机时间低于1000小时返厂修理/索赔的附件数量',
+                value0: 'thousandHourComponentNum',
+                value1: null,
+              },
+              {
+                name: '维修差错及质量调查数量',
+                value0: 'repairErrorAndQauditNum',
+                value1: null,
+              },
+              {
+                name: '出厂检发现问题数量',
+                value0: 'outCheckProblemNum',
+                value1: null,
+              },
+              {
+                name: '客户质量投诉数量',
+                value0: 'customerQuComplaintNum',
+                value1: null,
+              },
+            ],
+          },
+          {
+            name: '航线维修产品',
+            value: '4',
+            children: [
+              {
+                name: '出港基地机械原因航班不正常数量全月之和',
+                value0: 'outMechanicalNum0',
+                value1: 'outMechanicalNum1',
+              },
+              {
+                name: '出港基地航班数量全月之和',
+                value0: 'outTotalNum0',
+                value1: 'outTotalNum1',
+              },
+              {
+                name: '执管基地国航机队机组报告故障（TLB、CLB上问题）全月数量',
+                value0: 'reportFaultNum',
+                value1: null,
+              },
+              {
+                name: '执管基地国航机队重复故障全月数量',
+                value0: 'repeatFaultNum',
+                value1: null,
+              },
+              {
+                name: '执管基地国航机队总飞行时间',
+                value0: 'flyHoursTotalNum',
+                value1: null,
+              },
+              {
+                name: '维修差错及质量调查数量',
+                value0: 'repairErrorAndQauditNum0',
+                value1: 'repairErrorAndQauditNum1',
+              },
+              {
+                name: '客户质量投诉数量',
+                value0: null,
+                value1: 'customerQuComplaintNum',
+              },
+            ],
+          },
+        ]
+      } else {
+        this.prodList = [
+          {
+            name: '定检产品',
+            value: '1',
+            children: [
+              {
+                name: '出厂检发现问题数量',
+                value0: 'outCheckProblemNum0',
+                value1: 'outCheckProblemNum1',
+              },
+              {
+                name: '出厂首班机械原因不正常航班数量',
+                value0: 'outFirstMechanicalNum0',
+                value1: 'outFirstMechanicalNum1',
+              },
+              {
+                name: '国航出厂一周机械原因不正常航班数量',
+                value0: 'outWeekMechanicalNum',
+                value1: null,
+              },
+              {
+                name: '维修差错及质量调查数量',
+                value0: 'repairErrorAndQauditNum0',
+                value1: 'repairErrorAndQauditNum1',
+              },
+              {
+                name: '客户质量投诉数量',
+                value0: null,
+                value1: 'customerQuComplaintNum',
+              },
+              /* { name: '三方定检总工时', value0: null, value1: 'outPlanTotalWorkingHours1' }, */
+              {
+                name: '客户满意度调查全月份数',
+                value0: null,
+                value1: 'custSatisfactionMonthSurveyNum',
+              },
+              {
+                name: '客户满意度调查全月份数总分数之和',
+                value0: null,
+                value1: 'custSatisfactionMonthSurveyScoresSum',
+              },
+            ],
+          },
+          {
+            name: '发动机/APU产品',
+            value: '2',
+            children: [
+              {
+                name: '全月出厂发动机/APU车台重复试车次数',
+                value0: 'outRepeatTestRunNum',
+                value1: null,
+              },
+              {
+                name: '全月出厂发动机/APU总台数',
+                value0: 'outTotalNum',
+                value1: null,
+              },
+              {
+                name: '发动机/APU在保修期全月返厂台数',
+                value0: 'returnWithinWarrantyPeriodNum',
+                value1: null,
+              },
+              {
+                name: '维修差错及质量调查数量',
+                value0: 'repairErrorAndQauditNum',
+                value1: null,
+              },
+              {
+                name: '客户质量投诉数量',
+                value0: 'customerQuComplaintNum',
+                value1: null,
+              },
+            ],
+          },
+          {
+            name: '附件修理产品',
+            value: '3',
+            children: [
+              {
+                name: '装机时间50小时以下非计划拆换的附件数量',
+                value0: 'fiftyHourComponentNum',
+                value1: null,
+              },
+              {
+                name: '全月出厂附件总数量',
+                value0: 'outComponentTotalNum',
+                value1: null,
+              },
+              {
+                name: '全月装机时间低于1000小时返厂修理/索赔的附件数量',
+                value0: 'thousandHourComponentNum',
+                value1: null,
+              },
+              {
+                name: '维修差错及质量调查数量',
+                value0: 'repairErrorAndQauditNum',
+                value1: null,
+              },
+              {
+                name: '出厂检发现问题数量',
+                value0: 'outCheckProblemNum',
+                value1: null,
+              },
+              {
+                name: '客户质量投诉数量',
+                value0: 'customerQuComplaintNum',
+                value1: null,
+              },
+            ],
+          },
+          {
+            name: '航线维修产品',
+            value: '4',
+            children: [
+              {
+                name: '出港基地机械原因航班不正常数量全月之和',
+                value0: 'outMechanicalNum0',
+                value1: 'outMechanicalNum1',
+              },
+              {
+                name: '出港基地航班数量全月之和',
+                value0: 'outTotalNum0',
+                value1: 'outTotalNum1',
+              },
+              {
+                name: '执管基地国航机队机组报告故障（TLB、CLB上问题）全月数量',
+                value0: 'reportFaultNum',
+                value1: null,
+              },
+              {
+                name: '执管基地国航机队重复故障全月数量',
+                value0: 'repeatFaultNum',
+                value1: null,
+              },
+              {
+                name: '执管基地国航机队总飞行时间',
+                value0: 'flyHoursTotalNum',
+                value1: null,
+              },
+              {
+                name: '维修差错及质量调查数量',
+                value0: 'repairErrorAndQauditNum0',
+                value1: 'repairErrorAndQauditNum1',
+              },
+              {
+                name: '客户质量投诉数量',
+                value0: null,
+                value1: 'customerQuComplaintNum',
+              },
+            ],
+          },
+        ]
+      }
     },
   },
   created() {
@@ -132,8 +439,13 @@ export default {
           { name: '国航出厂一周机械原因不正常航班数量', value0: 'outWeekMechanicalNum', value1: null },
           { name: '维修差错及质量调查数量', value0: 'repairErrorAndQauditNum0', value1: 'repairErrorAndQauditNum1' },
           { name: '客户质量投诉数量', value0: null, value1: 'customerQuComplaintNum' },
-          { name: '客户满意度调查全月份数', value0: null, value1: 'custSatisfactionMonthSurveyNum' },
-          { name: '客户满意度调查全月份数总分数之和', value0: null, value1: 'custSatisfactionMonthSurveyScoresSum' },
+          {
+            name: '三方定检总工时',
+            value0: null,
+            value1: 'outPlanTotalWorkingHours1',
+          },
+          /* { name: '客户满意度调查全月份数', value0: null, value1: 'custSatisfactionMonthSurveyNum' },
+          { name: '客户满意度调查全月份数总分数之和', value0: null, value1: 'custSatisfactionMonthSurveyScoresSum' }, */
         ]
       },
       {

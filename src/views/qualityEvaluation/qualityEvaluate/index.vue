@@ -66,14 +66,22 @@
           <el-table-column label width="120">
             <template slot-scope="{row}">{{renderTbCol(row)}}</template>
           </el-table-column>
-          <el-table-column v-for="(column,index) in columns" :key="index" :label="column.name">
+          <el-table-column v-for="(column,index) in columns" :key="column.name+index" :label="column.name" :prop="column.prop ? column.prop : null">
+              <el-table-column
+                v-for="(item,iindex) in column.children"
+                :key="iindex"
+                :label="item.name"
+                :prop="item.prop"
+              />
+          </el-table-column>
+          <!-- <el-table-column v-for="(column,index) in columns" :key="column.name+index" :label="column.name">
             <el-table-column
               v-for="(item,iindex) in column.children"
               :key="iindex"
               :label="item.name"
               :prop="item.prop"
             />
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
       </el-col>
     </el-row>
@@ -127,8 +135,16 @@ export default {
   },
   methods: {
     toQuery(name) {
+      let title = ''
+      const bool1 = this.queryForm.month || this.queryForm.departmentPath
+      const bool2 = this.queryForm.productValue == '2' || this.queryForm.productValue == '3'
+      if(bool1 && bool2) {
+        title = '_new'
+      } else if (!bool1 && bool2) {
+        title = '_old'
+      }
       let obj = {
-        setObjectName: `quality_product_index_${this.queryForm.productValue}_${this.queryForm.indexValue}_title_cn`,
+        setObjectName: `quality_product_index_${this.queryForm.productValue}_${this.queryForm.indexValue}${title}_title_cn`,
         type: 2
       };
       queryDefaultValue(obj).then(res => {

@@ -17,7 +17,14 @@
       <el-table-column label="截止日期">
         <template slot-scope="{row}">{{formatShortDate(row.dueDate)}}</template>
       </el-table-column>
-      <el-table-column prop="productValue" label="产品" />
+      <el-table-column prop="productValue" label="产品">
+        <template slot-scope="{row}">
+          <span v-if="row.productValue == '1'">定检产品</span>
+          <span v-if="row.productValue == '2'">发动机/APU产品</span>
+          <span v-if="row.productValue == '3'">附件修理产品</span>
+          <span v-if="row.productValue == '4'">航线维修产品</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="150px" align="center" fixed="right">
         <template slot-scope="scope">
           <el-button-group v-if="scope.row.status==2">
@@ -101,6 +108,11 @@ export default {
           _this.fillInDate = formatShortDate(obj.fillInDate);
           _this.monthTaskId = obj.monthTaskId;
           _this.params = obj.params || {};
+          if(obj.year >= 2020 && obj.month >= 10) {
+            _this.isNew = true
+          } else {
+            _this.isNew = false
+          }
           _this.dialog = true;
         }
       })
@@ -118,6 +130,11 @@ export default {
           _this.fillInDate = formatShortDate(obj.fillInDate);
           _this.monthTaskId = obj.monthTaskId;
           _this.params = obj.params || {};
+          if(obj.year >= 2020 && obj.month >= 10) {
+            _this.isNew = true
+          } else {
+            _this.isNew = false
+          }
           _this.dialog = true;
         }
       })
@@ -134,6 +151,11 @@ export default {
           _this.fillInDate = formatShortDate(obj.fillInDate);
           _this.monthTaskId = obj.monthTaskId;
           _this.params = obj.params || {};
+          if(obj.year >= 2020 && obj.month >= 10) {
+            _this.isNew = true
+          } else {
+            _this.isNew = false
+          }
           _this.dialog = true;
         }
       })

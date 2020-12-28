@@ -8,7 +8,7 @@
       :highlight-current-row="false"
       style="width: 100%"
       cell-class-name="detail"
-      @cell-dblclick="detailCell"
+      @cell-click="detailCell"
     >
       <el-table-column type="index" width="50" fixed="left">
         <template slot="header">
