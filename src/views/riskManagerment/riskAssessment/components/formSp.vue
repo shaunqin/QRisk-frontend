@@ -114,12 +114,11 @@
           <el-col :span="8">
             <el-form-item label="分析人">
               <el-input
-                v-model="data.analysis"
-                :disabled="formEnable"
+                v-model="form.analysis"
               ></el-input>
             </el-form-item>
             <el-form-item label="编号">
-              <el-input :disabled="true" v-model="data.analysisNo"></el-input>
+              <el-input :disabled="true" v-model="form.analysisNo"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -134,7 +133,7 @@
             </el-form-item> -->
             <el-form-item label="批准日期">
               <el-date-picker
-                v-model="data.approvalDate"
+                v-model="form.approvalDate"
                 value-format="yyyy-MM-dd"
                 style="width: 100%"
                 :picker-options="pickerOptions"
@@ -149,7 +148,7 @@
               ></el-input>
             </el-form-item> -->
             <el-form-item label="批准人">
-              <el-input :disabled="true" v-model="data.approval"></el-input>
+              <el-input :disabled="true" v-model="form.approval"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -853,6 +852,8 @@ export default {
       this.resetForm()
     },
     doSubmit(sqlUserId) {
+      if (!this.form.issueDepts || !this.form.title.trim())
+        return this.$message.error('请填写完整！')
       this.loading = true
       if (this.isAdd) {
         this.doAdd(sqlUserId)

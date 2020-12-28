@@ -132,16 +132,21 @@ export default {
             _that.assessmentType = this.assessmentType;
             _that.form = { ...obj }
             _that.form.endTime = formatShortDate(obj.endTime)
-            _that.form.issueDepts = []
+            _that.form.approvalDate = formatShortDate(obj.approvalDate)
             if (obj.hazardVoList && obj.hazardVoList.length > 0) {
               // _that.list = [...obj.hazardVoList]
-              _that.list.map((item, index) => {
+              await _that.list.map((item, index) => {
                 item.possibility = obj.hazardVoList[index].possibility
                 item.rootCauseAnalysis = obj.hazardVoList[index].rootCauseAnalysis
                 item.specialRiskMeasureList = obj.hazardVoList[index].specialRiskMeasureList
               })
             }
             _that.dialog = true;
+            if(obj.type=='1') {
+              _that.form.issueDepts = obj.issueDept.split(',')
+            } else {
+              _that.form.issueDepts = obj.issueDept
+            }
           } else {
             _this.assessmentType = this.assessmentType;
             _this.form = {

@@ -689,7 +689,7 @@ export default {
       this.resetForm()
     },
     doSubmit(sqlUserId) {
-      if (!this.form.issueDepts || !this.form.title)
+      if (!this.form.issueDepts || !this.form.title.trim())
         return this.$message.error('请填写完整！')
       this.loading = true
       if (this.isAdd) {
@@ -697,7 +697,7 @@ export default {
       } else this.doModify(sqlUserId)
     },
     submit() {
-      if (!this.form.issueDepts || !this.form.title)
+      if (!this.form.issueDepts || !this.form.title.trim())
         return this.$message.error('请填写完整！')
       let _this = this.$refs.selectEmplotee
       // _this.id = this.selections[0];

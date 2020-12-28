@@ -409,7 +409,7 @@
               </ul>
             </template>
           </el-table-column>
-          <el-table-column label="控制状态" min-width="160">
+          <el-table-column label="控制状态" width="180">
             <template slot-scope="{ row }">
               <ul class="tab-ul">
                 <li
@@ -419,6 +419,7 @@
                   <el-select
                     v-model="item.measureStatus"
                     @change="changeStatus(item.measureStatus, item, row)"
+                    style="width: 110px"
                   >
                     <el-option label="不适用" value="0"></el-option>
                     <el-option label="未控制" value="1"></el-option>
