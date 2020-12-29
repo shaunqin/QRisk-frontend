@@ -1328,6 +1328,12 @@ export default {
     'data.type'(val) {
       this.data.issueDepts = null
     },
+    list: {
+      handler: function (val, oldVal) {
+        this.data.hazardList = deepClone([...val])
+      },
+      deep: true
+    },
   },
   created() {
     // 危险源层级
