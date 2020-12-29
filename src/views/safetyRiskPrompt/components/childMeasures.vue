@@ -55,7 +55,7 @@
       </el-table-column>
       <el-table-column label="审批记录" width="100">
         <template slot-scope="{row}">
-          <div v-if="row.comments==null||row.reviewerInfo.length==0">-</div>
+          <div v-if="row.comments==null||row.comments.length==0">-</div>
           <el-popover v-else placement="left" width="1000">
             <el-button type="text" size="mini" slot="reference">详情</el-button>
             <leaderApprvalRecord :data="row.comments" type="safety_measures" />
