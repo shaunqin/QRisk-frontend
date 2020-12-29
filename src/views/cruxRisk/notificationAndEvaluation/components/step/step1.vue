@@ -42,8 +42,8 @@
               是否适用于本单位
               <span style="margin: 0px 15px;">
                 <el-radio-group v-model="item.appliance" @change="changeAppliance(item.appliance, item)">
-                  <el-radio label="0" :disabled="formEnable || !!item.disabledAppliance">是</el-radio>
-                  <el-radio label="1" :disabled="formEnable || !!item.disabledAppliance">否</el-radio>
+                  <el-radio label="0" :disabled="formEnable">是</el-radio>
+                  <el-radio label="1" :disabled="formEnable">否</el-radio>
                 </el-radio-group>
               </span>
             </span>
