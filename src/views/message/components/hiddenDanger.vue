@@ -36,8 +36,15 @@
     </el-card>
 
     <el-card header="下发任务" key="childTask" v-if="childTask.length>0">
-      <el-table :data="childTask" size="mini">
-        <el-table-column prop="deptName" label="部门" />
+      <el-table
+        :data="childTask"
+        size="mini"
+        row-key="id"
+        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+        lazy
+        :load="loadTree"
+      >
+        <el-table-column prop="deptName" label="部门" align="left" width="160" />
         <el-table-column label="填报日期" prop="fillerDate" />
         <el-table-column label="填报人" prop="filler" />
         <el-table-column label="状态">
@@ -101,7 +108,7 @@
 
 <script>
 import { formatShortDate, format } from '@/utils/datetime'
-import { queryControlListDetail } from '@/api/hazards'
+import { queryControlListDetail, querySubIssueTreeData } from '@/api/hazards'
 import approvalRecord from '@/views/hazardsInvestigation/safetyHazardsReport/components/approvalRecord';
 import fillinForm from '@/views/hazardsInvestigation/safetyHazardsReport/components/fillinForm';
 import detailFillin from '@/views/hazardsInvestigation/safetyHazardsReport/components/detailFillin';
@@ -177,6 +184,12 @@ export default {
         }
       })
     },
+    loadTree(tree, treeNode, resolve) {
+      console.log(tree);
+      querySubIssueTreeData(tree.id).then(res => {
+        resolve(res.obj)
+      })
+    }
   },
 }
 </script>
