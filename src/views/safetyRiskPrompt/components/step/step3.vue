@@ -109,7 +109,8 @@ export default {
     data: {
       deep: true,
       handler(val) {
-        this.form.comment = val.summary;
+        if (val.summary)
+          this.form.comment = val.summary;
         // 重置附件
         this.accessory = this.data.deptMeasure ? this.data.deptMeasure.accessory : [];
       }
