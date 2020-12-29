@@ -22,20 +22,22 @@
         class="avatar-container right-menu-item hover-effect"
         trigger="click"
         placement="bottom"
+        @command="handleCommand"
       >
         <div class="avatar-wrapper">
           <img :src="userImgUrl" class="user-avatar" />
-          <span class="user-name">{{userInfo.realname||'admin@123'}}</span>
+          <span class="user-name">{{userInfo.realname}}</span>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>{{userInfo.sqlUserId}}</el-dropdown-item>
+          <el-dropdown-item command="updatepwd">修改密码</el-dropdown-item>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">{{ $t('navbar.logOut') }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+    <UpdatePWD ref="UpdatePWD" />
   </div>
 </template>
 
@@ -47,6 +49,7 @@ import Screenfull from "@/components/Screenfull";
 // import SizeSelect from '@/components/SizeSelect'
 import LangSelect from "@/components/LangSelect";
 import MessageBell from "@/components/MessageBell";
+import UpdatePWD from '@/components/UpdatePWD'
 
 export default {
   components: {
@@ -56,6 +59,7 @@ export default {
     // SizeSelect,
     LangSelect,
     MessageBell,
+    UpdatePWD
   },
   data() {
     return {
@@ -73,6 +77,11 @@ export default {
       await this.$store.dispatch("user/logout");
       this.$router.push(`/login?redirect=${this.$route.fullPath}`);
     },
+    handleCommand(command) {
+      if (command == 'updatepwd') {
+        this.$refs.UpdatePWD.dialog = true;
+      }
+    }
   },
 };
 </script>

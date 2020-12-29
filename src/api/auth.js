@@ -24,3 +24,12 @@ export function resetAllModuleRoleAuth() {
     method: 'put'
   })
 }
+
+// 修改面膜
+export function updatePwd(data) {
+  return request({
+    url: '/sys_mgr/modifyPwd',
+    method: 'post',
+    data
+  })
+}

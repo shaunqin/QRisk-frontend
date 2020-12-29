@@ -171,7 +171,8 @@ export default {
         } else {
           this.$message.success("填报成功!");
           this.resetForm(); // 关闭主弹窗
-          _this.resetForm();  // 关闭子弹窗
+          if (_this)
+            _this.resetForm();  // 关闭子弹窗
           if (!this.fullscreen) {
             this.$parent.init();
             this.loadCount();

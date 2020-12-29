@@ -53,6 +53,7 @@
               placeholder="为空则是长期选项"
               style="width:100%"
               @change="formChangeStatus"
+              :picker-options="{disabledDate:date=>date.getTime() < Date.now() - 8.64e7}"
             ></el-date-picker>
           </el-col>
           <el-col :span="11">

@@ -20,6 +20,16 @@ export function validUsername(str) {
 }
 
 /**
+ * 
+ * @param {string} pwd 
+ * @return {Boolean}
+ */
+export function validPWD(pwd) {
+  const reg = /^(?![a-zA-Z]+$)(?![A-Z0-9]+$)(?![A-Z\W_]+$)(?![a-z0-9]+$)(?![a-z\W_]+$)(?![0-9\W_]+$)(?![A-Z0-9\W_]+$)[a-zA-Z0-9\W_]{8,16}$/;
+  return reg.test(pwd);
+}
+
+/**
  * @param {string} url
  * @returns {Boolean}
  */

@@ -66,6 +66,7 @@
                 value-format="yyyy-MM-dd"
                 placeholder="为空则是长期选项"
                 style="width: 100%"
+                :picker-options="{disabledDate:date=>date.getTime() < Date.now() - 8.64e7}"
               ></el-date-picker>
             </div>
             <div style="width: 55px">

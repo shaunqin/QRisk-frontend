@@ -13,7 +13,7 @@
       <el-option label="本月有新增" value="0"></el-option>
       <el-option label="本月无新增" value="1"></el-option>
     </el-select>
-    <fillinForm ref="fillinForm" :data="data" v-if="form.noHiddenDanger!=1" />
+    <fillinForm ref="fillinForm" :data="data" v-show="form.noHiddenDanger!=1" />
   </div>
 </template>
 
