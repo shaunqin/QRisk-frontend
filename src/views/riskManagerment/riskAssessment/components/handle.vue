@@ -80,14 +80,14 @@
         :source="fullscreen ? 'smart' : ''"
       />
       <!-- 风险评价报告 -->
-      <report ref="reportRef" :formId="formId" />
+      <report ref="reportRef" :formId="formId" @submit="reportSubmit" />
       <!-- 抄送 -->
       <ccPerson ref="ccPerson" :deptPath="deptPath" @subCC="subCC" />
     </div>
 
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel" v-if="!fullscreen">取消</el-button>
-      <el-button :loading="loading" type="warning" @click="doSubmitSave" v-if="!onlyLeader"
+      <el-button :loading="loading" type="warning" @click="doSubmitSave(false)" v-if="!onlyLeader"
         >暂存</el-button
       >
       <el-button :loading="loading" type="primary" @click="doSubmit"
@@ -195,7 +195,7 @@ export default {
         case 4:
         case 5:
         case 7:
-          this.submitStep1()
+          this.doSubmitSave(true)
           break
         case 2:
         case 6:
@@ -228,6 +228,7 @@ export default {
     },
     submitStep1() {
       this.loading = true
+      this.$parent.loading = true
       const commentModel = { ...this.form, processFlag: '' }
       specialRiskSaveHazard({ ...this.data, commentModel }).then((res) => {
         if (res.code != '200') {
@@ -241,6 +242,7 @@ export default {
           }
         }
         this.loading = false
+        this.$parent.loading = false
       })
     },
     submitStep2() {
@@ -346,25 +348,35 @@ export default {
         this.loading = false
       })
     },
-    doSubmitSave() {
+    doSubmitSave(submitBool) {
       this.loading = true
       specialRiskSaveHazard(this.data).then((res) => {
         if (res.code != '200') {
           this.$message.error(res.msg)
         } else {
-          if (res.obj) {
+          if (!this.data.hiddenReport && res.obj) {
             this.formId = this.data.id
             this.$refs.reportRef.disabled = this.data.step != '1'
+            this.$refs.reportRef.submitBool = submitBool
             this.$refs.reportRef.dialog = this.data.hiddenReport?false:true
           } else {
-            this.$message.success('填报成功')
-            this.$parent.init()
-            this.resetForm()
+            if(submitBool) {
+              this.reportSubmit(submitBool)
+            } else {
+              this.$message.success('填报成功')
+              this.$parent.init()
+              this.resetForm()
+            }
           }
         }
         this.loading = false
       })
     },
+    reportSubmit(bool) {
+      if(bool) {
+        this.submitStep1()
+      }
+    }
   },
 }
 </script>

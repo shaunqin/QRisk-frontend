@@ -181,6 +181,7 @@
                 v-model="row.possibility"
                 style="width: 100%"
                 :disabled="false"
+                @change="choosePoss(row, row.possibility)"
               >
                 <!-- code作为key -->
                 <el-option
@@ -290,6 +291,7 @@ import {
   specialRiskModify,
   queryRiskListMgr,
   queryRiskMgrDept,
+  specialRiskQueryRiskLevel,
 } from '@/api/risk'
 import department from '@/components/Department'
 import deptByRole from '@/components/Department/deptByRole'
@@ -1409,6 +1411,16 @@ export default {
         row.specialRiskMeasureList[0].controlMeasure = '-'
         row.specialRiskMeasureList[0].reponsibleDept = '-'
       }
+    },
+    choosePoss(row, value) {
+      specialRiskQueryRiskLevel(value, row.seriousness).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg)
+        } else {
+          row.riskLevel = res.obj
+          this.$forceUpdate()
+        }
+      })
     }
   },
 }

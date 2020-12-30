@@ -811,6 +811,7 @@ export default {
     formatShortDate,
     showReport() {
       this.formId = this.data.id
+      this.$refs.report.disabled = true
       this.$refs.report.dialog = true
     },
     cancel() {

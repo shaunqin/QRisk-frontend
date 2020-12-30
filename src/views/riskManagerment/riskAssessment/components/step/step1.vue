@@ -132,6 +132,7 @@
               :value="row.reponsibleUnit"
               @change="deptChangeOnTb($event, row)"
               :disabled="riskEnable"
+              :url="deptPath"
             ></department>
           </template>
         </el-table-column>
@@ -329,7 +330,7 @@
               <el-select
                 v-model="row.possibility"
                 style="width: 100%"
-                @change="forceUpdate()"
+                @change="choosePoss(row, row.possibility)"
                 :disabled="false"
               >
                 <!-- code作为key -->
@@ -636,6 +637,7 @@
                   @change="deptChange($event, scope.row, 'reponsibleDept')"
                   :disabled="riskEnable"
                   :path="departmentParams"
+                  :url="deptPath"
                 />
               </template>
             </el-table-column>
@@ -702,7 +704,7 @@
     <!-- <ehandle ref="ehandle" />
     <hairdown ref="formHairdown" :data="data" :form="formHairdown" :multiple="false" :issue="false" />-->
 
-    <el-card header="已下发通知" key="childNotes" v-if="showChildNotes">
+    <el-card header="已下发通知" key="childNotes" v-if="data.hiddenSubNotes">
       <childNotes :data="data" :source="source" />
     </el-card>
     <el-card header="已下发措施" key="childMeasures" v-if="showChildMeasures">
@@ -1326,6 +1328,12 @@ export default {
     'data.type'(val) {
       this.data.issueDepts = null
     },
+    list: {
+      handler: function (val, oldVal) {
+        this.data.hazardList = deepClone([...val])
+      },
+      deep: true
+    },
   },
   created() {
     // 危险源层级
@@ -1346,7 +1354,7 @@ export default {
     })
 
     this.loadingTree = true
-    const url = '/sys_mgr/department_mgr/query/tree'
+    const url = '/risk_mgr/special_risk_notice_mgr/query/tree'
     queryDepts(url).then((res) => {
       this.loadingTree = false
       this.options = res.obj
@@ -1557,6 +1565,16 @@ export default {
         item.controlMeasure = '-'
         item.reponsibleDept = '-'
       }
+    },
+    choosePoss(row, value) {
+      specialRiskQueryRiskLevel(value, row.seriousness).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg)
+        } else {
+          row.riskLevel = res.obj
+          this.$forceUpdate()
+        }
+      })
     }
     /* doHandle(row) {
       this.reviewLoading = true

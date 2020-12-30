@@ -79,6 +79,7 @@
               :value="form.issueDepts"
               :deptPath="form.releasePath"
               :multiple="true"
+              :url="'/risk_mgr/special_risk_notice_mgr/query/depts'"
               @change="deptChange($event, 'issueDepts')"
             ></deptByRole>
             <department

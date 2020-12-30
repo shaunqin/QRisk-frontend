@@ -31,7 +31,7 @@
         </div>
         <el-dropdown-menu slot="dropdown">
           <!-- <el-dropdown-item command="updatepwd">修改密码</el-dropdown-item> -->
-          <el-dropdown-item divided @click.native="logout">
+          <el-dropdown-item @click.native="logout">
             <span style="display:block;">{{ $t('navbar.logOut') }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
