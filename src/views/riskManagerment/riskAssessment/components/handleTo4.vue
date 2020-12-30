@@ -59,7 +59,7 @@
             </ul>
           </template>
         </el-table-column>
-        <el-table-column label="风险完成期限" width="160" show-overflow-tooltip>
+        <el-table-column label="风险完成期限" width="160" show-overflow-tooltip v-if="this.data.assType != '4'">
           <template slot-scope="{ row }">
             <ul class="tab-ul">
               <li v-for="item in row.specialRiskMeasureList" :key="item.id">
@@ -204,6 +204,9 @@ export default {
             } else {
               this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.subHandle(obj)
             }
+          }
+          if(this.data.assType == '4') {
+            this.$parent.$parent.$parent.data.hazardVoList = [...this.data.hazardVoList]
           }
         }
         this.loading = false
