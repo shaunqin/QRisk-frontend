@@ -85,6 +85,30 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <el-form-item label="附件">
+        <eupload @success="uploadSuccess"></eupload>
+        <el-table :data="files" size="mini" class="file-table">
+          <el-table-column :label="$t('analysis.fileName')" prop="originFileName" />
+          <el-table-column :label="$t('analysis.fileSize')">
+            <template slot-scope="{row}">{{(row.fileSize/1024).toFixed(2)}}Kb</template>
+          </el-table-column>
+          <el-table-column :label="$t('global.operation')" width="100px">
+            <template slot-scope="{row,$index}">
+              <el-tooltip :content="$t('analysis.preview')" placement="left">
+                <el-link
+                  type="primary"
+                  :underline="false"
+                  :href="baseApi+row.filePath"
+                  target="_blank"
+                >
+                  <svg-icon icon-class="eye-open"></svg-icon>
+                </el-link>
+              </el-tooltip>&nbsp;&nbsp;
+              <el-button type="text" icon="el-icon-delete" @click="delFile($index)"></el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-form-item>
     </el-form>
     <selectEmplotee :deptPath="form.deptPath" ref="selectEmplotee" @on-submit="doSubmit" />
     <div slot="footer" class="dialog-footer">
@@ -111,8 +135,9 @@ import department from "@/components/Department/deptByRole";
 import { format } from "@/utils/datetime";
 import selectEmplotee from "./selectEmplotee";
 import editer from "@/components/Tinymce";
+import eupload from "@/components/Upload/index";
 export default {
-  components: { department, selectEmplotee, editer },
+  components: { department, selectEmplotee, editer, eupload },
   data() {
     return {
       loading: false,
@@ -125,6 +150,7 @@ export default {
         existingRisk: "",
         measures: [],
         deptPath: '',
+        accId: []
       },
       roleSelect: [],
       formRules: {
@@ -135,6 +161,8 @@ export default {
       },
       deptList: [],
       needLeader: true, // 是否需要领导,提交/下发
+      files: [],
+      baseApi: process.env.VUE_APP_BASE_API
     };
   },
   props: {
@@ -151,6 +179,10 @@ export default {
       needSubmit2Leader(val).then(res => {
         this.needLeader = !!res.obj;
       })
+    },
+    files(val) {
+      if (val && val.length > 0) this.form.accId = val.map((r) => r.id);
+      else this.form.accId = [];
     },
   },
   methods: {
@@ -241,7 +273,9 @@ export default {
         existingRisk: "",
         measures: [],
         deptPath: '',
+        accId: []
       };
+      this.files = [];
     },
     addRisk() {
       this.form.measures.push({
@@ -262,9 +296,20 @@ export default {
     },
     getUrl(url) {
       return process.env.VUE_APP_BASE_API + url;
-    }
+    },
+    uploadSuccess(response) {
+      console.log(response);
+      this.files.push(response.obj);
+    },
+    delFile(index) {
+      this.files.splice(index, 1);
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.file-table {
+  margin-top: 10px;
+}
+</style>

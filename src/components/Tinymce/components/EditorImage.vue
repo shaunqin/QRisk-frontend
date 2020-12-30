@@ -1,8 +1,12 @@
 <template>
   <div class="upload-container">
-    <el-button :style="{background:color,borderColor:color}" icon="el-icon-upload" size="mini" type="primary" @click=" dialogVisible=true">
-      上传图片
-    </el-button>
+    <el-button
+      :style="{background:color,borderColor:color}"
+      icon="el-icon-upload"
+      size="mini"
+      type="primary"
+      @click=" dialogVisible=true"
+    >上传图片</el-button>
     <el-dialog :append-to-body="true" :visible.sync="dialogVisible">
       <el-upload
         :multiple="true"
@@ -12,26 +16,21 @@
         :on-success="handleSuccess"
         :before-upload="beforeUpload"
         class="editor-slide-upload"
-        action="https://httpbin.org/post"
+        :headers="headers"
+        :action="apiurl"
         list-type="picture-card"
       >
-        <el-button size="small" type="primary">
-          点击上传
-        </el-button>
+        <el-button size="small" type="primary">点击上传</el-button>
       </el-upload>
-      <el-button @click="dialogVisible = false">
-        关闭
-      </el-button>
-      <el-button type="primary" @click="handleSubmit">
-        确认
-      </el-button>
+      <el-button @click="dialogVisible = false">关闭</el-button>
+      <el-button type="primary" @click="handleSubmit">确认</el-button>
     </el-dialog>
   </div>
 </template>
 
 <script>
 // import { getToken } from 'api/qiniu'
-
+import { getToken } from "@/utils/auth";
 export default {
   name: 'EditorSlideUpload',
   props: {
@@ -44,7 +43,11 @@ export default {
     return {
       dialogVisible: false,
       listObj: {},
-      fileList: []
+      fileList: [],
+      apiurl: process.env.VUE_APP_BASE_API + "/accessory/upload",
+      headers: {
+        Authorization: `xytoken_${getToken("Token")}`,
+      },
     }
   },
   methods: {
@@ -67,8 +70,10 @@ export default {
       const objKeyArr = Object.keys(this.listObj)
       for (let i = 0, len = objKeyArr.length; i < len; i++) {
         if (this.listObj[objKeyArr[i]].uid === uid) {
-          this.listObj[objKeyArr[i]].url = response.files.file
+          // this.listObj[objKeyArr[i]].url = response.files.file
+          this.listObj[objKeyArr[i]].url = process.env.VUE_APP_BASE_API + response.obj.filePath
           this.listObj[objKeyArr[i]].hasSuccess = true
+          this.listObj[objKeyArr[i]].path = response.obj.diskPath
           return
         }
       }
@@ -91,7 +96,7 @@ export default {
       return new Promise((resolve, reject) => {
         const img = new Image()
         img.src = _URL.createObjectURL(file)
-        img.onload = function() {
+        img.onload = function () {
           _self.listObj[fileName] = { hasSuccess: false, uid: file.uid, width: this.width, height: this.height }
         }
         resolve(true)

@@ -120,6 +120,7 @@ export default {
             pdf: obj.pdf
           };
           _this.id = obj.id;
+          _this.files = res.obj.files; 
           _this.dialog = true;
         }
       });
