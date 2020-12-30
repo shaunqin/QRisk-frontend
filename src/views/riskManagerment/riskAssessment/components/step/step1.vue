@@ -1330,7 +1330,9 @@ export default {
     },
     list: {
       handler: function (val, oldVal) {
-        this.data.hazardList = deepClone([...val])
+        if(this.data.assType == '4') {
+          this.data.hazardList = deepClone([...val])
+        }
       },
       deep: true
     },
