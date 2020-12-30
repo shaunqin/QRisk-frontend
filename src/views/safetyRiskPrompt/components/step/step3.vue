@@ -20,6 +20,18 @@
       <el-form-item label="安全风险">
         <htmlContent :html="data.existingRisk" />
       </el-form-item>
+      <el-form-item label="附件">
+        <ul class="measuresVos">
+          <li v-for="(item,index) in data.files" :key="index">
+            <el-link
+              type="primary"
+              :underline="false"
+              :href="baseApi+item.filePath"
+              target="_blank"
+            >{{item.originFileName}}</el-link>
+          </li>
+        </ul>
+      </el-form-item>
       <el-form-item label="风险防范">
         <el-table :data="deptMeasure" size="mini">
           <el-table-column label="截止日期" prop="deadline" width="100" />
@@ -78,7 +90,8 @@ export default {
   data() {
     return {
       accessory: this.data.deptMeasure ? this.data.deptMeasure.accessory : [],
-      summary: ""
+      summary: "",
+      baseApi: process.env.VUE_APP_BASE_API
     };
   },
   props: {

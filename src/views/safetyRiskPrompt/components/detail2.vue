@@ -33,6 +33,18 @@
           <li v-for="(item,index) in form.measuresVos" :key="index">{{item.content}}</li>
         </ul>
       </el-form-item>
+      <el-form-item label="附件">
+        <ul class="measuresVos">
+          <li v-for="(item,index) in form.files" :key="index">
+            <el-link
+              type="primary"
+              :underline="false"
+              :href="baseApi+item.filePath"
+              target="_blank"
+            >{{item.originFileName}}</el-link>
+          </li>
+        </ul>
+      </el-form-item>
       <el-form-item label="下发措施" v-if="form.firstLevelMeasure!=null">
         <el-table
           :data="form.firstLevelMeasure"
@@ -42,7 +54,7 @@
           lazy
           :load="loadTree"
         >
-          <el-table-column label="下发部门" prop="deptName" width="160" align="left"  />
+          <el-table-column label="下发部门" prop="deptName" width="160" align="left" />
           <el-table-column label="截止日期" width="100">
             <template slot-scope="{row}">{{row.data.deadline}}</template>
           </el-table-column>
@@ -101,6 +113,7 @@ export default {
       dialog: false,
       dialogLoading: false,
       form: {},
+      baseApi: process.env.VUE_APP_BASE_API
     };
   },
   props: {

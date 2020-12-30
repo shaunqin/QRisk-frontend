@@ -33,6 +33,18 @@
           <li v-for="(item,index) in data.measuresVos" :key="index">{{item.content}}</li>
         </ul>
       </el-form-item>
+      <el-form-item label="附件">
+        <ul class="measuresVos">
+          <li v-for="(item,index) in files" :key="index">
+            <el-link
+              type="primary"
+              :underline="false"
+              :href="baseApi+item.filePath"
+              target="_blank"
+            >{{item.originFileName}}</el-link>
+          </li>
+        </ul>
+      </el-form-item>
       <el-form-item label="部门措施">
         <childMeasures :data="data.deptsMeasures" :hiddenField="['审核']" />
       </el-form-item>
@@ -65,8 +77,10 @@ export default {
   data() {
     return {
       dialog: false,
-      dialogLoading:false,
-      data: {}
+      dialogLoading: false,
+      data: {},
+      files: [],
+      baseApi: process.env.VUE_APP_BASE_API
     };
   },
   props: {

@@ -75,6 +75,7 @@ export default {
         } else {
           let _this = this.$refs.doneDetail;
           _this.data = res.obj;
+          _this.files = res.obj.files;
           _this.dialog = true;
         }
       })

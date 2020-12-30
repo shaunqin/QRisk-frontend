@@ -89,6 +89,7 @@ export default {
           this.$message.error(res.msg);
         } else {
           _this.form = res.obj;
+          _this.files = res.obj.files;
           _this.dialog = true;
         }
       });

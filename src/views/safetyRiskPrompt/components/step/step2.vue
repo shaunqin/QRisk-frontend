@@ -81,6 +81,30 @@
           </el-col>
         </el-row>
       </el-form-item>
+      <el-form-item label="附件">
+        <eupload @success="uploadSuccess"></eupload>
+        <el-table :data="files" size="mini" class="file-table">
+          <el-table-column :label="$t('analysis.fileName')" prop="originFileName" />
+          <el-table-column :label="$t('analysis.fileSize')">
+            <template slot-scope="{row}">{{(row.fileSize/1024).toFixed(2)}}Kb</template>
+          </el-table-column>
+          <el-table-column :label="$t('global.operation')" width="100px">
+            <template slot-scope="{row,$index}">
+              <el-tooltip :content="$t('analysis.preview')" placement="left">
+                <el-link
+                  type="primary"
+                  :underline="false"
+                  :href="baseUrl+row.filePath"
+                  target="_blank"
+                >
+                  <svg-icon icon-class="eye-open"></svg-icon>
+                </el-link>
+              </el-tooltip>&nbsp;&nbsp;
+              <el-button type="text" icon="el-icon-delete" @click="delFile($index)"></el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-form-item>
       <el-form-item label="审批记录">
         <leaderApprvalRecord :data="data.noticeComments" type="safety_risk_notice" />
       </el-form-item>
@@ -94,8 +118,9 @@ import department from "@/components/Department/deptByRole";
 import { format } from "@/utils/datetime";
 import leaderApprvalRecord from '../leaderApprvalRecord'
 import editer from '@/components/Tinymce'
+import eupload from "@/components/Upload/index";
 export default {
-  components: { department, leaderApprvalRecord, editer },
+  components: { department, leaderApprvalRecord, editer, eupload },
   data() {
     return {
       loading: false,
@@ -107,6 +132,7 @@ export default {
         background: this.data.background,
         existingRisk: this.data.existingRisk,
         measures: this.data.measuresVos,
+        accId: []
       },
       formRules: {
         no: [{ required: true, message: "编号不能为空", trigger: "blur" }],
@@ -123,6 +149,8 @@ export default {
         ],
       },
       formChange: false,
+      baseUrl: process.env.VUE_APP_BASE_API,
+      files: this.data.files,
     };
   },
   props: {
@@ -163,7 +191,12 @@ export default {
           measures: data.measuresVos,
         };
         this.formChange = false;
+        this.files = data.files;
       },
+    },
+    files(val) {
+      if (val && val.length > 0) this.detailForm.accId = val.map((r) => r.id);
+      else this.detailForm.accId = [];
     },
   },
   methods: {
@@ -183,7 +216,14 @@ export default {
     },
     formChangeStatus() {
       this.formChange = true;
-    }
+    },
+    uploadSuccess(response) {
+      console.log(response);
+      this.files.push(response.obj);
+    },
+    delFile(index) {
+      this.files.splice(index, 1);
+    },
   },
 };
 </script>
@@ -193,6 +233,9 @@ export default {
   /deep/ .el-form-item__content {
     padding: 0 4px;
   }
+}
+.file-table {
+  margin-top: 10px;
 }
 </style>
 
