@@ -88,11 +88,11 @@ export default {
       this.params.assType = this.assessmentType;
       return true;
     },
-    subHandle(row) {
+    async subHandle(row) {
       this.loading = true;
       let _this = this.$refs.handle;
       _this.dialogLoading = true;
-      specialRiskFill(row.taskId).then((res) => {
+      await specialRiskFill(row.taskId).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
           this.loading = false;

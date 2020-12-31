@@ -194,14 +194,14 @@ export default {
         return
       }
       this.loading = true
-      specialRiskComplete({ ...this.form, ...params }).then((res) => {
+      specialRiskComplete({ ...this.form, ...params }).then(async (res) => {
         if (res.code != '200') {
           this.$message.error(res.msg)
         } else {
           this.$message.success('操作成功')
           this.resetForm()
           if (this.source == 'smart') {
-            this.$parent.$parent.$parent.$parent.$parent.$parent.speciaRisk()
+            await this.$parent.$parent.$parent.$parent.$parent.$parent.speciaRisk()
           } else {
 
             if (this.data.assType == '4') {
@@ -220,9 +220,9 @@ export default {
             }
             const obj = { taskId: this.parentTaskId }
             if (this.$parent.$parent.$parent.$parent.$parent.step == 1) {
-              this.$parent.$parent.$parent.$parent.$parent.$parent.subHandle(obj)
+              await this.$parent.$parent.$parent.$parent.$parent.$parent.subHandle(obj)
             } else {
-              this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.subHandle(obj)
+              await this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.subHandle(obj)
             }
           }
         }
