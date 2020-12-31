@@ -1301,6 +1301,7 @@ export default {
       let arr = []
       if (this.data.hazardVoList.length == 25) {
         arr = this.listArr.map((item, index) => {
+          item.id = this.data.hazardVoList[index].id
           item.possibility = this.data.hazardVoList[index].possibility
           item.rootCauseAnalysis = this.data.hazardVoList[
             index
