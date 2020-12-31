@@ -1,33 +1,29 @@
 <template>
   <div>
-    <el-table :data="data.childNotes" size="mini">
+    <el-table
+      :data="data.trees"
+      size="mini"
+      row-key="id"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      lazy
+      :load="loadTree"
+    >
+      <el-table-column label="下发部门" prop="deptName" width="140" align="left" />
       <el-table-column label="截止日期" prop="endTime" width="100">
-        <template slot-scope="{ row }">
-          {{ formatShortDate(row.endTime) || '-' }}
-        </template>
+        <template slot-scope="{ row }">{{ formatShortDate(row.data.deadline) || '-' }}</template>
       </el-table-column>
-      <el-table-column
-        label="下发部门"
-        prop="issueDeptName"
-        width="110"
-        show-overflow-tooltip
-      />
       <el-table-column label="通知内容" prop="noteContent" />
-      <el-table-column
-        label="上报人"
-        prop="reporter"
-        width="120"
-      ></el-table-column>
-      <el-table-column label="附件预览" width="120">
+      <el-table-column label="下发人" prop="issuer" width="120" />
+      <el-table-column label="填报人" prop="filler" width="120"></el-table-column>
+      <el-table-column label="附件预览" min-width="120">
         <template slot-scope="{ row }">
-          <div v-for="(item, index) in row.accessory" :key="index">
+          <div v-for="(item, index) in row.data.files" :key="index">
             <el-link
               type="primary"
               v-if="item != null"
               :href="getUrl(item.filePath)"
               target="_blank"
-              >{{ item.originFileName }}</el-link
-            >
+            >{{ item.originFileName }}</el-link>
           </div>
         </template>
       </el-table-column>
@@ -48,7 +44,7 @@
       </el-table-column>
       <el-table-column label="办理人" width="80">
         <template slot-scope="{ row }">
-          <div v-if="row.reviewerInfo == null">-</div>
+          <div v-if="row.reviewerInfo == null||row.reviewerInfo.length==0">-</div>
           <el-popover v-else placement="left">
             <el-button type="text" size="mini" slot="reference">详情</el-button>
             <transactor :data="row.reviewerInfo" />
@@ -57,17 +53,14 @@
       </el-table-column>
       <el-table-column label="审批记录" width="100">
         <template slot-scope="{ row }">
-          <div v-if="row.noteComment == null">-</div>
+          <div v-if="row.comments == null||row.comments.length==0">-</div>
           <el-popover v-else placement="left" width="1000">
             <el-button type="text" size="mini" slot="reference">详情</el-button>
-            <leaderApprvalRecord
-              :data="row.noteComment"
-              type="safety_measures"
-            />
+            <leaderApprvalRecord :data="row.comments" type="safety_measures" />
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column label="审核" width="160">
+      <el-table-column label="审核" width="100">
         <template slot-scope="{ row }">
           <span v-if="!row.reviewing">-</span>
           <el-button
@@ -76,26 +69,14 @@
             size="mini"
             @click="doHandle(row)"
             :loading="reviewLoading"
-            >办理</el-button
-          >
+          >办理</el-button>
           <!-- <el-button
             v-if="row.hiddenSubIssue"
             type="primary"
             size="mini"
             @click="doHairdown(row)"
             :loading="reviewLoading"
-          >下发</el-button> -->
-        </template>
-      </el-table-column>
-      <el-table-column label="通知记录" v-if="showIssueRecord">
-        <template slot-scope="{ row }">
-          <el-button
-            size="mini"
-            type="primary"
-            @click="issueRecord(row)"
-            :loading="tbLoading"
-            >查询</el-button
-          >
+          >下发</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -114,7 +95,7 @@
 import leaderApprvalRecord from './leaderApprvalRecord'
 import handleNotes from './handleTo4'
 import hairdown from './hairdown'
-import { specialRiskFill, queryIssueTreeNoteData, queryIsLM } from '@/api/risk'
+import { specialRiskFill, queryIssueTreeNoteData, queryIsLM, specialNoticeRiskSubNotes } from '@/api/risk'
 import cmdIssue from './cmdIssueTreeTable'
 import { format, formatShortDate } from '@/utils/datetime'
 import transactor from '@/components/common/transactor'
@@ -207,6 +188,12 @@ export default {
         }
       })
     },
+    loadTree(tree, treeNode, resolve) {
+      console.log(tree);
+      specialNoticeRiskSubNotes(tree.formId).then(res => {
+        resolve(res.obj)
+      })
+    }
   },
 }
 </script>

@@ -289,7 +289,7 @@
     >
       <transactor :data="data.reviewerInfo" width="100%" />
     </el-card>
-    <el-card header="下发通知" key="childNotes" v-if="showChildNotes">
+    <el-card header="下发记录" key="childNotes" v-if="showChildNotes">
       <childNotes :data="data" :showIssueRecord="true" />
     </el-card>
     <!-- <el-card

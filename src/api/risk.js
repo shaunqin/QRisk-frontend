@@ -222,6 +222,13 @@ export function riskNoticeLazyLoadIssueTree(measureId) {
     method: 'get',
   })
 }
+// 流程图
+export function riskNoticeLazyProcessChart(id) {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/echartsTreeData/${id}`,
+    method: 'get',
+  })
+}
 // =========  风险提示 end ==============
 
 // ======== 专项风险 =======
@@ -386,6 +393,14 @@ export function queryIsLM(id) {
     method: 'get',
   })
 }
+// 懒加载下发记录
+export function specialNoticeRiskSubNotes(formId) {
+  return request({
+    url: `/risk_mgr/special_risk_notice_mgr/subNotes/${formId}`,
+    method: 'get',
+  })
+}
+
 // ======== 专项风险 end =======
 
 // ======= 关键风险 ============

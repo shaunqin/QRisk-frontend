@@ -59,7 +59,12 @@
             </ul>
           </template>
         </el-table-column>
-        <el-table-column label="风险完成期限" width="160" show-overflow-tooltip v-if="this.data.assType != '4'">
+        <el-table-column
+          label="风险完成期限"
+          width="160"
+          show-overflow-tooltip
+          v-if="this.data.assType != '4'"
+        >
           <template slot-scope="{ row }">
             <ul class="tab-ul">
               <li v-for="item in row.specialRiskMeasureList" :key="item.id">
@@ -198,6 +203,21 @@ export default {
           if (this.source == 'smart') {
             this.$parent.$parent.$parent.$parent.$parent.$parent.speciaRisk()
           } else {
+
+            if (this.data.assType == '4') {
+              // 更新父级危险源
+              let hazardVoList = this.data.hazardVoList;
+              let parentData = [...this.$parent.$parent.$parent.data.hazardVoList];
+              parentData.map((item, index) => {
+                if (!item.possibility) {
+                  item.possibility = hazardVoList[index].possibility;
+                }
+                if (hazardVoList[index].rootCauseAnalysis != null)
+                  item.rootCauseAnalysis += "\r\n" + hazardVoList[index].rootCauseAnalysis
+                item.specialRiskMeasureList = [...item.specialRiskMeasureList, ...hazardVoList[index].specialRiskMeasureList]
+              })
+              this.$parent.$parent.$parent.$parent.$parent.$parent.appendData = parentData;
+            }
             const obj = { taskId: this.parentTaskId }
             if (this.$parent.$parent.$parent.$parent.$parent.step == 1) {
               this.$parent.$parent.$parent.$parent.$parent.$parent.subHandle(obj)
@@ -205,12 +225,21 @@ export default {
               this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.subHandle(obj)
             }
           }
-          if(this.data.assType == '4') {
-            this.$parent.$parent.$parent.data.hazardVoList = [...this.data.hazardVoList]
-          }
         }
         this.loading = false
       })
+    },
+    subHandle() {
+      let promise = new Promise((resolve, reject) => {
+        const obj = { taskId: this.parentTaskId }
+        if (this.$parent.$parent.$parent.$parent.$parent.step == 1) {
+          this.$parent.$parent.$parent.$parent.$parent.$parent.subHandle(obj)
+        } else {
+          this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.subHandle(obj)
+        }
+        resolve(true);
+      })
+      return promise;
     },
     resetForm() {
       this.dialog = false

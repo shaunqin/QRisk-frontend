@@ -21,9 +21,7 @@
       <el-table-column prop="businessTitle" label="任务标题" show-overflow-tooltip />
       <el-table-column prop="assignor" label="分配人" width="130" />
       <el-table-column label="分配时间" width="140">
-        <template slot-scope="{row}">
-          {{format(row.assignorTime)}}
-        </template>
+        <template slot-scope="{row}">{{format(row.assignorTime)}}</template>
       </el-table-column>
       <el-table-column prop="createBy" label="发起人" width="130" />
       <el-table-column prop="createTime" label="发起时间" width="140" />
@@ -61,6 +59,11 @@ export default {
   mixins: [initData],
   components: { handle, fillin },
   props: ["assessmentType", "queryForm"],
+  data() {
+    return {
+      appendData: [], // 追加数据,包括原数据
+    }
+  },
   mounted() {
     this.init();
   },
@@ -103,14 +106,18 @@ export default {
             _this.data.issueDepts = [res.obj.issueDept]
           } */
           _this.data.approvalDate = formatShortDate(res.obj.approvalDate);
-          if (res.obj.hazardVoList && res.obj.hazardVoList.length > 0) {
-            _this.data.hazardList = res.obj.hazardVoList.map(item => {
-              item.specialRiskMeasureList.map(childItem => {
-                childItem.deadline = formatShortDate(childItem.deadline)
+          if (this.appendData.length > 0) {
+            _this.data.hazardList = [...this.appendData];
+          } else {
+            if (res.obj.hazardVoList && res.obj.hazardVoList.length > 0) {
+              _this.data.hazardList = res.obj.hazardVoList.map(item => {
+                item.specialRiskMeasureList.map(childItem => {
+                  childItem.deadline = formatShortDate(childItem.deadline)
+                })
+                return item
               })
-              return item
-            })
-          } else { _this.data.hazardList = [] }
+            } else { _this.data.hazardList = [] }
+          }
           _this.form.taskId = row.taskId;
           _this.form.formId = res.obj.id;
           this.loading = false;
@@ -144,7 +151,7 @@ export default {
               return item
             })
           }
-          if(res.obj.specialRiskAnalyses &&  res.obj.specialRiskAnalyses.length > 0) {
+          if (res.obj.specialRiskAnalyses && res.obj.specialRiskAnalyses.length > 0) {
             _this.form.specialRiskAnalyses = [...res.obj.specialRiskAnalyses]
           }
           await this.getRiskListMgr()

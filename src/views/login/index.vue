@@ -2,8 +2,18 @@
   <div ref="box" class="container">
     <!-- 卡片 element-ui 组件 -->
     <el-card class="my-card">
+      <div class="login-type" @click="accoutLogin=!accoutLogin">
+        <img v-if="accoutLogin" src="../../assets/login_images/icon/account.png" />
+        <img v-else src="../../assets/login_images/icon/qrcode.png" />
+      </div>
       <span class="title">风险管理系统前台</span>
-      <el-form ref="loginForm" :model="loginForm" :rules="loginRules" status-icon>
+      <el-form
+        v-show="accoutLogin"
+        ref="loginForm"
+        :model="loginForm"
+        :rules="loginRules"
+        status-icon
+      >
         <!-- <el-form-item label>
           <el-select v-model="loginForm.userName" size="mini" placeholder="测试账号" clearable>
             <el-option label="NewAmeco风险管理员" value="00089715"></el-option>
@@ -51,6 +61,7 @@
           >登 录</el-button>
         </el-form-item>
       </el-form>
+      <div v-show="!accoutLogin" id="qrlogin" style="height: 280px;text-align: center;"></div>
     </el-card>
     <el-dialog title="用户协议和隐私条款" :visible.sync="dialogVisible" width="30%">
       <span slot="footer" class="dialog-footer">
@@ -98,6 +109,7 @@ export default {
       loading: false,
       redirect: undefined,
       otherQuery: {},
+      accoutLogin: true
     };
   },
   watch: {
@@ -112,15 +124,26 @@ export default {
       immediate: true,
     },
   },
-  created() {
-    // window.addEventListener('storage', this.afterQRScan)
-  },
   mounted() {
     if (this.loginForm.userName === "") {
       this.$refs.userName.focus();
     } else if (this.loginForm.password === "") {
       this.$refs.password.focus();
     }
+    var aLogin = new AmecoQrLogin(
+      {
+        id: 'qrlogin',//二维码嵌入的第三方页面标签id
+        url: 'http://ssoapi.ameco.com.cn/sso-api/qrlogin.html', //嵌入的扫描页地址,内外网可能地址不一样
+      },
+      {
+        self_redirect: false,//页面跳转方式
+        client_key: '0a545da67a134e43a213153c4b087fa1',
+        scope: '',
+        redirect_uri: this.getUrlDelParams()
+      }, {
+      // style: '',
+      // href: ''
+    });
   },
   destroyed() {
     // window.removeEventListener('storage', this.afterQRScan)
@@ -179,7 +202,18 @@ export default {
     //       alert('第三方登录失败')
     //     }
     //   }
-    // }
+    // },
+    getUrlDelParams() {
+      // var url = location.search;
+      // var old_url = window.location.href;
+
+      // if (url) {
+      //   var new_url = old_url.substring(0, old_url.indexOf('?'));
+      //   return new_url;
+      // }
+      // return old_url;
+      return 'http://localhost:9990/'
+    }
   },
 };
 </script>
@@ -276,5 +310,18 @@ export default {
   padding-left: 50px;
   cursor: pointer;
   color: #005ba7;
+}
+.login-type {
+  position: absolute;
+  top: 0px;
+  right: 0;
+  width: 60px;
+  height: 60px;
+  img {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    cursor: pointer;
+  }
 }
 </style>
