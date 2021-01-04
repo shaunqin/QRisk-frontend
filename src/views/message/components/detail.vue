@@ -7,8 +7,8 @@
     title="详情"
     custom-class="big_dialog"
   >
-    <hiddenDanger v-if="msgType=='hidden_danger_control'" ref="hiddenDanger" :data="data" />
-    <safetyRiskPrompt v-if="msgType=='safety_risk_notice'" ref="safetyRiskPrompt" :data="data" />
+    <hiddenDanger v-if="msgType=='hidden_danger_control'||msgType=='hidden_danger_notice_do'" ref="hiddenDanger" :data="data" />
+    <safetyRiskPrompt v-if="msgType=='safety_risk_notice'||msgType=='safety_risk_notice_do'" ref="safetyRiskPrompt" :data="data" />
     <specialRiskNote v-if="msgType=='special_risk_note'" ref="specialRiskNote" :data="data" />
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="cancel">确定</el-button>

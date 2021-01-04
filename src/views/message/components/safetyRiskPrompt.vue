@@ -21,10 +21,10 @@
       <el-form-item label="适用范围">{{data.applyScope}}</el-form-item>
       <el-form-item label="主题">{{data.title}}</el-form-item>
       <el-form-item label="背景">
-        <span v-html="data.background" style="white-space: pre-wrap;"></span>
+        <htmlContent :html="data.background" />
       </el-form-item>
       <el-form-item label="安全风险">
-        <span v-html="data.existingRisk" style="white-space: pre-wrap;"></span>
+        <htmlContent :html="data.existingRisk" />
       </el-form-item>
       <el-form-item label="风险防范" v-if="data.measuresVos!=null">
         <ul class="measuresVos">
@@ -40,10 +40,12 @@
               <span style="white-space: break-spaces;" v-html="row.implementStatus"></span>
             </template>
           </el-table-column>
-          <el-table-column label="经办人">
-            <template slot-scope="{row}">{{row.fillerName}}[{{row.filler}}]</template>
+          <el-table-column label="填报人">
+            <template slot-scope="{row}">
+              <span v-if="row.fillerName">{{row.fillerName}}[{{row.filler}}]</span>
+              <span v-else>-</span>
+            </template>
           </el-table-column>
-
           <el-table-column label="预览附件" min-width="120">
             <template slot-scope="{row}">
               <div v-for="(item, index) in row.accessory" :key="index">
@@ -91,8 +93,9 @@
 import childMeasures from '@/views/safetyRiskPrompt/components/childMeasures';
 import leaderApprvalRecord from '@/views/safetyRiskPrompt/components/leaderApprvalRecord';
 import transactor from '@/components/common/transactor'
+import htmlContent from '@/components/common/htmlContent'
 export default {
-  components: { childMeasures, leaderApprvalRecord, transactor },
+  components: { childMeasures, leaderApprvalRecord, transactor, htmlContent },
   props: ["data"],
   computed: {
     deptMeasure() {

@@ -58,6 +58,15 @@ export const hazardsComplete = (data) => {
         data
     })
 }
+// 待办暂存
+export const hazardsSave = (data) => {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/tempSave/${data.taskId}`,
+        method: 'post',
+        data
+    })
+}
+
 // runTask 处理待办
 export const hazardsComplete2 = (data) => {
     return request({

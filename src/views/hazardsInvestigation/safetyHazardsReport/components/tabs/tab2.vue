@@ -7,6 +7,7 @@
       size="small"
       :highlight-current-row="true"
       style="width: 100%;"
+      @sort-change="sortChange"
     >
       <el-table-column prop="name" label="流程状态" min-width="100">
         <template slot-scope="{row}">
@@ -28,7 +29,7 @@
       </el-table-column>
       <el-table-column prop="createBy" label="发起人" width="130" />
       <el-table-column prop="createTime" label="发起时间" width="140" />
-      <el-table-column prop="daysRemained" label="剩余天数" width="120" />
+      <el-table-column prop="daysRemainedHD" label="剩余天数" width="120" sortable="custom" />
       <el-table-column label="操作" width="110">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="subHandle(row)">办理</el-button>
@@ -53,7 +54,7 @@
 <script>
 import initData from "@/mixins/initData";
 import { queryHazards, queryHazards2 } from "@/api/hazards";
-import { format } from "@/utils/datetime"
+import { format, formatShortDate } from "@/utils/datetime"
 import handle from "../handle";
 import handleRun from "../handleRun";
 export default {
@@ -72,9 +73,10 @@ export default {
     }
   },
   methods: {
+    formatShortDate,
     beforeInit() {
       this.url = `/riskmgr_mgr/hidden_danger/query/queryTodo/${this.page}/${this.size}`;
-      this.params = { ...this.queryForm }
+      this.params = { ...this.params, ...this.queryForm }
       return true;
     },
     subHandle(row) {
@@ -94,6 +96,14 @@ export default {
             }
             _this.form.implementStatus = res.obj.deptMeasure ? (res.obj.deptMeasure.implementStatus || "") : "";
             _this.dialog = true;
+            this.$nextTick(() => {
+              if (_this.$refs.step1 && _this.$refs.step1.$refs.fillinForm) {
+                _this.$refs.step1.$refs.fillinForm.fillinData = res.obj.deptControlList.hiddenDangerControlList;
+                _this.$refs.step1.$refs.fillinForm.titleForm.reportName = res.obj.deptControlList.fillerName;
+                _this.$refs.step1.$refs.fillinForm.titleForm.reportDate = this.formatShortDate(res.obj.deptControlList.fillDate);
+                _this.$refs.step1.$refs.fillinForm.titleForm.title = res.obj.controlListName;
+              }
+            })
           }
           setTimeout(() => {
             _this.dialogLoading = false

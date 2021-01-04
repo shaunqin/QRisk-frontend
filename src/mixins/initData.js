@@ -85,6 +85,23 @@ export default {
     },
     getIndex(index) {
       return (this.page - 1) * this.size + index + 1;
+    },
+    sortChange({ column, prop, order }) {
+      console.log(column)
+      let orderByColumn = prop;
+      let isAsc = order == 'descending' ? 'desc' : 'asc';
+      switch (orderByColumn) {
+        case 'daysRemained': orderByColumn = 'deadline'; break;
+        case 'daysRemainedHD': orderByColumn = 'dueDate'; break;
+        default: break;
+      }
+      // 清空排序
+      if (order == null) {
+        orderByColumn = null;
+        isAsc = null;
+      }
+      this.params = { ...this.params, orderByColumn, isAsc };
+      this.init();
     }
   }
 }

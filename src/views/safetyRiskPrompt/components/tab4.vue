@@ -7,6 +7,7 @@
       size="small"
       :highlight-current-row="true"
       style="width: 100%;"
+      @sort-change="sortChange"
     >
       <el-table-column prop="name" label="流程状态" width="260">
         <template slot-scope="{row}">
@@ -17,7 +18,7 @@
       <el-table-column prop="content" label="措施内容" show-overflow-tooltip />
       <el-table-column prop="createBy" label="发起人" width="120" />
       <el-table-column prop="createTime" label="发起时间" width="140" />
-      <el-table-column prop="daysRemained" label="剩余天数" width="120" />
+      <el-table-column prop="daysRemained" label="剩余天数" width="120" sortable="custom" />
       <el-table-column label="操作" width="110">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="subHandle(row)">办理</el-button>
@@ -65,7 +66,7 @@ export default {
   methods: {
     beforeInit() {
       this.url = `/riskmgr_mgr/safety_risk_notice_mgr/query/queryTodo/${this.page}/${this.size}`;
-      this.params = { ...this.queryForm };
+      this.params = { ...this.params, ...this.queryForm };
       return true;
     },
     subHandle(row) {

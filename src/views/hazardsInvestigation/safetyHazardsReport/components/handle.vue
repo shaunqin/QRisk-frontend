@@ -16,6 +16,7 @@
     <hairdown ref="hairdown" :data="data" :form="form" :source="fullscreen?'smart':''" />
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel" v-if="!fullscreen">取消</el-button>
+      <el-button v-if="step==1" type="info" @click="doSave">暂存</el-button>
       <el-button v-if="(step==1||step==3)&&!hiddenFill" type="primary" @click="doReport">填报</el-button>
       <el-button v-if="step==2" :loading="loading" type="primary" @click="doSubmit">确认</el-button>
       <el-button
@@ -32,7 +33,7 @@
 </template>
 
 <script>
-import { hazardsComplete, } from "@/api/hazards";
+import { hazardsComplete, hazardsSave } from "@/api/hazards";
 import step1 from "./step/step1";
 import step2 from "./step/step2";
 import step3 from "./step/step3";
@@ -177,6 +178,26 @@ export default {
             this.$parent.init();
             this.loadCount();
           }
+        }
+      })
+    },
+    doSave() {
+      let _this;
+      this.form.hiddenDangerList = [];
+      if (this.step == 1) {
+        _this = this.$refs.step1.$refs.fillinForm;
+      }
+      // let _this = this.$refs.step1.$refs.fillinForm;
+      if (_this)
+        this.form.hiddenDangerList = _this.fillinData;
+      console.log(this.form);
+      this.$loading();
+      hazardsSave(this.form).then(res => {
+        this.$loading().close();
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          this.$message.success("暂存成功!");
         }
       })
     },
