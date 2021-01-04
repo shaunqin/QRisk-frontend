@@ -31,3 +31,11 @@ export const tokenLogin = (data) => {
     data
   })
 }
+// qrtoken登录
+export const qrLogin = (data) => {
+  return request({
+    url: '/sys_mgr/QRCodeLogin',
+    method: 'post',
+    data
+  })
+}

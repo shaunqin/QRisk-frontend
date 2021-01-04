@@ -1,5 +1,5 @@
 // const jwt = require('jsonwebtoken')
-import { login, logout, tokenLogin } from '@/api/login'
+import { login, logout, tokenLogin, qrLogin } from '@/api/login'
 import { findCurrentUser } from '@/api/emplotee'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
@@ -69,6 +69,20 @@ const actions = {
         // console.log(response)
         commit('SET_TOKEN', response.obj)
         resolve(true)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  qrLogin({ commit }, token) {
+    return new Promise((resolve, reject) => {
+      qrLogin({ token: token }).then(response => {
+        if (!response || response.ok === false) {
+          resolve(response)
+        }
+        // console.log(response)
+        commit('SET_TOKEN', response.obj)
+        resolve(response)
       }).catch(error => {
         reject(error)
       })

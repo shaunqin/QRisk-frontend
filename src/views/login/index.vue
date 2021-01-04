@@ -2,8 +2,8 @@
   <div ref="box" class="container">
     <!-- 卡片 element-ui 组件 -->
     <el-card class="my-card">
-      <div class="login-type" @click="accoutLogin=!accoutLogin">
-        <img v-if="accoutLogin" src="../../assets/login_images/icon/account.png" />
+      <div class="login-type" @click="accoutLogin=!accoutLogin" v-if="false">
+        <img v-if="!accoutLogin" src="../../assets/login_images/icon/account.png" />
         <img v-else src="../../assets/login_images/icon/qrcode.png" />
       </div>
       <span class="title">风险管理系统前台</span>
@@ -119,17 +119,39 @@ export default {
         if (query) {
           this.redirect = query.redirect;
           this.otherQuery = this.getOtherQuery(query);
+          // 扫码登录
+          if (query.token) {
+            let token = query.token;
+            this.$loading({ text: "登录中..." })
+            this.$store.dispatch("user/qrLogin", token).then(res => {
+              if (res.code == '200') {
+                this.$router.push({
+                  path: this.redirect || "/",
+                  query: this.otherQuery,
+                });
+              } else {
+                // this.$router.replace({
+                //   path: '/login'
+                // })
+                this.$loading().close();
+                this.$message.error(res.msg)
+              }
+            }).catch(e => {
+              this.$loading().close();
+              this.$message.error("扫码登录失败")
+            })
+          }
         }
       },
       immediate: true,
     },
   },
   mounted() {
-    if (this.loginForm.userName === "") {
-      this.$refs.userName.focus();
-    } else if (this.loginForm.password === "") {
-      this.$refs.password.focus();
-    }
+    // if (this.loginForm.userName === "") {
+    //   this.$refs.userName.focus();
+    // } else if (this.loginForm.password === "") {
+    //   this.$refs.password.focus();
+    // }
     var aLogin = new AmecoQrLogin(
       {
         id: 'qrlogin',//二维码嵌入的第三方页面标签id
@@ -204,15 +226,15 @@ export default {
     //   }
     // },
     getUrlDelParams() {
-      // var url = location.search;
-      // var old_url = window.location.href;
+      var url = location.search;
+      var old_url = window.location.href;
 
-      // if (url) {
-      //   var new_url = old_url.substring(0, old_url.indexOf('?'));
-      //   return new_url;
-      // }
-      // return old_url;
-      return 'http://localhost:9990/'
+      if (url) {
+        var new_url = old_url.substring(0, old_url.indexOf('?'));
+        return new_url;
+      }
+      return old_url;
+      // return 'http://localhost:9990/'
     }
   },
 };
@@ -317,11 +339,18 @@ export default {
   right: 0;
   width: 60px;
   height: 60px;
+  transform: rotate(45deg);
+  margin-right: -24px;
+  margin-top: -24px;
+  overflow: hidden;
   img {
     width: 100% !important;
     height: 100% !important;
     margin: 0 !important;
     cursor: pointer;
+    transform: rotate(-45deg);
+    margin-top: 30px !important;
+    margin-right: 30px !important;
   }
 }
 </style>
