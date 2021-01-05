@@ -1,34 +1,11 @@
 <template>
   <div>
-    <el-table
-      :data="data.trees"
-      size="mini"
-      row-key="id"
-      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-      lazy
-      :load="loadTree"
-    >
-      <el-table-column label="下发部门" prop="deptName" width="140" align="left" />
-      <el-table-column label="截止日期">
-        <template slot-scope="{ row }">{{ row.data.deadline }}</template>
-      </el-table-column>
-      <el-table-column label="通知内容" min-width="100">
-        <template slot-scope="{ row }">{{ row.data.content }}</template>
-      </el-table-column>
-      <el-table-column label="下发人" prop="issuer" />
-      <el-table-column label="填报人" prop="filler" />
-      <!-- <el-table-column label="附件预览" min-width="120">
-        <template slot-scope="{ row }">
-          <div v-for="(item, index) in row.data.files" :key="index">
-            <el-link
-              type="primary"
-              v-if="item != null"
-              :href="getUrl(item.filePath)"
-              target="_blank"
-            >{{ item.originFileName }}</el-link>
-          </div>
-        </template>
-      </el-table-column>-->
+    <el-table :data="data.childNotes" size="mini">
+      <el-table-column label="下发部门" prop="issueDeptName" width="140" align="left" />
+      <el-table-column label="截止日期" prop="endTime" />
+      <el-table-column label="通知内容" prop="noteContent" min-width="100" />
+      <el-table-column label="下发人" prop="creater" />
+      <el-table-column label="填报人" prop="reporter" />
       <el-table-column label="状态">
         <template slot-scope="{ row }">
           <span v-if="row.status == 0">待处理</span>
@@ -55,10 +32,10 @@
       </el-table-column>
       <el-table-column label="审批记录">
         <template slot-scope="{ row }">
-          <div v-if="row.comments == null||row.comments.length==0">-</div>
-          <el-popover v-else placement="left" width="1000">
+          <div v-if="row.noteComment == null||row.noteComment.length==0">-</div>
+          <el-popover v-else placement="left" width="600">
             <el-button type="text" size="mini" slot="reference">详情</el-button>
-            <leaderApprvalRecord :data="row.comments" type="safety_measures" />
+            <leaderApprvalRecord :data="row.noteComment" type="safety_measures" />
           </el-popover>
         </template>
       </el-table-column>

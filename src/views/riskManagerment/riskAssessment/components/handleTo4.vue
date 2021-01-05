@@ -47,14 +47,26 @@
             </ul>
           </template>
         </el-table-column>
-        <el-table-column label="风险控制状态" width="160" show-overflow-tooltip>
+        <el-table-column label="落实情况" width="160" show-overflow-tooltip>
           <template slot-scope="{ row }">
             <ul class="tab-ul">
               <li v-for="item in row.specialRiskMeasureList" :key="item.id">
                 <el-popover trigger="hover" v-if="true" placement="top">
-                  <span>{{ item.measureStatus }}</span>
-                  <div class="text" slot="reference">{{ item.measureStatus }}</div>
+                  <span>{{item.completion}}</span>
+                  <div class="text" slot="reference">{{item.completion}}</div>
                 </el-popover>
+              </li>
+            </ul>
+          </template>
+        </el-table-column>
+        <el-table-column label="风险控制状态" width="160" show-overflow-tooltip>
+          <template slot-scope="{ row }">
+            <ul class="tab-ul">
+              <li v-for="item in row.specialRiskMeasureList" :key="item.id">
+                <span v-if="item.measureStatus=='0'">不适用</span>
+                <span v-if="item.measureStatus=='1'">未控制</span>
+                <span v-if="item.measureStatus=='2'">在控</span>
+                <span v-if="item.measureStatus=='3'">关闭</span>
               </li>
             </ul>
           </template>

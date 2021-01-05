@@ -14,9 +14,11 @@
     <el-card header="详细信息">
       <el-form size="small" label-width="80px" class="info" inline>
         <el-form-item label="编号">{{ data.no }}</el-form-item>
-        <el-form-item label="截止日期">{{
+        <el-form-item label="截止日期">
+          {{
           formatShortDate(data.endTime)
-        }}</el-form-item>
+          }}
+        </el-form-item>
         <el-form-item label="发布部门">{{ data.releasePathName }}</el-form-item>
         <el-form-item label="下发部门">{{ data.issueDeptName }}</el-form-item>
         <el-row class="fill-row">
@@ -30,8 +32,7 @@
                   v-show="item != null"
                   :href="getUrl(item ? item.filePath : '')"
                   target="_blank"
-                  >{{ item ? item.originFileName : '' }}</el-link
-                >
+                >{{ item ? item.originFileName : '' }}</el-link>
               </span>
             </el-form-item>
           </el-col>
@@ -52,13 +53,17 @@
         </el-row>
         <el-form-item label="编号">{{ data.analysisNo }}</el-form-item>
         <el-form-item label="分析人">{{ data.analysis }}</el-form-item>
-        <el-form-item label="分析单位">{{
+        <el-form-item label="分析单位">
+          {{
           data.analysisDeptName
-        }}</el-form-item>
+          }}
+        </el-form-item>
         <el-form-item label="批准人">{{ data.approval }}</el-form-item>
-        <el-form-item label="批准日期">{{
+        <el-form-item label="批准日期">
+          {{
           formatShortDate(data.approvalDate)
-        }}</el-form-item>
+          }}
+        </el-form-item>
         <el-table :data="data.specialRiskAnalyses" size="mini" max-height="500">
           <el-table-column label="系统" prop="productName" />
           <el-table-column label="子系统" prop="subSystemName" />
@@ -88,15 +93,9 @@
           icon="el-icon-tickets"
           @click="showReport"
           :disabled="!data.hiddenReport"
-          >风险报告</el-button
-        >
+        >风险报告</el-button>
       </div>
-      <el-form
-        size="mini"
-        class="info2"
-        inline
-        v-if="data.assType != 1 && data.assType != 2"
-      >
+      <el-form size="mini" class="info2" inline v-if="data.assType != 1 && data.assType != 2">
         <el-row class="fill-row">
           <el-col :span="24">
             <el-form-item label="标题">{{ data.analysisTitle }}</el-form-item>
@@ -104,13 +103,17 @@
         </el-row>
         <el-form-item label="编号">{{ data.analysisNo }}</el-form-item>
         <el-form-item label="分析人">{{ data.analysis }}</el-form-item>
-        <el-form-item label="分析单位">{{
+        <el-form-item label="分析单位">
+          {{
           data.analysisDeptName
-        }}</el-form-item>
+          }}
+        </el-form-item>
         <el-form-item label="批准人">{{ data.approval }}</el-form-item>
-        <el-form-item label="批准日期">{{
+        <el-form-item label="批准日期">
+          {{
           formatShortDate(data.approvalDate)
-        }}</el-form-item>
+          }}
+        </el-form-item>
       </el-form>
 
       <div v-if="assessmentType == '4'">
@@ -125,36 +128,14 @@
           <el-table-column label="系统" prop="product" />
           <el-table-column label="子系统" prop="subSystem" />
           <el-table-column label="管理流程" prop="managementProcess" />
-          <el-table-column
-            label="危险源描述"
-            prop="hazardSource"
-            min-width="300"
-            show-overflow-tooltip
-          />
-          <el-table-column
-            label="危险源"
-            prop="hazardSources"
-            min-width="200"
-            show-overflow-tooltip
-          />
+          <el-table-column label="危险源描述" prop="hazardSource" min-width="300" show-overflow-tooltip />
+          <el-table-column label="危险源" prop="hazardSources" min-width="200" show-overflow-tooltip />
           <el-table-column label="ID" prop="hazard" />
-          <el-table-column
-            label="可能性"
-            width="110"
-            prop="possibility"
-          ></el-table-column>
+          <el-table-column label="可能性" width="110" prop="possibility"></el-table-column>
           <el-table-column label="严重性" prop="seriousness" />
-          <el-table-column
-            label="可能导致的风险"
-            prop="possibleRisks"
-            min-width="140"
-          ></el-table-column>
+          <el-table-column label="可能导致的风险" prop="possibleRisks" min-width="140"></el-table-column>
           <el-table-column label="风险等级" prop="riskLevel" />
-          <el-table-column
-            label="根原因分析"
-            width="200"
-            prop="rootCauseAnalysis"
-          ></el-table-column>
+          <el-table-column label="根原因分析" width="200" prop="rootCauseAnalysis"></el-table-column>
           <el-table-column label="控制措施" min-width="200">
             <template slot-scope="{ row }">
               <ul class="tab-ul">
@@ -214,11 +195,7 @@
             width="160"
             show-overflow-tooltip
           />
-          <el-table-column
-            label="风险控制措施"
-            width="160"
-            show-overflow-tooltip
-          >
+          <el-table-column label="风险控制措施" width="160" show-overflow-tooltip>
             <template slot-scope="{ row }">
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
@@ -230,11 +207,7 @@
               </ul>
             </template>
           </el-table-column>
-          <el-table-column
-            label="风险责任单位"
-            width="160"
-            show-overflow-tooltip
-          >
+          <el-table-column label="风险责任单位" width="160" show-overflow-tooltip>
             <template slot-scope="{ row }">
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
@@ -246,27 +219,31 @@
               </ul>
             </template>
           </el-table-column>
-          <el-table-column
-            label="风险控制状态"
-            width="160"
-            show-overflow-tooltip
-          >
+          <el-table-column label="落实情况" width="160" show-overflow-tooltip>
             <template slot-scope="{ row }">
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
                   <el-popover trigger="hover" v-if="true" placement="top">
-                    <span>{{item.measureStatus}}</span>
-                    <div class="text" slot="reference">{{item.measureStatus}}</div>
+                    <span>{{item.completion}}</span>
+                    <div class="text" slot="reference">{{item.completion}}</div>
                   </el-popover>
                 </li>
               </ul>
             </template>
           </el-table-column>
-          <el-table-column
-            label="风险完成期限"
-            width="160"
-            show-overflow-tooltip
-          >
+          <el-table-column label="风险控制状态" width="160" show-overflow-tooltip>
+            <template slot-scope="{ row }">
+              <ul class="tab-ul">
+                <li v-for="item in row.specialRiskMeasureList" :key="item.id">
+                  <span v-if="item.measureStatus=='0'">不适用</span>
+                  <span v-if="item.measureStatus=='1'">未控制</span>
+                  <span v-if="item.measureStatus=='2'">在控</span>
+                  <span v-if="item.measureStatus=='3'">关闭</span>
+                </li>
+              </ul>
+            </template>
+          </el-table-column>
+          <el-table-column label="风险完成期限" width="160" show-overflow-tooltip>
             <template slot-scope="{ row }">
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
@@ -290,7 +267,7 @@
       <transactor :data="data.reviewerInfo" width="100%" />
     </el-card>
     <el-card header="下发记录" key="childNotes" v-if="showChildNotes">
-      <childNotes :data="data" :showIssueRecord="true" />
+      <childNotes :data="data" :showIssueRecord="true" :hiddenField="['审核']" />
     </el-card>
     <!-- <el-card
       header="下发措施"
@@ -298,7 +275,7 @@
       v-if="showChildMeasures"
     >
       <childMeasures :data="data" :showIssueRecord="true" />
-    </el-card> -->
+    </el-card>-->
 
     <el-card
       header="审批记录"
@@ -312,12 +289,7 @@
       <el-button type="primary" @click="cancel">取消</el-button>
     </div>
 
-    <report
-      ref="report"
-      :formId="formId"
-      :disabled="true"
-      @change="formIdChange"
-    />
+    <report ref="report" :formId="formId" :disabled="true" @change="formIdChange" />
   </el-dialog>
 </template>
 
@@ -339,16 +311,16 @@ export default {
       type: Boolean,
       default: false,
     },
-    fullscreen:{
-      type:Boolean,
-      default:false
+    fullscreen: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
       formId: '',
       dialog: false,
-      dialogLoading:false,
+      dialogLoading: false,
       data: {},
       assessmentType: '',
       list: [
