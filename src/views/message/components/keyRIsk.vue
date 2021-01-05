@@ -1,19 +1,16 @@
 <template>
-  <el-dialog
-    :append-to-body="true"
-    :close-on-click-modal="false"
-    :before-close="cancel"
-    :visible.sync="dialog"
-    title="详情"
-    custom-class="big_dialog"
-  >
+  <div>
     <el-card header="详细信息">
       <el-form size="small" label-width="80px" class="info" inline>
         <el-form-item label="编号">{{ data.no }}</el-form-item>
-        <el-form-item label="截止日期">{{
+        <el-form-item label="截止日期">
+          {{
           formatShortDate(data.endTime)
-        }}</el-form-item>
-        <el-form-item :label="data.type=='1'?'下发部门':'分析单位'">{{ data.type=='1'?data.issueDeptName:data.analysisDeptName }}</el-form-item>
+          }}
+        </el-form-item>
+        <el-form-item
+          :label="data.type=='1'?'下发部门':'分析单位'"
+        >{{ data.type=='1'?data.issueDeptName:data.analysisDeptName }}</el-form-item>
         <el-row class="fill-row">
           <el-col :span="24">
             <el-form-item label="标题">{{ data.title }}</el-form-item>
@@ -25,8 +22,7 @@
                   v-show="item != null"
                   :href="getUrl(item ? item.filePath : '')"
                   target="_blank"
-                  >{{ item ? item.originFileName : '' }}</el-link
-                >
+                >{{ item ? item.originFileName : '' }}</el-link>
               </span>
             </el-form-item>
           </el-col>
@@ -45,71 +41,46 @@
           <span>风险{{ index + 1 }}</span>
         </div>
         <el-form size="mini" inline label-width="70px" class="info">
-          <el-form-item label="可能导致的风险" label-width="125px">
-            {{ item.possibleRisksName }}
-          </el-form-item>
-          <el-form-item label="严重性">
-            {{ item.seriousnessName }}
-          </el-form-item>
-          <el-form-item label="风险等级">
-            {{ item.riskLevelName }}
-          </el-form-item>
-          <el-form-item label="是否适用于本单位" label-width="125px">
-            {{ item.appliance == '1' ? '否' : '是' }}
-          </el-form-item>
+          <el-form-item label="可能导致的风险" label-width="125px">{{ item.possibleRisksName }}</el-form-item>
+          <el-form-item label="严重性">{{ item.seriousnessName }}</el-form-item>
+          <el-form-item label="风险等级">{{ item.riskLevelName }}</el-form-item>
+          <el-form-item label="是否适用于本单位" label-width="125px">{{ item.appliance == '1' ? '否' : '是' }}</el-form-item>
         </el-form>
         <el-table :data="item.hazardList" size="mini">
           <el-table-column label="危险源描述" prop="hazardSource" width="200" show-overflow-tooltip />
           <el-table-column label="可能性" prop="possibilityName" width="160" />
           <el-table-column label="风险等级" prop="riskLevelName" width="160" />
-          <el-table-column
-            label="风险控制措施"
-            show-overflow-tooltip
-          >
+          <el-table-column label="风险控制措施" show-overflow-tooltip>
             <template slot-scope="{ row }">
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
                   <el-popover trigger="hover" v-if="true" placement="top">
                     <span>{{ item.controlMeasure }}</span>
-                    <div class="text" slot="reference">
-                      {{ item.controlMeasure }}
-                    </div>
+                    <div class="text" slot="reference">{{ item.controlMeasure }}</div>
                   </el-popover>
                 </li>
               </ul>
             </template>
           </el-table-column>
-          <el-table-column
-            label="风险责任单位"
-            width="160"
-            show-overflow-tooltip
-          >
+          <el-table-column label="风险责任单位" width="160" show-overflow-tooltip>
             <template slot-scope="{ row }">
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
                   <el-popover trigger="hover" v-if="true" placement="top">
                     <span>{{ item.reponsibleDeptName }}</span>
-                    <div class="text" slot="reference">
-                      {{ item.reponsibleDeptName }}
-                    </div>
+                    <div class="text" slot="reference">{{ item.reponsibleDeptName }}</div>
                   </el-popover>
                 </li>
               </ul>
             </template>
           </el-table-column>
-          <el-table-column
-            label="风险完成期限"
-            width="160"
-            show-overflow-tooltip
-          >
+          <el-table-column label="风险完成期限" width="160" show-overflow-tooltip>
             <template slot-scope="{ row }">
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
                   <el-popover trigger="hover" v-if="true" placement="top">
                     <span>{{ formatShortDate(item.deadline) }}</span>
-                    <div class="text" slot="reference">
-                      {{ formatShortDate(item.deadline) }}
-                    </div>
+                    <div class="text" slot="reference">{{ formatShortDate(item.deadline) }}</div>
                   </el-popover>
                 </li>
               </ul>
@@ -126,8 +97,8 @@
     >
       <transactor :data="data.reviewerInfo" width="100%" />
     </el-card>
-    
-    <el-card header="下发记录" key="childNotes" v-if="showChildNotes">
+
+    <el-card header="下发记录" key="childNotes">
       <cmdIssueTreeTable :data="data" :showIssueRecord="true" />
     </el-card>
 
@@ -138,33 +109,23 @@
     >
       <apprvalRecord :data="data.noticeComments" />
     </el-card>
-
-    <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="cancel">取消</el-button>
-    </div>
-  </el-dialog>
+  </div>
 </template>
 
 <script>
 import { formatShortDate } from '@/utils/datetime'
-import apprvalRecord from './apprvalRecord'
-import cmdIssueTreeTable from './cmdIssueTreeTable'
+import apprvalRecord from '@/views/cruxRisk/notificationAndEvaluation/components/apprvalRecord'
+import cmdIssueTreeTable from '@/views/cruxRisk/notificationAndEvaluation/components/cmdIssueTreeTable'
 import transactor from '@/components/common/transactor'
 export default {
   components: { apprvalRecord, transactor, cmdIssueTreeTable },
-  props: {
-    showChildNotes: {
-      type: Boolean,
-      default: true,
-    },
-  },
   data() {
     return {
       formId: '',
       dialog: false,
-      data: {},
     }
   },
+  props: ["data"],
   methods: {
     formatShortDate,
     cancel() {

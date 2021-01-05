@@ -1,28 +1,11 @@
 <template>
   <div>
     <el-table :data="data.childNotes" size="mini">
-      <el-table-column label="截止日期" prop="endTime" width="100">
-        <template slot-scope="{ row }">
-          {{
-          formatShortDate(row.endTime) || '-'
-          }}
-        </template>
-      </el-table-column>
       <el-table-column label="下发部门" prop="issueDeptName" width="110" show-overflow-tooltip />
+      <el-table-column label="截止日期" prop="endTime" width="120" />
       <el-table-column label="通知内容" prop="noteContent" />
-      <el-table-column label="上报人" prop="reporter" width="120"></el-table-column>
-      <el-table-column label="附件预览" width="120">
-        <template slot-scope="{ row }">
-          <div v-for="(item, index) in row.accessory" :key="index">
-            <el-link
-              type="primary"
-              v-if="item != null"
-              :href="getUrl(item.filePath)"
-              target="_blank"
-            >{{ item.originFileName }}</el-link>
-          </div>
-        </template>
-      </el-table-column>
+      <el-table-column label="下发人" prop="creater" />
+      <el-table-column label="填报人" prop="reporter" />
       <el-table-column label="状态" width="160">
         <template slot-scope="{ row }">
           <span v-if="row.status == 0">待处理</span>
@@ -56,7 +39,7 @@
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column label="审核" width="160">
+      <el-table-column label="审核" width="100">
         <template slot-scope="{ row }">
           <span v-if="!row.reviewing">-</span>
           <el-button
@@ -72,14 +55,9 @@
             size="mini"
             @click="doHairdown(row)"
             :loading="reviewLoading"
-          >下发</el-button> -->
+          >下发</el-button>-->
         </template>
       </el-table-column>
-      <!-- <el-table-column label="通知记录" v-if="showIssueRecord">
-        <template slot-scope="{row}">
-          <el-button size="mini" type="primary" @click="issueRecord(row)" :loading="tbLoading">查询</el-button>
-        </template>
-      </el-table-column> -->
     </el-table>
     <hairdown
       ref="noteHairdown"
@@ -89,19 +67,17 @@
       :issue="false"
     />
     <handleNotes ref="handleNotes" :isSecChild="true" :source="source" />
-    <cmdIssue ref="cmdIssueNotes" />
   </div>
 </template>
 <script>
 import leaderApprvalRecord from "./leaderApprvalRecord";
 import handleNotes from "./handleTo4";
-import hairdown from './hairdown'
+import hairdown from "./hairdown";
 import { keyRiskFill, queryIssueTreeNoteData } from "@/api/risk";
-import cmdIssue from './cmdIssueTreeTable'
-import { format, formatShortDate } from '@/utils/datetime'
-import transactor from '@/components/common/transactor'
+import { format, formatShortDate } from "@/utils/datetime";
+import transactor from "@/components/common/transactor";
 export default {
-  components: { leaderApprvalRecord, handleNotes, cmdIssue, hairdown, transactor },
+  components: { leaderApprvalRecord, handleNotes, hairdown, transactor },
   props: {
     data: {
       type: Object,
@@ -109,19 +85,19 @@ export default {
     },
     source: {
       type: String,
-      default: ''
+      default: "",
     },
     showIssueRecord: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
       reviewLoading: false,
       tbLoading: false,
-      formHairdown: {}
-    }
+      formHairdown: {},
+    };
   },
   methods: {
     format,
@@ -130,52 +106,38 @@ export default {
       return process.env.VUE_APP_BASE_API + url;
     },
     doHandle(row) {
-      this.reviewLoading = true
+      this.reviewLoading = true;
       keyRiskFill(row.taskId).then((res) => {
-        this.reviewLoading = false
-        if (res.code != '200') {
-          this.$message.error(res.msg)
+        this.reviewLoading = false;
+        if (res.code != "200") {
+          this.$message.error(res.msg);
         } else {
-          let _this = this.$refs.handleNotes
-          _this.parentTaskId = row.parentTaskId
-          _this.data = res.obj
-          _this.data.approvalDate = formatShortDate(res.obj.approvalDate)
+          let _this = this.$refs.handleNotes;
+          _this.parentTaskId = row.parentTaskId;
+          _this.data = res.obj;
+          _this.data.approvalDate = formatShortDate(res.obj.approvalDate);
           if (res.obj.hazardVoList && res.obj.hazardVoList.length > 0) {
             _this.data.hazardList = res.obj.hazardVoList.map((item) => {
               item.specialRiskMeasureList.map((childItem) => {
-                childItem.deadline = formatShortDate(childItem.deadline)
-              })
-              return item
-            })
+                childItem.deadline = formatShortDate(childItem.deadline);
+              });
+              return item;
+            });
           } else {
-            _this.data.hazardList = []
+            _this.data.hazardList = [];
           }
-          _this.form.taskId = row.taskId
-          _this.form.formId = res.obj.id
-          _this.dialog = true
-        }
-      })
-    },
-    doHairdown(row) {
-      this.formHairdown.formId = row.id
-      this.formHairdown.taskId = row.parentTaskId
-      this.formHairdown.pathAndDeadLines = []
-      this.$refs.noteHairdown.dialog = true;
-    },
-    issueRecord(row) {
-      this.tbLoading = true;
-      const issueType = '1';
-      queryIssueTreeNoteData(issueType, row.parentId).then(res => {
-        this.tbLoading = false;
-        if (res.code != '200') {
-          this.$message.error(res.msg);
-        } else {
-          let _this = this.$refs.cmdIssueNotes;
-          _this.data = res.obj;
+          _this.form.taskId = row.taskId;
+          _this.form.formId = res.obj.id;
           _this.dialog = true;
         }
-      })
-    }
+      });
+    },
+    doHairdown(row) {
+      this.formHairdown.formId = row.id;
+      this.formHairdown.taskId = row.parentTaskId;
+      this.formHairdown.pathAndDeadLines = [];
+      this.$refs.noteHairdown.dialog = true;
+    },
   },
-}
+};
 </script>

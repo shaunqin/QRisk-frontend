@@ -7,9 +7,19 @@
     title="详情"
     custom-class="big_dialog"
   >
-    <hiddenDanger v-if="msgType=='hidden_danger_control'||msgType=='hidden_danger_notice_do'" ref="hiddenDanger" :data="data" />
-    <safetyRiskPrompt v-if="msgType=='safety_risk_notice'||msgType=='safety_risk_notice_do'" ref="safetyRiskPrompt" :data="data" />
+    <hiddenDanger
+      v-if="msgType=='hidden_danger_control'||msgType=='hidden_danger_notice_do'"
+      ref="hiddenDanger"
+      :data="data"
+    />
+    <safetyRiskPrompt
+      v-if="msgType=='safety_risk_notice'||msgType=='safety_risk_notice_do'"
+      ref="safetyRiskPrompt"
+      :data="data"
+    />
     <specialRiskNote v-if="msgType=='special_risk_note'" ref="specialRiskNote" :data="data" />
+    <keyRIsk v-if="msgType=='key_risk_note'" ref="keyRIsk" :data="data" />
+    
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="cancel">确定</el-button>
     </div>
@@ -20,8 +30,9 @@
 import hiddenDanger from './hiddenDanger';
 import safetyRiskPrompt from './safetyRiskPrompt';
 import specialRiskNote from './specialRiskNote';
+import keyRIsk from './keyRIsk';
 export default {
-  components: { hiddenDanger, safetyRiskPrompt, specialRiskNote },
+  components: { hiddenDanger, safetyRiskPrompt, specialRiskNote, keyRIsk },
   data() {
     return {
       loading: false,

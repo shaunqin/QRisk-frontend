@@ -511,6 +511,14 @@ export function getTableData(data) {
     data
   })
 }
+
+// 懒加载下发记录
+export function keyRiskSubNotes(formId) {
+  return request({
+    url: `/risk_mgr/key_risk_mgr/subNotes/${formId}`,
+    method: 'get',
+  })
+}
 // ======== 关键风险 end =======
 
 // 风险提示编号

@@ -35,8 +35,8 @@
       <el-table-column type="selection" width="45" />
       <el-table-column prop="no" label="编号" width="130" />
       <el-table-column prop="title" label="主题" min-width="150" show-overflow-tooltip />
-      <el-table-column prop="background" label="背景" min-width="150" show-overflow-tooltip />
-      <el-table-column prop="existingRisk" label="安全风险" min-width="150" show-overflow-tooltip />
+      <!-- <el-table-column prop="background" label="背景" min-width="150" show-overflow-tooltip />
+      <el-table-column prop="existingRisk" label="安全风险" min-width="150" show-overflow-tooltip /> -->
       <el-table-column prop="responseDept" label="责任单位" show-overflow-tooltip />
       <el-table-column label="拟制人">
         <template slot-scope="{row}">{{row.issueName}}[{{row.issuer}}]</template>
