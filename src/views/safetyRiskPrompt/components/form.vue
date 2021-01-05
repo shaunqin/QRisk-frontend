@@ -69,6 +69,9 @@
                 :picker-options="{disabledDate:date=>date.getTime() < Date.now() - 8.64e7}"
               ></el-date-picker>
             </div>
+            <div style="width: 110px; margin-right: 10px">
+              <el-input-number v-model="item.sort" style="width: 100%"></el-input-number>
+            </div>
             <div style="width: 55px">
               <el-button type="danger" icon="el-icon-delete" size="mini" @click="delRisk(index)"></el-button>
             </div>
@@ -122,7 +125,7 @@
         查看PDF
         <i class="el-icon-view el-icon--right"></i>
       </el-link>
-      <el-button type="info" @click="cancel">取消</el-button>
+      <el-button type="text" @click="cancel">取消</el-button>
       <el-button :loading="save_loading" type="success" @click="doSave">暂存</el-button>
       <el-button :loading="loading" type="primary" @click="handleEmp">{{needLeader?'提交':'下发'}}</el-button>
     </div>
@@ -282,6 +285,7 @@ export default {
         content: "",
         deadline: "",
         deptPath: null,
+        sort:0
       });
     },
     delRisk(index) {

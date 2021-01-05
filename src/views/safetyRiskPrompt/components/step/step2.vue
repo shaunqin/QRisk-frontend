@@ -29,47 +29,49 @@
       </el-row>
 
       <el-form-item label="风险防范措施" class="measures">
-        <el-row
-          v-for="(item,index) in detailForm.measures"
+        <el-card
+          v-for="(item, index) in detailForm.measures"
           :key="index"
-          style="margin-bottom: 10px;display:flex"
-          :gutter="8"
+          style="margin-bottom: 10px"
         >
-          <el-col :span="6">
+          <div>
             <department
-              :value="!item.deptPath?[]:item.deptPath.split(',')"
-              @change="deptChange($event,item)"
+              :value="!item.deptPath ? [] : item.deptPath.split(',')"
+              @change="deptChange($event, item)"
               :multiple="true"
-              :limit="1"
-              :flat="true"
-              style="line-height:20px"
+              style="line-height: 20px"
               :deptPath="data.deptPath"
             />
-          </el-col>
-          <el-col :span="5">
-            <el-date-picker
-              v-model="item.deadline"
-              value-format="yyyy-MM-dd"
-              placeholder="为空则是长期选项"
-              style="width:100%"
-              @change="formChangeStatus"
-              :picker-options="{disabledDate:date=>date.getTime() < Date.now() - 8.64e7}"
-            ></el-date-picker>
-          </el-col>
-          <el-col :span="11">
-            <el-input
-              v-model="item.content"
-              style="width: 100%;"
-              placeholder="措施内容"
-              @keyup.native="formChangeStatus"
-              type="textarea"
-              rows="3"
-            />
-          </el-col>
-          <el-col :span="2">
-            <el-button type="text" icon="el-icon-delete" size="mini" @click="delRisk(index)"></el-button>
-          </el-col>
-        </el-row>
+          </div>
+          <div style="display: flex; margin-top: 10px">
+            <div style="flex: 1">
+              <el-input
+                v-model="item.content"
+                style="width: 100%"
+                placeholder="措施内容"
+                type="textarea"
+                rows="3"
+                @keyup.native="formChangeStatus"
+              />
+            </div>
+            <div style="width: 180px; margin: 0 10px">
+              <el-date-picker
+                v-model="item.deadline"
+                value-format="yyyy-MM-dd"
+                placeholder="为空则是长期选项"
+                style="width: 100%"
+                @change="formChangeStatus"
+                :picker-options="{disabledDate:date=>date.getTime() < Date.now() - 8.64e7}"
+              ></el-date-picker>
+            </div>
+            <div style="width: 110px; margin-right: 10px">
+              <el-input-number v-model="item.sort" style="width: 100%"></el-input-number>
+            </div>
+            <div style="width: 55px">
+              <el-button type="danger" icon="el-icon-delete" size="mini" @click="delRisk(index)"></el-button>
+            </div>
+          </div>
+        </el-card>
         <el-row style="margin-top:10px">
           <el-col :span="24">
             <el-button
