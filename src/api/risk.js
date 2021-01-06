@@ -52,6 +52,13 @@ export function riskNoticeSubDetail(id) {
     method: 'get',
   })
 }
+// 风险提示 重新生成pdf
+export function riskNoticeGenPdf(id) {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/genPdf/${id}`,
+    method: 'post',
+  })
+}
 // 添加风险提示
 export function riskNoticeAdd(data) {
   return request({

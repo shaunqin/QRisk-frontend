@@ -23,14 +23,15 @@
         </template>
       </el-table-column>
       <!-- <el-table-column prop="background" label="背景" min-width="150" show-overflow-tooltip />
-      <el-table-column prop="existingRisk" label="安全风险" min-width="150" show-overflow-tooltip /> -->
+      <el-table-column prop="existingRisk" label="安全风险" min-width="150" show-overflow-tooltip />-->
       <el-table-column prop="responseDept" label="责任单位" show-overflow-tooltip />
       <el-table-column label="拟制人">
         <template slot-scope="{ row }">{{ row.issueName }}[{{ row.issuer }}]</template>
       </el-table-column>
-      <el-table-column label="操作" width="80">
+      <el-table-column label="操作" width="180">
         <template slot-scope="{ row }">
           <el-button size="mini" type="text" @click="detail(row)">详情</el-button>
+          <el-button size="mini" type="primary" @click="genPdf(row)">手动生成PDF</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -50,7 +51,7 @@
 <script>
 import initData from "@/mixins/initData";
 import edetail from "./detail";
-import { riskNoticeSubDetail } from "@/api/risk";
+import { riskNoticeSubDetail, riskNoticeGenPdf } from "@/api/risk";
 export default {
   components: { edetail },
   mixins: [initData],
@@ -93,6 +94,17 @@ export default {
           _this.dialog = true;
         }
       });
+    },
+    genPdf(row) {
+      this.loading = true;
+      riskNoticeGenPdf(row.id).then(res => {
+        this.loading = false;
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          this.$message.success("生成成功,请稍后刷新页面查看");
+        }
+      })
     },
     pdfUrl(row) {
       return `${process.env.VUE_APP_BASE_API}${row.pdfUrl}`;

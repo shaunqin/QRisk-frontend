@@ -277,7 +277,7 @@
         </el-row>
       </el-form>
       <div v-if="assessmentType == '4'">
-        <el-table :data="list" size="mini" :span-method="objectSpanMethod" border height="550">
+        <el-table :data="list" size="mini" :span-method="objectSpanMethod" border max-height="550">
           <el-table-column label="系统" prop="product" />
           <el-table-column label="子系统" prop="subSystem" />
           <el-table-column label="管理流程" prop="managementProcess" />
@@ -290,7 +290,7 @@
                 v-model="row.possibility"
                 style="width: 100%"
                 @change="choosePoss(row, row.possibility)"
-                :disabled="false"
+                :disabled="!completionEnable"
               >
                 <!-- code作为key -->
                 <el-option
@@ -303,9 +303,9 @@
             </template>
           </el-table-column>
           <el-table-column label="严重性" prop="seriousness" />
-          <el-table-column label="可能导致的风险" prop="possibleRisks" min-width="140">
+          <el-table-column label="可能导致的风险" prop="possibleRisks" min-width="160">
             <template slot-scope="{ row }">
-              <el-select v-model="row.possibleRisks" style="width: 120px" :disabled="true">
+              <el-select v-model="row.possibleRisks" style="width: 100%" :disabled="true">
                 <el-option
                   v-for="childItem in possibleRisksList"
                   :key="childItem.riskNo"
@@ -324,6 +324,7 @@
                 @input="forceUpdate()"
                 type="textarea"
                 rows="2"
+                :disabled="!completionEnable"
               ></el-input>
             </template>
           </el-table-column>
@@ -331,7 +332,22 @@
             <template slot-scope="{ row }">
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
-                  <el-input v-model="item.controlMeasure" placeholder type="textarea" rows="2"></el-input>
+                  <el-input
+                    :disabled="item.measureStatus==0||!completionEnable"
+                    v-model="item.controlMeasure"
+                    placeholder
+                    type="textarea"
+                    rows="2"
+                  ></el-input>
+                </li>
+              </ul>
+            </template>
+          </el-table-column>
+          <el-table-column label="落实情况" min-width="210" v-if="!completionEnable">
+            <template slot-scope="{ row }">
+              <ul class="tab-ul">
+                <li v-for="item in row.specialRiskMeasureList" :key="item.id">
+                  <el-input v-model="item.completion" type="textarea" rows="2"></el-input>
                 </li>
               </ul>
             </template>
@@ -351,6 +367,7 @@
                     :flat="false"
                     :placeholder="$t('global.select')"
                     appendToBody
+                    :disabled="item.measureStatus==0||!completionEnable"
                   />
                 </li>
               </ul>
@@ -362,8 +379,8 @@
                 <li v-for="(item, index) in row.specialRiskMeasureList" :key="item.id">
                   <el-select
                     v-model="item.measureStatus"
-                    @change="changeStatus(item.measureStatus, item, row)"
                     style="width: 110px"
+                    :disabled="!completionEnable"
                   >
                     <el-option label="不适用" value="0"></el-option>
                     <el-option label="未控制" value="1"></el-option>
@@ -374,9 +391,10 @@
                     title="确定删除吗？"
                     @onConfirm="delSpecial(row, item, index)"
                     v-if="
-                      item.controlMeasure ||
+                      (item.controlMeasure ||
                       item.reponsibleDept ||
-                      item.measureStatus
+                      item.measureStatus) &&
+                      completionEnable
                     "
                   >
                     <i
@@ -618,7 +636,6 @@
       </div>
     </el-card>
 
-    <report ref="report" :formId="formId" @change="formIdChange" />
     <!-- <ehandle ref="ehandle" />
     <hairdown ref="formHairdown" :data="data" :form="formHairdown" :multiple="false" :issue="false" />-->
 
@@ -636,6 +653,7 @@
       <apprvalRecord :data="data.noticeComments" />
     </el-card>
     <selectManager ref="selectManager" :deptPath="data.issueDept" @on-submit="doSubmit" />
+    <report ref="report" :formId="formId" @change="formIdChange" />
   </div>
 </template>
 
@@ -1217,15 +1235,19 @@ export default {
     },
     list() {
       let arr = []
-      if (this.data.hazardList.length == 25) {
-        arr = this.listArr.map((item, index) => {
-          item.possibility = this.data.hazardList[index].possibility
-          item.rootCauseAnalysis = this.data.hazardList[index].rootCauseAnalysis
-          item.specialRiskMeasureList = this.data.hazardList[index].specialRiskMeasureList
-          return item
-        })
+      if (this.data.step == 7) {
+        arr = this.data.hazardList;
       } else {
-        arr = deepClone([...this.listArr])
+        if (this.data.hazardList.length == 25) {
+          arr = this.listArr.map((item, index) => {
+            item.possibility = this.data.hazardList[index].possibility
+            item.rootCauseAnalysis = this.data.hazardList[index].rootCauseAnalysis
+            item.specialRiskMeasureList = this.data.hazardList[index].specialRiskMeasureList
+            return item
+          })
+        } else {
+          arr = deepClone([...this.listArr])
+        }
       }
       return arr
     },
@@ -1236,7 +1258,7 @@ export default {
       if (this.data.step == '1' && (this.roles.length == 2 || this.roles.length > 2) && this.roles.includes('RISK_MANAGER_LEADER') && (this.data.childNotes == null || this.data.childNotes.length == 0)) {
         return true;
       } return false;
-    }
+    },
   },
   watch: {
     'data.type'(val) {
@@ -1271,7 +1293,7 @@ export default {
 
     this.loadingTree = true
     const url = '/risk_mgr/special_risk_notice_mgr/query/tree'
-    queryDepts(url).then((res) => {
+    queryDepts(url, { path: this.data.issueDept }).then((res) => {
       this.loadingTree = false
       this.options = res.obj
     })
@@ -1476,10 +1498,10 @@ export default {
     },
     changeStatus(val, item, row) {
       if (val == '0') {
-        row.possibility = '-'
-        row.rootCauseAnalysis = '-'
-        item.controlMeasure = '-'
-        item.reponsibleDept = '-'
+        // row.possibility = ''
+        // row.rootCauseAnalysis = ''
+        // item.controlMeasure = ''
+        // item.reponsibleDept = null
       }
     },
     choosePoss(row, value) {
@@ -1557,7 +1579,7 @@ export default {
   text-align: left;
   padding-inline-start: 20px;
   margin: 0;
-  li{
+  li {
     margin-bottom: 4px;
   }
   .text {

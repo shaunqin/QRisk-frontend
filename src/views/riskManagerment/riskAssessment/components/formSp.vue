@@ -6,13 +6,7 @@
     :title="isAdd ? '新增' : '编辑'"
     custom-class="big_dialog"
   >
-    <el-form
-      ref="form"
-      :model="form"
-      size="small"
-      :rules="formRules"
-      label-width="100px"
-    >
+    <el-form ref="form" :model="form" size="small" :rules="formRules" label-width="100px">
       <el-row :gutter="16">
         <el-col :span="12" v-if="isAdd">
           <el-form-item label="类型">
@@ -43,21 +37,12 @@
         </el-col>
         <el-col :span="24" v-if="form.type != '2'" key="noteContent">
           <el-form-item label="通知内容">
-            <el-input
-              v-model="form.noteContent"
-              style="width: 100%"
-              type="textarea"
-              rows="4"
-            />
+            <el-input v-model="form.noteContent" style="width: 100%" type="textarea" rows="4" />
           </el-form-item>
         </el-col>
         <el-col :span="24">
           <el-form-item prop="releasePath" label="发起部门">
-            <el-select
-              v-model="form.releasePath"
-              style="width: 100%"
-              @change="$forceUpdate()"
-            >
+            <el-select v-model="form.releasePath" style="width: 100%" @change="$forceUpdate()">
               <el-option
                 v-for="item in deptList"
                 :key="item.deptPath"
@@ -69,9 +54,7 @@
         </el-col>
         <el-col :span="24">
           <el-form-item prop="issueDepts">
-            <template slot="label">
-              {{ form.type != '2' ? '下发部门' : '分析单位' }}
-            </template>
+            <template slot="label">{{ form.type != '2' ? '下发部门' : '分析单位' }}</template>
             <deptByRole
               v-if="form.type != '2'"
               :value="form.issueDepts"
@@ -96,8 +79,7 @@
                 v-show="item != null"
                 :href="getUrl(item ? item.filePath : '')"
                 target="_blank"
-                >{{ item ? item.originFileName : '' }}</el-link
-              >
+              >{{ item ? item.originFileName : '' }}</el-link>
               <el-popconfirm title="确定删除该附件吗？" @onConfirm="del(item)">
                 <i
                   class="el-icon-delete"
@@ -113,9 +95,7 @@
         <el-row :gutter="8">
           <el-col :span="8">
             <el-form-item label="分析人">
-              <el-input
-                v-model="form.analysis"
-              ></el-input>
+              <el-input v-model="form.analysis"></el-input>
             </el-form-item>
             <el-form-item label="编号">
               <el-input :disabled="true" v-model="form.analysisNo"></el-input>
@@ -130,7 +110,7 @@
                 :url="deptPath"
                 :path="departmentParams"
               ></department>
-            </el-form-item> -->
+            </el-form-item>-->
             <el-form-item label="批准日期">
               <el-date-picker
                 v-model="form.approvalDate"
@@ -146,42 +126,26 @@
                 v-model="data.analysisTitle"
                 :disabled="formEnable"
               ></el-input>
-            </el-form-item> -->
+            </el-form-item>-->
             <el-form-item label="批准人">
               <el-input :disabled="true" v-model="form.approval"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-table
-          :data="list"
-          size="mini"
-          :span-method="objectSpanMethod"
-          border
-          height="550"
-        >
+        <el-table :data="list" size="mini" :span-method="objectSpanMethod" border height="550">
           <el-table-column label="系统" prop="product" />
           <el-table-column label="子系统" prop="subSystem" />
           <el-table-column label="管理流程" prop="managementProcess" />
-          <el-table-column
-            label="危险源描述"
-            prop="hazardSource"
-            min-width="300"
-            show-overflow-tooltip
-          />
-          <el-table-column
-            label="危险源"
-            prop="hazardSources"
-            min-width="200"
-            show-overflow-tooltip
-          />
+          <el-table-column label="危险源描述" prop="hazardSource" min-width="300" show-overflow-tooltip />
+          <el-table-column label="危险源" prop="hazardSources" min-width="200" show-overflow-tooltip />
           <el-table-column label="ID" prop="hazard" />
           <el-table-column label="可能性" width="110">
             <template slot-scope="{ row }">
               <el-select
                 v-model="row.possibility"
                 style="width: 100%"
-                :disabled="false"
                 @change="choosePoss(row, row.possibility)"
+                :disabled="row.specialRiskMeasureList[0].measureStatus=='0'"
               >
                 <!-- code作为key -->
                 <el-option
@@ -194,31 +158,28 @@
             </template>
           </el-table-column>
           <el-table-column label="严重性" prop="seriousness" />
-          <el-table-column
-            label="可能导致的风险"
-            prop="possibleRisks"
-            min-width="140"
-          >
+          <el-table-column label="可能导致的风险" prop="possibleRisks" min-width="160">
             <template slot-scope="{ row }">
-              <el-select
-                v-model="row.possibleRisks"
-                style="width: 120px"
-                :disabled="true"
-              >
+              <el-select v-model="row.possibleRisks" style="width: 100%" :disabled="true">
                 <el-option
                   v-for="childItem in possibleRisksList"
                   :key="childItem.riskNo"
                   :label="childItem.riskName"
                   :value="childItem.riskNo"
-                >
-                </el-option>
+                ></el-option>
               </el-select>
             </template>
           </el-table-column>
           <el-table-column label="风险等级" prop="riskLevel" />
           <el-table-column label="根原因分析" width="200">
             <template slot-scope="{ row }">
-              <el-input v-model="row.rootCauseAnalysis" placeholder type="textarea" rows="2"></el-input>
+              <el-input
+                v-model="row.rootCauseAnalysis"
+                placeholder
+                type="textarea"
+                rows="2"
+                :disabled="row.specialRiskMeasureList[0].measureStatus=='0'"
+              ></el-input>
             </template>
           </el-table-column>
           <el-table-column label="控制措施" min-width="200">
@@ -228,6 +189,7 @@
                 placeholder
                 type="textarea"
                 rows="2"
+                :disabled="row.specialRiskMeasureList[0].measureStatus=='0'"
               ></el-input>
             </template>
           </el-table-column>
@@ -244,15 +206,13 @@
                 :flat="false"
                 :placeholder="$t('global.select')"
                 appendToBody
+                :disabled="row.specialRiskMeasureList[0].measureStatus=='0'"
               />
             </template>
           </el-table-column>
           <el-table-column label="控制状态" width="180">
             <template slot-scope="{ row }">
-              <el-select
-                v-model="row.specialRiskMeasureList[0].measureStatus"
-                @change="changeStatus(row.specialRiskMeasureList[0].measureStatus, row)"
-              >
+              <el-select v-model="row.specialRiskMeasureList[0].measureStatus">
                 <el-option label="不适用" value="0"></el-option>
                 <el-option label="未控制" value="1"></el-option>
                 <el-option label="在控" value="2"></el-option>
@@ -265,16 +225,17 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
-      <el-button :loading="loading" type="primary" @click="doSubmit(false)">{{
+      <el-button :loading="loading" type="primary" @click="doSubmit(false)">
+        {{
         form.type == '2' ? '暂存' : '确认'
-      }}</el-button>
+        }}
+      </el-button>
       <el-button
         v-if="form.type == '2'"
         type="success"
         @click="doSubmit(true)"
         :loading="loading"
-        >提交</el-button
-      >
+      >提交</el-button>
     </div>
     <selectEmplotee ref="selectEmplotee" @on-submit="doSubmit" />
   </el-dialog>
@@ -802,17 +763,19 @@ export default {
         this.form.issueDepts = null
       }
     },
+    'form.issueDepts'(val) {
+      this.getDepts();
+      // 清空所选
+      this.list.map(item => {
+        item.specialRiskMeasureList[0].reponsibleDept = null;
+      })
+    }
   },
   created() {
     this.getRiskListMgr()
     this.queryDictByName()
 
-    this.loadingTree = true
-    const url = '/sys_mgr/department_mgr/query/tree'
-    queryDepts(url).then((res) => {
-      this.loadingTree = false
-      this.options = res.obj
-    })
+    this.getDepts();
 
     // 发起部门
     queryRiskMgrDept().then((res) => {
@@ -830,6 +793,14 @@ export default {
     })
   },
   methods: {
+    getDepts() {
+      this.loadingTree = true
+      const url = '/sys_mgr/department_mgr/query/tree'
+      queryDepts(url, { path: this.form.issueDepts }).then((res) => {
+        this.loadingTree = false
+        this.options = res.obj
+      })
+    },
     deptChange(val, key) {
       this.form[key] = val
     },
@@ -1405,7 +1376,7 @@ export default {
       }
     },
     changeStatus(val, row) {
-      if(val=='0') {
+      if (val == '0') {
         row.possibility = '-'
         row.rootCauseAnalysis = '-'
         row.specialRiskMeasureList[0].controlMeasure = '-'

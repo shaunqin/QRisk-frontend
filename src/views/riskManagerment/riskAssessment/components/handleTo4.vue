@@ -220,13 +220,22 @@ export default {
               // 更新父级危险源
               let hazardVoList = this.data.hazardVoList;
               let parentData = [...this.$parent.$parent.$parent.data.hazardVoList];
+              debugger
               parentData.map((item, index) => {
-                if (!item.possibility) {
-                  item.possibility = hazardVoList[index].possibility;
+                // 可能性不为空则添加
+                if (!!hazardVoList[index].possibility) {
+                  // 如果父级可能性没填,则覆盖
+                  if (!item.possibility) {
+                    item.possibility = hazardVoList[index].possibility;
+                    if (hazardVoList[index].rootCauseAnalysis != null)
+                      item.rootCauseAnalysis = hazardVoList[index].rootCauseAnalysis
+                    item.specialRiskMeasureList = [...hazardVoList[index].specialRiskMeasureList];
+                  } else {
+                    if (hazardVoList[index].rootCauseAnalysis != null)
+                      item.rootCauseAnalysis += "\r\n" + hazardVoList[index].rootCauseAnalysis
+                    item.specialRiskMeasureList = [...item.specialRiskMeasureList, ...hazardVoList[index].specialRiskMeasureList];
+                  }
                 }
-                if (hazardVoList[index].rootCauseAnalysis != null)
-                  item.rootCauseAnalysis += "\r\n" + hazardVoList[index].rootCauseAnalysis
-                item.specialRiskMeasureList = [...item.specialRiskMeasureList, ...hazardVoList[index].specialRiskMeasureList]
               })
               this.$parent.$parent.$parent.$parent.$parent.$parent.appendData = parentData;
             }
