@@ -122,7 +122,7 @@
           size="mini"
           :span-method="objectSpanMethod"
           border
-          height="550"
+          max-height="550"
           key="list"
         >
           <el-table-column label="系统" prop="product" />
@@ -148,6 +148,18 @@
               </ul>
             </template>
           </el-table-column>
+          <el-table-column label="落实情况" min-width="200" v-if="completionEnable">
+            <template slot-scope="{ row }">
+              <ul class="tab-ul">
+                <li v-for="item in row.specialRiskMeasureList" :key="item.id">
+                  <el-popover trigger="hover" v-if="true" placement="top">
+                    <span>{{item.completion}}</span>
+                    <div class="text" slot="reference">{{item.completion}}</div>
+                  </el-popover>
+                </li>
+              </ul>
+            </template>
+          </el-table-column>
           <el-table-column label="责任单位" width="160">
             <template slot-scope="{ row }">
               <ul class="tab-ul">
@@ -164,10 +176,10 @@
             <template slot-scope="{ row }">
               <ul class="tab-ul">
                 <li v-for="item in row.specialRiskMeasureList" :key="item.id">
-                  <el-popover trigger="hover" v-if="true" placement="top">
-                    <span>{{item.measureStatus}}</span>
-                    <div class="text" slot="reference">{{item.measureStatus}}</div>
-                  </el-popover>
+                  <span v-if="item.measureStatus=='0'">不适用</span>
+                  <span v-if="item.measureStatus=='1'">未控制</span>
+                  <span v-if="item.measureStatus=='2'">在控</span>
+                  <span v-if="item.measureStatus=='3'">关闭</span>
                 </li>
               </ul>
             </template>
@@ -269,13 +281,9 @@
     <el-card header="下发记录" key="childNotes" v-if="showChildNotes">
       <childNotes :data="data" :showIssueRecord="true" :hiddenField="['审核']" />
     </el-card>
-    <!-- <el-card
-      header="下发措施"
-      key="firstLevelMeasure"
-      v-if="showChildMeasures"
-    >
-      <childMeasures :data="data" :showIssueRecord="true" />
-    </el-card>-->
+    <el-card header="下发措施" key="firstLevelMeasure" v-if="completionEnable">
+      <childMeasures :data="data" :showIssueRecord="true" :hiddenField="['审核']" />
+    </el-card>
 
     <el-card
       header="审批记录"
@@ -777,6 +785,7 @@ export default {
         0,
         0,
       ],
+      completionEnable: false
     }
   },
   methods: {

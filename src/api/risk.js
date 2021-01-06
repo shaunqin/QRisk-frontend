@@ -254,6 +254,13 @@ export function specialRiskDetail(id) {
     method: 'get',
   })
 }
+// 已办详情
+export function specialRiskHasDoneDetail(taskId) {
+  return request({
+    url: `/risk_mgr/special_risk_notice_mgr/query/hasDoneDetail/${taskId}`,
+    method: 'get',
+  })
+}
 // 修改
 export function specialRiskModify(data) {
   return request({

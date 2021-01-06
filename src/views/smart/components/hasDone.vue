@@ -26,7 +26,7 @@ import hazardsDoneDetail from '@/views/hazardsInvestigation/safetyHazardsReport/
 import hazardsDoneDetail2 from '@/views/hazardsInvestigation/safetyHazardsReport/components/detail2'
 import speciaRiskDetail from '@/views/riskManagerment/riskAssessment/components/detail'
 import monthEvaluateReportDoneDetail from '@/views/dataAnalysis/evaluateReportMonthly/components/doneDetail'
-import { riskNoticeDoneDetail2, specialRiskDetail, riskControlHasDoneDetailByFormId } from '@/api/risk'
+import { riskNoticeDoneDetail2, specialRiskHasDoneDetail, riskControlHasDoneDetailByFormId } from '@/api/risk'
 import { queryHasDoneDetail, queryHasDoneDetail2 } from "@/api/hazards";
 export default {
   components: {
@@ -95,7 +95,7 @@ export default {
       let _this = this.$refs.speciaRiskDetail;
       _this.dialog = true;
       _this.dialogLoading = true;
-      specialRiskDetail(this.id).then((res) => {
+      specialRiskHasDoneDetail(this.id).then((res) => {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
