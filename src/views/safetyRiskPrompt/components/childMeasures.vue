@@ -10,7 +10,7 @@
       :load="loadTree"
     >
       <el-table-column label="下发部门" prop="deptName" width="160" align="left" />
-      <el-table-column label="截止日期"  width="100">
+      <el-table-column label="截止日期" width="100">
         <template slot-scope="{row}">{{row.data.deadline}}</template>
       </el-table-column>
       <el-table-column label="措施内容" min-width="150">
@@ -42,6 +42,7 @@
           <span v-if="row.status==2">待审核</span>
           <span v-if="row.status==3">通过</span>
           <span v-if="row.status==4">驳回</span>
+          <span v-if="row.status == 5">已取消</span>
         </template>
       </el-table-column>
       <el-table-column label="办理人" width="80">
