@@ -69,12 +69,18 @@
       />
       <el-table-column :label="$t('global.operation')" width="150" fixed="right">
         <template slot-scope="{row}">
-          <el-button-group v-if="row.status=='1'&&row.updData">
+          <el-button-group v-if="row.status=='1'">
             <el-button type="primary" size="mini" icon="el-icon-edit" @click="edit(row.id)"></el-button>
             <el-button type="primary" size="mini" icon="el-icon-upload" @click="doSub(row.id)"></el-button>
             <el-button type="danger" size="mini" icon="el-icon-delete" @click="subDel(row.id)"></el-button>
           </el-button-group>
-          <el-button v-else type="primary" size="mini" icon="el-icon-upload" @click="doSub(row.id)"></el-button>
+          <el-button
+            v-if="row.status=='0'&&row.updData"
+            type="primary"
+            size="mini"
+            icon="el-icon-upload"
+            @click="doSub(row.id)"
+          ></el-button>
         </template>
       </el-table-column>
     </el-table>
