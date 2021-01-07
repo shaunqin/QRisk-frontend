@@ -180,6 +180,7 @@ export default {
             _this.data = res.obj;
             _this.data.endTime = formatShortDate(res.obj.endTime);
             _this.assessmentType = this.assessmentType;
+            _this.completionEnable = res.obj.step == 7;
             _this.dialog = true;
           }
         }

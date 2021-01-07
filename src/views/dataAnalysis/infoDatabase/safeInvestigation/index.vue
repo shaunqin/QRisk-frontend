@@ -55,15 +55,26 @@
         width="120"
         show-overflow-tooltip
       />
-      <el-table-column prop="riskText" :label="$t('analysis.risk')" min-width="160" show-overflow-tooltip />
-      <el-table-column prop="incentiveText" :label="$t('analysis.incentive')" min-width="200" show-overflow-tooltip />
+      <el-table-column
+        prop="riskText"
+        :label="$t('analysis.risk')"
+        min-width="160"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="incentiveText"
+        :label="$t('analysis.incentive')"
+        min-width="200"
+        show-overflow-tooltip
+      />
       <el-table-column :label="$t('global.operation')" width="150" fixed="right">
         <template slot-scope="{row}">
-          <el-button-group v-if="row.status=='1'">
+          <el-button-group v-if="row.status=='1'&&row.updData">
             <el-button type="primary" size="mini" icon="el-icon-edit" @click="edit(row.id)"></el-button>
             <el-button type="primary" size="mini" icon="el-icon-upload" @click="doSub(row.id)"></el-button>
             <el-button type="danger" size="mini" icon="el-icon-delete" @click="subDel(row.id)"></el-button>
           </el-button-group>
+          <el-button v-else type="primary" size="mini" icon="el-icon-upload" @click="doSub(row.id)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -77,7 +88,7 @@
       @current-change="pageChange"
     />
     <eform ref="form" :is-add="isAdd"></eform>
-    <editform ref="editform" type="1" :is-add="isAdd"></editform>
+    <editform ref="editform" type="1" :is-add="isAdd" :isSubmit="isSubmit"></editform>
   </div>
 </template>
 
@@ -96,6 +107,7 @@ export default {
       isSuperAdmin: false,
       userInfo: {},
       selections: [],
+      isSubmit: false
     };
   },
   mounted() {
@@ -114,6 +126,7 @@ export default {
     },
     edit(id) {
       this.isAdd = false;
+      this.isSubmit = false;
       let _this = this.$refs.editform;
       detailInfobase(id).then((res) => {
         if (res.code != "200") {
@@ -144,22 +157,18 @@ export default {
       });
     },
     doSub(id) {
-      let form = {
-        id,
-        status: "0",
-      };
-      this.$confirm(this.$t('analysis.submitConfirm'))
-        .then(() => {
-          modifyInfobase(form).then((res) => {
-            if (res.code != "200") {
-              this.$message.error(res.msg);
-            } else {
-              this.$message.success("提交成功");
-              this.init();
-            }
-          });
-        })
-        .catch(() => { });
+      this.isSubmit = true;
+      let _this = this.$refs.editform;
+      detailInfobase(id).then((res) => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          const { obj } = res;
+          _this.form = obj;
+          _this.files = obj.filesList;
+          _this.dialog = true;
+        }
+      });
     },
     subDel(id) {
       this.$confirm(this.$t('analysis.deleteConfirm'))

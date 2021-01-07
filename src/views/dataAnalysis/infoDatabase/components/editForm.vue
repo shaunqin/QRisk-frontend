@@ -143,7 +143,13 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">{{$t('global.cancel')}}</el-button>
-      <el-button :loading="loading" type="primary" @click="doSubmit">{{$t('global.confirm')}}</el-button>
+      <el-button
+        v-if="!isSubmit"
+        :loading="loading"
+        type="primary"
+        @click="doSubmit"
+      >{{$t('global.confirm')}}</el-button>
+      <el-button v-else :loading="loading" type="primary" @click="handleSub">提交</el-button>
     </div>
   </el-dialog>
 </template>
@@ -170,6 +176,14 @@ export default {
       type: String,
       required: true
     },
+    isAdd: {
+      type: Boolean,
+      required: true,
+    },
+    isSubmit: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -237,12 +251,6 @@ export default {
       files: [],
     };
   },
-  props: {
-    isAdd: {
-      type: Boolean,
-      required: true,
-    },
-  },
   created() {
     this.loadData();
   },
@@ -297,6 +305,21 @@ export default {
     cancel() {
       this.resetForm();
     },
+    handleSub() {
+      let form = {
+        ...this.form,
+        status: "0",
+      };
+      modifyInfobase(form).then((res) => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          this.$message.success("提交成功");
+          this.$parent.init();
+          this.resetForm();
+        }
+      });
+    },
     doSubmit() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
@@ -328,7 +351,7 @@ export default {
         });
     },
     doModify() {
-      modifyInfobase(this.form)
+      modifyInfobase({ ...this.form, status: "1" })
         .then((res) => {
           if (res.code === "200") {
             this.$message({
