@@ -142,13 +142,17 @@ export default {
                       align: 'center'
                     }
                   },
-                  tooltip:{
-                    formatter:'措施内容:{c}'
-                  }
+                  tooltip: {
+                    formatter: '措施内容:{c}'
+                  },
+                  expandAndCollapse:false, // 节点展开
                 }
               ]
             }
             this.$refs.charts.chart.hideLoading();
+            this.$refs.charts.chart.on("click", (params) => {
+              console.log(params);
+            })
           }
         })
       }

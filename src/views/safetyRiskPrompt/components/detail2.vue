@@ -45,50 +45,8 @@
           </li>
         </ul>
       </el-form-item>
-      <el-form-item label="下发措施" v-if="form.firstLevelMeasure!=null">
-        <el-table
-          :data="form.firstLevelMeasure"
-          size="mini"
-          row-key="id"
-          :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-          lazy
-          :load="loadTree"
-        >
-          <el-table-column label="下发部门" prop="deptName" width="160" align="left" />
-          <el-table-column label="截止日期" width="100">
-            <template slot-scope="{row}">{{row.data.deadline}}</template>
-          </el-table-column>
-          <el-table-column label="措施内容" min-width="150">
-            <template slot-scope="{row}">{{row.data.content}}</template>
-          </el-table-column>
-          <el-table-column label="落实情况" min-width="200" align="left">
-            <template slot-scope="{row}">
-              <span style="white-space: pre-wrap;">{{row.data.impl}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="上报人" width="120" prop="filler" />
-          <el-table-column label="附件预览" min-width="120">
-            <template slot-scope="{row}">
-              <div v-for="(item, index) in row.data.files" :key="index">
-                <el-link
-                  type="primary"
-                  v-if="item!=null"
-                  :href="getUrl(item.filePath)"
-                  target="_blank"
-                >{{item.originFileName}}</el-link>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column label="状态" width="100">
-            <template slot-scope="{row}">
-              <span v-if="row.status==0">待填</span>
-              <span v-if="row.status==1">待填</span>
-              <span v-if="row.status==2">待审核</span>
-              <span v-if="row.status==3">通过</span>
-              <span v-if="row.status==4">驳回</span>
-            </template>
-          </el-table-column>
-        </el-table>
+      <el-form-item label="下发措施" v-if="form.treeData!=null&&form.treeData.length>0">
+        <childMeasuresSimp :data="form.treeData" :id="form.id" />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer" v-if="!fullscreen">
@@ -100,13 +58,12 @@
 
 <script>
 import { riskNoticeDetail } from "@/api/risk";
-import childMeasures from './childMeasures'
+import childMeasuresSimp from './childMeasuresSimp'
 import leaderApprvalRecord from './leaderApprvalRecord'
 import htmlContent from '@/components/common/htmlContent'
 import transactor from '@/components/common/transactor'
-import { riskNoticeLazyLoadIssueTree } from "@/api/risk";
 export default {
-  components: { childMeasures, leaderApprvalRecord, htmlContent, transactor },
+  components: { childMeasuresSimp, leaderApprvalRecord, htmlContent, transactor },
   data() {
     return {
       loading: false,
@@ -122,18 +79,7 @@ export default {
       default: false
     }
   },
-  computed: {
-    noticeComments() {
-      if (this.form.noticeComments) {
-        return this.form.noticeComments;
-      }
-      return []
-    },
-  },
   methods: {
-    getUrl(url) {
-      return process.env.VUE_APP_BASE_API + url;
-    },
     cancel() {
       this.resetForm();
     },
@@ -143,12 +89,6 @@ export default {
     resetForm() {
       this.dialog = false;
     },
-    loadTree(tree, treeNode, resolve) {
-      console.log(tree);
-      riskNoticeLazyLoadIssueTree(tree.id).then(res => {
-        resolve(res.obj)
-      })
-    }
   },
 };
 </script>

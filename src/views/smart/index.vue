@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 待办 -->
-    <toDoTask v-if="redirect=='toDoTask'" ref="toDoTask" />
+    <toDoTask v-if="redirect=='toDoView'" ref="toDoTask" />
     <!-- 已办 -->
     <hasDone v-if="redirect=='hasDoneView'" />
     <!-- 我发起的 -->

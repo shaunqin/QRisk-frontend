@@ -306,11 +306,13 @@ export default {
       this.resetForm();
     },
     handleSub() {
+      this.loading = true;
       let form = {
         ...this.form,
         status: "0",
       };
       modifyInfobase(form).then((res) => {
+        this.loading = false;
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {

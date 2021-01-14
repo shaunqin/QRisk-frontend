@@ -9,7 +9,7 @@
       lazy
       :load="loadTree"
     >
-      <el-table-column label="下发部门" prop="deptName" width="160" align="left" />
+      <el-table-column label="下发部门" prop="deptName" width="160" align="left"  />
       <el-table-column label="截止日期" width="100">
         <template slot-scope="{row}">{{row.data.deadline}}</template>
       </el-table-column>
@@ -37,8 +37,8 @@
       </el-table-column>
       <el-table-column label="状态" width="80">
         <template slot-scope="{row}">
-          <span v-if="row.status==0">待填</span>
-          <span v-if="row.status==1">待填</span>
+          <span v-if="row.status==0">待上报</span>
+          <span v-if="row.status==1">已下发</span>
           <span v-if="row.status==2">待审核</span>
           <span v-if="row.status==3">通过</span>
           <span v-if="row.status==4">驳回</span>

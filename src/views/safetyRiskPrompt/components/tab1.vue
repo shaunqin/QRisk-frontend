@@ -67,7 +67,7 @@ import initData from "@/mixins/initData";
 import { format, formatShortDate } from "@/utils/datetime";
 import eform from "./form";
 import edetail from "./detail2";
-import { riskNoticeDetail, getRiskNoticeNo, queryRiskMgrDept, verifyPerms, riskNoticeSubDetail } from "@/api/risk";
+import { riskNoticeDetail, getRiskNoticeNo, queryRiskMgrDept, verifyPerms, riskNoticeSubDetail2 } from "@/api/risk";
 import { mapGetters } from "vuex";
 export default {
   components: { eform, edetail },
@@ -132,7 +132,7 @@ export default {
     },
     detail(row) {
       this.loading = true;
-      riskNoticeSubDetail(row.id).then((res) => {
+      riskNoticeSubDetail2(row.id).then((res) => {
         this.loading = false;
         if (res.code != "200") {
           this.$message.error(res.msg);

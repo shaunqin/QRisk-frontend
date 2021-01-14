@@ -52,6 +52,12 @@ export function riskNoticeSubDetail(id) {
     method: 'get',
   })
 }
+export function riskNoticeSubDetail2(id) {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/query/submitDetail2/${id}`,
+    method: 'get',
+  })
+}
 // 风险提示 重新生成pdf
 export function riskNoticeGenPdf(id) {
   return request({
@@ -226,6 +232,18 @@ export function riskNoticeRiskManger(data) {
 export function riskNoticeLazyLoadIssueTree(measureId) {
   return request({
     url: `/riskmgr_mgr/safety_risk_notice_mgr/subMeasures/${measureId}`,
+    method: 'get',
+  })
+}
+export function riskNoticeQueryChildren(deptPath, id) {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/queryChildren/${deptPath}/${id}`,
+    method: 'get',
+  })
+}
+export function riskNoticeQueryMeasures(deptPath, id) {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/queryMeasures/${deptPath}/${id}`,
     method: 'get',
   })
 }
