@@ -89,7 +89,7 @@ export default {
   components: { upload, childMeasures, htmlContent, selectManager },
   data() {
     return {
-      accessory: this.data.deptMeasure ? this.data.deptMeasure.accessory : [],
+      accessory: this.data.deptMeasure ? [...this.data.deptMeasure.accessory] : [],
       summary: "",
       baseApi: process.env.VUE_APP_BASE_API
     };
@@ -125,7 +125,7 @@ export default {
         if (val.summary)
           this.form.comment = val.summary;
         // 重置附件
-        this.accessory = this.data.deptMeasure ? this.data.deptMeasure.accessory : [];
+        this.accessory = this.data.deptMeasure ? [...this.data.deptMeasure.accessory] : [];
       }
     },
   },

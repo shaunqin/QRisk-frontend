@@ -42,7 +42,7 @@
           <template slot-scope="{row}">{{`${row.issuerName}[${row.issuer}]`}}</template>
         </el-table-column>
         <el-table-column label="上报人" width="120">
-          <template slot-scope="{row}">{{`${row.fillerName}[${row.filler}]`}}</template>
+          <template slot-scope="{row}">{{row.fillerName?`${row.fillerName}[${row.filler}]`:'-'}}</template>
         </el-table-column>
         <el-table-column label="附件预览" min-width="120">
           <template slot-scope="{row}">
