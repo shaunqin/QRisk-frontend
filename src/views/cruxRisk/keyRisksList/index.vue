@@ -99,6 +99,9 @@ export default {
       })
     },
     detailCell(row, column, cell, event) {
+      if(column.type == "index" || column.label == '关键风险项目') {
+        return 
+      }
       if(!row[column.property]) return this.$message.error("无数据！")
       let params = {
         riskNo: row.riskNo
