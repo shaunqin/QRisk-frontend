@@ -11,14 +11,18 @@
     >
       <el-table-column prop="name" label="流程状态" width="260">
         <template slot-scope="{row}">
-          <el-tag type="warning">{{row.name}}</el-tag>
+          <el-tag class="noborder" :color="getStatusColor(row)" effect="dark">{{row.name}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="businessTitle" label="主题" show-overflow-tooltip />
       <el-table-column prop="content" label="措施内容" show-overflow-tooltip />
       <el-table-column prop="createBy" label="发起人" width="120" />
       <el-table-column prop="createTime" label="发起时间" width="140" />
-      <el-table-column prop="daysRemained" label="剩余天数" width="120" sortable="custom" />
+      <el-table-column label="剩余天数" width="120" sortable="custom">
+        <template slot-scope="{row}">
+          <span :style="{color:row.emergency?getStatusColor(row):'#606266'}">{{row.daysRemained}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="110">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="subHandle(row)">办理</el-button>
@@ -97,9 +101,26 @@ export default {
     pdfUrl(row) {
       return `${process.env.VUE_APP_BASE_API}${row.pdfUrl}`;
     },
+    getStatusColor(row) {
+      let color = "";
+      if (row.emergency) {
+        color = "#f56c6c"; //红色
+      } else {
+        switch (row.customStep) {
+          case 0: color = "#FF9800"; break; // 橙色
+          case 1: color = "#4CAF50"; break; // 绿色
+          case 2: color = "#FFEB3B"; break; // 黄色
+          default: color = "#FF9800"; break;
+        }
+      }
+      return color
+    }
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.noborder {
+  border-color: transparent;
+}
 </style>

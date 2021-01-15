@@ -60,7 +60,13 @@
         <tab1 v-if="tabIndex==1" :queryForm="queryForm" />
       </el-tab-pane>
       <el-tab-pane name="2">
-        <el-badge slot="label" :value="count" class="item" :hidden="!count">
+        <el-badge
+          slot="label"
+          :value="count.all"
+          class="item"
+          :type="count.emergency>0?'danger':'success'"
+          :hidden="!count.all"
+        >
           <span>待办</span>
         </el-badge>
         <tab2 v-if="tabIndex==2" :queryForm="queryForm" />
@@ -93,6 +99,13 @@ export default {
   },
   created() {
     this.loadCount();
+  },
+  mounted() {
+    // 是否从导航栏点进来
+    if (this.$store.getters.hiddenDangerTabIndex != '1')
+      this.tabIndex = this.$store.getters.hiddenDangerTabIndex;
+    // 重置
+    this.$store.dispatch("riskSettings/setHiddenDangerTabIndex", "1");
   },
   computed: {
     ...mapGetters(["roles"]),

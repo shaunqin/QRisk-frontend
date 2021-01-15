@@ -96,7 +96,13 @@
           <tab3 v-if="tabIndex==3" :queryForm="queryForm" />
         </el-tab-pane>
         <el-tab-pane name="4">
-          <el-badge slot="label" :value="count" class="item" :hidden="!count">
+          <el-badge
+            slot="label"
+            :value="count.all"
+            class="item"
+            :type="count.emergency>0?'danger':'success'"
+            :hidden="!count.all"
+          >
             <span>待办</span>
           </el-badge>
           <tab4 v-if="tabIndex==4" :queryForm="queryForm" />
@@ -132,7 +138,7 @@ export default {
       tabIndex: "1",
       queryForm: {},
       date: "",
-      count: 0
+      count: {}
     };
   },
   computed: {
@@ -145,6 +151,7 @@ export default {
         this.tabIndex = "1";
         return false;
       }
+
     }
   },
   watch: {
@@ -165,6 +172,13 @@ export default {
   },
   created() {
     this.loadCount();
+  },
+  mounted() {
+    // 是否从导航栏点进来
+    if (this.$store.getters.riskNoticeTabIndex != '1')
+      this.tabIndex = this.$store.getters.riskNoticeTabIndex;
+    // 重置
+    this.$store.dispatch("riskSettings/setRiskNoticeTabIndex", "1");
   },
   methods: {
     toQuery() {

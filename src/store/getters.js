@@ -11,6 +11,8 @@ const getters = {
   roles: state => state.user.roles,
   permission_routes: state => state.permission.routes,
   resetChart: state => state.user.resetChart,
-  monthReportEnable: state => state.user.monthReportEnable
+  monthReportEnable: state => state.user.monthReportEnable,
+  riskNoticeTabIndex: state => state.riskSettings.riskNoticeTabIndex,
+  hiddenDangerTabIndex: state => state.riskSettings.hiddenDangerTabIndex,
 }
 export default getters

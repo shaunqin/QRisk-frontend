@@ -11,7 +11,14 @@
         :collapse-transition="false"
         mode="horizontal"
       >
-        <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
+        <sidebar-item
+          v-for="route in permission_routes"
+          :key="route.path"
+          :item="route"
+          :base-path="route.path"
+          :riskNoticeCount="riskNoticeCount"
+          :hiddenDanger="hiddenDanger"
+        />
       </el-menu>
     </el-scrollbar>
     <navbar></navbar>
@@ -23,10 +30,25 @@ import { mapGetters } from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import variables from '@/styles/variables.scss'
-import {Navbar} from '../../components'
+import { Navbar } from '../../components'
+import { queryCount } from '@/api/info'
 
 export default {
-  components: { SidebarItem, Logo , Navbar},
+  components: { SidebarItem, Logo, Navbar },
+  data() {
+    return {
+      riskNoticeCount: 0,
+      hiddenDanger: 0
+    }
+  },
+  created() {
+    queryCount().then(res => {
+      if (res.code == '200') {
+        this.riskNoticeCount = res.obj.safetyNotice.all;
+        this.hiddenDanger = res.obj.hiddenDanger.all;
+      }
+    });
+  },
   computed: {
     ...mapGetters([
       'permission_routes',
