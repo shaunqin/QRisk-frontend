@@ -20,6 +20,7 @@
           :hiddenDanger="hiddenDanger"
           :cruxRisk="cruxRisk"
           :riskManagerment="riskManagerment"
+          :evaluateReportMonthly="evaluateReportMonthly"
         />
       </el-menu>
     </el-scrollbar>
@@ -42,7 +43,8 @@ export default {
       riskNoticeCount: 0,
       hiddenDanger: 0,
       cruxRisk: 0,
-      riskManagerment: 0
+      riskManagerment: 0,
+      evaluateReportMonthly: 0
     }
   },
   created() {
@@ -52,6 +54,7 @@ export default {
         this.hiddenDanger = res.obj.hiddenDanger.all;
         this.cruxRisk = res.obj.keyRisk.all;
         this.riskManagerment = res.obj.specialRiskl.all;
+        this.evaluateReportMonthly = res.obj.riskEvaluationReport.all;
       }
     });
   },

@@ -57,6 +57,18 @@
               :title="generateTitle(onlyOneChild.meta.title)"
             />
           </el-badge>
+          <!-- 数据分析 -->
+          <el-badge
+            class="evaluateReportMonthly"
+            v-else-if="item.meta&&item.meta.title=='dataAnalysis'"
+            :value="evaluateReportMonthly"
+            :hidden="evaluateReportMonthly==0"
+          >
+            <item
+              :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
+              :title="generateTitle(onlyOneChild.meta.title)"
+            />
+          </el-badge>
           <item
             v-else
             :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
@@ -125,6 +137,10 @@ export default {
       default: 0
     },
     riskManagerment: {
+      type: Number,
+      default: 0
+    },
+    evaluateReportMonthly: {
       type: Number,
       default: 0
     }
