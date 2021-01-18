@@ -262,11 +262,21 @@
 
       <!-- 危险源清单 -->
       <el-card
-        header="危险源"
+        class="chead"
         key="2"
         style="margin-top: 20px"
         v-if="form.type == '2' || !isAdd"
       >
+      <div slot="header" class="hslot">
+        <span>危险源</span>
+        <el-button
+          v-if="assessmentType != '4' && !isAdd"
+          type="text"
+          icon="el-icon-tickets"
+          @click="showReport"
+          :disabled="!form.hiddenReport"
+        >风险报告</el-button>
+      </div>
         <el-row :gutter="8">
           <el-col :span="8">
             <el-form-item label="分析人">
@@ -536,6 +546,8 @@
       >
     </div>
     <selectEmplotee ref="selectEmplotee" @on-submit="doSubmit" />
+      <!-- 风险评价报告 -->
+      <report ref="reportRef" :formId="formId" @change="formIdChange" @do-submit="reportDoSubmit" />
   </el-dialog>
 </template>
 
@@ -555,9 +567,10 @@ import deptByRole from '@/components/Department/deptByRole'
 import dictSelect from '@/components/common/dictSelect'
 import eupload from '@/components/Upload/index'
 import selectEmplotee from './selectEmplotee'
+import report from './report'
 
 export default {
-  components: { department, deptByRole, dictSelect, eupload, selectEmplotee },
+  components: { department, deptByRole, dictSelect, eupload, selectEmplotee, report },
   data() {
     return {
       loading: false,
@@ -577,6 +590,7 @@ export default {
         approval: '', // 批准
         approvalDate: '', // 批准日期
         type: '1', // 类别,1:通知,2:评估
+        hiddenReport: false,
         specialRiskAnalyses: [
           {
             product: '维修工程', // 产品
@@ -637,6 +651,7 @@ export default {
           return time.getTime() < Date.now() - 8.64e7
         },
       },
+      formId: ''
     }
   },
   props: {
@@ -689,6 +704,10 @@ export default {
     cancel() {
       this.resetForm()
     },
+    showReport() {
+      this.formId = this.form.id
+      this.$refs.reportRef.dialog = true
+    },
     doSubmit(sqlUserId) {
       if (!this.form.issueDepts || !this.form.title.trim())
         return this.$message.error('请填写完整！')
@@ -727,6 +746,10 @@ export default {
               message: '添加成功',
               type: 'success',
             })
+            if(res.obj && this.form.type == '2' && !this.form.hiddenReport) {
+              this.form.id = res.obj
+              this.showReport()
+            }
             this.resetForm()
             this.$parent.init()
           } else {
@@ -761,6 +784,10 @@ export default {
               message: '修改成功',
               type: 'success',
             })
+            if(res.obj && this.form.type == '2' && !this.form.hiddenReport) {
+              this.form.id = res.obj
+              this.showReport()
+            }
             this.resetForm()
             this.$parent.init()
           } else {
@@ -977,6 +1004,14 @@ export default {
         }
       })
     },
+    formIdChange(val) {
+      this.formId = val
+      this.$forceUpdate()
+    },
+    reportDoSubmit(bool) {
+      this.$parent.init()
+      this.resetForm()
+    }
   },
 }
 </script>

@@ -75,7 +75,7 @@ export default {
     border-radius: 0;
   }
   /deep/ .scrollbar-wrapper {
-    height: calc(100vh - 77px);
+    height: calc(100vh - 72px);
   }
 }
 </style>

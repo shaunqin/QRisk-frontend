@@ -209,8 +209,9 @@ export default {
           this.$message.success('操作成功')
           this.resetForm()
           if(this.submitBool) { this.$emit('submit', true) }
-          this.$parent.$parent.resetForm()
-          this.$parent.$parent.$parent.init()
+          this.$emit('doSubmit', true)
+          /* this.$parent.$parent.resetForm()
+          this.$parent.$parent.$parent.init() */
         }
       })
     },
