@@ -653,7 +653,7 @@
       <apprvalRecord :data="data.noticeComments" />
     </el-card>
     <selectManager ref="selectManager" :deptPath="data.issueDept" @on-submit="doSubmit" />
-    <report ref="report" :formId="formId" @change="formIdChange" />
+    <report ref="report" :formId="formId" @change="formIdChange" @do-submit="reportDoSubmit" />
   </div>
 </template>
 
@@ -1513,6 +1513,15 @@ export default {
           this.$forceUpdate()
         }
       })
+    },
+    reportDoSubmit(bool) {
+      if(data.step == '1') {
+        this.$parent.$parent.init()
+        this.$parent.resetForm()
+      } else {
+        this.$parent.$parent.$parent.init()
+        this.$parent.$parent.resetForm()
+      }
     }
     /* doHandle(row) {
       this.reviewLoading = true

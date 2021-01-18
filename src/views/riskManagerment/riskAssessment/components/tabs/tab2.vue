@@ -163,7 +163,8 @@ export default {
               approval: obj.approval,
               approvalDate: formatShortDate(obj.approvalDate),
               releasePath: obj.releasePath,
-              type: obj.type
+              type: obj.type,
+              hiddenReport: obj.hiddenReport
             };
             if (obj.hazardVoList && obj.hazardVoList.length > 0) {
               _this.form.hazardList = obj.hazardVoList.map(item => {

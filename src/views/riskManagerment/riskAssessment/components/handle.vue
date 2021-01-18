@@ -80,7 +80,7 @@
         :source="fullscreen ? 'smart' : ''"
       />
       <!-- 风险评价报告 -->
-      <report ref="reportRef" :formId="formId" @submit="reportSubmit" />
+      <report ref="reportRef" :formId="formId" @submit="reportSubmit" @do-submit="reportDoSubmit" />
       <!-- 抄送 -->
       <ccPerson ref="ccPerson" :deptPath="deptPath" @subCC="subCC" />
     </div>
@@ -376,6 +376,10 @@ export default {
       if(bool) {
         this.submitStep1()
       }
+    },
+    reportDoSubmit(bool) {
+      this.$parent.init()
+      this.resetForm()
     }
   },
 }
