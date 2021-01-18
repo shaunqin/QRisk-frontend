@@ -15,15 +15,13 @@
       </el-table-column>
       <el-table-column prop="name" label="流程状态" width="180">
         <template slot-scope="{row}">
-          <el-tag type="warning">{{row.name}}</el-tag>
+          <el-tag class="noborder" :color="getStatusColor(row)" effect="dark">{{row.name}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="businessTitle" label="任务标题" show-overflow-tooltip />
       <el-table-column prop="assignor" label="分配人" width="130" />
       <el-table-column label="分配时间" width="140">
-        <template slot-scope="{row}">
-          {{format(row.assignorTime)}}
-        </template>
+        <template slot-scope="{row}">{{format(row.assignorTime)}}</template>
       </el-table-column>
       <el-table-column prop="createBy" label="发起人" width="130" />
       <el-table-column prop="createTime" label="发起时间" width="140" />
@@ -89,14 +87,14 @@ export default {
           _this.data.approvalDate = formatShortDate(res.obj.approvalDate);
           if (res.obj.keyRiskListVoLists && res.obj.keyRiskListVoLists.length > 0) {
             _this.data.keyRiskLists = res.obj.keyRiskListVoLists.map(item => {
-              if(item.appliance == '0') {
+              if (item.appliance == '0') {
                 item.disabledRisk = false
                 item.disabledAppliance = false
-              } else if(item.appliance == '1') {
+              } else if (item.appliance == '1') {
                 item.disabledRisk = true
                 item.disabledAppliance = true
               }
-              item.hazardList.map(hazardItem=> {
+              item.hazardList.map(hazardItem => {
                 hazardItem.specialRiskMeasureList.map(childItem => {
                   childItem.deadline = formatShortDate(childItem.deadline)
                 })
@@ -120,10 +118,27 @@ export default {
         default: break;
       }
       return type;
+    },
+    getStatusColor(row) {
+      let color = "";
+      if (row.emergency) {
+        color = "#f56c6c"; //红色
+      } else {
+        switch (row.customStep) {
+          case 0: color = "#FF9800"; break; // 橙色
+          case 1: color = "#4CAF50"; break; // 绿色
+          case 2: color = "#FFEB3B"; break; // 黄色
+          default: color = "#FF9800"; break;
+        }
+      }
+      return color
     }
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.noborder {
+  border-color: transparent;
+}
 </style>

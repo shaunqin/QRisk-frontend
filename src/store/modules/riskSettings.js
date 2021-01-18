@@ -2,7 +2,8 @@
 
 const state = {
     riskNoticeTabIndex: "1",
-    hiddenDangerTabIndex: "1"
+    hiddenDangerTabIndex: "1",
+    cruxRiskTabIndex: "1",
 }
 
 const mutations = {
@@ -12,6 +13,9 @@ const mutations = {
     setHiddenDangerTabIndex: (state, hiddenDangerTabIndex) => {
         state.hiddenDangerTabIndex = hiddenDangerTabIndex
     },
+    setCruxRiskTabIndex: (state, cruxRiskTabIndex) => {
+        state.cruxRiskTabIndex = cruxRiskTabIndex
+    },
 }
 
 const actions = {
@@ -20,6 +24,9 @@ const actions = {
     },
     setHiddenDangerTabIndex({ commit }, hiddenDangerTabIndex) {
         commit('setHiddenDangerTabIndex', hiddenDangerTabIndex)
+    },
+    setCruxRiskTabIndex({ commit }, cruxRiskTabIndex) {
+        commit('setCruxRiskTabIndex', cruxRiskTabIndex)
     },
 }
 

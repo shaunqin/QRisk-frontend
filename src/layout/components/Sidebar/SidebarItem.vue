@@ -33,6 +33,30 @@
               :title="generateTitle(onlyOneChild.meta.title)"
             />
           </el-badge>
+          <!-- 关键风险 -->
+          <el-badge
+            class="cruxRisk"
+            v-else-if="item.meta&&item.meta.title=='cruxRisk'"
+            :value="cruxRisk"
+            :hidden="cruxRisk==0"
+          >
+            <item
+              :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
+              :title="generateTitle(onlyOneChild.meta.title)"
+            />
+          </el-badge>
+          <!-- 专项风险 -->
+          <el-badge
+            class="riskManagerment"
+            v-else-if="item.meta&&item.meta.title=='riskManagerment'"
+            :value="riskManagerment"
+            :hidden="riskManagerment==0"
+          >
+            <item
+              :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
+              :title="generateTitle(onlyOneChild.meta.title)"
+            />
+          </el-badge>
           <item
             v-else
             :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
@@ -95,6 +119,14 @@ export default {
     hiddenDanger: {
       type: Number,
       default: 0
+    },
+    cruxRisk: {
+      type: Number,
+      default: 0
+    },
+    riskManagerment: {
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -107,6 +139,7 @@ export default {
   mounted() {
     document.querySelector(".safetyRiskPrompt .el-badge__content").onclick = this.jumpRiskNotice
     document.querySelector(".hazardsInvestigation .el-badge__content").onclick = this.jumpHiddenDanger
+    document.querySelector(".cruxRisk .el-badge__content").onclick = this.jumpCruxRisk
   },
   methods: {
     hasOneShowingChild(children = [], parent) {
@@ -150,6 +183,9 @@ export default {
     jumpHiddenDanger(e) {
       this.$store.dispatch("riskSettings/setHiddenDangerTabIndex", "2");
     },
+    jumpCruxRisk() {
+      this.$store.dispatch("riskSettings/setCruxRiskTabIndex", "4");
+    }
   }
 }
 </script>

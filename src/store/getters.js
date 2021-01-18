@@ -14,5 +14,6 @@ const getters = {
   monthReportEnable: state => state.user.monthReportEnable,
   riskNoticeTabIndex: state => state.riskSettings.riskNoticeTabIndex,
   hiddenDangerTabIndex: state => state.riskSettings.hiddenDangerTabIndex,
+  cruxRiskTabIndex: state => state.riskSettings.cruxRiskTabIndex,
 }
 export default getters
