@@ -213,6 +213,7 @@ export default {
     download() {
       const qs = require('qs')
       let params = qs.stringify(this.queryForm);
+      params.fileType = '0'
       let url = `${process.env.VUE_APP_BASE_API}/quality_mgr/downLoad/produceFile?${params}`;
       location.href = url;
     }
