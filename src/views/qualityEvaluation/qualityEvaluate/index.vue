@@ -92,6 +92,7 @@
 import department from '@/components/Department';
 import { queryDictByName } from '@/api/dict'
 import { queryIndexList, queryDefaultValue } from '@/api/quality'
+import { deepClone } from '@/utils/index'
 export default {
   components: { department },
   data() {
@@ -212,8 +213,9 @@ export default {
     },
     download() {
       const qs = require('qs')
-      let params = qs.stringify(this.queryForm);
-      params.fileType = '0'
+      const param = deepClone(this.queryForm)
+      param.fileType = '0'
+      const params = qs.stringify(param);
       let url = `${process.env.VUE_APP_BASE_API}/quality_mgr/downLoad/produceFile?${params}`;
       location.href = url;
     }
