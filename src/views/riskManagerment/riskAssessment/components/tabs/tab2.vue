@@ -81,6 +81,7 @@ import {
   queryRiskListMgr,
 } from "@/api/risk";
 import { formatShortDate } from "@/utils/datetime";
+import { deepClone } from "@/utils/index";
 export default {
   components: { eform, selectEmplotee, formSp },
   data() {
@@ -199,6 +200,7 @@ export default {
             } else {
               _this.form.issueDepts = obj.issueDept
             }
+            _this.form = deepClone(_this.form)
             _this.dialog = true;
           }
         }

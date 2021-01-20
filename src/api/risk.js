@@ -535,10 +535,26 @@ export function queryTableList() {
     method: 'get',
   })
 }
-// 详情
+// 关键风险清单详情
 export function getTableData(data) {
   return request({
     url: `/risk_mgr/key_risk_mgr/getTableData`,
+    method: 'post',
+    data
+  })
+}
+// 查询关键风险追踪
+export function queryTableListTrack() {
+  return request({
+    url: '/risk_mgr/key_risk_mgr/tableListTrack',
+    method: 'get',
+  })
+}
+
+// 关键风险追踪详情
+export function getTrackTableData(data) {
+  return request({
+    url: `/risk_mgr/key_risk_mgr/getTrackTableData`,
     method: 'post',
     data
   })
@@ -581,7 +597,7 @@ export function riskControlAdd(data) {
 // 查询风险评价报告详情
 export function riskControlDetail(id) {
   return request({
-    url: `/riskControlManage/riskControlManage/query/detail/${id}`,
+    url: `/riskControlManage/riskControlManage/query/detailById/${id}`,
     method: 'get',
   })
 }

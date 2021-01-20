@@ -42,6 +42,7 @@
 
 <script>
 import { keyRiskComplete, keyRiskSaveHazard } from '@/api/risk'
+import { deepClone } from '@/utils/index'
 import step1 from './step/step1'
 import step2 from './step/step2'
 import step3 from './step/step3'
@@ -142,7 +143,10 @@ export default {
     submitStep1() {
       this.loading = true
       const commentModel = { ...this.form, processFlag: '' }
-      keyRiskSaveHazard({ ...this.data, commentModel }).then((res) => {
+      let params = { ...this.data, commentModel }
+      params = deepClone(params)
+      this.changeReponsibleDept(params)
+      keyRiskSaveHazard(params).then((res) => {
         if (res.code != '200') {
           this.$message.error(res.msg)
         } else {
@@ -178,7 +182,11 @@ export default {
     },
     judgeCC() {
       // 领导审核同意
-      if (this.data.leaderApprove && this.form.processFlag == '1' && this.needCC) {
+      if (
+        this.data.leaderApprove &&
+        this.form.processFlag == '1' &&
+        this.needCC
+      ) {
         this.$refs.ccPerson.dialog = true
       } else if (
         !this.data.leaderApprove &&
@@ -199,14 +207,17 @@ export default {
         this.subCC({})
       }
     },
-    subCC(params) {
+    subCC(param) {
       if (this.form.processFlag == '2' && this.form.comment == '') {
         this.$message.error('请输入驳回备注！')
         return
       }
       this.loading = true
-      const commentModel = { ...this.form, ...params }
-      keyRiskSaveHazard({ ...this.data, commentModel }).then((res) => {
+      const commentModel = { ...this.form, ...param }
+      let params = { ...this.data, commentModel }
+      params = deepClone(params)
+      this.changeReponsibleDept(params)
+      keyRiskSaveHazard(params).then((res) => {
         if (res.code != '200') {
           this.$message.error(res.msg)
         } else {
@@ -218,9 +229,12 @@ export default {
         this.loading = false
       })
     },
-    doSubmitSave() {
+    doSubmitSave(param = {}) {
       this.loading = true
-      keyRiskSaveHazard(this.data).then((res) => {
+      let params = { ...this.data, ...param }
+      params = deepClone(params)
+      this.changeReponsibleDept(params)
+      keyRiskSaveHazard(params).then((res) => {
         if (res.code != '200') {
           this.$message.error(res.msg)
         } else {
@@ -230,6 +244,32 @@ export default {
         }
         this.loading = false
       })
+    },
+    changeReponsibleDept(params) {
+      if (params.keyRiskLists.length > 0) {
+        params.keyRiskLists.map((item) => {
+          if (item.hazardList.length > 0) {
+            item.hazardList.map((hazadItem) => {
+              if (hazadItem.specialRiskMeasureList.length > 0) {
+                hazadItem.specialRiskMeasureList.map((specialItem) => {
+                  if (specialItem.reponsibleDept.length > 0) {
+                    let str = ''
+                    specialItem.reponsibleDept.map((reponsItem, index) => {
+                      if (index == 0) {
+                        str = reponsItem
+                      } else {
+                        str = str + ',' + reponsItem
+                      }
+                    })
+                    specialItem.reponsibleDept = str
+                  }
+                })
+              }
+            })
+          }
+        })
+      }
+      // return params
     },
   },
 }

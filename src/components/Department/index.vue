@@ -71,6 +71,12 @@ export default {
       default: '/sys_mgr/department_mgr/query/tree',
     },
   },
+  watch: {
+    path(val) {
+      if (val)
+        this.loadData();
+    },
+  },
   mounted() {
     this.loadData()
   },

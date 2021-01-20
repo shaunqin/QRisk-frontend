@@ -97,6 +97,20 @@
               </ul>
             </template>
           </el-table-column>
+          <el-table-column label="落实情况" min-width="210">
+            <template slot-scope="{ row }">
+              <ul class="tab-ul">
+                <li v-for="item in row.specialRiskMeasureList" :key="item.id">
+                  <el-popover trigger="hover" v-if="true" placement="top">
+                    <span>{{ item.completion }}</span>
+                    <div class="text" slot="reference">
+                      {{ item.completion }}
+                    </div>
+                  </el-popover>
+                </li>
+              </ul>
+            </template>
+          </el-table-column>
           <el-table-column
             label="风险完成期限"
             width="160"
@@ -127,8 +141,12 @@
       <transactor :data="data.reviewerInfo" width="100%" />
     </el-card>
     
-    <el-card header="下发记录" key="childNotes" v-if="showChildNotes">
+    <el-card header="下发记录" key="childNotes" v-if="data.hiddenSubNotes">
       <cmdIssueTreeTable :data="data" :showIssueRecord="true" />
+    </el-card>
+    
+    <el-card header="已下发措施" key="childMeasures" v-if="showChildMeasures">
+      <childMeasures :data="data" />
     </el-card>
 
     <el-card
@@ -150,20 +168,25 @@ import { formatShortDate } from '@/utils/datetime'
 import apprvalRecord from './apprvalRecord'
 import cmdIssueTreeTable from './cmdIssueTreeTable'
 import transactor from '@/components/common/transactor'
+import childMeasures from './childMeasures'
 export default {
-  components: { apprvalRecord, transactor, cmdIssueTreeTable },
-  props: {
-    showChildNotes: {
-      type: Boolean,
-      default: true,
-    },
-  },
+  components: { apprvalRecord, transactor, cmdIssueTreeTable, childMeasures },
   data() {
     return {
       formId: '',
       dialog: false,
       data: {},
     }
+  },
+  computed: {
+    showChildMeasures() {
+      return (
+        this.data.step == 4 ||
+        this.data.step == 5 ||
+        this.data.step == 6 ||
+        this.data.step == 7
+      )
+    },
   },
   methods: {
     formatShortDate,

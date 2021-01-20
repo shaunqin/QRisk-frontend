@@ -6,11 +6,15 @@
         <el-form-item label="截止日期">{{
           formatShortDate(data.endTime)
         }}</el-form-item>
-        <el-form-item :label="data.type=='1'?'下发部门':'分析单位'">{{ data.type=='1'?data.issueDeptName:data.analysisDeptName }}</el-form-item>
+        <el-form-item :label="data.type == '1' ? '下发部门' : '分析单位'">{{
+          data.type == '1' ? data.issueDeptName : data.analysisDeptName
+        }}</el-form-item>
         <el-row class="fill-row">
           <el-col :span="24">
             <el-form-item label="标题">{{ data.title }}</el-form-item>
-            <el-form-item label="通知内容" v-if="data.type!='2'">{{ data.noteContent }}</el-form-item>
+            <el-form-item label="通知内容" v-if="data.type != '2'">{{
+              data.noteContent
+            }}</el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -37,28 +41,36 @@
         class="chead"
       >
         <div slot="header" class="clearfix">
-            <span>风险{{ index + 1 }}</span>
-            <span style="margin: 0px 15px;">
-              是否适用于本单位
-              <span style="margin: 0px 15px;">
-                <el-radio-group v-model="item.appliance" @change="changeAppliance(item.appliance, item)">
-                  <el-radio label="0" :disabled="formEnable">是</el-radio>
-                  <el-radio label="1" :disabled="formEnable">否</el-radio>
-                </el-radio-group>
-              </span>
-            </span>
-            <span>
-              <el-button
-                :disabled="formEnable || item.disabledRisk"
-                type="danger"
-                icon="el-icon-delete"
-                size="mini"
-                @click="delRisk(index)"
-                >{{'删除风险'+(index+1)}}</el-button
+          <span>风险{{ index + 1 }}</span>
+          <span style="margin: 0px 15px">
+            是否适用于本单位
+            <span style="margin: 0px 15px">
+              <el-radio-group
+                v-model="item.appliance"
+                @change="changeAppliance(item.appliance, item)"
               >
+                <el-radio label="0" :disabled="formEnable">是</el-radio>
+                <el-radio label="1" :disabled="formEnable">否</el-radio>
+              </el-radio-group>
             </span>
-          </div>
-        <el-form size="mini" inline label-width="70px" :disabled="formEnable || item.disabledRisk">
+          </span>
+          <span>
+            <el-button
+              :disabled="formEnable || item.disabledRisk"
+              type="danger"
+              icon="el-icon-delete"
+              size="mini"
+              @click="delRisk(index)"
+              >{{ '删除风险' + (index + 1) }}</el-button
+            >
+          </span>
+        </div>
+        <el-form
+          size="mini"
+          inline
+          label-width="70px"
+          :disabled="formEnable || item.disabledRisk"
+        >
           <el-form-item label="可能导致的风险" label-width="115px">
             <el-select
               v-model="item.possibleRisks"
@@ -111,20 +123,25 @@
           v-for="(itemHazard, indexHazard) in item.hazardList"
           :key="indexHazard"
         >
-        <div slot="header" class="clearfix">
+          <div slot="header" class="clearfix">
             <span>危险源{{ indexHazard + 1 }}</span>
-            <span style="float: right;">
-            <el-button
-              :disabled="formEnable || item.disabledRisk"
-              type="danger"
-              icon="el-icon-delete"
-              size="mini"
-              @click="delHazard(item, indexHazard)"
-              >{{'删除危险源'+(indexHazard+1)}}</el-button
-            >
+            <span style="float: right">
+              <el-button
+                :disabled="formEnable || item.disabledRisk"
+                type="danger"
+                icon="el-icon-delete"
+                size="mini"
+                @click="delHazard(item, indexHazard)"
+                >{{ '删除危险源' + (indexHazard + 1) }}</el-button
+              >
             </span>
           </div>
-          <el-form size="mini" inline label-width="70px" :disabled="formEnable || item.disabledRisk">
+          <el-form
+            size="mini"
+            inline
+            label-width="70px"
+            :disabled="formEnable || item.disabledRisk"
+          >
             <el-form-item label="危险源描述" label-width="115px">
               <el-input
                 v-model="itemHazard.hazardSource"
@@ -186,10 +203,19 @@
                 <department
                   :value="scope.row.reponsibleDept"
                   :path="data.issueDept"
+                  :multiple="true"
                   @change="deptChange($event, scope.row)"
                   :disabled="riskEnable || item.disabledRisk"
                   :url="'/risk_mgr/key_risk_mgr/query/tree'"
                 />
+              </template>
+            </el-table-column>
+            <el-table-column label="落实情况" v-if="showCompletion">
+              <template slot-scope="scope">
+                <el-input
+                  v-model="scope.row.completion"
+                  :disabled="data.step != 7 && data.step != 8"
+                ></el-input>
               </template>
             </el-table-column>
             <el-table-column label="完成期限">
@@ -223,6 +249,9 @@
     <el-card header="已下发通知" key="childNotes" v-if="data.hiddenSubNotes">
       <childNotes :data="data" />
     </el-card>
+    <el-card header="已下发措施" key="childMeasures" v-if="showChildMeasures">
+      <childMeasures :data="data" />
+    </el-card>
     <el-card
       header="审批记录"
       key="noticeComments"
@@ -238,8 +267,10 @@ import { formatShortDate } from '@/utils/datetime'
 import apprvalRecord from '../apprvalRecord'
 import dictSelect from '@/components/common/dictSelect'
 import department from '@/components/Department'
+import deptByRole from '@/components/Department/deptByRole'
 import leaderApprvalRecord from '../leaderApprvalRecord'
 import childNotes from '../childNotes'
+import childMeasures from '../childMeasures'
 import {
   getKeyRiskLevel,
   getKeyRiskSeriousnessLevel,
@@ -253,8 +284,10 @@ export default {
     apprvalRecord,
     dictSelect,
     department,
+    deptByRole,
     leaderApprvalRecord,
     childNotes,
+    childMeasures,
   },
   data() {
     return {
@@ -269,7 +302,7 @@ export default {
           return time.getTime() < Date.now() - 8.64e7
         },
       },
-      specialRiskMeasureKey: true
+      specialRiskMeasureKey: true,
     }
   },
   props: ['data', 'form'],
@@ -307,7 +340,12 @@ export default {
       return bool
     },
     showChildMeasures() {
-      return this.data.step == 4 || this.data.step == 5 || this.data.step == 6
+      return (
+        this.data.step == 4
+      )
+    },
+    showCompletion() {
+      return this.data.step == 4 || this.data.step == 7 || this.data.step == 8
     },
   },
   created() {
@@ -355,18 +393,20 @@ export default {
         riskLevel: '',
         seriousness: '',
         appliance: '0',
-        hazardList: [{
-          hazardSource: '',
-          possibility: '',
-          riskLevel: '',
-          specialRiskMeasureList: [
-            {
-              controlMeasure: '',
-              deadline: '',
-              reponsibleDept: null,
-            },
-          ],
-        }],
+        hazardList: [
+          {
+            hazardSource: '',
+            possibility: '',
+            riskLevel: '',
+            specialRiskMeasureList: [
+              {
+                controlMeasure: '',
+                deadline: '',
+                reponsibleDept: null,
+              },
+            ],
+          },
+        ],
       })
       this.$forceUpdate()
     },
@@ -392,16 +432,20 @@ export default {
     delHazard(item, indexHazard) {
       item.hazardList.splice(indexHazard, 1)
       setTimeout(() => {
-        const arr = item.hazardList.map(serItem => {
-          if(serItem.riskLevel !== '' && serItem.riskLevel !== null && serItem.riskLevel !== undefined) {
+        const arr = item.hazardList.map((serItem) => {
+          if (
+            serItem.riskLevel !== '' &&
+            serItem.riskLevel !== null &&
+            serItem.riskLevel !== undefined
+          ) {
             return serItem.riskLevel
           }
           return ''
         })
-        item.riskLevel = Math.max.apply(null,arr) + ''
-        if(item.riskLevel == '-Infinity') item.riskLevel = '1'
+        item.riskLevel = Math.max.apply(null, arr) + ''
+        if (item.riskLevel == '-Infinity') item.riskLevel = '1'
         this.$forceUpdate()
-      }, 500);
+      }, 500)
       this.$forceUpdate()
     },
     addRow(item) {
@@ -417,30 +461,42 @@ export default {
       this.$forceUpdate()
     },
     async dictChange(val, item, key, itemHazard) {
-      if(!!itemHazard) { itemHazard[key] = val } else { item[key] = val }
+      if (!!itemHazard) {
+        itemHazard[key] = val
+      } else {
+        item[key] = val
+      }
       if (key == 'possibleRisks') {
         await this.querySeriousness(item.possibleRisks, item)
-        item.hazardList.map(serItem => {
-          if(serItem.possibility !== '') {
-            this.queryRiskLevel(serItem.possibility, item.seriousness, serItem);
+        item.hazardList.map((serItem) => {
+          if (serItem.possibility !== '') {
+            this.queryRiskLevel(serItem.possibility, item.seriousness, serItem)
           }
         })
       }
       if (key == 'possibility') {
-        await this.queryRiskLevel(itemHazard.possibility, item.seriousness, itemHazard);
+        await this.queryRiskLevel(
+          itemHazard.possibility,
+          item.seriousness,
+          itemHazard
+        )
       }
       setTimeout(() => {
-        const arr = item.hazardList.map(serItem => {
-          if(serItem.riskLevel !== '' && serItem.riskLevel !== null && serItem.riskLevel !== undefined) {
+        const arr = item.hazardList.map((serItem) => {
+          if (
+            serItem.riskLevel !== '' &&
+            serItem.riskLevel !== null &&
+            serItem.riskLevel !== undefined
+          ) {
             console.log(serItem.riskLevel)
             return serItem.riskLevel
           }
           return ''
         })
-        item.riskLevel = Math.max.apply(null,arr) + ''
-        if(item.riskLevel == '-Infinity') item.riskLevel = '1'
+        item.riskLevel = Math.max.apply(null, arr) + ''
+        if (item.riskLevel == '-Infinity') item.riskLevel = '1'
         this.$forceUpdate()
-      }, 500);
+      }, 500)
       this.$forceUpdate()
     },
     deptChange(val, row) {
@@ -504,7 +560,7 @@ export default {
       this.$forceUpdate()
     },
     changeAppliance(val, item) {
-      if(val=='0') {
+      if (val == '0') {
         item.disabledRisk = false
       } else {
         item.disabledRisk = true

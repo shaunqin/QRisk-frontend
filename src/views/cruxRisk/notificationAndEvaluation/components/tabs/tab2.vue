@@ -138,6 +138,7 @@ export default {
               item.hazardList.map(hazardItem=> {
                 hazardItem.specialRiskMeasureList.map(childItem => {
                   childItem.deadline = formatShortDate(childItem.deadline)
+                  childItem.reponsibleDept = [childItem.reponsibleDept]
                 })
               })
               return item

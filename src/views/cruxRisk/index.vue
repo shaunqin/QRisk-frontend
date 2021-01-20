@@ -76,7 +76,10 @@ export default {
     // }
   }
   /deep/ .scrollbar-wrapper{
-    height: calc(100vh - 77px);
+    height: calc(100vh - 70px);
+  }
+  /deep/ .el-scrollbar__bar.is-horizontal {
+      height: 0px;
   }
 }
 </style>
