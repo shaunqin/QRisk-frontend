@@ -9,7 +9,7 @@
       style="width: 100%;"
       @row-click="rowClick"
     >
-      <el-table-column :label="$t('standard.seriousLevel')">
+      <el-table-column :label="$t('standard.probablyLevel')">
         <el-table-column prop="riskLevel" :label="$t('standard.level')" width="120">
           <template slot-scope="{row}">{{row.riskLevel}}级</template>
         </el-table-column>
