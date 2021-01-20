@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table :data="data.childMeasures" size="mini">
-      <el-table-column label="编号" prop="no" />
+      <!-- <el-table-column label="编号" prop="no" /> -->
       <el-table-column label="责任单位" prop="reponsibleDeptName" show-overflow-tooltip></el-table-column>
       <el-table-column label="控制措施" prop="controlMeasure" min-width="120" show-overflow-tooltip></el-table-column>
       <el-table-column label="落实情况" prop="completion" />
@@ -105,7 +105,7 @@
 import leaderApprvalRecord from "./leaderApprvalRecord";
 import handleMeasures from "./handleTo4";
 import hairdown from './hairdown'
-import { specialRiskFill, queryIssueTreeNoteData, queryIsLM } from "@/api/risk";
+import { keyRiskFill, queryIssueTreeNoteData, queryIsLM } from "@/api/risk";
 import cmdIssue from './cmdIssueTreeTable'
 import { format, formatShortDate } from '@/utils/datetime'
 export default {
@@ -120,7 +120,7 @@ export default {
   props: {
     data: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     source: {
       type: String,
@@ -143,7 +143,7 @@ export default {
     formatShortDate,
     doHandle(row) {
       this.reviewLoading = true
-      specialRiskFill(row.taskId).then((res) => {
+      keyRiskFill(row.taskId).then((res) => {
         this.reviewLoading = false
         if (res.code != '200') {
           this.$message.error(res.msg)

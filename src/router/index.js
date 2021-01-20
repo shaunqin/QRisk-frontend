@@ -415,6 +415,15 @@ export const asyncRoutes = [{
           meta: {
             title: 'keyRisksList'
           }
+        },
+        {
+          path: 'keyRiskTracking',
+          component: () => import('@/views/cruxRisk/keyRiskTracking/index'),
+          name: 'keyRiskTracking',
+          hidden: true,
+          meta: {
+            title: 'keyRiskTracking'
+          }
         }
       ]
     }
@@ -548,7 +557,17 @@ export const asyncRoutes = [{
       meta: {
         title: 'qualityMonthlyReport'
       }
-    }]
+    },
+    /* {
+      path: 'qualityCharts',
+      component: () => import('@/views/qualityEvaluation/qualityCharts/index'),
+      name: 'QualityCharts',
+      hidden: true,
+      meta: {
+        title: 'qualityCharts'
+      }
+    } */
+  ]
   }]
 },
 {

@@ -73,7 +73,9 @@ export default {
     cruxRisk: '关键风险',
     notificationAndEvaluation: '通知-评估',
     keyRisksList: '关键风险清单',
-    qualityMonthlyReport: '质量评价月报'
+    keyRiskTracking: '关键风险追踪',
+    qualityMonthlyReport: '质量评价月报',
+    qualityCharts: '质量评价图表'
   },
   navbar: {
     dashboard: '首页',
@@ -207,7 +209,7 @@ export default {
     remark: '备注',
     seriousLevel: '风险严重性等级',
     probablyLevel: '风险可能性等级',
-    level: '严重性等级',
+    level: '等级',
     definingStandard: '界定标准',
     quantitativeScore: '量化分值',
     hazardLevel1: '危险源层级一',

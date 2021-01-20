@@ -273,9 +273,19 @@
                 </el-table-column>
                 <el-table-column label="责任单位">
                   <template slot-scope="scope">
+                    <!-- <deptByRole
+                      :value="scope.row.reponsibleDept"
+                      :deptPath="form.type == '2' ? form.issueDepts : ''"
+                      :multiple="true"
+                      @change="srmDeptChange($event, scope.row)"
+                      :url="'/risk_mgr/special_risk_notice_mgr/query/depts'"
+                    /> -->
                     <department
                       :value="scope.row.reponsibleDept"
+                      :multiple="true"
+                      :path="form.type == '2' ? form.issueDepts : ''"
                       @change="srmDeptChange($event, scope.row)"
+                      :url="'/risk_mgr/key_risk_mgr/query/tree'"
                     />
                   </template>
                 </el-table-column>
@@ -335,6 +345,7 @@ import {
 } from '@/api/risk'
 import { queryDictByName } from '@/api/dict'
 import { queryHazardList } from '@/api/standard'
+import { deepClone } from '@/utils/index'
 import department from '@/components/Department/index'
 import deptByRole from '@/components/Department/deptByRole'
 import dictSelect from '@/components/common/dictSelect'
@@ -391,6 +402,21 @@ export default {
         this.form.issueDepts = null
       }
     },
+    'form.issueDepts'(val) {
+      if (this.form.keyRiskLists.length > 0) {
+        this.form.keyRiskLists.map(item => {
+          if (item.hazardList.length > 0) {
+            item.hazardList.map(hazadItem => {
+              if(hazadItem.specialRiskMeasureList.length > 0) {
+                hazadItem.specialRiskMeasureList.map(specialItem => {
+                  specialItem.reponsibleDept = null
+                })
+              }
+            })
+          }
+        })
+      }
+    },
   },
   created() {
     // 危险源层级
@@ -443,11 +469,13 @@ export default {
     doAdd(sqlUserId) {
       let submit
       let issueDepts = []
-      const params = { ...this.form, submit: submit }
+      let params = { ...this.form, submit: submit }
+      params = deepClone(params)
       if (this.form.type == '2') {
         params.submit = sqlUserId ? '1' : '2'
         params.analysisDept = this.form.issueDepts
         params.issueDepts = []
+        this.changeReponsibleDept(params)
       } else {
         params.issueDepts = this.form.issueDepts
         params.analysisDept = ''
@@ -476,11 +504,13 @@ export default {
     doModify(sqlUserId) {
       let submit
       let issueDepts = []
-      const params = { ...this.form, submit: submit }
+      let params = { ...this.form, submit: submit }
+      params = deepClone(params)
       if (this.form.type == '2') {
         params.submit = sqlUserId ? '1' : '2'
         params.analysisDept = this.form.issueDepts
         params.issueDepts = []
+        this.changeReponsibleDept(params)
       } else {
         params.issueDepts = this.form.issueDepts
         params.analysisDept = ''
@@ -505,6 +535,32 @@ export default {
         .catch((err) => {
           this.loading = false
         })
+    },
+    changeReponsibleDept(params) {
+      if (params.keyRiskLists.length > 0) {
+        params.keyRiskLists.map(item => {
+          if (item.hazardList.length > 0) {
+            item.hazardList.map(hazadItem => {
+              if(hazadItem.specialRiskMeasureList.length > 0) {
+                hazadItem.specialRiskMeasureList.map(specialItem => {
+                  if(specialItem.reponsibleDept.length>0) {
+                    let str = ''
+                    specialItem.reponsibleDept.map((reponsItem, index) => {
+                      if(index == 0) {
+                        str = reponsItem
+                      } else {
+                        str = str + ',' + reponsItem
+                      }
+                    })
+                    specialItem.reponsibleDept = str
+                  }
+                })
+              }
+            })
+          }
+        })
+      }
+      // return params
     },
     resetForm() {
       this.dialog = false
@@ -644,7 +700,6 @@ export default {
         })
         item.riskLevel = Math.max.apply(null,arr) + ''
         if(item.riskLevel == '-Infinity') item.riskLevel = '1'
-        console.log(item.riskLevel)
         this.$forceUpdate()
       }, 500);
       this.$forceUpdate()

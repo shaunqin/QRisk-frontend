@@ -86,6 +86,8 @@
               v-else
               class="form-dept-tree mini"
               :value="form.issueDepts"
+              :path="form.releasePath"
+              :url="'/risk_mgr/special_risk_notice_mgr/query/tree'"
               @change="deptChange($event, 'issueDepts')"
             />
           </el-form-item>
@@ -164,6 +166,7 @@
             <template slot-scope="{ row }">
               <department
                 :value="row.reponsibleUnit"
+                :path="form.issueDepts"
                 @change="deptChangeOnTb($event, row)"
               ></department>
             </template>
@@ -494,6 +497,7 @@
               <template slot-scope="scope">
                 <department
                   :value="scope.row.reponsibleDept"
+                  :path="form.issueDepts"
                   @change="srmDeptChange($event, scope.row)"
                 />
               </template>
@@ -663,11 +667,30 @@ export default {
   watch: {
     'form.type'(val) {
       this.form.issueDepts = null
+      this.$forceUpdate()
     },
     'form.releasePath'(val) {
       if (this.form.type == '1') {
         this.form.issueDepts = null
+        this.$forceUpdate()
       }
+    },
+    'form.issueDepts'(val) {
+      if (this.form.hazardList.length > 0) {
+        this.form.hazardList.map(item => {
+          if(item.specialRiskMeasureList.length > 0) {
+            item.specialRiskMeasureList.map(specialItem => {
+              specialItem.reponsibleDept = null
+            })
+          }
+        })
+      }
+      if (this.form.specialRiskAnalyses.length > 0) {
+        this.form.specialRiskAnalyses.map(item => {
+          item.reponsibleUnit = null
+        })
+      }
+      this.$forceUpdate()
     },
   },
   created() {
