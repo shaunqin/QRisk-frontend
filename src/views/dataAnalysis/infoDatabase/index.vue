@@ -49,6 +49,14 @@ export default {
       }
     });
   },
+  mounted () {
+    // 点击待办数字进来
+    if(this.$store.getters.evaluateReportTabIndex=='4'){
+      this.$router.push({
+        path:'/dataAnalysis/evaluateReportMonthly/index'
+      })
+    }
+  },
   methods: {
     generateTitle
   }

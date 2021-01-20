@@ -2,7 +2,7 @@
   <div ref="box" class="container">
     <!-- 卡片 element-ui 组件 -->
     <el-card class="my-card">
-      <div class="login-type" @click="accoutLogin=!accoutLogin" v-if="false">
+      <div class="login-type" @click="accoutLogin=!accoutLogin">
         <img v-if="!accoutLogin" src="../../assets/login_images/icon/account.png" />
         <img v-else src="../../assets/login_images/icon/qrcode.png" />
       </div>
@@ -73,6 +73,7 @@
 
 <script>
 import { validUsername } from "@/utils/validate";
+import settings from '@/store/modules/settings';
 
 export default {
   name: "Login",
@@ -114,6 +115,7 @@ export default {
   },
   watch: {
     $route: {
+      immediate: true,
       handler: function (route) {
         const query = route.query;
         if (query) {
@@ -124,17 +126,19 @@ export default {
             let token = query.token;
             this.$loading({ text: "登录中..." })
             this.$store.dispatch("user/qrLogin", token).then(res => {
+              this.$loading().close();
               if (res.code == '200') {
                 this.$router.push({
                   path: this.redirect || "/",
                   query: this.otherQuery,
                 });
               } else {
-                // this.$router.replace({
-                //   path: '/login'
-                // })
-                this.$loading().close();
                 this.$message.error(res.msg)
+                setTimeout(() => {
+                  this.$router.replace({
+                    path: "/login"
+                  });
+                }, 500);
               }
             }).catch(e => {
               this.$loading().close();
@@ -142,8 +146,7 @@ export default {
             })
           }
         }
-      },
-      immediate: true,
+      }
     },
   },
   mounted() {

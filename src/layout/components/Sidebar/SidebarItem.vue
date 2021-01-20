@@ -13,8 +13,9 @@
           <el-badge
             class="safetyRiskPrompt"
             v-if="item.meta&&item.meta.title=='safetyRiskPrompt'"
-            :value="riskNoticeCount"
-            :hidden="riskNoticeCount==0"
+            :value="countObj.safetyNotice.all"
+            :hidden="countObj.safetyNotice.all==0"
+            :type="countObj.safetyNotice.emergency>0?'danger':'success'"
           >
             <item
               :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
@@ -25,8 +26,9 @@
           <el-badge
             class="hazardsInvestigation"
             v-else-if="item.meta&&item.meta.title=='hazardsInvestigation'"
-            :value="hiddenDanger"
-            :hidden="hiddenDanger==0"
+            :value="countObj.hiddenDanger.all"
+            :hidden="countObj.hiddenDanger.all==0"
+            :type="countObj.hiddenDanger.emergency>0?'danger':'success'"
           >
             <item
               :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
@@ -37,8 +39,9 @@
           <el-badge
             class="cruxRisk"
             v-else-if="item.meta&&item.meta.title=='cruxRisk'"
-            :value="cruxRisk"
-            :hidden="cruxRisk==0"
+            :value="countObj.keyRisk.all"
+            :hidden="countObj.keyRisk.all==0"
+            :type="countObj.keyRisk.emergency>0?'danger':'success'"
           >
             <item
               :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
@@ -49,8 +52,9 @@
           <el-badge
             class="riskManagerment"
             v-else-if="item.meta&&item.meta.title=='riskManagerment'"
-            :value="riskManagerment"
-            :hidden="riskManagerment==0"
+            :value="countObj.specialRiskl.all"
+            :hidden="countObj.specialRiskl.all==0"
+            :type="countObj.specialRiskl.emergency>0?'danger':'success'"
           >
             <item
               :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
@@ -61,8 +65,9 @@
           <el-badge
             class="evaluateReportMonthly"
             v-else-if="item.meta&&item.meta.title=='dataAnalysis'"
-            :value="evaluateReportMonthly"
-            :hidden="evaluateReportMonthly==0"
+            :value="countObj.riskEvaluationReport.all"
+            :hidden="countObj.riskEvaluationReport.all==0"
+            :type="countObj.riskEvaluationReport.emergency>0?'danger':'success'"
           >
             <item
               :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
@@ -124,26 +129,10 @@ export default {
       type: String,
       default: ''
     },
-    riskNoticeCount: {
-      type: Number,
-      default: 0
+    countObj: {
+      type: Object,
+      required: true
     },
-    hiddenDanger: {
-      type: Number,
-      default: 0
-    },
-    cruxRisk: {
-      type: Number,
-      default: 0
-    },
-    riskManagerment: {
-      type: Number,
-      default: 0
-    },
-    evaluateReportMonthly: {
-      type: Number,
-      default: 0
-    }
   },
   data() {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
@@ -156,6 +145,7 @@ export default {
     document.querySelector(".safetyRiskPrompt .el-badge__content").onclick = this.jumpRiskNotice
     document.querySelector(".hazardsInvestigation .el-badge__content").onclick = this.jumpHiddenDanger
     document.querySelector(".cruxRisk .el-badge__content").onclick = this.jumpCruxRisk
+    document.querySelector(".evaluateReportMonthly .el-badge__content").onclick = this.jumpEvaluateReportMonthly
   },
   methods: {
     hasOneShowingChild(children = [], parent) {
@@ -201,6 +191,9 @@ export default {
     },
     jumpCruxRisk() {
       this.$store.dispatch("riskSettings/setCruxRiskTabIndex", "4");
+    },
+    jumpEvaluateReportMonthly() {
+      this.$store.dispatch("riskSettings/setEvaluateReportTabIndex", "4");
     }
   }
 }

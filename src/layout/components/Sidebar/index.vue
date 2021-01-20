@@ -16,11 +16,7 @@
           :key="route.path"
           :item="route"
           :base-path="route.path"
-          :riskNoticeCount="riskNoticeCount"
-          :hiddenDanger="hiddenDanger"
-          :cruxRisk="cruxRisk"
-          :riskManagerment="riskManagerment"
-          :evaluateReportMonthly="evaluateReportMonthly"
+          :countObj="countObj"
         />
       </el-menu>
     </el-scrollbar>
@@ -40,21 +36,19 @@ export default {
   components: { SidebarItem, Logo, Navbar },
   data() {
     return {
-      riskNoticeCount: 0,
-      hiddenDanger: 0,
-      cruxRisk: 0,
-      riskManagerment: 0,
-      evaluateReportMonthly: 0
+      countObj: {
+        hiddenDanger: { all: 0, emergency: 0 },
+        keyRisk: { all: 0, emergency: 0 },
+        riskEvaluationReport: { all: 0, emergency: 0 },
+        safetyNotice: { all: 0, emergency: 0 },
+        specialRiskl: { all: 0, emergency: 0 }
+      }
     }
   },
   created() {
     queryCount().then(res => {
       if (res.code == '200') {
-        this.riskNoticeCount = res.obj.safetyNotice.all;
-        this.hiddenDanger = res.obj.hiddenDanger.all;
-        this.cruxRisk = res.obj.keyRisk.all;
-        this.riskManagerment = res.obj.specialRiskl.all;
-        this.evaluateReportMonthly = res.obj.riskEvaluationReport.all;
+        this.countObj = res.obj;
       }
     });
   },

@@ -15,5 +15,6 @@ const getters = {
   riskNoticeTabIndex: state => state.riskSettings.riskNoticeTabIndex,
   hiddenDangerTabIndex: state => state.riskSettings.hiddenDangerTabIndex,
   cruxRiskTabIndex: state => state.riskSettings.cruxRiskTabIndex,
+  evaluateReportTabIndex: state => state.riskSettings.evaluateReportTabIndex,
 }
 export default getters

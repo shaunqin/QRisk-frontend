@@ -33,8 +33,9 @@ import tab5 from './components/tabs/tab5';
 import { riskControlQueryTodoCount } from '@/api/risk'
 import department from '@/components/Department'
 export default {
-  components: { tab1, tab2, tab3,tab4, tab5,
-  //   department 
+  components: {
+    tab1, tab2, tab3, tab4, tab5,
+    //   department 
   },
   data() {
     return {
@@ -76,6 +77,14 @@ export default {
   },
   created() {
     this.loadCount();
+  },
+  mounted() {
+    // 是否从导航栏点进来
+    if (this.$store.getters.evaluateReportTabIndex != '1') {
+      this.tabIndex = this.$store.getters.evaluateReportTabIndex;
+    }
+    // 重置
+    this.$store.dispatch("riskSettings/setEvaluateReportTabIndex", "1");
   },
   methods: {
     toQuery(name) {
