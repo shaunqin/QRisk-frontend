@@ -201,6 +201,6 @@ export default {
 <style lang="scss" scoped>
 /deep/ .el-badge__content.is-fixed {
   top: 15px;
-  right: 24px;
+  right: 30px;
 }
 </style>

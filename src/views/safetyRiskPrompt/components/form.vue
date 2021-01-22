@@ -39,7 +39,7 @@
         </el-col>
       </el-row>
 
-      <el-form-item label="风险防范措施">
+      <el-form-item label="风险防范措施" prop="measures">
         <el-card v-for="(item, index) in form.measures" :key="index" style="margin-bottom: 10px">
           <div>
             <department
@@ -161,6 +161,7 @@ export default {
         title: [{ required: true, message: "主题不能为空", trigger: "blur" }],
         background: [{ required: true, message: "背景不能为空", trigger: "blur" }],
         existingRisk: [{ required: true, message: "存在的安全风险不能为空", trigger: "blur" },],
+        measures: [{ required: true, message: "风险防范措施不能为空", trigger: "blur" },],
       },
       deptList: [],
       needLeader: true, // 是否需要领导,提交/下发
@@ -285,7 +286,7 @@ export default {
         content: "",
         deadline: "",
         deptPath: null,
-        sort:0
+        sort: 0
       });
     },
     delRisk(index) {

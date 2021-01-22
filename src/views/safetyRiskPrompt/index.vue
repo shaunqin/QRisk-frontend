@@ -110,6 +110,9 @@
         <el-tab-pane label="已办" name="5">
           <tab5 v-if="tabIndex==5" :queryForm="queryForm" />
         </el-tab-pane>
+        <el-tab-pane label="驳回记录" name="6">
+          <tab6 v-if="tabIndex==6" :queryForm="queryForm" />
+        </el-tab-pane>
       </el-tabs>
       <edetail ref="detail"></edetail>
     </el-scrollbar>
@@ -123,11 +126,12 @@ import tab2 from "./components/tab2";
 import tab3 from "./components/tab3";
 import tab4 from "./components/tab4";
 import tab5 from "./components/tab5";
+import tab6 from "./components/tab6";
 import department from '@/components/Department'
 import { queryTodoCount } from '@/api/risk'
 import { mapGetters } from 'vuex'
 export default {
-  components: { edetail, tab1, tab2, tab3, tab4, tab5, department },
+  components: { edetail, tab1, tab2, tab3, tab4, tab5, tab6, department },
   data() {
     return {
       isAdd: false,
