@@ -33,7 +33,7 @@
           <el-button type="success" icon="el-icon-search" @click="reset">重置</el-button>
         </el-form-item>
       </el-form>
-      <el-form :model="form" size="mini" inline v-else>
+      <el-form :model="form" size="mini" inline v-if="tabIndex==2||tabIndex==3">
         <el-form-item label="流程状态">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
@@ -52,6 +52,24 @@
         <el-form-item label>
           <el-button type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
           <el-button type="success" icon="el-icon-search" @click="reset">重置</el-button>
+        </el-form-item>
+      </el-form>
+      <el-form :model="form" size="mini" inline v-if="tabIndex==4">
+        <el-form-item label="内容">
+          <el-input v-model="form.remark" placeholder="请输入内容" style="width:120px"></el-input>
+        </el-form-item>
+        <el-form-item label="创建时间">
+          <el-date-picker
+            v-model="date"
+            unlink-panels
+            type="daterange"
+            placeholder
+            value-format="yyyy-MM-dd"
+            style="width:220px"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label>
+          <el-button type="success" icon="el-icon-search" @click="toQuery">查询</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -74,6 +92,9 @@
       <el-tab-pane label="已办" name="3">
         <tab3 v-if="tabIndex==3" :queryForm="queryForm" />
       </el-tab-pane>
+      <el-tab-pane label="驳回记录" name="4">
+        <tab4 v-if="tabIndex==4" :queryForm="queryForm" />
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -82,10 +103,11 @@
 import tab1 from './components/tabs/tab1'
 import tab2 from './components/tabs/tab2'
 import tab3 from './components/tabs/tab3'
+import tab4 from './components/tabs/tab4'
 import { queryTodoCount } from '@/api/hazards'
 import { mapGetters } from 'vuex'
 export default {
-  components: { tab1, tab2, tab3 },
+  components: { tab1, tab2, tab3, tab4 },
   data() {
     return {
       isAdd: false,

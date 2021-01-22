@@ -66,6 +66,7 @@ export default {
     queryForm: {
       deep: true,
       handler() {
+        this.page = 1;
         this.init();
       },
     },

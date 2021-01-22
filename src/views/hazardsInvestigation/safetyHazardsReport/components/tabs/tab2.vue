@@ -9,7 +9,7 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column prop="name" label="流程状态" min-width="100">
+      <el-table-column prop="name" label="流程状态" min-width="150">
         <template slot-scope="{row}">
           <el-tag class="noborder" :color="getStatusColor(row)" effect="dark">{{row.name}}</el-tag>
         </template>
@@ -72,6 +72,7 @@ export default {
     queryForm: {
       deep: true,
       handler() {
+        this.page = 1;
         this.init();
       }
     }

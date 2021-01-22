@@ -28,7 +28,7 @@
       @size-change="sizeChange"
       @current-change="pageChange"
     />
-    <detail ref="detail" />
+    <commentDetail ref="commentDetail" />
   </div>
 </template>
 
@@ -36,9 +36,9 @@
 import initData from "@/mixins/initData";
 import { format, formatShortDate } from "@/utils/datetime";
 import { rejectDetail } from '@/api/process';
-import detail from './detailOfReject'
+import commentDetail from '../commentDetail'
 export default {
-  components: { detail },
+  components: { commentDetail },
   mixins: [initData],
   mounted() {
     this.init();
@@ -58,7 +58,7 @@ export default {
     formatShortDate,
     beforeInit() {
       this.url = `/process/query/rejectHistory/${this.page}/${this.size}`;
-      this.params = { formName: "safety_measures", ...this.queryForm };
+      this.params = { formName: "hidden_danger_control", ...this.queryForm };
       return true;
     },
     detail(row) {
@@ -68,9 +68,8 @@ export default {
         if (res.code != '200') {
           this.$message.error(res.msg);
         } else {
-          let _this = this.$refs.detail;
-          _this.data = res.obj;
-          _this.files = res.obj.files;
+          let _this = this.$refs.commentDetail;
+          _this.form = res.obj;
           _this.dialog = true;
         }
       }).catch(() => {

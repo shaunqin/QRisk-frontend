@@ -84,6 +84,24 @@
             <el-button type="success" icon="el-icon-search" @click="toQuery">查询</el-button>
           </el-form-item>
         </el-form>
+        <el-form :model="form" size="mini" inline v-if="tabIndex==6">
+          <el-form-item label="内容">
+            <el-input v-model="form.remark" placeholder="请输入内容" style="width:120px"></el-input>
+          </el-form-item>
+          <el-form-item label="创建时间">
+            <el-date-picker
+              v-model="date"
+              unlink-panels
+              type="daterange"
+              placeholder
+              value-format="yyyy-MM-dd"
+              style="width:220px"
+            ></el-date-picker>
+          </el-form-item>
+          <el-form-item label>
+            <el-button type="success" icon="el-icon-search" @click="toQuery">查询</el-button>
+          </el-form-item>
+        </el-form>
       </div>
       <el-tabs v-model="tabIndex">
         <el-tab-pane label="全部" name="1" v-if="!onlyLeader">

@@ -8,16 +8,20 @@
       :highlight-current-row="true"
       style="width: 100%;"
       @sort-change="sortChange"
+      row-key="id"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      lazy
+      :load="loadTree"
     >
+      <el-table-column prop="businessTitle" label="主题" show-overflow-tooltip align="left" />
+      <el-table-column prop="content" label="措施内容" show-overflow-tooltip />
+      <el-table-column prop="createBy" label="发起人" width="120" />
+      <el-table-column prop="createTime" label="发起时间" width="140" />
       <el-table-column prop="name" label="流程状态" width="260">
         <template slot-scope="{row}">
           <el-tag class="noborder" :color="getStatusColor(row)" effect="dark">{{row.name}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="businessTitle" label="主题" show-overflow-tooltip />
-      <el-table-column prop="content" label="措施内容" show-overflow-tooltip />
-      <el-table-column prop="createBy" label="发起人" width="120" />
-      <el-table-column prop="createTime" label="发起时间" width="140" />
       <el-table-column label="剩余天数" width="120" sortable="custom">
         <template slot-scope="{row}">
           <span :style="{color:row.emergency?getStatusColor(row):'#606266'}">{{row.daysRemained}}</span>
@@ -63,6 +67,7 @@ export default {
     queryForm: {
       deep: true,
       handler() {
+        this.page = 1;
         this.init();
       }
     }
@@ -114,6 +119,12 @@ export default {
         }
       }
       return color
+    },
+    loadTree(tree, treeNode, resolve) {
+      console.log(tree);
+      riskNoticeLazyLoadIssueTree(tree.id).then(res => {
+        resolve(res.obj)
+      })
     }
   },
 };
