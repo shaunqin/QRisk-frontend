@@ -8,18 +8,38 @@
       :highlight-current-row="true"
       style="width: 100%;"
       @sort-change="sortChange"
-      row-key="id"
-      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-      lazy
-      :load="loadTree"
     >
+      <el-table-column type="expand">
+        <template slot-scope="{row}">
+          <el-table size="mini" :data="row.tasks">
+            <el-table-column label="部门" prop="dept" />
+            <el-table-column label="措施内容" prop="content" min-width="200" show-overflow-tooltip />
+            <el-table-column label="流程状态">
+              <template slot-scope="{row}">
+                <el-tag class="noborder" :color="getStatusColor(row)" effect="dark">{{row.name}}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="剩余天数" prop="daysRemained">
+              <template slot-scope="{row}">
+                <span
+                  :style="{color:row.emergency?getStatusColor(row):'#606266'}"
+                >{{row.daysRemained}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="110">
+              <template slot-scope="{row}">
+                <el-button type="primary" size="mini" @click="subHandle(row)">办理</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </template>
+      </el-table-column>
       <el-table-column prop="businessTitle" label="主题" show-overflow-tooltip align="left" />
-      <el-table-column prop="content" label="措施内容" show-overflow-tooltip />
       <el-table-column prop="createBy" label="发起人" width="120" />
       <el-table-column prop="createTime" label="发起时间" width="140" />
-      <el-table-column prop="name" label="流程状态" width="260">
+      <el-table-column label="流程状态" width="260">
         <template slot-scope="{row}">
-          <el-tag class="noborder" :color="getStatusColor(row)" effect="dark">{{row.name}}</el-tag>
+          <el-tag class="noborder" :color="getStatusColor(row)" effect="dark">{{row.taskName}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="剩余天数" width="120" sortable="custom">
@@ -27,11 +47,7 @@
           <span :style="{color:row.emergency?getStatusColor(row):'#606266'}">{{row.daysRemained}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="110">
-        <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="subHandle(row)">办理</el-button>
-        </template>
-      </el-table-column>
+
       <el-table-column label width="80">
         <template slot-scope="{ row }" v-if="row.pdfUrl != null">
           <el-link type="primary" :href="pdfUrl(row)" target="_blank">查看PDF</el-link>
@@ -74,7 +90,7 @@ export default {
   },
   methods: {
     beforeInit() {
-      this.url = `/riskmgr_mgr/safety_risk_notice_mgr/query/queryTodo/${this.page}/${this.size}`;
+      this.url = `/riskmgr_mgr/safety_risk_notice_mgr/query/queryTodo2/${this.page}/${this.size}`;
       this.params = { ...this.params, ...this.queryForm };
       return true;
     },
