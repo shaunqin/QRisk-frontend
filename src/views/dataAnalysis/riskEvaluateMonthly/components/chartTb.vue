@@ -45,20 +45,17 @@ export default {
       handler(val) {
         this.show = false;
         quertChartOfType(val).then((res) => {
-          this.show = true;
-          eventBus.$emit("close-dialog");
-          eventBus.$emit("tab-change", "2");
-          // if (res.code != "200") {
-          //   this.$message.error(res.msg);
-          // } else {
-          //   this.$nextTick(() => {
-          //     this.loadData(res);
-          //   });
-          // }
-          this.$nextTick(() => {
-            this.$refs.chart.chart.clear();
-            this.loadData(res);
-          });
+          if (res.code != "200") {
+            this.$message.error(res.msg);
+          } else {
+            this.show = true;
+            eventBus.$emit("close-dialog");
+            eventBus.$emit("tab-change", "2");
+            this.$nextTick(() => {
+              this.$refs.chart.chart.clear();
+              this.loadData(res.obj);
+            });
+          }
         });
       },
     },
