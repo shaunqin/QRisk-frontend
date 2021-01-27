@@ -13,32 +13,14 @@
     <!-- 1-2 -->
     <div class="toPDF">
       <h5 class="title-sec">2、年度关键风险状态</h5>
-      <el-table
-        v-loading="loading"
-        class="riskstatus-tb"
-        :data="data1_2"
-        size="mini"
-      >
-        <el-table-column
-          label="公司关键风险"
-          prop="name"
-          width="120"
-        ></el-table-column>
+      <el-table v-loading="loading" class="riskstatus-tb" :data="data1_2" size="mini">
+        <el-table-column label="公司关键风险" prop="name" width="120"></el-table-column>
         <el-table-column label="预警状态">
-          <el-table-column
-            :label="item"
-            v-for="(item, index) in data1_2_columns"
-            :key="index"
-          >
+          <el-table-column :label="item" v-for="(item, index) in data1_2_columns" :key="index">
             <template slot-scope="{ row }">
               <el-tooltip trigger="hover" v-if="true" placement="top">
-                <span
-                  class="cicle"
-                  :style="'background:' + getCirclePoint(row.data[index].num)"
-                ></span>
-                <div class="text" slot="content">
-                  {{ row.data[index].num }}
-                </div>
+                <span class="cicle" :style="'background:' + getCirclePoint(row.data[index].num)"></span>
+                <div class="text" slot="content">{{ row.data[index].num }}</div>
               </el-tooltip>
             </template>
           </el-table-column>
@@ -52,12 +34,7 @@
     <!-- 1-3 -->
     <div class="toPDF">
       <h5 class="title-sec">3、关键风险TOP3趋势</h5>
-      <echart
-        ref="image2"
-        :chartData="data1_3"
-        height="500px"
-        v-loading="loading"
-      />
+      <echart ref="image2" :chartData="data1_3" height="500px" v-loading="loading" />
       <el-input v-model="desc['1_3']" placeholder>
         <template slot="prepend">注释：</template>
       </el-input>
@@ -85,28 +62,13 @@
       <h5 class="title-sec">5、关键风险TOP3状态(各单位)</h5>
       <el-row :gutter="8">
         <el-col :span="8">
-          <echart
-            ref="image6"
-            :chartData="data1_5[0]"
-            height="200px"
-            v-loading="loading"
-          />
+          <echart ref="image6" :chartData="data1_5[0]" height="200px" v-loading="loading" />
         </el-col>
         <el-col :span="8">
-          <echart
-            ref="image7"
-            :chartData="data1_5[1]"
-            height="200px"
-            v-loading="loading"
-          />
+          <echart ref="image7" :chartData="data1_5[1]" height="200px" v-loading="loading" />
         </el-col>
         <el-col :span="8">
-          <echart
-            ref="image8"
-            :chartData="data1_5[2]"
-            height="200px"
-            v-loading="loading"
-          />
+          <echart ref="image8" :chartData="data1_5[2]" height="200px" v-loading="loading" />
         </el-col>
       </el-row>
       <el-input v-model="desc['1_5']" placeholder>
@@ -124,10 +86,7 @@
         :span-method="objectSpanMethod"
       >
         <el-table-column label="风险" prop="risk"></el-table-column>
-        <el-table-column
-          label="危险源"
-          prop="sourceOfRiskName"
-        ></el-table-column>
+        <el-table-column label="危险源" prop="sourceOfRiskName"></el-table-column>
         <el-table-column label="产品" prop="product"></el-table-column>
         <el-table-column label="风险值" prop="value"></el-table-column>
       </el-table>
@@ -298,7 +257,7 @@
               :picker-options="{disabledDate:date=>date.getTime() < Date.now() - 8.64e7}"
               style="width:140px"
             ></el-date-picker>
-          </el-form-item> -->
+          </el-form-item>-->
           <el-row class="full-row">
             <el-col :span="24">
               <el-form-item label="责任单位">
@@ -314,20 +273,12 @@
             </el-col>
             <el-col :span="24">
               <el-form-item label="备注">
-                <el-input
-                  v-model="item.remark"
-                  type="textarea"
-                  rows="3"
-                ></el-input>
+                <el-input v-model="item.remark" type="textarea" rows="3"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="24" style="text-align: center">
               <el-form-item>
-                <el-button
-                  type="danger"
-                  icon="el-icon-delete"
-                  @click="delRow(index)"
-                ></el-button>
+                <el-button type="danger" icon="el-icon-delete" @click="delRow(index)"></el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -338,13 +289,10 @@
         icon="el-icon-plus"
         style="width: 100%; border-style: dashed"
         @click="addRow"
-        >新增</el-button
-      >
+      >新增</el-button>
     </div>
     <br />
-    <el-button type="primary" @click="submit" :loading="loading"
-      >暂存</el-button
-    >
+    <el-button type="primary" @click="submit" :loading="loading">暂存</el-button>
   </div>
 </template>
 
@@ -446,7 +394,7 @@ export default {
   props: {
     form: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
   },
   watch: {
@@ -469,7 +417,7 @@ export default {
   computed: {
     ...mapGetters(['resetChart']),
   },
-  mounted() {},
+  mounted() { },
   methods: {
     getCirclePoint(num) {
       if (num <= 10) {
@@ -728,6 +676,53 @@ export default {
           data: item.data.map((r) => r.num),
           yAxisIndex: index,
           xAxisIndex: index,
+          lineStyle: {
+            color: "#000"
+          },
+          markArea: {
+            data: [
+              [{
+                yAxis: '0',
+                itemStyle: {
+                  color: '#fff'
+                }
+              }, {
+                yAxis: '10',
+              }],
+              [{
+                yAxis: '10',
+                itemStyle: {
+                  color: '#13ce66'
+                }
+              }, {
+                yAxis: '36',
+              }],
+              [{
+                yAxis: '36',
+                itemStyle: {
+                  color: '#ffba00'
+                }
+              }, {
+                yAxis: '240',
+              }],
+              [{
+                yAxis: '240',
+                itemStyle: {
+                  color: '#ff7600'
+                }
+              }, {
+                yAxis: '600',
+              }],
+              [{
+                yAxis: '600',
+                itemStyle: {
+                  color: '#e64242'
+                }
+              }, {
+                yAxis: '2000',
+              }]
+            ]
+          }
         })
         titleArr.push({
           text: item.name,

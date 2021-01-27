@@ -35,7 +35,7 @@ export default {
   props: {
     form: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
   },
   watch: {
@@ -56,6 +56,7 @@ export default {
           //   });
           // }
           this.$nextTick(() => {
+            this.$refs.chart.chart.clear();
             this.loadData(res);
           });
         });
@@ -77,7 +78,7 @@ export default {
       }
     },
   },
-  mounted() {},
+  mounted() { },
   methods: {
     loadData(res) {
       // 单系列
@@ -96,7 +97,7 @@ export default {
         if (this.chartType != "pie") {
           this.chartData = {
             tooltip: { trigger: "axis" },
-            xAxis: { type: "category", data: xAxis },
+            xAxis: { type: "category", data: xAxis, axisLabel: { rotate: 30 } },
             yAxis: { type: "value" },
             series: {
               type: this.chartType,
@@ -136,9 +137,9 @@ export default {
           });
         });
         this.chartData = {
-          legend: {},
+          legend: { type: 'scroll' },
           tooltip: { trigger: "axis" },
-          xAxis: { type: "category", data: xAxis },
+          xAxis: { type: "category", data: xAxis, axisLabel: { rotate: 30 } },
           yAxis: { type: "value" },
           series: seriesArr,
         };

@@ -6,7 +6,7 @@ import { Message } from 'element-ui'
 // create an axios instance
 const service = axios.create({
   // baseURL: `http://192.168.110.55:8999`,
-  // baseURL: `http://192.168.99.102:8999`,
+  // baseURL: `http://192.168.110.95:8999`,
   // baseURL: `http://192.168.98.32:8999`,
   // baseURL: `http://localhost:8999`,
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
