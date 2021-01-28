@@ -55,7 +55,7 @@
 
 <script>
 import { riskNoticeLazyLoadIssueTree, riskNoticeApproveHistory } from '@/api/risk'
-import handleApprvalRecord from './cptHandleApprvalRec'
+import handleApprvalRecord from './cptHandleApproval'
 export default {
   components: { handleApprvalRecord },
   data() {
