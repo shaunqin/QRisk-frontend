@@ -12,6 +12,10 @@
     :show-close="!fullscreen"
   >
     <el-card header="详情">
+      <div slot="header" class="info-header">
+        <span>详情</span>
+        <el-button type="text" size="mini" @click="showHandleAndApproval">办理&审批记录</el-button>
+      </div>
       <el-form inline class="detail-form">
         <el-row>
           <el-col :span="24" class="full-row">
@@ -49,12 +53,12 @@
     <el-card header="下发任务" key="childTask" v-if="childTask.length>0">
       <childTask :data="childTask" :hiddenField="['审核']" :readonly="true" />
     </el-card>
-    <el-card header="审批记录" key="comments" v-if="comments.length>0">
+    <!-- <el-card header="审批记录" key="comments" v-if="comments.length>0">
       <approvalRecord :data="comments" />
-    </el-card>
-    <el-card header="办理人" key="reviewersInfo" v-if="reviewersInfo.length>0">
+    </el-card>-->
+    <!-- <el-card header="办理人" key="reviewersInfo" v-if="reviewersInfo.length>0">
       <transactor :data="reviewersInfo" width="100%" />
-    </el-card>
+    </el-card>-->
 
     <fillinForm
       v-if="data.deptControlList!=null&&data.deptControlList.hiddenDangerControlList.length>0"
@@ -73,6 +77,8 @@
     <div slot="footer" class="dialog-footer" v-if="!fullscreen">
       <el-button type="primary" @click="cancel">确定</el-button>
     </div>
+
+    <handleApproval ref="handleApproval" :statusAndreviewerInfo="statusAndreviewerInfo" />
   </el-dialog>
 </template>
 
@@ -83,8 +89,10 @@ import detailFillin from './detailFillin'
 import approvalRecord from './approvalRecord'
 import childTask from './childTask'
 import transactor from '@/components/common/transactor'
+import { queryApproveHistory } from '@/api/hazards'
+import handleApproval from './cptHandleApproval'
 export default {
-  components: { fillinForm, detailFillin, approvalRecord, childTask, transactor },
+  components: { fillinForm, detailFillin, approvalRecord, childTask, transactor, handleApproval },
   data() {
     return {
       loading: false,
@@ -93,7 +101,8 @@ export default {
       data: {}, // 父组件赋值
       baseApi: process.env.VUE_APP_BASE_API,
       detailData: {},
-      detailFillinData: []
+      detailFillinData: [],
+      statusAndreviewerInfo: []
     }
   },
   props: {
@@ -151,6 +160,35 @@ export default {
         }
       })
     },
+    showHandleAndApproval() {
+      // 状态和下一办理人
+      let statusAndreviewerInfo = [];
+      if (this.data.reviewersInfo != null && this.data.reviewersInfo.length > 0) {
+        this.data.reviewersInfo.map(item => {
+          statusAndreviewerInfo.push({
+            status: this.data.status,
+            ...item
+          })
+        })
+      } else {
+        statusAndreviewerInfo.push({
+          status: this.data.status,
+        })
+      }
+      this.statusAndreviewerInfo = statusAndreviewerInfo;
+
+      let _this = this.$refs.handleApproval;
+      _this.dialog = true;
+      _this.tbLoading = true;
+      queryApproveHistory(this.data.id).then(res => {
+        _this.tbLoading = false;
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          _this.data = res.obj;
+        }
+      })
+    }
   },
 }
 </script>
@@ -169,5 +207,13 @@ export default {
 
 .el-card + .el-card {
   margin-top: 20px;
+}
+/deep/ .el-card__header {
+  padding: 10px 20px;
+  .info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 </style>

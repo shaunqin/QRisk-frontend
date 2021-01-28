@@ -36,7 +36,7 @@
       </el-table-column>
       <el-table-column prop="businessTitle" label="主题" show-overflow-tooltip align="left" />
       <el-table-column prop="createBy" label="发起人" width="120" />
-      <el-table-column prop="createTime" label="发起时间" width="140" />
+      <el-table-column prop="createTime" label="发起时间" width="150" />
       <el-table-column label="流程状态" width="260">
         <template slot-scope="{row}">
           <el-tag class="noborder" :color="getStatusColor(row)" effect="dark">{{row.taskName}}</el-tag>

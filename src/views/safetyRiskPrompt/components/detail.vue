@@ -6,20 +6,22 @@
     :visible.sync="dialog"
     :title="'详情'"
     custom-class="big_dialog"
-    v-loading="dialogLoading"
     :fullscreen="fullscreen"
     :close-on-press-escape="!fullscreen"
     :show-close="!fullscreen"
   >
-    <el-tabs v-model="tabIndex">
+    <el-tabs v-model="tabIndex" v-loading="dialogLoading">
       <el-tab-pane label="详情" name="1">
         <el-form ref="form" :model="form" size="small" label-width="80px">
           <el-row :gutter="16">
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="编号">{{form.no}}</el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="拟制人">{{form.issuerName}}[{{form.issuer}}]</el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="批准人">{{form.approver}}</el-form-item>
             </el-col>
           </el-row>
           <el-form-item label="适用范围">{{form.applyScope}}</el-form-item>
@@ -145,7 +147,7 @@ export default {
                   tooltip: {
                     formatter: '措施内容:{c}'
                   },
-                  expandAndCollapse:false, // 节点展开
+                  expandAndCollapse: false, // 节点展开
                 }
               ]
             }

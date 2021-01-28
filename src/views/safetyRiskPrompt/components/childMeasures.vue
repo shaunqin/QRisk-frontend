@@ -1,28 +1,35 @@
 <template>
   <div>
     <el-table
+      ref="table"
       v-loading="tbLoading"
       :data="data"
       size="mini"
-      row-key="id"
-      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-      lazy
-      :load="loadTree"
+      :span-method="objectSpanMethod"
+      border
     >
-      <el-table-column label="下发部门" prop="deptName" width="160" align="left"  />
+      <el-table-column type label="措施内容" min-width="150">
+        <template slot-scope="{row}">{{row.data.content}}</template>
+      </el-table-column>
+      <!-- <el-table-column type="expand">
+        <template slot-scope="{row}"></template>
+      </el-table-column>-->
+      <el-table-column label="下发部门" prop="deptName" width="140" align="left">
+        <template slot-scope="{row}">
+          <el-button v-if="row.hasChildren" type="text" @click="getIssueTree(row)">{{row.deptName}}</el-button>
+          <span v-else>{{row.deptName}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="截止日期" width="100">
         <template slot-scope="{row}">{{row.data.deadline}}</template>
-      </el-table-column>
-      <el-table-column label="措施内容" min-width="150">
-        <template slot-scope="{row}">{{row.data.content}}</template>
       </el-table-column>
       <el-table-column label="落实情况" min-width="200" align="left">
         <template slot-scope="{row}">
           <span style="white-space: pre-wrap;">{{row.data.impl}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="下发人" width="120" prop="issuer" />
-      <el-table-column label="上报人" width="120" prop="filler" />
+      <!-- <el-table-column label="下发人" width="120" prop="issuer" />
+      <el-table-column label="上报人" width="120" prop="filler" />-->
       <el-table-column label="附件预览" min-width="120">
         <template slot-scope="{row}">
           <div v-for="(item, index) in row.data.files" :key="index">
@@ -35,7 +42,12 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="状态" width="80">
+      <el-table-column label="办理/审批记录" width="130">
+        <template slot-scope="{row}">
+          <el-button type="text" size="mini" @click="showRecord(row)">详情</el-button>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column label="状态" width="80">
         <template slot-scope="{row}">
           <span v-if="row.status==0">待上报</span>
           <span v-if="row.status==1">已下发</span>
@@ -62,7 +74,7 @@
             <leaderApprvalRecord :data="row.comments" type="safety_measures" />
           </el-popover>
         </template>
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column label="审核" width="80" v-if="!hiddenField.includes('审核')">
         <template slot-scope="{row}">
           <span v-if="!row.reviewing">-</span>
@@ -72,21 +84,29 @@
     </el-table>
     <ehandle ref="ehandle" :isSecChild="true" :source="source" />
     <cmdIssue ref="cmdIssue" />
+    <handleApproval ref="handleApproval" :statusAndreviewerInfo="statusAndreviewerInfo" />
   </div>
 </template>
 
 <script>
-import leaderApprvalRecord from "./leaderApprvalRecord";
+// import leaderApprvalRecord from "./leaderApprvalRecord";
 import ehandle from "./handleTo4";
-import { riskNoticeQueryTask, queryIssueTreeData, riskNoticeLazyLoadIssueTree } from "@/api/risk";
+import { riskNoticeQueryTask, queryIssueTreeData, riskNoticeLazyLoadIssueTree, riskNoticeApproveHistory } from "@/api/risk";
 import cmdIssue from './cmdIssueTreeTable'
 import { format } from '@/utils/datetime'
-import transactor from '@/components/common/transactor'
+// import transactor from '@/components/common/transactor'
+import handleApproval from './cptHandleApproval'
 export default {
-  components: { leaderApprvalRecord, ehandle, cmdIssue, transactor },
+  components: {
+    // leaderApprvalRecord, transactor,
+    ehandle, cmdIssue, handleApproval
+  },
   data() {
     return {
-      tbLoading: false
+      tbLoading: false,
+      spanArr: [],
+      position: 0,
+      statusAndreviewerInfo: []
     }
   },
   props: {
@@ -102,6 +122,17 @@ export default {
       type: Array,
       default: () => [],
     }
+  },
+  watch: {
+    data: {
+      deep: true,
+      handler(data) {
+        this.getSpan()
+      }
+    }
+  },
+  mounted() {
+    this.getSpan();
   },
   methods: {
     format,
@@ -130,11 +161,78 @@ export default {
         }
       });
     },
-    loadTree(tree, treeNode, resolve) {
-      console.log(tree);
-      riskNoticeLazyLoadIssueTree(tree.id).then(res => {
-        resolve(res.obj)
+    getIssueTree(row) {
+      let _this = this.$refs.cmdIssue;
+      this.tbLoading = true;
+      riskNoticeLazyLoadIssueTree(row.id).then(res => {
+        this.tbLoading = false;
+        if (res.code != '200') {
+          this.$message.error(res.msg)
+        } else {
+          _this.data = res.obj;
+          _this.dialog = true;
+        }
       })
+    },
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      //表格合并行
+      if (columnIndex === 0) {
+        const _row = this.spanArr[rowIndex];
+        const _col = _row > 0 ? 1 : 0;
+        return {
+          rowspan: _row,
+          colspan: _col
+        };
+      }
+    },
+    getSpan() {
+      let data = this.data;
+      this.spanArr = [];
+      this.position = 0;
+      data.forEach((item, index) => {
+        if (index === 0) {
+          this.spanArr.push(1);
+          this.position = 0;
+        } else {
+          if (data[index].data.content === data[index - 1].data.content) {
+            this.spanArr[this.position] += 1;
+            this.spanArr.push(0);
+          } else {
+            this.spanArr.push(1);
+            this.position = index;
+          }
+        }
+      });
+    },
+    showRecord(row) {
+      // 状态和下一办理人
+      let statusAndreviewerInfo = [];
+      if (row.reviewerInfo != null && row.reviewerInfo.length > 0) {
+        row.reviewerInfo.map(item => {
+          statusAndreviewerInfo.push({
+            status: row.status,
+            ...item
+          })
+        })
+      } else {
+        statusAndreviewerInfo.push({
+          status: row.status,
+        })
+      }
+      this.statusAndreviewerInfo = statusAndreviewerInfo;
+
+      let _this = this.$refs.handleApproval;
+      _this.dialog = true;
+      _this.tbLoading = true;
+      riskNoticeApproveHistory(row.id).then(res => {
+        _this.tbLoading = false;
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          _this.data = res.obj;
+        }
+      })
+
     }
   },
 };

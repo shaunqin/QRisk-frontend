@@ -2,11 +2,14 @@
   <div>
     <el-form ref="form" :model="_form" size="small" label-width="auto">
       <el-row :gutter="16">
-        <el-col :span="12">
+        <el-col :span="8">
           <el-form-item label="编号">{{data.no}}</el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="8">
           <el-form-item label="拟制人">{{data.issuerName}}[{{data.issuer}}]</el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="批准人">{{data.approver}}</el-form-item>
         </el-col>
       </el-row>
       <el-form-item label="适用范围">{{data.applyScope}}</el-form-item>

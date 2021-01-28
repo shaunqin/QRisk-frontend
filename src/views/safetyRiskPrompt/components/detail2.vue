@@ -13,11 +13,14 @@
   >
     <el-form ref="form" :model="form" size="small" label-width="auto">
       <el-row :gutter="16">
-        <el-col :span="12">
+        <el-col :span="8">
           <el-form-item label="编号">{{form.no}}</el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="8">
           <el-form-item label="拟制人">{{form.issuerName}}[{{form.issuer}}]</el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="批准人">{{form.approver}}</el-form-item>
         </el-col>
       </el-row>
       <el-form-item label="适用范围">{{form.applyScope}}</el-form-item>

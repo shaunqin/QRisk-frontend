@@ -253,3 +253,10 @@ export function querySubIssueTreeData(monthTaskId) {
         method: 'get',
     })
 }
+// 办理&审批记录
+export function queryApproveHistory(id) {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/approveHistory/${id}`,
+        method: 'get',
+    })
+}

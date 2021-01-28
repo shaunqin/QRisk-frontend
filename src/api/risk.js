@@ -254,6 +254,13 @@ export function riskNoticeLazyProcessChart(id) {
     method: 'get',
   })
 }
+// 查询办理/审批记录
+export function riskNoticeApproveHistory(id) {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/approveHistory/${id}`,
+    method: 'get',
+  })
+}
 // =========  风险提示 end ==============
 
 // ======== 专项风险 =======

@@ -11,7 +11,6 @@
       :data="data"
       size="mini"
       row-key="id"
-      default-expand-all
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
       lazy
       :load="loadTree"
@@ -24,12 +23,10 @@
         <template slot-scope="{row}">{{row.data.content}}</template>
       </el-table-column>
       <el-table-column label="落实情况">
-        <template slot-scope="{row}">
-          {{row.data.impl}}
-        </template>
+        <template slot-scope="{row}">{{row.data.impl}}</template>
       </el-table-column>
-      <el-table-column label="下发人" prop="issuer" width="130" />
-      <el-table-column label="上报人" prop="filler" width="130" />
+      <!-- <el-table-column label="下发人" prop="issuer" width="130" />
+      <el-table-column label="上报人" prop="filler" width="130" />-->
       <el-table-column label="附件预览">
         <template slot-scope="{row}">
           <div v-for="(item, index) in row.data.files" :key="index">
@@ -42,31 +39,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="状态" width="80">
+      <el-table-column label="办理/审批记录" width="130">
         <template slot-scope="{row}">
-          <span v-if="row.status==0">待填</span>
-          <span v-if="row.status==1">待填</span>
-          <span v-if="row.status==2">待审核</span>
-          <span v-if="row.status==3">通过</span>
-          <span v-if="row.status==4">驳回</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="办理人" width="80">
-        <template slot-scope="{row}">
-          <div v-if="row.reviewerInfo.length==0">-</div>
-          <el-popover v-else placement="left">
-            <el-button type="text" size="mini" slot="reference">详情</el-button>
-            <transactor :data="row.reviewerInfo" />
-          </el-popover>
-        </template>
-      </el-table-column>
-      <el-table-column label="审批记录" width="100">
-        <template slot-scope="{row}">
-          <div v-if="row.comments.length==0">-</div>
-          <el-popover v-else placement="left" width="1000">
-            <el-button type="text" size="mini" slot="reference">详情</el-button>
-            <leaderApprvalRecord :data="row.comments" type="safety_measures" />
-          </el-popover>
+          <el-button type="text" size="mini" @click="showRecord(row)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -74,19 +49,20 @@
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button type="primary" @click="doSubmit">确认</el-button>
     </div>
+    <handleApprvalRecord ref="handleApprvalRecord" :statusAndreviewerInfo="statusAndreviewerInfo" />
   </el-dialog>
 </template>
 
 <script>
-import leaderApprvalRecord from "./leaderApprvalRecord";
-import transactor from '@/components/common/transactor'
-import { riskNoticeLazyLoadIssueTree } from '@/api/risk'
+import { riskNoticeLazyLoadIssueTree, riskNoticeApproveHistory } from '@/api/risk'
+import handleApprvalRecord from './cptHandleApprvalRec'
 export default {
-  components: { leaderApprvalRecord, transactor },
+  components: { handleApprvalRecord },
   data() {
     return {
       dialog: false,
-      data: []
+      data: [],
+      statusAndreviewerInfo: []
     }
   },
   methods: {
@@ -106,6 +82,35 @@ export default {
       console.log(tree);
       riskNoticeLazyLoadIssueTree(tree.id).then(res => {
         resolve(res.obj)
+      })
+    },
+    showRecord(row) {
+      // 状态和下一办理人
+      let statusAndreviewerInfo = [];
+      if (row.reviewerInfo != null && row.reviewerInfo.length > 0) {
+        row.reviewerInfo.map(item => {
+          statusAndreviewerInfo.push({
+            status: row.status,
+            ...item
+          })
+        })
+      } else {
+        statusAndreviewerInfo.push({
+          status: row.status,
+        })
+      }
+      this.statusAndreviewerInfo = statusAndreviewerInfo;
+
+      let _this = this.$refs.handleApprvalRecord;
+      _this.dialog = true;
+      _this.tbLoading = true;
+      riskNoticeApproveHistory(row.id).then(res => {
+        _this.tbLoading = false;
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          _this.data = res.obj;
+        }
       })
 
     }

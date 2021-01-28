@@ -2,13 +2,16 @@
   <div>
     <el-form ref="form" size="small" label-width="auto">
       <el-row :gutter="16">
-        <el-col :span="10">
+        <el-col :span="7">
           <el-form-item label="编号">{{data.no}}</el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="拟制人">{{data.issuerName}}[{{data.issuer}}]</el-form-item>
         </el-col>
         <el-col :span="6">
+          <el-form-item label="批准人">{{data.approver}}</el-form-item>
+        </el-col>
+        <el-col :span="5">
           <el-button type="primary" size="mini" v-if="noticeEnable" @click="noticeManager">提醒风险管理员办理</el-button>
         </el-col>
       </el-row>

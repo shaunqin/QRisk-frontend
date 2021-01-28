@@ -1,9 +1,14 @@
 <template>
   <div>
     <el-form inline class="detail-form">
-      <el-row>
-        <el-col :span="24" class="full-row">
+      <el-row :gutter="16">
+        <el-col :span="18" class="full-row">
           <el-form-item label="任务名称">{{data.taskName}}</el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label>
+            <el-button type="info" size="mini" @click="showHandleAndApproval">办理&审批记录</el-button>
+          </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="16">
@@ -40,18 +45,22 @@
       </el-row>
     </el-form>
     <onlyList ref="onlyList" :taskId="taskId" />
+    <handleApproval ref="handleApproval" :statusAndreviewerInfo="statusAndreviewerInfo" />
   </div>
 </template>
 
 <script>
 import { formatShortDate } from '@/utils/datetime'
 import onlyList from '../hazardsList/onlyList'
+import handleApproval from '../cptHandleApproval'
+import { queryApproveHistory } from '@/api/hazards'
 export default {
-  components: { onlyList, },
+  components: { onlyList, handleApproval },
   data() {
     return {
       baseApi: process.env.VUE_APP_BASE_API,
-      taskId: ""
+      taskId: "",
+      statusAndreviewerInfo: []
     }
   },
   props: ["data"],
@@ -60,6 +69,35 @@ export default {
     showHistoryList() {
       this.taskId = this.data.id;
       this.$refs.onlyList.dialog = true;
+    },
+    showHandleAndApproval() {
+      // 状态和下一办理人
+      let statusAndreviewerInfo = [];
+      if (this.data.reviewersInfo != null && this.data.reviewersInfo.length > 0) {
+        this.data.reviewersInfo.map(item => {
+          statusAndreviewerInfo.push({
+            status: this.data.status,
+            ...item
+          })
+        })
+      } else {
+        statusAndreviewerInfo.push({
+          status: this.data.status,
+        })
+      }
+      this.statusAndreviewerInfo = statusAndreviewerInfo;
+
+      let _this = this.$refs.handleApproval;
+      _this.dialog = true;
+      _this.tbLoading = true;
+      queryApproveHistory(this.data.id).then(res => {
+        _this.tbLoading = false;
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          _this.data = res.obj;
+        }
+      })
     }
   }
 }
