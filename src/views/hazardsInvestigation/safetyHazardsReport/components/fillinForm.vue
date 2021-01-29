@@ -34,7 +34,7 @@
           </el-col>
         </el-row>
         <el-form-item label="编号">
-          <el-input v-model="item.no" style="width: 140px" disabled></el-input>
+          <el-input v-model="item.no" style="width: 140px"></el-input>
         </el-form-item>
         <el-form-item label="发现时间">
           <el-date-picker
