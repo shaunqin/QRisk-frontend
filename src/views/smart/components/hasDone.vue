@@ -17,6 +17,8 @@
       v-if="processType==3"
       :fullscreen="true"
     />
+    <!-- 关键风险 -->
+    <keyRiskDoneDetail ref="keyRiskDoneDetail" v-if="processType==8" :fullscreen="true" />
   </div>
 </template>
 
@@ -26,11 +28,13 @@ import hazardsDoneDetail from '@/views/hazardsInvestigation/safetyHazardsReport/
 import hazardsDoneDetail2 from '@/views/hazardsInvestigation/safetyHazardsReport/components/detail2'
 import speciaRiskDetail from '@/views/riskManagerment/riskAssessment/components/detail'
 import monthEvaluateReportDoneDetail from '@/views/dataAnalysis/evaluateReportMonthly/components/doneDetail'
-import { riskNoticeDoneDetail2, specialRiskHasDoneDetail, riskControlHasDoneDetailByFormId } from '@/api/risk'
+import keyRiskDoneDetail from '@/views/cruxRisk/notificationAndEvaluation/components/detail'
+import { riskNoticeDoneDetail2, specialRiskHasDoneDetail, riskControlHasDoneDetailByFormId, keyRiskDetail } from '@/api/risk'
 import { queryHasDoneDetail, queryHasDoneDetail2 } from "@/api/hazards";
 export default {
   components: {
-    riskNoticeDoneDetail, hazardsDoneDetail, hazardsDoneDetail2, speciaRiskDetail, monthEvaluateReportDoneDetail
+    riskNoticeDoneDetail, hazardsDoneDetail, hazardsDoneDetail2, speciaRiskDetail,
+    monthEvaluateReportDoneDetail, keyRiskDoneDetail
   },
   data() {
     return {
@@ -47,6 +51,7 @@ export default {
       case "7": this.hazards2(); break;
       case "3": this.monthEvaluateReport(); break;
       case "2": this.speciaRisk(); break;
+      case "8": this.keyRisk(); break;
       default: break;
     }
   },
@@ -124,6 +129,19 @@ export default {
       _this.dialog = true;
       _this.dialogLoading = true;
       riskControlHasDoneDetailByFormId(this.id).then(res => {
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          _this.data = res.obj;
+        }
+        _this.dialogLoading = false;
+      })
+    },
+    keyRisk() {
+      let _this = this.$refs.keyRiskDoneDetail;
+      _this.dialog = true;
+      _this.dialogLoading = true;
+      keyRiskDetail(this.id).then(res => {
         if (res.code != '200') {
           this.$message.error(res.msg);
         } else {
