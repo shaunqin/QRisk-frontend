@@ -76,6 +76,7 @@ export default {
         } else {
           this.resetForm();
           if (this.source == 'smart') {
+            // smart
             this.$parent.$parent.$parent.keyRisk();
           } else {
             this.$parent.$parent.resetForm();
