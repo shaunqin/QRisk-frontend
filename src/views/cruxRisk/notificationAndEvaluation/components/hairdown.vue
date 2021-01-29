@@ -38,7 +38,20 @@ export default {
       measureId: ""
     };
   },
-  props: ["data", "form"],
+  props: {
+    data: {
+      type: Object,
+      default: () => { },
+    },
+    form: {
+      type: Object,
+      default: () => { },
+    },
+    source: {
+      type: String,
+      default: ''
+    }
+  },
   created() {
     this.measureId = this.data.id;
   },
@@ -62,8 +75,12 @@ export default {
           this.$message.error(res.msg);
         } else {
           this.resetForm();
-          this.$parent.$parent.resetForm();
-          this.$parent.$parent.$parent.init(); // 刷新父页面
+          if (this.source == 'smart') {
+            this.$parent.$parent.$parent.keyRisk();
+          } else {
+            this.$parent.$parent.resetForm();
+            this.$parent.$parent.$parent.init(); // 刷新父页面
+          }
         }
         this.loading = false;
       })

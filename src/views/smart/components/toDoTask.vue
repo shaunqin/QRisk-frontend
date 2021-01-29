@@ -17,6 +17,8 @@
     />
     <!-- 专项风险 -->
     <riskAssessmentHandle v-if="processType==2" ref="riskAssessmentHandle" :fullscreen="true" />
+    <!-- 关键风险 -->
+    <keyRiskHandle v-if="processType==8" ref="keyRiskHandle" :fullscreen="true" />
   </div>
 </template>
 
@@ -26,12 +28,14 @@ import hazardsHandle from '@/views/hazardsInvestigation/safetyHazardsReport/comp
 import hazardsHandleRun from '@/views/hazardsInvestigation/safetyHazardsReport/components/handleRun'
 import monthEvaluateReportHandle from '@/views/dataAnalysis/evaluateReportMonthly/components/handle'
 import riskAssessmentHandle from '@/views/riskManagerment/riskAssessment/components/handle'
-import { riskNoticeQueryTask, riskControlQueryDetailTask, specialRiskFill } from "@/api/risk";
+import keyRiskHandle from '@/views/cruxRisk/notificationAndEvaluation/components/handle'
+import { riskNoticeQueryTask, riskControlQueryDetailTask, specialRiskFill, keyRiskFill } from "@/api/risk";
 import { queryHazards, queryHazards2 } from "@/api/hazards";
 import { formatShortDate } from '@/utils/datetime'
 export default {
   components: {
-    riskNoticeHanfle, hazardsHandle, hazardsHandleRun, monthEvaluateReportHandle, riskAssessmentHandle
+    riskNoticeHanfle, hazardsHandle, hazardsHandleRun, monthEvaluateReportHandle,
+    riskAssessmentHandle, keyRiskHandle
   },
   data() {
     return {
@@ -49,6 +53,7 @@ export default {
       case "7": this.hazards2(); break;
       case "3": this.monthEvaluateReport(); break;
       case "2": this.speciaRisk(); break;
+      case "8": this.keyRisk(); break;
       default: break;
     }
   },
@@ -151,6 +156,40 @@ export default {
           _this.form.formId = res.obj.id;
         }
         _this.dialogLoading = false;
+      });
+    },
+    keyRisk() {
+      let _this = this.$refs.keyRiskHandle;
+      _this.dialog = true;
+      _this.dialogLoading = true;
+      keyRiskFill(this.taskId).then((res) => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          _this.data = res.obj
+          _this.data.approvalDate = formatShortDate(res.obj.approvalDate);
+          if (res.obj.keyRiskListVoLists && res.obj.keyRiskListVoLists.length > 0) {
+            _this.data.keyRiskLists = res.obj.keyRiskListVoLists.map(item => {
+              if (item.appliance == '0') {
+                item.disabledRisk = false
+                item.disabledAppliance = false
+              } else if (item.appliance == '1') {
+                item.disabledRisk = true
+                item.disabledAppliance = true
+              }
+              item.hazardList.map(hazardItem => {
+                hazardItem.specialRiskMeasureList.map(childItem => {
+                  childItem.deadline = formatShortDate(childItem.deadline)
+                  childItem.reponsibleDept = [childItem.reponsibleDept]
+                })
+              })
+              return item
+            })
+          } else { _this.data.keyRiskLists = [] }
+          _this.form.taskId = this.taskId;
+          _this.form.formId = res.obj.id;
+          _this.dialogLoading = false;
+        }
       });
     }
   }
