@@ -10,14 +10,14 @@
     :show-close="!fullscreen"
   >
     <div v-loading="dialogLoading">
-      <step1 v-if="step == 1" :data="data" :form="form" />
-      <step2 ref="step2" v-if="step == 2" :data="data" :form="form" />
-      <step3 ref="step3" v-if="step == 3" :data="data" :form="form" />
-      <step4 ref="step4" v-if="step == 4" :data="data" :form="form" />
-      <step5 ref="step5" v-if="step == 5" :data="data" :form="form" />
-      <step6 ref="step6" v-if="step == 6" :data="data" :form="form" />
-      <step7 ref="step7" v-if="step == 7" :data="data" :form="form" />
-      <step8 ref="step8" v-if="step == 8" :data="data" :form="form" />
+      <step1 v-if="step == 1" :data="data" :form="form" :source="fullscreen ? 'smart' : ''" />
+      <step2 ref="step2" v-if="step == 2" :data="data" :form="form" :source="fullscreen ? 'smart' : ''" />
+      <step3 ref="step3" v-if="step == 3" :data="data" :form="form" :source="fullscreen ? 'smart' : ''" />
+      <step4 ref="step4" v-if="step == 4" :data="data" :form="form" :source="fullscreen ? 'smart' : ''" />
+      <step5 ref="step5" v-if="step == 5" :data="data" :form="form" :source="fullscreen ? 'smart' : ''" />
+      <step6 ref="step6" v-if="step == 6" :data="data" :form="form" :source="fullscreen ? 'smart' : ''" />
+      <step7 ref="step7" v-if="step == 7" :data="data" :form="form" :source="fullscreen ? 'smart' : ''" />
+      <step8 ref="step8" v-if="step == 8" :data="data" :form="form" :source="fullscreen ? 'smart' : ''" />
       <hairdown ref="hairdown" :data="data" :form="form" :source="fullscreen ? 'smart' : ''" />
       <!-- 抄送 -->
       <ccPerson ref="ccPerson" :deptPath="deptPath" @subCC="subCC" />

@@ -3,18 +3,24 @@
     <el-card header="详细信息">
       <el-form size="small" label-width="80px" class="info" inline>
         <el-form-item label="编号">{{ data.no }}</el-form-item>
-        <el-form-item label="截止日期">{{
+        <el-form-item label="截止日期">
+          {{
           formatShortDate(data.endTime)
-        }}</el-form-item>
-        <el-form-item :label="data.type == '1' ? '下发部门' : '分析单位'">{{
+          }}
+        </el-form-item>
+        <el-form-item :label="data.type == '1' ? '下发部门' : '分析单位'">
+          {{
           data.type == '1' ? data.issueDeptName : data.analysisDeptName
-        }}</el-form-item>
+          }}
+        </el-form-item>
         <el-row class="fill-row">
           <el-col :span="24">
             <el-form-item label="标题">{{ data.title }}</el-form-item>
-            <el-form-item label="通知内容" v-if="data.type != '2'">{{
+            <el-form-item label="通知内容" v-if="data.type != '2'">
+              {{
               data.noteContent
-            }}</el-form-item>
+              }}
+            </el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -31,15 +37,9 @@
           size="mini"
           @click="addRisk"
           style="margin-bottom: 10px"
-          >新增风险</el-button
-        >
+        >新增风险</el-button>
       </el-badge>
-      <el-card
-        shadow="never"
-        v-for="(item, index) in data.keyRiskLists"
-        :key="index"
-        class="chead"
-      >
+      <el-card shadow="never" v-for="(item, index) in data.keyRiskLists" :key="index" class="chead">
         <div slot="header" class="clearfix">
           <span>风险{{ index + 1 }}</span>
           <span style="margin: 0px 15px">
@@ -61,16 +61,10 @@
               icon="el-icon-delete"
               size="mini"
               @click="delRisk(index)"
-              >{{ '删除风险' + (index + 1) }}</el-button
-            >
+            >{{ '删除风险' + (index + 1) }}</el-button>
           </span>
         </div>
-        <el-form
-          size="mini"
-          inline
-          label-width="70px"
-          :disabled="formEnable || item.disabledRisk"
-        >
+        <el-form size="mini" inline label-width="70px" :disabled="formEnable || item.disabledRisk">
           <el-form-item label="可能导致的风险" label-width="115px">
             <el-select
               v-model="item.possibleRisks"
@@ -84,8 +78,7 @@
                 :key="childItem.riskNo"
                 :label="childItem.riskName"
                 :value="childItem.riskNo"
-              >
-              </el-option>
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="严重性">
@@ -115,8 +108,7 @@
             size="mini"
             @click="addHazard(item)"
             style="margin-bottom: 10px"
-            >新增危险源</el-button
-          >
+          >新增危险源</el-button>
         </el-badge>
         <el-card
           shadow="never"
@@ -132,8 +124,7 @@
                 icon="el-icon-delete"
                 size="mini"
                 @click="delHazard(item, indexHazard)"
-                >{{ '删除危险源' + (indexHazard + 1) }}</el-button
-              >
+              >{{ '删除危险源' + (indexHazard + 1) }}</el-button>
             </span>
           </div>
           <el-form
@@ -178,8 +169,7 @@
             size="mini"
             class="at"
             @click="addRow(itemHazard)"
-            >新增一行</el-button
-          >
+          >新增一行</el-button>
           <el-table
             :data="itemHazard.specialRiskMeasureList"
             size="small"
@@ -247,10 +237,10 @@
     </el-card>
 
     <el-card header="已下发通知" key="childNotes" v-if="data.hiddenSubNotes">
-      <childNotes :data="data" />
+      <childNotes :data="data"  :source="source" />
     </el-card>
     <el-card header="已下发措施" key="childMeasures" v-if="showChildMeasures">
-      <childMeasures :data="data" />
+      <childMeasures :data="data"  :source="source" />
     </el-card>
     <el-card
       header="审批记录"
@@ -305,7 +295,20 @@ export default {
       specialRiskMeasureKey: true,
     }
   },
-  props: ['data', 'form'],
+  props: {
+    data: {
+      type: Object,
+      default: () => { },
+    },
+    form: {
+      type: Object,
+      default: () => { },
+    },
+    source: {
+      type: String,
+      default: '',
+    },
+  },
   computed: {
     type() {
       return this.data.step
@@ -346,7 +349,7 @@ export default {
     },
     showCompletion() {
       return this.data.step == 4 || this.data.step == 7 || this.data.step == 8
-    },
+    }
   },
   created() {
     // 危险源层级

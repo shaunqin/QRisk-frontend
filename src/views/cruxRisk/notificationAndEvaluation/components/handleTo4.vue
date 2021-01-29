@@ -15,7 +15,9 @@
           formatShortDate(data.endTime)
           }}
         </el-form-item>
-        <el-form-item :label="data.type=='1'?'下发部门':'分析单位'">{{ data.type=='1'?data.issueDeptName:data.analysisDeptName }}</el-form-item>
+        <el-form-item
+          :label="data.type=='1'?'下发部门':'分析单位'"
+        >{{ data.type=='1'?data.issueDeptName:data.analysisDeptName }}</el-form-item>
         <el-row class="fill-row">
           <el-col :span="24">
             <el-form-item label="标题">{{ data.title }}</el-form-item>
@@ -49,9 +51,7 @@
           <el-form-item label="可能导致的风险" label-width="125px">{{ item.possibleRisksName }}</el-form-item>
           <el-form-item label="严重性">{{ item.seriousnessName }}</el-form-item>
           <el-form-item label="风险等级">{{ item.riskLevelName }}</el-form-item>
-          <el-form-item label="是否适用于本单位" label-width="125px">
-            {{ item.appliance == '1' ? '否' : '是' }}
-          </el-form-item>
+          <el-form-item label="是否适用于本单位" label-width="125px">{{ item.appliance == '1' ? '否' : '是' }}</el-form-item>
         </el-form>
         <el-table :data="item.hazardList" size="mini">
           <el-table-column label="危险源描述" prop="hazardSource" width="200" show-overflow-tooltip />
@@ -214,19 +214,23 @@ export default {
         return
       }
       this.loading = true
-      keyRiskComplete({ ...this.form, ...params }).then((res) => {
+      keyRiskComplete({ ...this.form, ...params }).then(async (res) => {
         if (res.code != '200') {
           this.$message.error(res.msg)
         } else {
           this.$message.success('操作成功')
           this.resetForm()
-          const obj = { taskId: this.parentTaskId }
-          if (this.$parent.$parent.$parent.$parent.$parent.step == 1) {
-            this.$parent.$parent.$parent.$parent.$parent.$parent.subHandle(obj)
+          if (this.source == 'smart') {
+            await this.$parent.$parent.$parent.$parent.$parent.$parent.keyRisk()
           } else {
-            this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.subHandle(
-              obj
-            )
+            const obj = { taskId: this.parentTaskId }
+            if (this.$parent.$parent.$parent.$parent.$parent.step == 1) {
+              this.$parent.$parent.$parent.$parent.$parent.$parent.subHandle(obj)
+            } else {
+              this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.subHandle(
+                obj
+              )
+            }
           }
         }
         this.loading = false

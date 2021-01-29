@@ -1,6 +1,6 @@
 <template>
   <div>
-    <info :data="data" :form="form" />
+    <info :data="data" :form="form" :source="source" />
   </div>
 </template>
 
@@ -11,7 +11,20 @@ export default {
   components: {
     info,
   },
-  props: ["data", "form"],
+  props: {
+    data: {
+      type: Object,
+      default: () => { },
+    },
+    form: {
+      type: Object,
+      default: () => { },
+    },
+    source: {
+      type: String,
+      default: '',
+    },
+  },
   methods: {
     formatShortDate,
   }
