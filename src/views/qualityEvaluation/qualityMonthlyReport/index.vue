@@ -439,7 +439,12 @@ export default {
       doctext['paragraph6'] = this.remark4_1;
       doctext['paragraph7'] = this.remark5;
       // console.log(doctext);
-      downloadReport(doctext).then(res => {
+      let params = {
+        doctext,
+        year: this.form.year,
+        month: this.form.month
+      }
+      downloadReport(params).then(res => {
         this.exportLoading = false;
         if (res.code != '200') {
           this.$message.error(res.msg);
