@@ -12,42 +12,7 @@
     :show-close="!fullscreen"
   >
     <el-card header="详情">
-      <div slot="header" class="info-header">
-        <span>详情</span>
-        <el-button type="text" size="mini" @click="showHandleAndApproval">办理&审批记录</el-button>
-      </div>
-      <el-form inline class="detail-form">
-        <el-row>
-          <el-col :span="24" class="full-row">
-            <el-form-item label="任务名称">{{data.taskName}}</el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="16">
-          <el-col :span="6">
-            <el-form-item label="反馈日期">{{formatShortDate(data.dueDate)}}</el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="月份">{{data.month}}</el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="部门">{{data.deptName}}</el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="下发人">{{data.founderName}}[{{data.founder}}]</el-form-item>
-          </el-col>
-        </el-row>
-        <el-form-item label="附件">
-          <ul class="file-ul">
-            <li v-for="item in data.acc" :key="item.id">
-              <el-link
-                type="primary"
-                :href="baseApi+item.filePath"
-                target="_blank"
-              >{{item.originFileName}}</el-link>
-            </li>
-          </ul>
-        </el-form-item>
-      </el-form>
+      <bsseinfo :data="data" />
     </el-card>
 
     <el-card header="下发任务" key="childTask" v-if="childTask.length>0">
@@ -77,8 +42,6 @@
     <div slot="footer" class="dialog-footer" v-if="!fullscreen">
       <el-button type="primary" @click="cancel">确定</el-button>
     </div>
-
-    <handleApproval ref="handleApproval" :statusAndreviewerInfo="statusAndreviewerInfo" />
   </el-dialog>
 </template>
 
@@ -89,10 +52,9 @@ import detailFillin from './detailFillin'
 import approvalRecord from './approvalRecord'
 import childTask from './childTask'
 import transactor from '@/components/common/transactor'
-import { queryApproveHistory } from '@/api/hazards'
-import handleApproval from './cptHandleApproval'
+import bsseinfo from './step/baseinfo'
 export default {
-  components: { fillinForm, detailFillin, approvalRecord, childTask, transactor, handleApproval },
+  components: { fillinForm, detailFillin, approvalRecord, childTask, transactor, bsseinfo },
   data() {
     return {
       loading: false,
@@ -160,35 +122,6 @@ export default {
         }
       })
     },
-    showHandleAndApproval() {
-      // 状态和下一办理人
-      let statusAndreviewerInfo = [];
-      if (this.data.reviewersInfo != null && this.data.reviewersInfo.length > 0) {
-        this.data.reviewersInfo.map(item => {
-          statusAndreviewerInfo.push({
-            status: this.data.status,
-            ...item
-          })
-        })
-      } else {
-        statusAndreviewerInfo.push({
-          status: this.data.status,
-        })
-      }
-      this.statusAndreviewerInfo = statusAndreviewerInfo;
-
-      let _this = this.$refs.handleApproval;
-      _this.dialog = true;
-      _this.tbLoading = true;
-      queryApproveHistory(this.data.id).then(res => {
-        _this.tbLoading = false;
-        if (res.code != '200') {
-          this.$message.error(res.msg);
-        } else {
-          _this.data = res.obj;
-        }
-      })
-    }
   },
 }
 </script>

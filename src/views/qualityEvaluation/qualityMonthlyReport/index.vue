@@ -13,24 +13,30 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" @click="toQuery" :loading="loading">搜索</el-button>
+          <el-button
+            type="success"
+            icon="el-icon-download"
+            @click="doExport"
+            :loading="exportLoading"
+          >导出</el-button>
         </el-form-item>
       </el-form>
     </div>
     <h4 class="title">一、航线产品</h4>
     <h5 class="title">(一)航线产品质量总体情况</h5>
-    <echarts :chartData="data1_1" v-loading="loading" />
-    <echarts :chartData="data1_2" v-loading="loading" />
-    <echarts :chartData="data1_3" v-loading="loading" />
-    <echarts :chartData="data1_4" v-loading="loading" />
+    <echarts ref="image1" :chartData="data1_1" v-loading="loading" />
+    <echarts ref="image2" :chartData="data1_2" v-loading="loading" />
+    <echarts ref="image3" :chartData="data1_3" v-loading="loading" />
+    <echarts ref="image4" :chartData="data1_4" v-loading="loading" />
     <div v-for="(item,index) in remark1_3" :key="'a'+index">
       <h6 class="title-t">{{index+1}})、{{item.title}}</h6>
       <el-input v-model="item.remark" type="textarea" rows="4"></el-input>
     </div>
     <h5 class="title-t">(二)航线产品质量评价分项指标</h5>
     <h6 class="title">1、国航机队</h6>
-    <echarts :chartData="data1_5" v-loading="loading" />
+    <echarts ref="image5" :chartData="data1_5" v-loading="loading" />
     <h6 class="title">2、客户机队</h6>
-    <echarts :chartData="data1_6" v-loading="loading" />
+    <echarts ref="image6" :chartData="data1_6" v-loading="loading" />
     <h5 class="title-t">(三)关键指标考核</h5>
     <h6 class="title">1、国航机队</h6>
     <el-table
@@ -41,7 +47,9 @@
       :highlight-current-row="true"
       style="width: 100%;"
     >
-    <template slot="empty"><span> </span></template>
+      <template slot="empty">
+        <span></span>
+      </template>
       <el-table-column v-for="(column,index) in columns1_7" :key="index" :label="column.name">
         <el-table-column
           v-for="(item,iindex) in column.children"
@@ -60,7 +68,9 @@
       :highlight-current-row="true"
       style="width: 100%;"
     >
-    <template slot="empty"><span> </span></template>
+      <template slot="empty">
+        <span></span>
+      </template>
       <el-table-column v-for="(column,index) in columns1_8" :key="index" :label="column.name">
         <el-table-column
           v-for="(item,iindex) in column.children"
@@ -73,19 +83,19 @@
 
     <h4 class="title">二、定检产品</h4>
     <h5 class="title">(一)定检产品质量总体情况</h5>
-    <echarts :chartData="data2_1" v-loading="loading" />
-    <echarts :chartData="data2_2" v-loading="loading" />
-    <echarts :chartData="data2_3" v-loading="loading" />
-    <echarts :chartData="data2_4" v-loading="loading" />
+    <echarts ref="image7" :chartData="data2_1" v-loading="loading" />
+    <echarts ref="image8" :chartData="data2_2" v-loading="loading" />
+    <echarts ref="image9" :chartData="data2_3" v-loading="loading" />
+    <echarts ref="image10" :chartData="data2_4" v-loading="loading" />
     <div v-for="(item,index) in remark2_3" :key="'b'+index">
       <h6 class="title-t">{{index+1}})、{{item.title}}</h6>
       <el-input v-model="item.remark" type="textarea" rows="4"></el-input>
     </div>
     <h5 class="title-t">(二)定检产品质量分项指标</h5>
     <h6 class="title">1、国航机队</h6>
-    <echarts :chartData="data2_5" v-loading="loading" />
+    <echarts ref="image11" :chartData="data2_5" v-loading="loading" />
     <h6 class="title">2、客户机队</h6>
-    <echarts :chartData="data2_6" v-loading="loading" />
+    <echarts ref="image12" :chartData="data2_6" v-loading="loading" />
     <h5 class="title-t">(三)关键指标考核</h5>
     <h6 class="title">1、国航机队</h6>
     <el-table
@@ -96,7 +106,9 @@
       :highlight-current-row="true"
       style="width: 100%;"
     >
-    <template slot="empty"><span> </span></template>
+      <template slot="empty">
+        <span></span>
+      </template>
       <el-table-column v-for="(column,index) in columns2_7" :key="index" :label="column.name">
         <el-table-column
           v-for="(item,iindex) in column.children"
@@ -115,7 +127,9 @@
       :highlight-current-row="true"
       style="width: 100%;"
     >
-    <template slot="empty"><span> </span></template>
+      <template slot="empty">
+        <span></span>
+      </template>
       <el-table-column v-for="(column,index) in columns2_8" :key="index" :label="column.name">
         <el-table-column
           v-for="(item,iindex) in column.children"
@@ -128,13 +142,13 @@
 
     <h4 class="title">三、发动机/APU产品</h4>
     <h5 class="title">(一)发动机/APU产品质量总体情况</h5>
-    <echarts :chartData="data3_1" v-loading="loading" />
+    <echarts ref="image13" :chartData="data3_1" v-loading="loading" />
     <el-input v-model="remark3_1" type="textarea" rows="4"></el-input>
     <h5 class="title-t">(二)发动机/APU产品质量分项指标</h5>
     <h6 class="title">1、发动机产品质量分项指标</h6>
-    <echarts :chartData="data3_2" v-loading="loading" />
+    <echarts ref="image14" :chartData="data3_2" v-loading="loading" />
     <h6 class="title">2、APU产品质量分项指标</h6>
-    <echarts :chartData="data3_3" v-loading="loading" />
+    <echarts ref="image15" :chartData="data3_3" v-loading="loading" />
     <h5 class="title-t">(三)关键指标考核</h5>
     <el-table
       v-loading="loading"
@@ -144,7 +158,9 @@
       :highlight-current-row="true"
       style="width: 100%;"
     >
-    <template slot="empty"><span> </span></template>
+      <template slot="empty">
+        <span></span>
+      </template>
       <el-table-column v-for="(column,index) in columns3_4" :key="index" :label="column.name">
         <el-table-column
           v-for="(item,iindex) in column.children"
@@ -157,11 +173,11 @@
 
     <h4 class="title">四、附件产品</h4>
     <h5 class="title">(一)附件产品质量总体情况</h5>
-    <echarts :chartData="data4_1" v-loading="loading" />
+    <echarts ref="image16" :chartData="data4_1" v-loading="loading" />
     <echarts :chartData="data4_2" v-loading="loading" />
     <el-input v-model="remark4_1" type="textarea" rows="4"></el-input>
     <h5 class="title-t">(二)附件产品质量分项指标</h5>
-    <echarts :chartData="data4_3" v-loading="loading" />
+    <echarts ref="image17" :chartData="data4_3" v-loading="loading" />
     <h5 class="title-t">(三)关键指标考核</h5>
     <el-table
       v-loading="loading"
@@ -171,7 +187,9 @@
       :highlight-current-row="true"
       style="width: 100%;"
     >
-    <template slot="empty"><span> </span></template>
+      <template slot="empty">
+        <span></span>
+      </template>
       <el-table-column v-for="(column,index) in columns4_4" :key="index" :label="column.name">
         <el-table-column
           v-for="(item,iindex) in column.children"
@@ -188,7 +206,7 @@
 </template>
 
 <script>
-import { queryReportData, queryDefaultValue } from '@/api/quality';
+import { queryReportData, queryDefaultValue, downloadReport } from '@/api/quality';
 import echarts from '@/components/Charts'
 export default {
   name: 'QualityMonthlyReport',
@@ -196,6 +214,7 @@ export default {
   data() {
     return {
       loading: false,
+      exportLoading: false,
       form: {
         year: "",
         month: ""
@@ -235,7 +254,8 @@ export default {
       data4_3: {},
       data4_4: [],
       columns4_4: [],
-      remark5: ""
+      remark5: "",
+      doctext: {},
     };
   },
   methods: {
@@ -382,9 +402,47 @@ export default {
     },
     getTable(res, dataSource) {
       this[dataSource] = res.obj.map(item => {
-        const obj = {...item, ...item.resultValues}
+        const obj = { ...item, ...item.resultValues }
         return obj
       });
+    },
+    doExport() {
+      this.exportLoading = true;
+      let doctext = {};
+      // 图
+      for (let i = 1; i < 18; i++) {
+        const charts = this.$refs["image" + i];
+        doctext["image" + i] = charts.chart.getDataURL({
+          type: 'png',
+          pixelRatio: 2,
+        })
+      }
+      // 标题文字
+      if (this.remark1_3.length == 2) {
+        doctext[`title1`] = this.remark1_3[0].title;
+        doctext[`paragraph1`] = this.remark1_3[0].remark;
+        doctext[`title2`] = this.remark1_3[1].title;
+        doctext[`paragraph2`] = this.remark1_3[1].remark;
+      }
+      if (this.remark2_3.length == 2) {
+        doctext[`title3`] = this.remark2_3[0].title;
+        doctext[`paragraph3`] = this.remark2_3[0].remark;
+        doctext[`title4`] = this.remark2_3[1].title;
+        doctext[`paragraph4`] = this.remark2_3[1].remark;
+      }
+      doctext['paragraph5'] = this.remark3_1;
+      doctext['paragraph6'] = this.remark4_1;
+      doctext['paragraph7'] = this.remark5;
+      // console.log(doctext);
+      downloadReport(doctext).then(res => {
+        this.exportLoading = false;
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          let url = process.env.VUE_APP_BASE_API + res.obj;
+          location.href = url;
+        }
+      })
     }
 
   },

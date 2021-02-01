@@ -131,3 +131,12 @@ export function queryDefaultSettingMgrList(params) {
         params
     })
 }
+
+// 导出图
+export function downloadReport(data) {
+    return request({
+        url: '/quality_mgr/downloadReport',
+        method: 'post',
+        data
+    })
+}
