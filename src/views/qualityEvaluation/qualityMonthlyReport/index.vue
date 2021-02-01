@@ -215,6 +215,7 @@ export default {
     return {
       loading: false,
       exportLoading: false,
+      hadLoad: false,
       form: {
         year: "",
         month: ""
@@ -254,8 +255,7 @@ export default {
       data4_3: {},
       data4_4: [],
       columns4_4: [],
-      remark5: "",
-      doctext: {},
+      remark5: ""
     };
   },
   methods: {
@@ -263,6 +263,7 @@ export default {
       this.loading = true;
       queryReportData(this.form).then(async res => {
         this.loading = false;
+        this.hadLoad = true;
         if (res) {
           let res1_1 = res.find(r => r.sortNum == 1).list.find(r => r.sortNum == 1);
           this.series2render(res1_1, "data1_1", "line", { title: '公司总体航线产品' });
@@ -407,6 +408,10 @@ export default {
       });
     },
     doExport() {
+      if (!this.hadLoad) {
+        this.$message("数据不能为空!");
+        return;
+      }
       this.exportLoading = true;
       let doctext = {};
       // 图
