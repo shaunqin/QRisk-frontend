@@ -24,19 +24,55 @@
     </div>
     <h4 class="title">一、航线产品</h4>
     <h5 class="title">(一)航线产品质量总体情况</h5>
-    <echarts ref="image1" :chartData="data1_1" v-loading="loading" />
-    <echarts ref="image2" :chartData="data1_2" v-loading="loading" />
-    <echarts ref="image3" :chartData="data1_3" v-loading="loading" />
-    <echarts ref="image4" :chartData="data1_4" v-loading="loading" />
+    <echarts
+      class="charts"
+      :width="echartsWidth"
+      ref="image1"
+      :chartData="data1_1"
+      v-loading="loading"
+    />
+    <echarts
+      class="charts"
+      :width="echartsWidth"
+      ref="image2"
+      :chartData="data1_2"
+      v-loading="loading"
+    />
+    <echarts
+      class="charts"
+      :width="echartsWidth"
+      ref="image3"
+      :chartData="data1_3"
+      v-loading="loading"
+    />
+    <echarts
+      class="charts"
+      :width="echartsWidth"
+      ref="image4"
+      :chartData="data1_4"
+      v-loading="loading"
+    />
     <div v-for="(item,index) in remark1_3" :key="'a'+index">
       <h6 class="title-t">{{index+1}})、{{item.title}}</h6>
       <el-input v-model="item.remark" type="textarea" rows="4"></el-input>
     </div>
     <h5 class="title-t">(二)航线产品质量评价分项指标</h5>
     <h6 class="title">1、国航机队</h6>
-    <echarts ref="image5" :chartData="data1_5" v-loading="loading" />
+    <echarts
+      class="charts"
+      :width="echartsWidth"
+      ref="image5"
+      :chartData="data1_5"
+      v-loading="loading"
+    />
     <h6 class="title">2、客户机队</h6>
-    <echarts ref="image6" :chartData="data1_6" v-loading="loading" />
+    <echarts
+      class="charts"
+      :width="echartsWidth"
+      ref="image6"
+      :chartData="data1_6"
+      v-loading="loading"
+    />
     <h5 class="title-t">(三)关键指标考核</h5>
     <h6 class="title">1、国航机队</h6>
     <el-table
@@ -83,19 +119,55 @@
 
     <h4 class="title">二、定检产品</h4>
     <h5 class="title">(一)定检产品质量总体情况</h5>
-    <echarts ref="image7" :chartData="data2_1" v-loading="loading" />
-    <echarts ref="image8" :chartData="data2_2" v-loading="loading" />
-    <echarts ref="image9" :chartData="data2_3" v-loading="loading" />
-    <echarts ref="image10" :chartData="data2_4" v-loading="loading" />
+    <echarts
+      class="charts"
+      :width="echartsWidth"
+      ref="image7"
+      :chartData="data2_1"
+      v-loading="loading"
+    />
+    <echarts
+      class="charts"
+      :width="echartsWidth"
+      ref="image8"
+      :chartData="data2_2"
+      v-loading="loading"
+    />
+    <echarts
+      class="charts"
+      :width="echartsWidth"
+      ref="image9"
+      :chartData="data2_3"
+      v-loading="loading"
+    />
+    <echarts
+      class="charts"
+      :width="echartsWidth"
+      ref="image10"
+      :chartData="data2_4"
+      v-loading="loading"
+    />
     <div v-for="(item,index) in remark2_3" :key="'b'+index">
       <h6 class="title-t">{{index+1}})、{{item.title}}</h6>
       <el-input v-model="item.remark" type="textarea" rows="4"></el-input>
     </div>
     <h5 class="title-t">(二)定检产品质量分项指标</h5>
     <h6 class="title">1、国航机队</h6>
-    <echarts ref="image11" :chartData="data2_5" v-loading="loading" />
+    <echarts
+      class="charts"
+      :width="echartsWidth"
+      ref="image11"
+      :chartData="data2_5"
+      v-loading="loading"
+    />
     <h6 class="title">2、客户机队</h6>
-    <echarts ref="image12" :chartData="data2_6" v-loading="loading" />
+    <echarts
+      class="charts"
+      :width="echartsWidth"
+      ref="image12"
+      :chartData="data2_6"
+      v-loading="loading"
+    />
     <h5 class="title-t">(三)关键指标考核</h5>
     <h6 class="title">1、国航机队</h6>
     <el-table
@@ -142,13 +214,31 @@
 
     <h4 class="title">三、发动机/APU产品</h4>
     <h5 class="title">(一)发动机/APU产品质量总体情况</h5>
-    <echarts ref="image13" :chartData="data3_1" v-loading="loading" />
+    <echarts
+      class="charts"
+      :width="echartsWidth"
+      ref="image13"
+      :chartData="data3_1"
+      v-loading="loading"
+    />
     <el-input v-model="remark3_1" type="textarea" rows="4"></el-input>
     <h5 class="title-t">(二)发动机/APU产品质量分项指标</h5>
     <h6 class="title">1、发动机产品质量分项指标</h6>
-    <echarts ref="image14" :chartData="data3_2" v-loading="loading" />
+    <echarts
+      class="charts"
+      :width="echartsWidth"
+      ref="image14"
+      :chartData="data3_2"
+      v-loading="loading"
+    />
     <h6 class="title">2、APU产品质量分项指标</h6>
-    <echarts ref="image15" :chartData="data3_3" v-loading="loading" />
+    <echarts
+      class="charts"
+      :width="echartsWidth"
+      ref="image15"
+      :chartData="data3_3"
+      v-loading="loading"
+    />
     <h5 class="title-t">(三)关键指标考核</h5>
     <el-table
       v-loading="loading"
@@ -173,11 +263,23 @@
 
     <h4 class="title">四、附件产品</h4>
     <h5 class="title">(一)附件产品质量总体情况</h5>
-    <echarts ref="image16" :chartData="data4_1" v-loading="loading" />
-    <echarts :chartData="data4_2" v-loading="loading" />
+    <echarts
+      class="charts"
+      :width="echartsWidth"
+      ref="image16"
+      :chartData="data4_1"
+      v-loading="loading"
+    />
+    <echarts class="charts" :width="echartsWidth" :chartData="data4_2" v-loading="loading" />
     <el-input v-model="remark4_1" type="textarea" rows="4"></el-input>
     <h5 class="title-t">(二)附件产品质量分项指标</h5>
-    <echarts ref="image17" :chartData="data4_3" v-loading="loading" />
+    <echarts
+      class="charts"
+      :width="echartsWidth"
+      ref="image17"
+      :chartData="data4_3"
+      v-loading="loading"
+    />
     <h5 class="title-t">(三)关键指标考核</h5>
     <el-table
       v-loading="loading"
@@ -255,7 +357,8 @@ export default {
       data4_3: {},
       data4_4: [],
       columns4_4: [],
-      remark5: ""
+      remark5: "",
+      echartsWidth: '60%'
     };
   },
   methods: {
@@ -270,7 +373,7 @@ export default {
           let res1_2 = res.find(r => r.sortNum == 1).list.find(r => r.sortNum == 2);
           this.seriesMore2render(res1_2, "data1_2", "bar");
           let res1_3 = res.find(r => r.sortNum == 1).list.find(r => r.sortNum == 3);
-          this.seriesMore2render(res1_3, "data1_3", "line", { showLabel: true, showRemark: true, remarkKey: "remark1_3" });
+          this.seriesMore2render(res1_3, "data1_3", "line", { showLabel: true, showRemark: true, remarkKey: "remark1_3", bottom: 80 });
           let res1_4 = res.find(r => r.sortNum == 1).list.find(r => r.sortNum == 4);
           this.seriesMore2render(res1_4, "data1_4", "bar", { rotate: 'no' });
           let res1_5 = res.find(r => r.sortNum == 1).list.find(r => r.sortNum == 5);
@@ -285,7 +388,7 @@ export default {
           let res2_2 = res.find(r => r.sortNum == 2).list.find(r => r.sortNum == 10);
           this.seriesMore2render(res2_2, "data2_2", "bar");
           let res2_3 = res.find(r => r.sortNum == 2).list.find(r => r.sortNum == 11);
-          this.seriesMore2render(res2_3, "data2_3", "line", { showLabel: true, showRemark: true, remarkKey: "remark2_3" });
+          this.seriesMore2render(res2_3, "data2_3", "line", { showLabel: true, showRemark: true, remarkKey: "remark2_3", bottom: 80 });
           let res2_4 = res.find(r => r.sortNum == 2).list.find(r => r.sortNum == 12);
           this.seriesMore2render(res2_4, "data2_4", "bar", { rotate: 'no' });
           let res2_5 = res.find(r => r.sortNum == 2).list.find(r => r.sortNum == 13);
@@ -294,18 +397,18 @@ export default {
           this.seriesMore2render(res2_6, "data2_6", "bar", { showLabel: true });
 
           let res3_1 = res.find(r => r.sortNum == 3).list.find(r => r.sortNum == 17);
-          this.seriesMore2render(res3_1, "data3_1", "line", { showLabel: true });
+          this.seriesMore2render(res3_1, "data3_1", "line", { showLabel: true, bottom: 80 });
           let res3_2 = res.find(r => r.sortNum == 3).list.find(r => r.sortNum == 18);
-          this.seriesMore2render(res3_2, "data3_2", "bar", { showLabel: true });
+          this.seriesMore2render(res3_2, "data3_2", "bar", { showLabel: true, bottom: 80 });
           let res3_3 = res.find(r => r.sortNum == 3).list.find(r => r.sortNum == 19);
           this.seriesMore2render(res3_3, "data3_3", "bar", { showLabel: true });
 
           let res4_1 = res.find(r => r.sortNum == 4).list.find(r => r.sortNum == 21);
           this.series2render(res4_1, "data4_1", "line", { title: '近十二个月公司平均趋势' });
           let res4_2 = res.find(r => r.sortNum == 4).list.find(r => r.sortNum == 22);
-          this.seriesMore2render(res4_2, "data4_2", "line", { showLabel: true });
+          this.seriesMore2render(res4_2, "data4_2", "line", { showLabel: true, bottom: 80 });
           let res4_3 = res.find(r => r.sortNum == 4).list.find(r => r.sortNum == 23);
-          this.seriesMore2render(res4_3, "data4_3", "bar", { showLabel: true, rotate: 'no' });
+          this.seriesMore2render(res4_3, "data4_3", "bar", { showLabel: true, rotate: 'no', bottom: 80 });
 
           await this.getTableHead('4_41_0', 'columns1_7')
           await this.getTableHead('4_41_1', 'columns1_8')
@@ -380,7 +483,7 @@ export default {
       this[dataSource] = {
         legend: { data: legendArr, bottom: 0, left: 'center' },
         tooltip: {},
-        grid: { bottom: 80 },
+        grid: { bottom: params.bottom ? params.bottom : 110 },
         title: { text: res.name, left: 'center' },
         xAxis: { type: 'category', data: _xAxis, axisLabel: { rotate: params.rotate == 'no' ? 0 : 30 } },
         yAxis: { type: 'value' },
@@ -418,8 +521,9 @@ export default {
       for (let i = 1; i < 18; i++) {
         const charts = this.$refs["image" + i];
         doctext["image" + i] = charts.chart.getDataURL({
-          type: 'png',
+          type: 'jpeg',
           pixelRatio: 2,
+          backgroundColor: '#fff'
         })
       }
       // 标题文字
@@ -472,5 +576,8 @@ export default {
 }
 /deep/ .el-table {
   margin-bottom: 10px;
+}
+.charts {
+  margin: 0 auto;
 }
 </style>
