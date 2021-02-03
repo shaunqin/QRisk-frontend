@@ -554,7 +554,11 @@ export default {
           this.$message.error(res.msg);
         } else {
           let url = process.env.VUE_APP_BASE_API + res.obj;
-          location.href = url;
+          // location.href = url;
+          let ele = document.createElement("a");
+          ele.href = url;
+          ele.target = "_blank";
+          ele.click();
         }
       })
     }
