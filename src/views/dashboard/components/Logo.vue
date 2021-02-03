@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       title: '信源科技',
-      logo: require('../../../assets/logo_images/logo.png')
+      logo: require('../../../assets/logo_images/logo2.png')
     }
   }
 }
@@ -43,7 +43,7 @@ export default {
 
 .sidebar-logo-container {
   position: relative;
-  width: 210px;
+  width: 310px;
   height: 100%;
   line-height: 50px;
   // background: #2b2f3a;

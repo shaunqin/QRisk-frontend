@@ -20,7 +20,7 @@
                   <span class="b-t">专项风险</span>
                 </div>
                 <div class="img">
-                  <img src="@/assets/images/home-03.png" />
+                  <img src="@/assets/images/home-02.png" />
                 </div>
               </router-link>
             </el-col>
@@ -30,7 +30,7 @@
                   <span class="b-t">风险提示</span>
                 </div>
                 <div class="img">
-                  <img src="@/assets/images/home-01.png" />
+                  <img src="@/assets/images/home-03.png" />
                 </div>
               </router-link>
             </el-col>
@@ -40,7 +40,7 @@
                   <span class="b-t">关键风险</span>
                 </div>
                 <div class="img">
-                  <img src="@/assets/images/home-01.png" />
+                  <img src="@/assets/images/home-04.png" />
                 </div>
               </router-link>
             </el-col>
@@ -52,7 +52,7 @@
                   <span class="b-t">隐患排查</span>
                 </div>
                 <div class="img">
-                  <img src="@/assets/images/home-04.png" />
+                  <img src="@/assets/images/home-05.png" />
                 </div>
               </router-link>
             </el-col>
@@ -62,7 +62,7 @@
                   <span class="b-t">规范标准</span>
                 </div>
                 <div class="img">
-                  <img src="@/assets/images/home-01.png" />
+                  <img src="@/assets/images/home-06.png" />
                 </div>
               </router-link>
             </el-col>
@@ -72,7 +72,7 @@
                   <span class="b-t">质量评价</span>
                 </div>
                 <div class="img">
-                  <img src="@/assets/images/home-05.png" />
+                  <img src="@/assets/images/home-07.png" />
                 </div>
               </router-link>
             </el-col>
@@ -82,7 +82,7 @@
                   <span class="b-t">Q-SMART</span>
                 </div>
                 <div class="img">
-                  <img src="@/assets/images/home-01.png" />
+                  <img src="@/assets/images/home-08.png" />
                 </div>
               </router-link>
             </el-col>
