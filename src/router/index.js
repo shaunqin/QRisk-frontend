@@ -66,20 +66,34 @@ export const constantRoutes = [{
   component: () => import('@/views/error-page/401'),
   hidden: true
 },
+// {
+//   path: '/',
+//   component: Layout,
+//   redirect: '/dashboard',
+//   children: [{
+//     path: 'dashboard',
+//     component: () => import('@/views/dashboard/index'),
+//     name: 'Dashboard',
+//     meta: {
+//       title: 'dashboard',
+//       icon: 'dashboard',
+//       affix: true
+//     }
+//   }]
+// },
 {
   path: '/',
-  component: Layout,
   redirect: '/dashboard',
-  children: [{
-    path: 'dashboard',
-    component: () => import('@/views/dashboard/index'),
-    name: 'Dashboard',
-    meta: {
-      title: 'dashboard',
-      icon: 'dashboard',
-      affix: true
-    }
-  }]
+},
+{
+  path: '/dashboard',
+  component: () => import('@/views/dashboard/index'),
+  name: 'Dashboard',
+  meta: {
+    title: 'dashboard',
+    icon: 'dashboard',
+    affix: true
+  },
 },
 {
   path: '/smart',
@@ -558,16 +572,16 @@ export const asyncRoutes = [{
         title: 'qualityMonthlyReport'
       }
     },
-    /* {
-      path: 'qualityCharts',
-      component: () => import('@/views/qualityEvaluation/qualityCharts/index'),
-      name: 'QualityCharts',
-      hidden: true,
-      meta: {
-        title: 'qualityCharts'
-      }
-    } */
-  ]
+      /* {
+        path: 'qualityCharts',
+        component: () => import('@/views/qualityEvaluation/qualityCharts/index'),
+        name: 'QualityCharts',
+        hidden: true,
+        meta: {
+          title: 'qualityCharts'
+        }
+      } */
+    ]
   }]
 },
 {

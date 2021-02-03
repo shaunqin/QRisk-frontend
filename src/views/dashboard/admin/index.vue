@@ -2,11 +2,91 @@
   <div class="dashboard-editor-container">
     <el-row class="r">
       <el-col :span="14" class="c-l">
-        <div>
-          <h1 class="t">Q-Risk风险管理系统</h1>
-          <h4
-            class="text"
-          >该系统可以显著的提高各中心、分公司、运行支持部门安全质量管理的工作效率和准确度。为了更好的实现公司系统网络化有序管理，统一工作标准，加强数据的综合评估，从而实现全电子化管理，提高工作效率。</h4>
+        <div style="flex:1">
+          <el-row :gutter="16">
+            <el-col :span="6">
+              <router-link to="/dataAnalysis" class="bottom">
+                <div class="b">
+                  <span class="b-t">数据分析</span>
+                </div>
+                <div class="img">
+                  <img src="@/assets/images/home-01.png" />
+                </div>
+              </router-link>
+            </el-col>
+            <el-col :span="6">
+              <router-link to="/riskManagerment" class="bottom">
+                <div class="b">
+                  <span class="b-t">专项风险</span>
+                </div>
+                <div class="img">
+                  <img src="@/assets/images/home-03.png" />
+                </div>
+              </router-link>
+            </el-col>
+            <el-col :span="6">
+              <router-link to="/safetyRiskPrompt" class="bottom">
+                <div class="b">
+                  <span class="b-t">风险提示</span>
+                </div>
+                <div class="img">
+                  <img src="@/assets/images/home-01.png" />
+                </div>
+              </router-link>
+            </el-col>
+            <el-col :span="6">
+              <router-link to="/cruxRisk" class="bottom">
+                <div class="b">
+                  <span class="b-t">关键风险</span>
+                </div>
+                <div class="img">
+                  <img src="@/assets/images/home-01.png" />
+                </div>
+              </router-link>
+            </el-col>
+          </el-row>
+          <el-row :gutter="16">
+            <el-col :span="6">
+              <router-link to="/hazardsInvestigation" class="bottom">
+                <div class="b">
+                  <span class="b-t">隐患排查</span>
+                </div>
+                <div class="img">
+                  <img src="@/assets/images/home-04.png" />
+                </div>
+              </router-link>
+            </el-col>
+            <el-col :span="6">
+              <router-link to="/standard" class="bottom">
+                <div class="b">
+                  <span class="b-t">规范标准</span>
+                </div>
+                <div class="img">
+                  <img src="@/assets/images/home-01.png" />
+                </div>
+              </router-link>
+            </el-col>
+            <el-col :span="6">
+              <router-link to="/qualityEvaluation" class="bottom">
+                <div class="b">
+                  <span class="b-t">质量评价</span>
+                </div>
+                <div class="img">
+                  <img src="@/assets/images/home-05.png" />
+                </div>
+              </router-link>
+            </el-col>
+            <el-col :span="6">
+              <router-link to="/standard" class="bottom">
+                <div class="b">
+                  <span class="b-t">Q-SMART</span>
+                </div>
+                <div class="img">
+                  <img src="@/assets/images/home-01.png" />
+                </div>
+              </router-link>
+            </el-col>
+          </el-row>
         </div>
       </el-col>
       <el-col :span="10" class="c-r">
@@ -21,63 +101,6 @@
             <li>安全隐患管控清单、安全隐患统计输出和重大安全隐患跟踪。</li>
           </ul>
         </div>
-      </el-col>
-    </el-row>
-    <el-row class="r2" :gutter="24">
-      <el-col :span="6">
-        <router-link to="/standard" class="bottom">
-          <div class="img">
-            <img src="@/assets/images/home-01.png" />
-          </div>
-          <div class="b">
-            <span class="b-t">规范标准</span>
-            <span class="b-desc">整合各事业部、分公司、运行支持部门在 Q-Risk 系统中所有用到的各类规范、标准。</span>
-          </div>
-        </router-link>
-      </el-col>
-      <el-col :span="6">
-        <router-link to="/dataAnalysis/infoDatabase/supervision" class="bottom">
-          <div class="img">
-            <img src="@/assets/images/home-02.png" />
-          </div>
-          <div class="b">
-            <span class="b-t">信息数据库</span>
-            <span class="b-desc">整合各事业部、分公司、运行支持部门在 Q-Risk 系统中所有用到的各类规范、标准。</span>
-          </div>
-        </router-link>
-      </el-col>
-      <el-col :span="6">
-        <router-link to="/riskManagerment/page/riskAssessment" class="bottom">
-          <div class="img">
-            <img src="@/assets/images/home-03.png" />
-          </div>
-          <div class="b">
-            <span class="b-t">专项风险</span>
-            <span class="b-desc">风险评价数据输出、安全风险提示和风险评价流程。</span>
-          </div>
-        </router-link>
-      </el-col>
-      <el-col :span="6">
-        <router-link to="/hazardsInvestigation/index/safetyHazardsReport" class="bottom">
-          <div class="img">
-            <img src="@/assets/images/home-04.png" />
-          </div>
-          <div class="b">
-            <span class="b-t">隐患排查</span>
-            <span class="b-desc">安全隐患管控清单、安全隐患统计输出和重大安全隐患跟踪。</span>
-          </div>
-        </router-link>
-      </el-col>
-      <el-col :span="6">
-        <router-link to="/qualityEvaluation" class="bottom">
-          <div class="img">
-            <img src="@/assets/images/home-05.png" />
-          </div>
-          <div class="b">
-            <span class="b-t">质量评价</span>
-            <span class="b-desc">安全隐患管控清单、安全隐患统计输出和重大安全隐患跟踪。</span>
-          </div>
-        </router-link>
       </el-col>
     </el-row>
   </div>
@@ -117,7 +140,7 @@ export default {
 
 <style lang="scss" scoped>
 .dashboard-editor-container {
-  min-height: calc(100vh - 56px);
+  min-height: 100vh;
   padding: 20px 60px 0px;
   .pan-info-roles {
     font-size: 12px;
@@ -127,6 +150,7 @@ export default {
   }
   .r {
     height: 55vh;
+    margin-top: 7vh;
     .c-l {
       height: 100%;
       position: relative;
@@ -141,6 +165,25 @@ export default {
         line-height: 2;
         letter-spacing: 3px;
         font-weight: normal;
+      }
+      .bottom {
+        text-align: center;
+        padding: 10px;
+        margin: 10px;
+        display: block;
+        background: rgba(36, 39, 142, 0.2);
+        border-radius: 10px;
+        .b {
+          padding: 10px;
+          font-size: 20px;
+          font-weight: bold;
+        }
+        .img {
+          padding: 10px;
+          img {
+            width: 80px;
+          }
+        }
       }
     }
     .c-r {

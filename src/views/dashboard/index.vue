@@ -1,5 +1,6 @@
 <template>
   <div class="dashboard-container">
+    <Sidebar />
     <component :is="currentRole" />
   </div>
 </template>
@@ -8,10 +9,11 @@
 import { mapGetters } from "vuex";
 import adminDashboard from "./admin";
 import editorDashboard from "./editor";
+import Sidebar from './components/Sidebar'
 
 export default {
   name: "Dashboard",
-  components: { adminDashboard, editorDashboard },
+  components: { adminDashboard, editorDashboard, Sidebar },
   data() {
     return {
       currentRole: "adminDashboard"
@@ -29,7 +31,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dashboard-container{
-  background: url('../../assets/images/home-bg.png') no-repeat 0 0/cover;
+.dashboard-container {
+  background: url("../../assets/images/home-bg.png") no-repeat 0 0 / cover;
 }
 </style>
