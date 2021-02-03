@@ -55,11 +55,15 @@
           <template slot-scope="{row}">
             <span v-if="row.processFlag==1">同意</span>
             <span v-else-if="row.processFlag==2">驳回</span>
+            <span v-else-if="row.processFlag==3">下发</span>
+            <span v-else-if="row.processFlag==4">上报</span>
+            <span v-else-if="row.processFlag==5">审批</span>
+            <span v-else-if="row.processFlag==6">修改</span>
             <span v-else>-</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作说明" prop="remark" />
-        <el-table-column label="备注" prop="remark2" />
+        <el-table-column label="操作说明" prop="remark2" />
+        <el-table-column label="备注" prop="remark" />
         <el-table-column fixed="right" width="90" label="历史版本">
           <template slot-scope="{row}">
             <el-button v-if="!!row.history" type="text" size="mini" @click="commentsDetail(row)">详情</el-button>
