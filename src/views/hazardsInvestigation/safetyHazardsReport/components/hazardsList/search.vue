@@ -9,9 +9,9 @@
           <el-option v-for="n in 12" :key="n" :label="n" :value="n"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="填报人">
+      <!-- <el-form-item label="填报人">
         <el-input v-model="form.user"></el-input>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item label="隐患名称">
         <el-input v-model="form.hiddenName" placeholder></el-input>
       </el-form-item>
@@ -58,8 +58,14 @@
           style="width: 140px"
         />
       </el-form-item>
-      <el-form-item label="监管单位">
+      <!-- <el-form-item label="监管单位">
         <el-input v-model="form.supervisoryUnit" placeholder></el-input>
+      </el-form-item>-->
+      <el-form-item label="整改进展">
+        <el-select v-model="form.rectificationProgress" placeholder clearable>
+          <el-option label="正在整改" value="正在整改"></el-option>
+          <el-option label="关闭" value="关闭"></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label>
         <el-button type="primary" icon="el-icon-search" @click="toQuery">搜索</el-button>
@@ -88,7 +94,8 @@ export default {
         hiddenType: "",
         involveBusiness: "",
         involveProcess: "",
-        supervisoryUnit: ""
+        supervisoryUnit: "",
+        rectificationProgress: ""
       }
     }
   },
@@ -116,11 +123,12 @@ export default {
         hiddenType: "",
         involveBusiness: "",
         involveProcess: "",
-        supervisoryUnit: ""
+        supervisoryUnit: "",
+        rectificationProgress: ""
       };
       this.toQuery();
     },
-    doExport(){
+    doExport() {
       let _this = this.$parent.$parent.$parent;
       _this.params = { ...this.form };
       _this.doExport(2);

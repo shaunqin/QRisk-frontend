@@ -103,6 +103,7 @@ export default {
         if (this.$refs.step2.$refs.fillinForm)
           this.form.hiddenDangerList = this.$refs.step2.$refs.fillinForm.fillinData;
       }
+      this.form.noHiddenDanger=this.data.noHiddenDanger;
       this.loading = true;
       hazardsComplete({ ...this.form, ...params }).then((res) => {
         if (res.code != "200") {

@@ -12,9 +12,9 @@
       <el-table-column label="截止日期">
         <template slot-scope="{ row }">{{ row.data.deadline }}</template>
       </el-table-column>
-      <el-table-column label="通知内容" min-width="100">
+      <!-- <el-table-column label="通知内容" min-width="100">
         <template slot-scope="{ row }">{{ row.data.content }}</template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="下发人" prop="issuer" />
       <el-table-column label="填报人" prop="filler" />
       <!-- <el-table-column label="附件预览" min-width="120">

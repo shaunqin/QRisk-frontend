@@ -233,7 +233,8 @@ export const asyncRoutes = [{
           name: 'supervision',
           hidden: true,
           meta: {
-            title: 'supervision'
+            title: 'supervision',
+            tip:'数据来源于Q-Radar'
           }
         },
         {
@@ -242,7 +243,8 @@ export const asyncRoutes = [{
           name: 'safeSelfExamination',
           hidden: true,
           meta: {
-            title: 'safeSelfExamination'
+            title: 'safeSelfExamination',
+            tip:'数据来源于Q-Radar'
           }
         },
         {
@@ -251,7 +253,8 @@ export const asyncRoutes = [{
           name: 'qualityAudit',
           hidden: true,
           meta: {
-            title: 'qualityAudit'
+            title: 'qualityAudit',
+            tip:'数据来源于Q-Audit'
           }
         },
         {
@@ -260,7 +263,8 @@ export const asyncRoutes = [{
           name: 'externalInspection',
           hidden: true,
           meta: {
-            title: 'externalInspection'
+            title: 'externalInspection',
+            tip:'数据来源于Q-Aduit'
           }
         },
         {

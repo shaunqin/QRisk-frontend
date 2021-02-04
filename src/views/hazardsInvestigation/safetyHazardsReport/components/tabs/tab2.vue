@@ -14,7 +14,7 @@
           <el-tag class="noborder" :color="getStatusColor(row)" effect="dark">{{row.name}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="businessTitle" label="任务标题" show-overflow-tooltip />
+      <el-table-column prop="businessTitle" label="任务名称" show-overflow-tooltip />
       <el-table-column prop="deptName" label="部门" show-overflow-tooltip />
       <el-table-column prop="month" label="月份" show-overflow-tooltip />
       <el-table-column label="上报人" width="130">
@@ -22,13 +22,11 @@
           <div>{{renderTbCol(row)}}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="taskTime" label="任务时间" width="140">
+      <el-table-column prop="taskTime" label="上报时间" width="140">
         <template slot-scope="{row}">
           <div>{{formatDate(row.taskTime)}}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="createBy" label="发起人" width="130" />
-      <el-table-column prop="createTime" label="发起时间" width="140" />
       <el-table-column prop="daysRemainedHD" label="剩余天数" width="120" sortable="custom">
         <template slot-scope="{row}">
           <span :style="{color:row.emergency?getStatusColor(row):'#606266'}">{{row.daysRemainedHD}}</span>

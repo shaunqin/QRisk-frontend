@@ -12,7 +12,7 @@
           <el-form-item label="批准人">{{data.approver}}</el-form-item>
         </el-col>
         <el-col :span="5">
-          <el-button type="primary" size="mini" v-if="noticeEnable" @click="noticeManager">提醒风险管理员办理</el-button>
+          <el-button type="primary" size="mini" v-if="noticeEnable" @click="noticeManager">转风险管理员办理</el-button>
         </el-col>
       </el-row>
       <el-form-item label="适用范围">{{data.applyScope}}</el-form-item>

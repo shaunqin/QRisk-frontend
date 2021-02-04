@@ -9,16 +9,36 @@
     <el-form-item label="部门">
       <department class="mini" :value="form.deptPath" @change="deptChange" style="width: 180px" />
     </el-form-item>
-    <el-form-item label="发现时间">
+    <el-form-item label="时间">
+      <el-radio-group v-model="dateType" size="mini">
+        <el-radio-button label="year">年</el-radio-button>
+        <el-radio-button label="month">年月</el-radio-button>
+      </el-radio-group>
       <el-date-picker
+        key="year"
+        v-model="form.date"
+        value-format="yyyy-MM"
+        type="year"
+        v-if="dateType=='year'"
+        style="width:130px"
+      ></el-date-picker>
+      <el-date-picker
+        key="month"
+        v-model="form.date"
+        value-format="yyyy-MM"
+        type="month"
+        v-if="dateType=='month'"
+        style="width:130px"
+      ></el-date-picker>
+      <!-- <el-date-picker
         v-model="date"
         value-format="yyyy-MM-dd"
         type="daterange"
         unlink-panels
         style="width: 220px"
-      ></el-date-picker>
+      ></el-date-picker>-->
     </el-form-item>
-    <el-form-item label="来源">
+    <!-- <el-form-item label="来源">
       <dictSelect
         type="data_source"
         :value="form.source"
@@ -33,7 +53,7 @@
         @change="dictChange($event,'type')"
         style="width: 140px"
       />
-    </el-form-item>
+    </el-form-item>-->
     <el-form-item label="等级">
       <dictSelect
         type="hidden_danger_level"
@@ -41,6 +61,12 @@
         @change="dictChange($event,'levels')"
         style="width: 140px"
       />
+    </el-form-item>
+    <el-form-item label="整改进展">
+      <el-select v-model="form.rectificationProgress" placeholder clearable>
+        <el-option label="正在整改" value="正在整改"></el-option>
+        <el-option label="关闭" value="关闭"></el-option>
+      </el-select>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" icon="el-icon-search" @click="toQuery">搜索</el-button>
@@ -68,7 +94,8 @@ export default {
         type: "",
         levels: ""
       },
-      date: ""
+      date: "",
+      dateType: 'year'
     }
   },
   watch: {
@@ -122,7 +149,7 @@ export default {
 /deep/ .vue-treeselect--append-to-body {
   z-index: 1 !important;
 }
-/deep/ .el-form-item{
-    margin-bottom: 4px;
+/deep/ .el-form-item {
+  margin-bottom: 4px;
 }
 </style>

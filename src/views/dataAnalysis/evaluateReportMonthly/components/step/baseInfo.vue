@@ -18,7 +18,7 @@
             target="_blank"
             :href="baseUrl+data.filePath"
           >{{data.fileName}}</el-link>
-          <el-button type="primary" size="mini" v-if="noticeEnable" @click="noticeManager">提醒风险管理员办理</el-button>
+          <el-button type="primary" size="mini" v-if="noticeEnable" @click="noticeManager">转风险管理员办理</el-button>
         </el-form-item>
       </el-col>
     </el-row>

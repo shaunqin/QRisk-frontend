@@ -6,12 +6,11 @@
     :visible.sync="dialog"
     :title="'详情'"
     custom-class="big_dialog"
-    v-loading="dialogLoading"
     :fullscreen="fullscreen"
     :close-on-press-escape="!fullscreen"
     :show-close="!fullscreen"
   >
-    <el-form ref="form" :model="form" size="small" label-width="auto">
+    <el-form ref="form" :model="form" size="small" label-width="80px" v-loading="dialogLoading">
       <el-row :gutter="16">
         <el-col :span="8">
           <el-form-item label="编号">{{form.no}}</el-form-item>
@@ -31,14 +30,9 @@
       <el-form-item label="安全风险">
         <htmlContent :html="form.existingRisk" />
       </el-form-item>
-      <el-form-item label="风险防范" v-if="form.measuresVos!=null">
-        <ul class="measuresVos">
-          <li v-for="(item,index) in form.measuresVos" :key="index">{{item.content}}</li>
-        </ul>
-      </el-form-item>
       <el-form-item label="附件">
         <ul class="measuresVos">
-          <li v-for="(item,index) in form.files" :key="index">
+          <li v-for="(item,index) in files" :key="index">
             <el-link
               type="primary"
               :underline="false"
@@ -48,10 +42,11 @@
           </li>
         </ul>
       </el-form-item>
-      <el-form-item label="下发措施" v-if="form.treeData!=null&&form.treeData.length>0">
-        <childMeasuresSimp :data="form.treeData" :id="form.id" />
+      <el-form-item label="下发措施" v-if="form.firstLevelMeasure!=null">
+        <childMeasures :data="form.firstLevelMeasure" :hiddenField="['审核']" :source="fullscreen?'smart':'myIssued'" />
       </el-form-item>
     </el-form>
+
     <div slot="footer" class="dialog-footer" v-if="!fullscreen">
       <el-button type="primary" @click="cancel">取消</el-button>
       <!-- <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button> -->
@@ -60,20 +55,24 @@
 </template>
 
 <script>
-import { riskNoticeDetail } from "@/api/risk";
-import childMeasuresSimp from './childMeasuresSimp'
+import { riskNoticeDetail, riskNoticeLazyProcessChart } from "@/api/risk";
+import childMeasures from './childMeasures'
 import leaderApprvalRecord from './leaderApprvalRecord'
 import htmlContent from '@/components/common/htmlContent'
 import transactor from '@/components/common/transactor'
+import charts from '@/components/Charts'
 export default {
-  components: { childMeasuresSimp, leaderApprvalRecord, htmlContent, transactor },
+  components: { childMeasures, leaderApprvalRecord, htmlContent, transactor, charts },
   data() {
     return {
       loading: false,
       dialog: false,
       dialogLoading: false,
       form: {},
-      baseApi: process.env.VUE_APP_BASE_API
+      files: [],
+      baseApi: process.env.VUE_APP_BASE_API,
+      tabIndex: "1",
+      chartData: {}
     };
   },
   props: {
@@ -82,7 +81,67 @@ export default {
       default: false
     }
   },
+  computed: {
+    noticeComments() {
+      if (this.form.noticeComments) {
+        return this.form.noticeComments;
+      }
+      return []
+    },
+  },
+  watch: {
+    tabIndex(val) {
+      if (val == '2') {
+        this.$refs.charts.resizeHandler();
+        this.$refs.charts.chart.showLoading();
+        riskNoticeLazyProcessChart(this.form.id).then(res => {
+          if (res.code != '200') {
+            this.$message.error(res.msg);
+          } else {
+            this.chartData = {
+              tooltip: {
+                trigger: 'item',
+                triggerOn: 'mousemove'
+              },
+              series: [
+                {
+                  type: 'tree',
+                  data: [res.obj],
+                  orient: 'TB',
+                  symbolSize: 10,
+                  label: {
+                    position: 'top',
+                    verticalAlign: 'middle',
+                    align: 'center',
+                    // fontSize: 9
+                  },
+                  leaves: {
+                    label: {
+                      position: 'bottom',
+                      verticalAlign: 'middle',
+                      align: 'center'
+                    }
+                  },
+                  tooltip: {
+                    formatter: '措施内容:{c}'
+                  },
+                  expandAndCollapse: false, // 节点展开
+                }
+              ]
+            }
+            this.$refs.charts.chart.hideLoading();
+            this.$refs.charts.chart.on("click", (params) => {
+              console.log(params);
+            })
+          }
+        })
+      }
+    }
+  },
   methods: {
+    getUrl(url) {
+      return process.env.VUE_APP_BASE_API + url;
+    },
     cancel() {
       this.resetForm();
     },
@@ -90,6 +149,8 @@ export default {
       this.resetForm();
     },
     resetForm() {
+      this.tabIndex = "1";
+      this.chartData = {};
       this.dialog = false;
     },
   },

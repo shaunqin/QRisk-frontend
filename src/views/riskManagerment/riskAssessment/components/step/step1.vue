@@ -1,7 +1,15 @@
 <template>
   <div>
     <el-card header="详细信息">
-      <el-form size="small" label-width="80px" class="info" inline>
+      <el-form
+        ref="form"
+        :rules="formRules"
+        size="small"
+        label-width="80px"
+        class="info"
+        inline
+        :disabled="formEnable"
+      >
         <el-row :gutter="10">
           <el-col :span="10">
             <el-form-item label="编号">{{data.no}}</el-form-item>
@@ -15,7 +23,7 @@
               size="mini"
               v-if="noticeEnable"
               @click="noticeManager"
-            >提醒风险管理员办理</el-button>
+            >转风险管理员办理</el-button>
           </el-col>
         </el-row>
         <el-row :gutter="10">
@@ -32,30 +40,13 @@
             <el-form-item label="通知内容" v-if="data.type!='2'">{{ data.noteContent }}</el-form-item>
           </el-col>
         </el-row>
-      </el-form>
-    </el-card>
-    <!-- 系统和工作分析记录表 -->
-    <el-card header="系统和工作分析记录表" v-if="assessmentType == '1' || assessmentType == '2'">
-      <el-form size="mini" label-width="80px" :disabled="formEnable">
-        <el-row :gutter="8">
+        <el-row :gutter="16" v-if="assessmentType == '1' || assessmentType == '2'">
           <el-col :span="8">
-            <el-form-item label="分析人">
+            <el-form-item label="分析人" prop="analysis">
               <el-input v-model="data.analysis" :disabled="formEnable"></el-input>
-            </el-form-item>
-            <el-form-item label="编号">
-              <el-input :disabled="true" v-model="data.analysisNo"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <!-- <el-form-item label="分析单位">
-              <department
-                :value="data.analysisDept"
-                @change="deptAnalysisChange($event, 'analysisDept')"
-                :disabled="formEnable"
-                :url="deptPath"
-                :path="departmentParams"
-              ></department>
-            </el-form-item>-->
             <el-form-item label="批准日期">
               <el-date-picker
                 v-model="data.approvalDate"
@@ -66,18 +57,42 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <!-- <el-form-item label="标题">
-              <el-input
-                v-model="data.analysisTitle"
-                :disabled="formEnable"
-              ></el-input>
-            </el-form-item>-->
             <el-form-item label="批准人">
               <el-input :disabled="true" v-model="data.approval"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
+    </el-card>
+    <!-- 系统和工作分析记录表 -->
+    <el-card header="系统和工作分析记录表" v-if="assessmentType == '1' || assessmentType == '2'">
+      <!-- <el-form size="mini" label-width="80px" :disabled="formEnable">
+        <el-row :gutter="8">
+          <el-col :span="8">
+            <el-form-item label="分析人">
+              <el-input v-model="data.analysis" :disabled="formEnable"></el-input>
+            </el-form-item>
+            <el-form-item label="编号">
+              <el-input :disabled="true" v-model="data.analysisNo"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="批准日期">
+              <el-date-picker
+                v-model="data.approvalDate"
+                value-format="yyyy-MM-dd"
+                style="width: 100%"
+                :picker-options="pickerOptions"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="批准人">
+              <el-input :disabled="true" v-model="data.approval"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>-->
       <el-row>
         <el-col :span="24">
           <el-button
@@ -1173,6 +1188,9 @@ export default {
         },
       },
       // formHairdown: {},
+      formRules: {
+        analysis: [{ required: true, message: '分析人不能为空', trigger: 'blur' }],
+      },
     }
   },
   props: {
@@ -1515,7 +1533,7 @@ export default {
       })
     },
     reportDoSubmit(bool) {
-      if(data.step == '1') {
+      if (data.step == '1') {
         this.$parent.$parent.init()
         this.$parent.resetForm()
       } else {

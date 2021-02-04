@@ -5,17 +5,17 @@
     </div>
     <!--表格渲染-->
     <el-table v-loading="loading" :data="data" size="small" :stripe="true" style="width: 100%;">
-      <el-table-column prop="no" label="编号" />
+      <el-table-column prop="no" label="编号" width="140" />
       <el-table-column prop="hiddenName" label="隐患名称" />
-      <el-table-column prop="deptName" label="部门" />
-      <el-table-column prop="findTime" label="发现时间" />
-      <el-table-column prop="sourceName" label="来源" />
-      <el-table-column prop="typeName" label="类型" />
-      <el-table-column prop="levelsName" label="等级" />
-      <el-table-column prop="businessName" label="涉及业务" />
-      <el-table-column prop="processName" label="涉及流程" />
-      <el-table-column prop="supervisoryUnit" label="监管单位" />
-      <el-table-column prop="rectificationProgress" label="整改进展" />
+      <el-table-column prop="deptName" label="部门" width="130" />
+      <el-table-column prop="findTime" label="时间" width="100" />
+      <!-- <el-table-column prop="sourceName" label="来源" /> -->
+      <!-- <el-table-column prop="typeName" label="类型" /> -->
+      <el-table-column prop="levelsName" label="等级" width="100" />
+      <!-- <el-table-column prop="businessName" label="涉及业务" /> -->
+      <!-- <el-table-column prop="processName" label="涉及流程" /> -->
+      <!-- <el-table-column prop="supervisoryUnit" label="监管单位" /> -->
+      <el-table-column prop="rectificationProgress" label="整改进展" width="100" />
       <el-table-column label="操作" width="100px">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="detail(scope.row.id)" icon="el-icon-edit"></el-button>

@@ -143,7 +143,8 @@ export default {
         formId: 0,
         processFlag: "1",
         sqlUserId: "",
-        hiddenDangerList: []
+        hiddenDangerList: [],
+        noHiddenDanger: "0"
       };
       if (this.fullscreen) {
         window.close();

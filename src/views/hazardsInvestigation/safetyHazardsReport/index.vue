@@ -11,22 +11,35 @@
             <el-option label="单次任务" value="2"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="反馈时间">
+        <el-form-item label="部门">
+          <department
+            class="mini"
+            :value="form.deptPath"
+            @change="deptChange"
+            style="width:180px;"
+          />
+        </el-form-item>
+        <el-form-item label="时间">
+          <el-radio-group v-model="dateType" size="mini">
+            <el-radio-button label="year">年</el-radio-button>
+            <el-radio-button label="month">年月</el-radio-button>
+          </el-radio-group>
+          <el-date-picker
+            key="year"
+            v-model="form.date"
+            value-format="yyyy-MM"
+            type="year"
+            v-if="dateType=='year'"
+            style="width:130px"
+          ></el-date-picker>
           <el-date-picker
             key="month"
             v-model="form.date"
             value-format="yyyy-MM"
             type="month"
+            v-if="dateType=='month'"
             style="width:130px"
           ></el-date-picker>
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-select v-model="form.status2" style="width:130px" clearable>
-            <el-option label="初始化" value="0"></el-option>
-            <el-option label="待完成" value="1"></el-option>
-            <el-option label="已完成" value="2"></el-option>
-            <el-option label="已取消" value="3"></el-option>
-          </el-select>
         </el-form-item>
         <el-form-item label>
           <el-button type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
@@ -34,20 +47,45 @@
         </el-form-item>
       </el-form>
       <el-form :model="form" size="mini" inline v-if="tabIndex==2||tabIndex==3">
-        <el-form-item label="流程状态">
-          <el-input v-model="form.name"></el-input>
+        <el-form-item label="任务名称">
+          <el-input v-model="form.businessTitle"></el-input>
         </el-form-item>
-        <el-form-item label="发起人">
-          <el-input v-model="form.starter"></el-input>
+        <el-form-item label="部门">
+          <department
+            class="mini"
+            :value="form.deptPath"
+            @change="deptChange"
+            style="width:180px;"
+          />
         </el-form-item>
-        <el-form-item label="发起时间">
+        <el-form-item label="时间">
+          <el-radio-group v-model="dateType" size="mini">
+            <el-radio-button label="year">年</el-radio-button>
+            <el-radio-button label="month">年月</el-radio-button>
+          </el-radio-group>
           <el-date-picker
+            key="year"
+            v-model="form.date"
+            value-format="yyyy-MM"
+            type="year"
+            v-if="dateType=='year'"
+            style="width:130px"
+          ></el-date-picker>
+          <el-date-picker
+            key="month"
+            v-model="form.date"
+            value-format="yyyy-MM"
+            type="month"
+            v-if="dateType=='month'"
+            style="width:130px"
+          ></el-date-picker>
+          <!-- <el-date-picker
             key="daterange"
             v-model="date"
             value-format="yyyy-MM-dd"
             type="daterange"
             style="width:230px"
-          ></el-date-picker>
+          ></el-date-picker>-->
         </el-form-item>
         <el-form-item label>
           <el-button type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
@@ -106,8 +144,9 @@ import tab3 from './components/tabs/tab3'
 import tab4 from './components/tabs/tab4'
 import { queryTodoCount } from '@/api/hazards'
 import { mapGetters } from 'vuex'
+import department from '@/components/Department'
 export default {
-  components: { tab1, tab2, tab3, tab4 },
+  components: { tab1, tab2, tab3, tab4, department },
   data() {
     return {
       isAdd: false,
@@ -116,7 +155,8 @@ export default {
       form: {},
       queryForm: {},
       date: "",
-      count: 0
+      count: 0,
+      dateType: 'year'
     };
   },
   created() {
@@ -174,6 +214,9 @@ export default {
       this.form = {};
       this.date = "";
       this.toQuery();
+    },
+    deptChange(val) {
+      this.form.deptPath = val;
     }
   },
 };
@@ -186,5 +229,8 @@ export default {
 
 /deep/ .el-badge__content.is-fixed {
   top: 10px;
+}
+/deep/ .vue-treeselect--append-to-body {
+    z-index: 1 !important;
 }
 </style>

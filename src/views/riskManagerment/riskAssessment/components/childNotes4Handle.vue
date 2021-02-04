@@ -3,7 +3,7 @@
     <el-table :data="data.childNotes" size="mini">
       <el-table-column label="下发部门" prop="issueDeptName" width="140" align="left" />
       <el-table-column label="截止日期" prop="endTime" />
-      <el-table-column label="通知内容" prop="noteContent" min-width="100" />
+      <!-- <el-table-column label="通知内容" prop="noteContent" min-width="100" /> -->
       <el-table-column label="下发人" prop="creater" />
       <el-table-column label="填报人" prop="reporter" />
       <el-table-column label="状态">

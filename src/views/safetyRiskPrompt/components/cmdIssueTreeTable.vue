@@ -19,9 +19,9 @@
       <el-table-column label="截止日期">
         <template slot-scope="{row}">{{row.data.deadline}}</template>
       </el-table-column>
-      <el-table-column label="措施内容">
+      <!-- <el-table-column label="措施内容">
         <template slot-scope="{row}">{{row.data.content}}</template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="落实情况">
         <template slot-scope="{row}">{{row.data.impl}}</template>
       </el-table-column>

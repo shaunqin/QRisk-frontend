@@ -34,7 +34,7 @@
         </template>
       </el-table-column>
       <!-- <el-table-column prop="background" label="背景" min-width="150" show-overflow-tooltip />
-      <el-table-column prop="existingRisk" label="安全风险" min-width="150" show-overflow-tooltip /> -->
+      <el-table-column prop="existingRisk" label="安全风险" min-width="150" show-overflow-tooltip />-->
       <el-table-column prop="responseDept" label="责任单位" show-overflow-tooltip />
       <el-table-column label="拟制人">
         <template slot-scope="{ row }">{{ row.issueName }}[{{ row.issuer }}]</template>
@@ -67,7 +67,7 @@ import initData from "@/mixins/initData";
 import { format, formatShortDate } from "@/utils/datetime";
 import eform from "./form";
 import edetail from "./detail2";
-import { riskNoticeDetail, getRiskNoticeNo, queryRiskMgrDept, verifyPerms, riskNoticeSubDetail2 } from "@/api/risk";
+import { riskNoticeDetail, getRiskNoticeNo, queryRiskMgrDept, verifyPerms, riskNoticeSubDetail } from "@/api/risk";
 import { mapGetters } from "vuex";
 export default {
   components: { eform, edetail },
@@ -132,14 +132,17 @@ export default {
         })
     },
     detail(row) {
-      this.loading = true;
-      riskNoticeSubDetail2(row.id).then((res) => {
-        this.loading = false;
+      let _this = this.$refs.detail;
+      _this.dialogLoading = true;
+      _this.dialog = true;
+      riskNoticeSubDetail(row.id).then((res) => {
+        // this.false = true;
+        _this.dialogLoading = false;
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
-          let _this = this.$refs.detail;
           _this.form = res.obj;
+          _this.files = res.obj.files;
           _this.dialog = true;
         }
       });

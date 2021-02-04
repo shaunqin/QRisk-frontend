@@ -51,13 +51,13 @@
       <el-form-item label="部门措施">
         <childMeasures :data="data.deptsMeasures" :hiddenField="['审核']" />
       </el-form-item>
-      <el-form-item label="风险提示处理记录" v-if="noticeComments.length>0">
+      <!-- <el-form-item label="风险提示处理记录" v-if="noticeComments.length>0">
         <leaderApprvalRecord
           key="leaderApprvalRecord"
           :data="noticeComments"
           type="safety_risk_notice"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item key="reviewerInfo" label="办理人" v-if="reviewerInfo.length>0">
         <transactor :data="reviewerInfo" width="100%" />
       </el-form-item>

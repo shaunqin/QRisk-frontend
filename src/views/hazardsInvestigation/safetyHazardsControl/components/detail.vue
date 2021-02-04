@@ -126,7 +126,7 @@
       <el-table-column type="index" width="50" />
       <el-table-column label="等效措施">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.measures" size="mini" placeholder></el-input>
+          <el-input v-model="scope.row.measures" size="mini" type="textarea" rows="3"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="责任人">
@@ -152,12 +152,12 @@
       </el-table-column>
       <el-table-column prop="nn" label="措施实施情况跟踪">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.implementationOfMeasures" size="mini"></el-input>
+          <el-input v-model="scope.row.implementationOfMeasures" size="mini"  type="textarea" rows="3"></el-input>
         </template>
       </el-table-column>
       <el-table-column prop="oo" label="治理结果情况跟踪">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.governanceResults" size="mini"></el-input>
+          <el-input v-model="scope.row.governanceResults" size="mini"  type="textarea" rows="3"></el-input>
         </template>
       </el-table-column>
       <el-table-column label width="80">

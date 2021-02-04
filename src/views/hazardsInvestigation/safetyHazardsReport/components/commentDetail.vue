@@ -7,7 +7,11 @@
     :title="'详情'"
     custom-class="big_dialog"
   >
-    <fillinForm ref="fillinForm" :disabled="true" :data="form" />
+    <el-select v-model="form.noHiddenDanger" placeholder size="mini" style="margin:10px 0" disabled>
+      <el-option label="本月有新增" value="0"></el-option>
+      <el-option label="本月无新增" value="1"></el-option>
+    </el-select>
+    <fillinForm ref="fillinForm" :disabled="true" :data="form" v-show="form.noHiddenDanger!=1" />
 
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>

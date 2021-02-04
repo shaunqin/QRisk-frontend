@@ -9,7 +9,7 @@
           size="mini"
           v-if="noticeEnable"
           @click="noticeManager"
-        >提醒风险管理员办理</el-button>
+        >转风险管理员办理</el-button>
       </div>
       <baseinfo :data="data" />
     </el-card>

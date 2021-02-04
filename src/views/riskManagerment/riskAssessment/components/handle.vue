@@ -73,12 +73,7 @@
         :assessmentType="assessmentType"
         :source="fullscreen ? 'smart' : ''"
       />
-      <hairdown
-        ref="hairdown"
-        :data="data"
-        :form="form"
-        :source="fullscreen ? 'smart' : ''"
-      />
+      <hairdown ref="hairdown" :data="data" :form="form" :source="fullscreen ? 'smart' : ''" />
       <!-- 风险评价报告 -->
       <report ref="reportRef" :formId="formId" @submit="reportSubmit" @do-submit="reportDoSubmit" />
       <!-- 抄送 -->
@@ -87,19 +82,19 @@
 
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel" v-if="!fullscreen">取消</el-button>
-      <el-button :loading="loading" type="warning" @click="doSubmitSave(false)" v-if="!onlyLeader"
-        >暂存</el-button
-      >
-      <el-button :loading="loading" type="primary" @click="doSubmit"
-        >提交</el-button
-      >
+      <el-button
+        :loading="loading"
+        type="warning"
+        @click="doSubmitSave(false)"
+        v-if="!onlyLeader"
+      >暂存</el-button>
+      <el-button :loading="loading" type="primary" @click="doSubmit">提交</el-button>
       <el-button
         v-if="(step == 1 || step == 4) && data.hiddenIssue && data.type != '2'"
         :loading="hdLoading"
         type="success"
         @click="doHairdown"
-        >下发</el-button
-      >
+      >下发</el-button>
       <!-- <el-button v-if="step==2||step==6" :loading="loading" type="primary" @click="doSubmit">确定</el-button> -->
     </div>
   </el-dialog>
@@ -189,6 +184,10 @@ export default {
       this.loadCount()
     },
     doSubmit() {
+      if (!this.data.analysis) {
+        this.$message.error("分析人不能为空");
+        return;
+      }
       switch (this.step) {
         case 1:
         case 3:
@@ -349,6 +348,10 @@ export default {
       })
     },
     doSubmitSave(submitBool) {
+      if (!this.data.analysis) {
+        this.$message.error("分析人不能为空");
+        return;
+      }
       this.loading = true
       specialRiskSaveHazard(this.data).then((res) => {
         if (res.code != '200') {
@@ -358,9 +361,9 @@ export default {
             this.formId = this.data.id
             this.$refs.reportRef.disabled = this.data.step != '1'
             this.$refs.reportRef.submitBool = submitBool
-            this.$refs.reportRef.dialog = this.data.hiddenReport?false:true
+            this.$refs.reportRef.dialog = this.data.hiddenReport ? false : true
           } else {
-            if(submitBool) {
+            if (submitBool) {
               this.reportSubmit(submitBool)
             } else {
               this.$message.success('填报成功')
@@ -373,7 +376,7 @@ export default {
       })
     },
     reportSubmit(bool) {
-      if(bool) {
+      if (bool) {
         this.submitStep1()
       }
     },

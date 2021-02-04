@@ -42,22 +42,23 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column label="状态" width="80" v-if="!hiddenField.includes('状态')">
+        <template slot-scope="{row}">
+          <span v-if="row.status==0">未完成</span>
+          <span v-if="row.status==1">未完成</span>
+          <span v-if="row.status==2">未完成</span>
+          <span v-if="row.status==3">已完成</span>
+          <span v-if="row.status==4">未完成</span>
+          <span v-if="row.status == 5">已取消</span>
+        </template>
+      </el-table-column>
       <el-table-column label="办理/审批记录" width="130">
         <template slot-scope="{row}">
           <el-button type="text" size="mini" @click="showRecord(row)">详情</el-button>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="状态" width="80">
-        <template slot-scope="{row}">
-          <span v-if="row.status==0">待上报</span>
-          <span v-if="row.status==1">已下发</span>
-          <span v-if="row.status==2">待审核</span>
-          <span v-if="row.status==3">通过</span>
-          <span v-if="row.status==4">驳回</span>
-          <span v-if="row.status == 5">已取消</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="办理人" width="80">
+
+      <!-- <el-table-column label="办理人" width="80">
         <template slot-scope="{row}">
           <div v-if="row.reviewerInfo==null||row.reviewerInfo.length==0">-</div>
           <el-popover v-else placement="left">

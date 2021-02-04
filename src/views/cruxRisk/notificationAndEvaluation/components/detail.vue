@@ -121,7 +121,7 @@
       <transactor :data="data.reviewerInfo" width="100%" />
     </el-card>
 
-    <el-card header="下发记录" key="childNotes" v-if="data.hiddenSubNotes">
+    <el-card header="办理&审批记录" key="childNotes" v-if="data.hiddenSubNotes">
       <cmdIssueTreeTable :data="data" :showIssueRecord="true" />
     </el-card>
 

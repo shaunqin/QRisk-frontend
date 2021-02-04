@@ -8,7 +8,7 @@
       :highlight-current-row="true"
       style="width: 100%;"
     >
-      <el-table-column prop="businessTitle" label="任务标题" show-overflow-tooltip />
+      <el-table-column prop="businessTitle" label="任务名称" show-overflow-tooltip />
       <el-table-column prop="deptName" label="部门" show-overflow-tooltip />
       <el-table-column prop="month" label="月份" show-overflow-tooltip />
       <el-table-column label="上报人" width="130">
@@ -16,8 +16,8 @@
           <div>{{renderTbCol(row)}}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="createBy" label="发起人" width="130" />
-      <el-table-column prop="createTime" label="发起时间" width="140" />
+      <!-- <el-table-column prop="createBy" label="发起人" width="130" />
+      <el-table-column prop="createTime" label="发起时间" width="140" /> -->
       <el-table-column label="操作" width="110">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="detail(row)">查看详情</el-button>

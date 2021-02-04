@@ -18,7 +18,15 @@
             class="next-menu-item pan-btn blue-btn"
             v-for="item in routes.find(a=>a.path=='infoDatabase').children"
             :key="item.path"
-          >{{generateTitle(item.meta.title)}}</router-link>
+          >
+            <!-- <el-tooltip
+              v-if="item.meta.tip"
+              :content="item.meta.tip"
+              placement="right"
+            >{{generateTitle(item.meta.title)}}</el-tooltip>
+            <span v-else>{{generateTitle(item.meta.title)}}</span> -->
+            {{generateTitle(item.meta.title)}}
+          </router-link>
         </div>
       </el-col>
       <el-col :span="18">
@@ -49,11 +57,11 @@ export default {
       }
     });
   },
-  mounted () {
+  mounted() {
     // 点击待办数字进来
-    if(this.$store.getters.evaluateReportTabIndex=='4'){
+    if (this.$store.getters.evaluateReportTabIndex == '4') {
       this.$router.push({
-        path:'/dataAnalysis/evaluateReportMonthly/index'
+        path: '/dataAnalysis/evaluateReportMonthly/index'
       })
     }
   },
@@ -108,7 +116,7 @@ export default {
     //   background: #0062ff;
     // }
   }
-  /deep/ .scrollbar-wrapper{
+  /deep/ .scrollbar-wrapper {
     height: calc(100vh - 72px);
   }
 }
