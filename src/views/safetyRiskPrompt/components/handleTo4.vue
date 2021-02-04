@@ -111,7 +111,7 @@ export default {
           if (this.isSecChild) {
             // 刷新父页面-已下发措施
             if (this.source == 'myIssued') {
-              this.$parent.$parent.$parent.$parent.$parent.$parent.detail({ id: this.form.formId });
+              this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.$parent.detail({ id: this.form.formId });
             } else if (this.source == "smart") {
               location.reload();
             }
