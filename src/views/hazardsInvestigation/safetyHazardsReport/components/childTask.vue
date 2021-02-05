@@ -57,6 +57,12 @@
           <el-button v-else type="primary" size="mini" @click="doHandle(row)">办理</el-button>
         </template>
       </el-table-column>
+      <el-table-column label="操作" width="80" v-if="!hiddenField.includes('操作')">
+        <template slot-scope="{row}">
+          <span v-if="!row.rollback">-</span>
+          <el-button v-else type="primary" size="mini" @click="doRollback(row)">撤回</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <list2copy ref="list2copy" :readonly="readonly" />
     <handle ref="handle" :source="source" />
@@ -68,7 +74,7 @@
 <script>
 import { formatShortDate } from "@/utils/datetime";
 import approvalRecord from "./approvalRecord";
-import { queryControlListDetail, queryHazards, querySubIssueTreeData, queryApproveHistory } from "@/api/hazards";
+import { queryControlListDetail, queryHazards, querySubIssueTreeData, queryApproveHistory,hiddenDangerRollback } from "@/api/hazards";
 import list2copy from "./list2copy";
 import handle from "./handlTo2";
 import cmdIssue from "./cmdIssueTreeTable";
@@ -98,6 +104,10 @@ export default {
     source: {
       type: String,
       default: "",
+    },
+    id: {
+      type: String,
+      default: ""
     },
   },
   methods: {
@@ -171,6 +181,22 @@ export default {
         }
       })
 
+    },
+    doRollback(row) {
+      if (this.id) {
+        this.$confirm("确认撤回吗?").then(() => {
+          this.tbLoading = true;
+          hiddenDangerRollback(row.id).then(res => {
+            this.tbLoading = false;
+            if (res.code != '200') {
+              this.$message.error(res.msg);
+            } else {
+              this.$message.success("撤回成功")
+              this.$parent.$parent.$parent.$parent.detail({ formId: this.id, businessType: 5 });
+            }
+          })
+        }).catch(() => { })
+      }
     }
   },
 };

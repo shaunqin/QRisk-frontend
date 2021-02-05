@@ -79,7 +79,7 @@ export default {
     formatShortDate,
     beforeInit() {
       this.url = `/riskmgr_mgr/hidden_danger/query/queryTodo/${this.page}/${this.size}`;
-      this.params = { ...this.params, ...this.queryForm }
+      this.params = { ...this.queryForm }
       return true;
     },
     subHandle(row) {

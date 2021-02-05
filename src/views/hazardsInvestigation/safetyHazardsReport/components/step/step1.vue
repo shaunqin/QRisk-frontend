@@ -14,7 +14,7 @@
       <baseinfo :data="data" />
     </el-card>
     <el-card header="下发任务" key="childTask" v-if="childTask.length>0">
-      <childTask :data="childTask" :hiddenField="[]" :source="fullscreen?'smart':''" />
+      <childTask :data="childTask" :hiddenField="['操作']" :source="fullscreen?'smart':''" />
     </el-card>
     <el-select
       v-model="form.noHiddenDanger"

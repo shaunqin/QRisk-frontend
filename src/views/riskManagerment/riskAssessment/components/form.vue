@@ -7,13 +7,7 @@
     :title="isAdd ? '新增' : '编辑'"
     custom-class="big_dialog"
   >
-    <el-form
-      ref="form"
-      :model="form"
-      :rules="formRules"
-      size="small"
-      label-width="100px"
-    >
+    <el-form ref="form" :model="form" :rules="formRules" size="small" label-width="100px">
       <el-row :gutter="16">
         <el-col :span="12" v-if="isAdd">
           <el-form-item label="类型">
@@ -35,7 +29,7 @@
                 <el-input v-model="form.title"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="12" v-if="form.type=='1'">
               <el-form-item label="截止日期">
                 <el-date-picker
                   v-model="form.endTime"
@@ -49,12 +43,7 @@
         </el-col>
         <el-col :span="24" v-if="form.type != '2'" key="noteContent">
           <el-form-item label="通知内容">
-            <el-input
-              v-model="form.noteContent"
-              style="width: 100%"
-              type="textarea"
-              rows="4"
-            />
+            <el-input v-model="form.noteContent" style="width: 100%" type="textarea" rows="4" />
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -71,9 +60,7 @@
         </el-col>
         <el-col :span="24">
           <el-form-item prop="issueDepts" key="issueDepts">
-            <template slot="label">
-              {{ form.type != '2' ? '下发部门' : '分析单位' }}
-            </template>
+            <template slot="label">{{ form.type != '2' ? '下发部门' : '分析单位' }}</template>
             <deptByRole
               v-if="form.type != '2'"
               :value="form.issueDepts"
@@ -101,8 +88,7 @@
                 v-show="item != null"
                 :href="getUrl(item ? item.filePath : '')"
                 target="_blank"
-                >{{ item ? item.originFileName : '' }}</el-link
-              >
+              >{{ item ? item.originFileName : '' }}</el-link>
               <el-popconfirm title="确定删除该附件吗？" @onConfirm="del(item)">
                 <i
                   class="el-icon-delete"
@@ -132,18 +118,13 @@
               size="mini"
               icon="el-icon-plus"
               @click="addCol"
-              >新增一行</el-button
-            >
+            >新增一行</el-button>
           </el-col>
         </el-row>
         <el-table :data="form.specialRiskAnalyses" size="mini" max-height="500">
           <el-table-column label="系统" min-width="130">
             <template slot-scope="{ row }">
-              <el-select
-                v-model="row.product"
-                placeholder="请选择系统"
-                clearable
-              >
+              <el-select v-model="row.product" placeholder="请选择系统" clearable>
                 <el-option label="维修工程" value="维修工程"></el-option>
               </el-select>
             </template>
@@ -179,107 +160,62 @@
           <el-table-column label="流程要素">
             <el-table-column label="人" min-width="130">
               <template slot-scope="{ row }">
-                <el-input
-                  v-model="row.processHuman"
-                  type="textarea"
-                  rows="1"
-                  placeholder
-                ></el-input>
+                <el-input v-model="row.processHuman" type="textarea" rows="1" placeholder></el-input>
               </template>
             </el-table-column>
             <el-table-column label="机" min-width="130">
               <template slot-scope="{ row }">
-                <el-input
-                  v-model="row.processMachine"
-                  type="textarea"
-                  rows="1"
-                  placeholder
-                ></el-input>
+                <el-input v-model="row.processMachine" type="textarea" rows="1" placeholder></el-input>
               </template>
             </el-table-column>
             <el-table-column label="料" min-width="130">
               <template slot-scope="{ row }">
-                <el-input
-                  v-model="row.processMaterial"
-                  type="textarea"
-                  rows="1"
-                  placeholder
-                ></el-input>
+                <el-input v-model="row.processMaterial" type="textarea" rows="1" placeholder></el-input>
               </template>
             </el-table-column>
             <el-table-column label="法" min-width="130">
               <template slot-scope="{ row }">
-                <el-input
-                  v-model="row.processRegulation"
-                  type="textarea"
-                  rows="1"
-                  placeholder
-                ></el-input>
+                <el-input v-model="row.processRegulation" type="textarea" rows="1" placeholder></el-input>
               </template>
             </el-table-column>
             <el-table-column label="环" min-width="130">
               <template slot-scope="{ row }">
-                <el-input
-                  v-model="row.processEnvironment"
-                  type="textarea"
-                  rows="1"
-                  placeholder
-                ></el-input>
+                <el-input v-model="row.processEnvironment" type="textarea" rows="1" placeholder></el-input>
               </template>
             </el-table-column>
           </el-table-column>
           <el-table-column label="流程分析">
             <el-table-column label="输入" min-width="130">
               <template slot-scope="{ row }">
-                <el-input
-                  v-model="row.input"
-                  type="textarea"
-                  rows="1"
-                  placeholder
-                ></el-input>
+                <el-input v-model="row.input" type="textarea" rows="1" placeholder></el-input>
               </template>
             </el-table-column>
             <el-table-column label="输出" min-width="130">
               <template slot-scope="{ row }">
-                <el-input
-                  v-model="row.output"
-                  type="textarea"
-                  rows="1"
-                  placeholder
-                ></el-input>
+                <el-input v-model="row.output" type="textarea" rows="1" placeholder></el-input>
               </template>
             </el-table-column>
           </el-table-column>
           <el-table-column label fixed="right" width="80">
             <template slot-scope="{ $index }">
-              <el-button
-                type="danger"
-                size="small"
-                icon="el-icon-delete"
-                @click="delCol($index)"
-              ></el-button>
+              <el-button type="danger" size="small" icon="el-icon-delete" @click="delCol($index)"></el-button>
             </template>
           </el-table-column>
         </el-table>
       </el-card>
 
       <!-- 危险源清单 -->
-      <el-card
-        class="chead"
-        key="2"
-        style="margin-top: 20px"
-        v-if="form.type == '2' || !isAdd"
-      >
-      <div slot="header" class="hslot">
-        <span>危险源</span>
-        <el-button
-          v-if="assessmentType != '4' && !isAdd"
-          type="text"
-          icon="el-icon-tickets"
-          @click="showReport"
-          :disabled="!form.hiddenReport"
-        >风险报告</el-button>
-      </div>
+      <el-card class="chead" key="2" style="margin-top: 20px" v-if="form.type == '2' || !isAdd">
+        <div slot="header" class="hslot">
+          <span>危险源</span>
+          <el-button
+            v-if="assessmentType != '4' && !isAdd"
+            type="text"
+            icon="el-icon-tickets"
+            @click="showReport"
+            :disabled="!form.hiddenReport"
+          >风险报告</el-button>
+        </div>
         <el-row :gutter="8">
           <el-col :span="8">
             <el-form-item label="分析人">
@@ -295,7 +231,7 @@
                 :value="form.analysisDept"
                 @change="deptChange($event, 'analysisDept')"
               ></department>
-            </el-form-item> -->
+            </el-form-item>-->
             <el-form-item label="批准日期">
               <el-date-picker
                 v-model="form.approvalDate"
@@ -308,27 +244,16 @@
           <el-col :span="8">
             <!-- <el-form-item label="标题">
               <el-input v-model="form.analysisTitle"></el-input>
-            </el-form-item> -->
+            </el-form-item>-->
             <el-form-item label="批准人">
               <el-input :disabled="true" v-model="form.approval"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-badge :value="form.hazardList.length">
-          <el-button
-            type="primary"
-            size="mini"
-            @click="addHazard"
-            style="margin-bottom: 10px"
-            >新增危险源</el-button
-          >
+          <el-button type="primary" size="mini" @click="addHazard" style="margin-bottom: 10px">新增危险源</el-button>
         </el-badge>
-        <el-card
-          shadow="never"
-          class="chead"
-          v-for="(item, index) in form.hazardList"
-          :key="index"
-        >
+        <el-card shadow="never" class="chead" v-for="(item, index) in form.hazardList" :key="index">
           <div slot="header" class="clearfix">
             <span>危险源{{ index + 1 }}</span>
           </div>
@@ -353,10 +278,7 @@
               />
             </el-form-item>
             <el-form-item label="管理流程">
-              <el-input
-                v-model="item.managementProcess"
-                @input="$forceUpdate()"
-              ></el-input>
+              <el-input v-model="item.managementProcess" @input="$forceUpdate()"></el-input>
             </el-form-item>
             <el-form-item label="危险源层级一" label-width="115px">
               <el-select
@@ -402,8 +324,7 @@
                   :key="childItem.diskNo"
                   :label="childItem.diskName"
                   :value="childItem.diskNo"
-                >
-                </el-option>
+                ></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="可能导致的风险" label-width="115px">
@@ -419,8 +340,7 @@
                   :key="childItem.riskNo"
                   :label="childItem.riskName"
                   :value="childItem.riskNo"
-                >
-                </el-option>
+                ></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="可能性">
@@ -475,22 +395,12 @@
             </el-row>
           </el-form>
           <!-- 风险表格 -->
-          <el-button type="info" size="mini" class="at" @click="addSrmRow(item)"
-            >新增一行</el-button
-          >
-          <el-table
-            :data="item.specialRiskMeasureList"
-            size="small"
-            max-height="400px"
-          >
+          <el-button type="info" size="mini" class="at" @click="addSrmRow(item)">新增一行</el-button>
+          <el-table :data="item.specialRiskMeasureList" size="small" max-height="400px">
             <el-table-column type="index" width="50" />
             <el-table-column label="控制措施">
               <template slot-scope="scope">
-                <el-input
-                  v-model="scope.row.controlMeasure"
-                  type="textarea"
-                  rows="3"
-                ></el-input>
+                <el-input v-model="scope.row.controlMeasure" type="textarea" rows="3"></el-input>
               </template>
             </el-table-column>
             <el-table-column label="责任单位">
@@ -524,13 +434,7 @@
             </el-table-column>
           </el-table>
           <div class="center">
-            <el-button
-              type="danger"
-              icon="el-icon-delete"
-              size="mini"
-              @click="delHazard(index)"
-              >删除</el-button
-            >
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="delHazard(index)">删除</el-button>
           </div>
         </el-card>
       </el-card>
@@ -538,20 +442,21 @@
 
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
-      <el-button :loading="loading" type="primary" @click="doSubmit(false)">{{
+      <el-button :loading="loading" type="primary" @click="doSubmit(false)">
+        {{
         form.type == '2' ? '暂存' : '确认'
-      }}</el-button>
+        }}
+      </el-button>
       <el-button
         v-if="form.type == '2'"
         type="success"
         @click="doSubmit(true)"
         :loading="loading"
-        >提交</el-button
-      >
+      >提交</el-button>
     </div>
     <selectEmplotee ref="selectEmplotee" @on-submit="doSubmit" />
-      <!-- 风险评价报告 -->
-      <report ref="reportRef" :formId="formId" @change="formIdChange" @do-submit="reportDoSubmit" />
+    <!-- 风险评价报告 -->
+    <report ref="reportRef" :formId="formId" @change="formIdChange" @do-submit="reportDoSubmit" />
   </el-dialog>
 </template>
 
@@ -678,7 +583,7 @@ export default {
     'form.issueDepts'(val) {
       if (this.form.hazardList.length > 0) {
         this.form.hazardList.map(item => {
-          if(item.specialRiskMeasureList.length > 0) {
+          if (item.specialRiskMeasureList.length > 0) {
             item.specialRiskMeasureList.map(specialItem => {
               specialItem.reponsibleDept = null
             })
@@ -769,7 +674,7 @@ export default {
               message: '添加成功',
               type: 'success',
             })
-            if(res.obj && this.form.type == '2' && !this.form.hiddenReport) {
+            if (res.obj && this.form.type == '2' && !this.form.hiddenReport) {
               this.form.id = res.obj
               this.showReport()
             }
@@ -807,7 +712,7 @@ export default {
               message: '修改成功',
               type: 'success',
             })
-            if(res.obj && this.form.type == '2' && !this.form.hiddenReport) {
+            if (res.obj && this.form.type == '2' && !this.form.hiddenReport) {
               this.form.id = res.obj
               this.showReport()
             }

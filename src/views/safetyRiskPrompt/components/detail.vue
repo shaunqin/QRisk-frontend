@@ -50,7 +50,7 @@
             </ul>
           </el-form-item>
           <el-form-item label="下发措施" v-if="form.firstLevelMeasure!=null">
-            <childMeasures :data="form.firstLevelMeasure" :hiddenField="['状态']" :source="fullscreen?'smart':'myIssued'" />
+            <childMeasures :data="form.firstLevelMeasure" :hiddenField="['状态','操作']" :source="fullscreen?'smart':'myIssued'" />
           </el-form-item>
           <el-form-item label="处理记录" v-if="noticeComments.length>0">
             <leaderApprvalRecord

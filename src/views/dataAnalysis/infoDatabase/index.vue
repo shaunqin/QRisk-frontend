@@ -19,13 +19,11 @@
             v-for="item in routes.find(a=>a.path=='infoDatabase').children"
             :key="item.path"
           >
-            <!-- <el-tooltip
-              v-if="item.meta.tip"
-              :content="item.meta.tip"
-              placement="right"
-            >{{generateTitle(item.meta.title)}}</el-tooltip>
-            <span v-else>{{generateTitle(item.meta.title)}}</span> -->
-            {{generateTitle(item.meta.title)}}
+            <el-popover v-if="item.meta.tip" :content="item.meta.tip" placement="right" trigger="hover">
+              <span slot="reference">{{generateTitle(item.meta.title)}}</span>
+            </el-popover>
+            <span v-else>{{generateTitle(item.meta.title)}}</span>
+            <!-- {{generateTitle(item.meta.title)}} -->
           </router-link>
         </div>
       </el-col>

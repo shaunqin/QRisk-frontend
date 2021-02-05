@@ -260,3 +260,11 @@ export function queryApproveHistory(id) {
         method: 'get',
     })
 }
+
+// 撤回
+export function hiddenDangerRollback(id) {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/cancelReport/${id}`,
+        method: 'post',
+    })
+}

@@ -49,7 +49,7 @@
         </ul>
       </el-form-item>
       <el-form-item label="部门措施">
-        <childMeasures :data="data.deptsMeasures" :hiddenField="['审核']" />
+        <childMeasures :id="data.id" :data="data.deptsMeasures" :hiddenField="['审核']" />
       </el-form-item>
       <!-- <el-form-item label="风险提示处理记录" v-if="noticeComments.length>0">
         <leaderApprvalRecord

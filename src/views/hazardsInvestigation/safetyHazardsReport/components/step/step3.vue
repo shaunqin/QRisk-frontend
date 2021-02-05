@@ -4,7 +4,7 @@
       <baseinfo :data="data" />
     </el-card>
     <el-card header="下发任务" key="childTask" v-if="childTask.length>0">
-      <childTask :data="childTask" :hiddenField="['审核']" />
+      <childTask :data="childTask" :hiddenField="['审核','操作']" />
     </el-card>
     <el-card header="审批记录" key="comments" v-if="comments.length>0">
       <approvalRecord :data="comments" />

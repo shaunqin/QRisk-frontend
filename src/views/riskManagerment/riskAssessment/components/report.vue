@@ -8,12 +8,7 @@
     custom-class="big_dialog"
   >
     <div style="text-align: right; margin-bottom: 5px;">
-    <el-button
-      class="mb"
-      type="warning"
-      icon="el-icon-download"
-      @click="doExport()"
-    >导出</el-button>
+      <el-button class="mb" type="warning" icon="el-icon-download" @click="doExport()">导出</el-button>
     </div>
     <el-card header="详细信息">
       <el-form class="form" size="mini" label-width="85px">
@@ -26,9 +21,11 @@
             <el-form-item label="批准人">{{ form.approval }}</el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="日期">{{
+            <el-form-item label="日期">
+              {{
               formatShortDate(form.approvalDate)
-            }}</el-form-item>
+              }}
+            </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="16">
@@ -52,24 +49,29 @@
               />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="24">
             <el-form-item label="抄送单位">
-              <department
-                class="mini"
-                :value="form.copyDept"
-                @change="deptChange($event, 'copyDept')"
-                :disabled="disabled"
-              />
+              <div style="display:flex;">
+                <el-input
+                  v-model="form.copyDept"
+                  placeholder
+                  :disabled="disabled"
+                  style="width:180px;margin-right:10px"
+                ></el-input>
+                <department
+                  class="mini"
+                  :value="copyDeptCode"
+                  @change="copyDeptCodeChange"
+                  @select="deptSelect"
+                  :disabled="disabled"
+                  style="width:180px"
+                />
+              </div>
             </el-form-item>
           </el-col>
         </el-row>
         <el-form-item label="背景描述">
-          <el-input
-            v-model="form.background"
-            type="textarea"
-            rows="5"
-            :disabled="disabled"
-          ></el-input>
+          <el-input v-model="form.background" type="textarea" rows="5" :disabled="disabled"></el-input>
         </el-form-item>
       </el-form>
     </el-card>
@@ -79,12 +81,7 @@
         <el-table-column label="可能性等级" prop="possibilityName" />
         <el-table-column label="严重性等级" prop="seriousnessName" />
         <el-table-column label="风险等级" prop="riskLevelName" />
-        <el-table-column
-          label="根原因分析"
-          prop="rootCauseAnalysis"
-          width="140"
-          show-overflow-tooltip
-        />
+        <el-table-column label="根原因分析" prop="rootCauseAnalysis" width="140" show-overflow-tooltip />
         <el-table-column
           label="可能导致的风险"
           prop="possibleRisksName"
@@ -97,9 +94,7 @@
               <li v-for="item in row.specialRiskMeasureList" :key="item.id">
                 <el-popover trigger="hover" v-if="true" placement="top">
                   <span>{{ item.controlMeasure }}</span>
-                  <div class="text" slot="reference">
-                    {{ item.controlMeasure }}
-                  </div>
+                  <div class="text" slot="reference">{{ item.controlMeasure }}</div>
                 </el-popover>
               </li>
             </ul>
@@ -111,9 +106,7 @@
               <li v-for="item in row.specialRiskMeasureList" :key="item.id">
                 <el-popover trigger="hover" v-if="true" placement="top">
                   <span>{{ item.reponsibleDeptName }}</span>
-                  <div class="text" slot="reference">
-                    {{ item.reponsibleDeptName }}
-                  </div>
+                  <div class="text" slot="reference">{{ item.reponsibleDeptName }}</div>
                 </el-popover>
               </li>
             </ul>
@@ -127,16 +120,14 @@
               </li>
             </ul>
           </template>
-        </el-table-column> -->
+        </el-table-column>-->
         <el-table-column label="完成期限" width="160" show-overflow-tooltip>
           <template slot-scope="{ row }">
             <ul class="tab-ul">
               <li v-for="item in row.specialRiskMeasureList" :key="item.id">
                 <el-popover trigger="hover" v-if="true" placement="top">
                   <span>{{ formatShortDate(item.deadline) }}</span>
-                  <div class="text" slot="reference">
-                    {{ formatShortDate(item.deadline) }}
-                  </div>
+                  <div class="text" slot="reference">{{ formatShortDate(item.deadline) }}</div>
                 </el-popover>
               </li>
             </ul>
@@ -146,13 +137,7 @@
     </el-card>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
-      <el-button
-        v-if="!disabled"
-        :loading="loading"
-        type="primary"
-        @click="doSubmit"
-        >确定</el-button
-      >
+      <el-button v-if="!disabled" :loading="loading" type="primary" @click="doSubmit">确定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -171,6 +156,7 @@ export default {
       form: {},
       disabled: false,
       submitBool: false,
+      copyDeptCode: null
     }
   },
   props: {
@@ -208,7 +194,7 @@ export default {
         } else {
           this.$message.success('操作成功')
           this.resetForm()
-          if(this.submitBool) { this.$emit('submit', true) }
+          if (this.submitBool) { this.$emit('submit', true) }
           this.$emit('doSubmit', true)
           /* this.$parent.$parent.resetForm()
           this.$parent.$parent.$parent.init() */
@@ -232,6 +218,12 @@ export default {
     },
     deptChange(val, key) {
       this.form[key] = val
+    },
+    copyDeptCodeChange(val) {
+      this.copyDeptCode = val;
+    },
+    deptSelect(node) {
+      this.form.copyDept = node.name;
     },
     doExport() {
       this.$loading();

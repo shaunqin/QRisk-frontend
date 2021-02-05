@@ -11,6 +11,7 @@
     :flat="flat"
     :placeholder="$t('global.select')"
     appendToBody
+    @select="select"
   />
 </template>
 
@@ -100,6 +101,11 @@ export default {
         children: node.children,
       }
     },
+    select(node, instanceId) {
+      if (this.$listeners['select']) {
+        this.$emit('select', node);
+      }
+    }
   },
 }
 </script>

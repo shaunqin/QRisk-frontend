@@ -9,7 +9,13 @@
             v-for="item in options"
             :key="item.name"
             :class="item.type==assessmentType?'active':''"
-          >{{item.name}}</router-link>
+          >
+            <el-popover v-if="item.tip" :content="item.tip" placement="right" trigger="hover">
+              <span slot="reference">{{item.name}}</span>
+            </el-popover>
+            <span v-else>{{item.name}}</span>
+            <!-- {{item.name}} -->
+          </router-link>
         </div>
       </el-col>
       <el-col :span="21">
@@ -154,9 +160,9 @@ export default {
       selections: [],
       type: "",
       options: [
-        { name: "流程/标准", type: 1 },
+        { name: "流程/标准", type: 1, tip: '来源于Q-Doc任务' },
         { name: "变革管理", type: 2 },
-        { name: "维修能力", type: 3 },
+        { name: "维修能力", type: 3, tip: '来源于Q-Doc任务' },
         { name: "航站审定", type: 4 },
         { name: "全员风险", type: 6 },
         { name: "其他评估", type: 7 },

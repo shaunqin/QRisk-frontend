@@ -82,6 +82,12 @@
           <el-button v-else type="primary" size="mini" @click="doHandle(row)">办理</el-button>
         </template>
       </el-table-column>
+      <el-table-column label="操作" width="80" v-if="!hiddenField.includes('操作')">
+        <template slot-scope="{row}">
+          <span v-if="!row.rollback">-</span>
+          <el-button v-else type="primary" size="mini" @click="doRollback(row)">撤回</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <ehandle ref="ehandle" :isSecChild="true" :source="source" />
     <cmdIssue ref="cmdIssue" />
@@ -92,7 +98,10 @@
 <script>
 // import leaderApprvalRecord from "./leaderApprvalRecord";
 import ehandle from "./handleTo4";
-import { riskNoticeQueryTask, queryIssueTreeData, riskNoticeLazyLoadIssueTree, riskNoticeApproveHistory } from "@/api/risk";
+import {
+  riskNoticeQueryTask, queryIssueTreeData, riskNoticeLazyLoadIssueTree,
+  riskNoticeApproveHistory, riskNoticeRollback
+} from "@/api/risk";
 import cmdIssue from './cmdIssueTreeTable'
 import { format } from '@/utils/datetime'
 // import transactor from '@/components/common/transactor'
@@ -122,7 +131,11 @@ export default {
     hiddenField: {
       type: Array,
       default: () => [],
-    }
+    },
+    id: {
+      type: String,
+      default: ""
+    },
   },
   watch: {
     data: {
@@ -233,7 +246,22 @@ export default {
           _this.data = res.obj;
         }
       })
-
+    },
+    doRollback(row) {
+      if (this.id) {
+        this.$confirm("确认撤回吗?").then(() => {
+          this.tbLoading = true;
+          riskNoticeRollback(row.id).then(res => {
+            this.tbLoading = false;
+            if (res.code != '200') {
+              this.$message.error(res.msg);
+            } else {
+              this.$message.success("撤回成功")
+              this.$parent.$parent.$parent.$parent.$parent.detail({ id: this.id });
+            }
+          })
+        }).catch(() => { })
+      }
     }
   },
 };

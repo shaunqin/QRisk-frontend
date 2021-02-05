@@ -68,9 +68,11 @@ export default {
       return true;
     },
     detail(row) {
-      this.loading = true;
+      // this.loading = true;
+      this.$loading();
       riskNoticeDoneDetail2(row.id).then(res => {
-        this.loading = false;
+        // this.loading = false;
+        this.$loading().close();
         if (res.code != '200') {
           this.$message.error(res.msg);
         } else {

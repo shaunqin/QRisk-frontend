@@ -43,7 +43,7 @@
         </ul>
       </el-form-item>
       <el-form-item label="下发措施" v-if="form.firstLevelMeasure!=null">
-        <childMeasures :data="form.firstLevelMeasure" :hiddenField="['审核']" :source="fullscreen?'smart':'myIssued'" />
+        <childMeasures :data="form.firstLevelMeasure" :hiddenField="['审核','操作']" :source="fullscreen?'smart':'myIssued'" />
       </el-form-item>
     </el-form>
 

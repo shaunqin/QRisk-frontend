@@ -16,7 +16,7 @@
     </el-card>
 
     <el-card header="下发任务" key="childTask" v-if="childTask.length>0">
-      <childTask :data="childTask" :hiddenField="['审核']" :readonly="true" />
+      <childTask :id="data.id" :data="childTask" :hiddenField="['审核']" :readonly="true" />
     </el-card>
     <!-- <el-card header="审批记录" key="comments" v-if="comments.length>0">
       <approvalRecord :data="comments" />
@@ -24,9 +24,20 @@
     <!-- <el-card header="办理人" key="reviewersInfo" v-if="reviewersInfo.length>0">
       <transactor :data="reviewersInfo" width="100%" />
     </el-card>-->
-
+    <el-select
+      v-model="noHiddenDanger"
+      placeholder
+      size="mini"
+      style="margin:10px 0"
+      v-if="!hiddenFill"
+      :disabled="true"
+    >
+      <el-option label="本月有新增" value="0"></el-option>
+      <el-option label="本月无新增" value="1"></el-option>
+    </el-select>
     <fillinForm
       v-if="data.deptControlList!=null&&data.deptControlList.hiddenDangerControlList.length>0"
+      v-show="noHiddenDanger!='1'"
       ref="fillinForm"
       :disabled="true"
       :data="data"
@@ -40,6 +51,7 @@
     />
 
     <div slot="footer" class="dialog-footer" v-if="!fullscreen">
+      <el-button type="info" @click="doRollback" v-if="data.rollback" :loading="rbLoading">撤回</el-button>
       <el-button type="primary" @click="cancel">确定</el-button>
     </div>
   </el-dialog>
@@ -53,11 +65,13 @@ import approvalRecord from './approvalRecord'
 import childTask from './childTask'
 import transactor from '@/components/common/transactor'
 import bsseinfo from './step/baseinfo'
+import { hiddenDangerRollback } from '@/api/hazards'
 export default {
   components: { fillinForm, detailFillin, approvalRecord, childTask, transactor, bsseinfo },
   data() {
     return {
       loading: false,
+      rbLoading: false,
       dialog: false,
       dialogLoading: false,
       data: {}, // 父组件赋值
@@ -94,6 +108,15 @@ export default {
       } else {
         return this.data.reviewersInfo
       }
+    },
+    hiddenFill() {
+      return this.data.hiddenFill
+    },
+    noHiddenDanger() {
+      if (this.data && this.data.deptControlList) {
+        return this.data.deptControlList.noHiddenDanger
+      }
+      return 0
     }
   },
   watch: {
@@ -122,6 +145,20 @@ export default {
         }
       })
     },
+    doRollback() {
+      this.$confirm("确认撤回吗?").then(() => {
+        this.rbLoading = true;
+        hiddenDangerRollback(this.data.id).then(res => {
+          this.rbLoading = false;
+          if (res.code != '200') {
+            this.$message.error(res.msg);
+          } else {
+            this.$message.success("撤回成功")
+            this.$parent.detail({ formId: this.data.id, businessType: 5 });
+          }
+        })
+      }).catch(() => { })
+    }
   },
 }
 </script>

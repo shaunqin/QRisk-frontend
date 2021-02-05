@@ -57,7 +57,7 @@
             <span v-else-if="row.processFlag==2">驳回</span>
             <span v-else-if="row.processFlag==3">下发</span>
             <span v-else-if="row.processFlag==4">上报</span>
-            <span v-else-if="row.processFlag==5">审批</span>
+            <span v-else-if="row.processFlag==5">撤回</span>
             <span v-else-if="row.processFlag==6">修改</span>
             <span v-else>-</span>
           </template>

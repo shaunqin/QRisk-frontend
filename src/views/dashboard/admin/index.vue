@@ -10,7 +10,7 @@
                   <span class="b-t">数据分析</span>
                 </div>
                 <div class="img">
-                  <img src="@/assets/images/home-01.png" />
+                  <img src="@/assets/images/home-02.png" />
                 </div>
               </router-link>
             </el-col>
@@ -20,7 +20,7 @@
                   <span class="b-t">专项风险</span>
                 </div>
                 <div class="img">
-                  <img src="@/assets/images/home-02.png" />
+                  <img src="@/assets/images/home-03.png" />
                 </div>
               </router-link>
             </el-col>
@@ -30,7 +30,7 @@
                   <span class="b-t">风险提示</span>
                 </div>
                 <div class="img">
-                  <img src="@/assets/images/home-03.png" />
+                  <img src="@/assets/images/home-05.png" />
                 </div>
               </router-link>
             </el-col>
@@ -52,7 +52,7 @@
                   <span class="b-t">隐患排查</span>
                 </div>
                 <div class="img">
-                  <img src="@/assets/images/home-05.png" />
+                  <img src="@/assets/images/home-06.png" />
                 </div>
               </router-link>
             </el-col>
@@ -62,7 +62,7 @@
                   <span class="b-t">规范标准</span>
                 </div>
                 <div class="img">
-                  <img src="@/assets/images/home-06.png" />
+                  <img src="@/assets/images/home-01.png" />
                 </div>
               </router-link>
             </el-col>
@@ -77,14 +77,14 @@
               </router-link>
             </el-col>
             <el-col :span="6">
-              <router-link to="/standard" class="bottom">
+              <a :href="smartUrl" class="bottom" target="_blank">
                 <div class="b">
                   <span class="b-t">Q-SMART</span>
                 </div>
                 <div class="img">
                   <img src="@/assets/images/home-08.png" />
                 </div>
-              </router-link>
+              </a>
             </el-col>
           </el-row>
         </div>
@@ -114,7 +114,8 @@ export default {
   name: "DashboardEditor",
   data() {
     return {
-      Manual: {}
+      Manual: {},
+      smartUrl:process.env.VUE_APP_SMART_URL
     };
   },
   computed: {
@@ -171,7 +172,7 @@ export default {
         padding: 10px;
         margin: 10px;
         display: block;
-        background: rgba(36, 39, 142, 0.2);
+        background: rgba(36, 39, 142, 0.1);
         border-radius: 10px;
         .b {
           padding: 10px;
@@ -194,7 +195,7 @@ export default {
       .notice {
         display: block;
         width: 70%;
-        margin: 0 auto;
+        margin: 0 0 0 auto;
         background: rgba(36, 39, 142, 0.4);
         padding: 0 10px 10px;
         border-radius: 8px;

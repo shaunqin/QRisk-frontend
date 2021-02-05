@@ -20,14 +20,14 @@
           />
         </el-form-item>
         <el-form-item label="时间">
-          <el-radio-group v-model="dateType" size="mini">
+          <el-radio-group v-model="dateType" size="mini" @change="form.date=''">
             <el-radio-button label="year">年</el-radio-button>
             <el-radio-button label="month">年月</el-radio-button>
           </el-radio-group>
           <el-date-picker
             key="year"
             v-model="form.date"
-            value-format="yyyy-MM"
+            value-format="yyyy"
             type="year"
             v-if="dateType=='year'"
             style="width:130px"
@@ -59,14 +59,14 @@
           />
         </el-form-item>
         <el-form-item label="时间">
-          <el-radio-group v-model="dateType" size="mini">
+          <el-radio-group v-model="dateType" size="mini" @change="form.date=''">
             <el-radio-button label="year">年</el-radio-button>
             <el-radio-button label="month">年月</el-radio-button>
           </el-radio-group>
           <el-date-picker
             key="year"
             v-model="form.date"
-            value-format="yyyy-MM"
+            value-format="yyyy"
             type="year"
             v-if="dateType=='year'"
             style="width:130px"
@@ -231,6 +231,6 @@ export default {
   top: 10px;
 }
 /deep/ .vue-treeselect--append-to-body {
-    z-index: 1 !important;
+  z-index: 1 !important;
 }
 </style>

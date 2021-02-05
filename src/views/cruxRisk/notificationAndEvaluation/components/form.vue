@@ -35,7 +35,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="截止日期">
+              <el-form-item label="截止日期" v-if="form.type=='1'">
                 <el-date-picker
                   v-model="form.endTime"
                   value-format="yyyy-MM-dd"

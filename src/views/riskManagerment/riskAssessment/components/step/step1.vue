@@ -3,6 +3,7 @@
     <el-card header="详细信息">
       <el-form
         ref="form"
+        :model="data"
         :rules="formRules"
         size="small"
         label-width="80px"
@@ -1289,7 +1290,7 @@ export default {
         }
       },
       deep: true
-    },
+    }
   },
   created() {
     // 危险源层级

@@ -261,6 +261,13 @@ export function riskNoticeApproveHistory(id) {
     method: 'get',
   })
 }
+// 撤回
+export function riskNoticeRollback(id) {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/cancelReport/${id}`,
+    method: 'post',
+  })
+}
 // =========  风险提示 end ==============
 
 // ======== 专项风险 =======

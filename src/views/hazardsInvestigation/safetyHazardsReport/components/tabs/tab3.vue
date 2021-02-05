@@ -67,8 +67,10 @@ export default {
       return true;
     },
     detail(row) {
+      this.$loading();
       if (row.businessType == 5) {
         queryHasDoneDetail(row.formId).then((res) => {
+          this.$loading().close();
           if (res.code != "200") {
             this.$message.error(res.msg);
           } else {
@@ -79,6 +81,7 @@ export default {
         });
       } else {
         queryHasDoneDetail2(row.id).then((res) => {
+          this.$loading().close();
           if (res.code != "200") {
             this.$message.error(res.msg);
           } else {
