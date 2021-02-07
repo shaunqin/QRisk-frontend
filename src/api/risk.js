@@ -268,6 +268,13 @@ export function riskNoticeRollback(id) {
     method: 'post',
   })
 }
+// 再次发起详情
+export function riskNoticeIssueAgain(id) {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/query/initDetail/${id}`,
+    method: 'get',
+  })
+}
 // =========  风险提示 end ==============
 
 // ======== 专项风险 =======

@@ -41,7 +41,7 @@
             <el-form-item label="通知内容" v-if="data.type!='2'">{{ data.noteContent }}</el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="16" v-if="assessmentType == '1' || assessmentType == '2'">
+        <el-row :gutter="16">
           <el-col :span="8">
             <el-form-item label="分析人" prop="analysis">
               <el-input v-model="data.analysis" :disabled="formEnable"></el-input>
@@ -106,7 +106,12 @@
           >新增一行</el-button>
         </el-col>
       </el-row>
-      <el-table :data="data.specialRiskAnalyses" size="mini" max-height="500">
+      <el-table
+        :data="data.specialRiskAnalyses"
+        size="mini"
+        max-height="500"
+        v-if="data.specialRiskAnalyses.length>0"
+      >
         <el-table-column label="系统" min-width="130">
           <template slot-scope="{ row }">
             <el-select v-model="row.product" placeholder="请选择系统" :disabled="riskEnable" clearable>
@@ -244,13 +249,13 @@
         <span>危险源</span>
         <el-button
           v-if="assessmentType != '4'"
-          type="text"
+          type="success"
           icon="el-icon-tickets"
           @click="showReport"
           :disabled="!data.hiddenReport"
         >风险报告</el-button>
       </div>
-      <el-form size="mini" label-width="80px" v-if="assessmentType != '1' && assessmentType != '2'">
+      <!-- <el-form size="mini" label-width="80px" v-if="assessmentType != '1' && assessmentType != '2'">
         <el-row :gutter="8">
           <el-col :span="8">
             <el-form-item label="分析人">
@@ -261,15 +266,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <!-- <el-form-item label="分析单位">
-              <department
-                :value="data.analysisDept"
-                @change="deptAnalysisChange($event, 'analysisDept')"
-                :disabled="formEnable"
-                :url="deptPath"
-                :path="departmentParams"
-              ></department>
-            </el-form-item>-->
             <el-form-item label="批准日期">
               <el-date-picker
                 v-model="data.approvalDate"
@@ -280,18 +276,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <!-- <el-form-item label="标题">
-              <el-input
-                v-model="data.analysisTitle"
-                :disabled="formEnable"
-              ></el-input>
-            </el-form-item>-->
             <el-form-item label="批准人">
               <el-input :disabled="true" v-model="data.approval"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
-      </el-form>
+      </el-form>-->
       <div v-if="assessmentType == '4'">
         <el-table :data="list" size="mini" :span-method="objectSpanMethod" border max-height="550">
           <el-table-column label="系统" prop="product" />
@@ -441,7 +431,7 @@
           </div>
           <el-form size="mini" inline label-width="70px" :disabled="formEnable">
             <el-form-item label="系统">
-              <el-select v-model="item.product" placeholder="请选择系统" clearable>
+              <el-select v-model="item.product" placeholder="请选择系统" clearable :disabled="prd_subprd_msg_enable">
                 <el-option label="维修工程" value="维修工程"></el-option>
               </el-select>
             </el-form-item>
@@ -451,10 +441,11 @@
                 type="system"
                 @change="dictChange($event, item, 'subSystem')"
                 style="width: 130px"
+                :disabled="prd_subprd_msg_enable"
               />
             </el-form-item>
             <el-form-item label="管理流程">
-              <el-input v-model="item.managementProcess" @input="$forceUpdate()"></el-input>
+              <el-input v-model="item.managementProcess" @input="$forceUpdate()" :disabled="prd_subprd_msg_enable"></el-input>
             </el-form-item>
             <el-form-item label="危险源层级一" label-width="115px">
               <el-select
@@ -1278,6 +1269,15 @@ export default {
         return true;
       } return false;
     },
+    prd_subprd_msg_enable() {
+      let b = false;
+      if (this.assessmentType == '1' || this.assessmentType == '2') {
+        if (this.data.specialRiskAnalyses.length > 0) {
+          b = true;
+        }
+      }
+      return b
+    }
   },
   watch: {
     'data.type'(val) {
@@ -1290,7 +1290,7 @@ export default {
         }
       },
       deep: true
-    }
+    },
   },
   created() {
     // 危险源层级
@@ -1325,7 +1325,7 @@ export default {
     })
   },
   mounted() {
-    console.log('step1', this.source)
+
   },
   methods: {
     formatShortDate,
@@ -1360,12 +1360,21 @@ export default {
       this.$forceUpdate()
     },
     addHazard() {
+      // if assessmentType == '1' || assessmentType == '2' 把系统和工作分析记录表的第一个系统,子系统,管理流程带下去
+      let product = "维修工程", subSystem = "", managementProcess = "";
+      if (this.assessmentType == '1' || this.assessmentType == '2') {
+        if (this.data.specialRiskAnalyses.length > 0) {
+          product = this.data.specialRiskAnalyses[0].product;
+          subSystem = this.data.specialRiskAnalyses[0].subSystem;
+          managementProcess = this.data.specialRiskAnalyses[0].managementProcess;
+        }
+      }
       this.data.hazardList.push({
         riskLevel1: this.riskLevel1List[0] ? this.riskLevel1List[0].value : '', //危险源层级1
         riskLevel2: this.riskLevel2List[0] ? this.riskLevel2List[0].value : '', //危险源层级2
         hazard: this.hazardList[0] ? this.hazardList[0].diskNo : '',
         hazardSource: '',
-        managementProcess: '',
+        managementProcess: managementProcess,
         possibility: '1',
         possibleRisks: this.possibleRisksList[0]
           ? this.possibleRisksList[0].riskNo
@@ -1381,8 +1390,8 @@ export default {
             reponsibleDept: null,
           },
         ],
-        subSystem: '',
-        product: '维修工程',
+        subSystem: subSystem,
+        product: product,
       })
       this.data.hazardList[
         this.data.hazardList.length - 1

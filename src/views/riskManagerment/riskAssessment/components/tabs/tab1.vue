@@ -179,7 +179,7 @@ export default {
         if (res.code != "200") {
           this.$message.error(res.msg);
         } else {
-          _this.form.hazardList[0].possibleRisks = res.obj[0].riskNo
+          // _this.form.hazardList[0].possibleRisks = res.obj[0].riskNo
           _this.possibleRisksList = res.obj
         }
       })

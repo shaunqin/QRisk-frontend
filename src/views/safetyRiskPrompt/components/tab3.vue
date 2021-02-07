@@ -28,10 +28,11 @@
       <el-table-column label="拟制人">
         <template slot-scope="{ row }">{{ row.issueName }}[{{ row.issuer }}]</template>
       </el-table-column>
-      <el-table-column label="操作" width="180">
+      <el-table-column label="操作" width="260">
         <template slot-scope="{ row }">
           <el-button size="mini" type="text" @click="detail(row)">详情</el-button>
           <el-button size="mini" type="primary" @click="genPdf(row)">手动生成PDF</el-button>
+          <el-button size="mini" type="warning" @click="issueAgain(row)">再次发起</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -45,15 +46,17 @@
       @current-change="pageChange"
     />
     <edetail ref="detail" />
+    <eform ref="form" :isAdd="isAdd" />
   </div>
 </template>
 
 <script>
 import initData from "@/mixins/initData";
 import edetail from "./detail";
-import { riskNoticeSubDetail, riskNoticeGenPdf } from "@/api/risk";
+import eform from './form'
+import { riskNoticeSubDetail, riskNoticeGenPdf, riskNoticeIssueAgain } from "@/api/risk";
 export default {
-  components: { edetail },
+  components: { edetail, eform },
   mixins: [initData],
   data() {
     return {};
@@ -86,7 +89,7 @@ export default {
       // this.loading = true;
       let _this = this.$refs.detail;
       _this.dialogLoading = true;
-          _this.dialog = true;
+      _this.dialog = true;
       riskNoticeSubDetail(row.id).then((res) => {
         // this.false = true;
         _this.dialogLoading = false;
@@ -113,6 +116,31 @@ export default {
     pdfUrl(row) {
       return `${process.env.VUE_APP_BASE_API}${row.pdfUrl}`;
     },
+    issueAgain(row) {
+      this.isAdd = false;
+      let id = row.id;
+      let _this = this.$refs.form;
+      riskNoticeIssueAgain(id).then((res) => {
+        if (res.code != "200") {
+          this.$message.error(res.msg);
+        } else {
+          const { obj } = res;
+          _this.form = {
+            id: obj.id,
+            no: obj.no,
+            title: obj.title,
+            background: obj.background,
+            existingRisk: obj.existingRisk,
+            measures: obj.measuresVos,
+            deptPath: obj.deptPath,
+            pdf: obj.pdf
+          };
+          _this.id = obj.id;
+          _this.files = res.obj.files;
+          _this.dialog = true;
+        }
+      });
+    }
   },
 };
 </script>

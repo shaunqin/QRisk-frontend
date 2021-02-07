@@ -105,7 +105,7 @@ export default {
           } else {
             _this.data.issueDepts = [res.obj.issueDept]
           } */
-          _this.data.approvalDate = formatShortDate(res.obj.approvalDate);
+          _this.data.approvalDate = formatShortDate(res.obj.approvalDate)||formatShortDate(new Date());
           if (this.appendData.length > 0) {
             _this.data.hazardList = [...this.appendData];
           } else {

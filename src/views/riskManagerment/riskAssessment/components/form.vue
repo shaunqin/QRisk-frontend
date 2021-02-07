@@ -121,7 +121,7 @@
             >新增一行</el-button>
           </el-col>
         </el-row>
-        <el-table :data="form.specialRiskAnalyses" size="mini" max-height="500">
+        <el-table :data="form.specialRiskAnalyses" size="mini" max-height="500" v-if="form.specialRiskAnalyses.length>0">
           <el-table-column label="系统" min-width="130">
             <template slot-scope="{ row }">
               <el-select v-model="row.product" placeholder="请选择系统" clearable>
@@ -265,6 +265,7 @@
                 placeholder="请选择系统"
                 clearable
                 @change="$forceUpdate()"
+                :disabled="prd_subprd_msg_enable"
               >
                 <el-option label="维修工程" value="维修工程"></el-option>
               </el-select>
@@ -275,10 +276,15 @@
                 type="system"
                 @change="dictChange($event, item, 'subSystem')"
                 style="width: 130px"
+                :disabled="prd_subprd_msg_enable"
               />
             </el-form-item>
             <el-form-item label="管理流程">
-              <el-input v-model="item.managementProcess" @input="$forceUpdate()"></el-input>
+              <el-input
+                v-model="item.managementProcess"
+                @input="$forceUpdate()"
+                :disabled="prd_subprd_msg_enable"
+              ></el-input>
             </el-form-item>
             <el-form-item label="危险源层级一" label-width="115px">
               <el-select
@@ -501,44 +507,44 @@ export default {
         type: '1', // 类别,1:通知,2:评估
         hiddenReport: false,
         specialRiskAnalyses: [
-          {
-            product: '维修工程', // 产品
-            subSystem: '', // 子系统
-            managementProcess: '', // 管理流程
-            reponsibleUnit: null, // 责任单位
-            post: '', // 岗位
-            processHuman: '', // 人
-            processMachine: '', // 机
-            processMaterial: '', // 料
-            processRegulation: '', // 法
-            processEnvironment: '', // 环
-            input: '', // 输入
-            output: '', // 输出
-          },
+          // {
+          //   product: '维修工程', // 产品
+          //   subSystem: '', // 子系统
+          //   managementProcess: '', // 管理流程
+          //   reponsibleUnit: null, // 责任单位
+          //   post: '', // 岗位
+          //   processHuman: '', // 人
+          //   processMachine: '', // 机
+          //   processMaterial: '', // 料
+          //   processRegulation: '', // 法
+          //   processEnvironment: '', // 环
+          //   input: '', // 输入
+          //   output: '', // 输出
+          // },
         ],
         hazardList: [
           // 危险源
-          {
-            hazardSource: '',
-            managementProcess: '',
-            riskLevel1: '', //危险源层级1
-            riskLevel2: '', //危险源层级2
-            hazard: '', // 危险源
-            possibility: '1',
-            possibleRisks: '', // 可能导致的风险
-            riskLevel: '1',
-            rootCauseAnalysis: '',
-            seriousness: '1',
-            specialRiskMeasureList: [
-              {
-                controlMeasure: '',
-                deadline: '',
-                reponsibleDept: null,
-              },
-            ],
-            subSystem: '',
-            product: '维修工程',
-          },
+          // {
+          //   hazardSource: '',
+          //   managementProcess: '',
+          //   riskLevel1: '', //危险源层级1
+          //   riskLevel2: '', //危险源层级2
+          //   hazard: '', // 危险源
+          //   possibility: '1',
+          //   possibleRisks: '', // 可能导致的风险
+          //   riskLevel: '1',
+          //   rootCauseAnalysis: '',
+          //   seriousness: '1',
+          //   specialRiskMeasureList: [
+          //     {
+          //       controlMeasure: '',
+          //       deadline: '',
+          //       reponsibleDept: null,
+          //     },
+          //   ],
+          //   subSystem: '',
+          //   product: '维修工程',
+          // },
         ],
         file: [],
       },
@@ -568,6 +574,17 @@ export default {
       type: Boolean,
       required: true,
     },
+  },
+  computed: {
+    prd_subprd_msg_enable() {
+      let b = false;
+      if (this.assessmentType == '1' || this.assessmentType == '2') {
+        if (this.form.specialRiskAnalyses.length > 0) {
+          b = true;
+        }
+      }
+      return b
+    }
   },
   watch: {
     'form.type'(val) {
@@ -605,12 +622,12 @@ export default {
       // 危险源层级
       queryDictByName('hazard_source').then((response) => {
         this.riskLevel1List = response.obj[0].children
-        this.form.hazardList[0].riskLevel1 = this.riskLevel1List[0].value
-        this.chooseRiskLevel1(
-          this.form.hazardList[0].riskLevel1,
-          this.form.hazardList[0]
-        )
-        this.$forceUpdate()
+        // this.form.hazardList[0].riskLevel1 = this.riskLevel1List[0].value
+        // this.chooseRiskLevel1(
+        //   this.form.hazardList[0].riskLevel1,
+        //   this.form.hazardList[0]
+        // )
+        // this.$forceUpdate()
       })
     })
     // 发起部门
@@ -745,43 +762,43 @@ export default {
         approvalDate: '', // 批准日期
         type: '1', // 类别,1:通知,2:评估
         specialRiskAnalyses: [
-          {
-            product: '维修工程', // 产品
-            subSystem: '', // 子系统
-            managementProcess: '', // 管理流程
-            reponsibleUnit: null, // 责任单位
-            post: '', // 岗位
-            processHuman: '', // 人
-            processMachine: '', // 机
-            processMaterial: '', // 料
-            processRegulation: '', // 法
-            processEnvironment: '', // 环
-            input: '', // 输入
-            output: '', // 输出
-          },
+          // {
+          //   product: '维修工程', // 产品
+          //   subSystem: '', // 子系统
+          //   managementProcess: '', // 管理流程
+          //   reponsibleUnit: null, // 责任单位
+          //   post: '', // 岗位
+          //   processHuman: '', // 人
+          //   processMachine: '', // 机
+          //   processMaterial: '', // 料
+          //   processRegulation: '', // 法
+          //   processEnvironment: '', // 环
+          //   input: '', // 输入
+          //   output: '', // 输出
+          // },
         ],
         hazardList: [
-          {
-            hazardSource: '',
-            managementProcess: '',
-            hazard: '', // 危险源
-            riskLevel1: '', //危险源层级1
-            riskLevel2: '', //危险源层级2
-            possibility: '1',
-            possibleRisks: '', // 可能导致的风险
-            riskLevel: '1',
-            rootCauseAnalysis: '',
-            seriousness: '1',
-            specialRiskMeasureList: [
-              {
-                controlMeasure: '',
-                deadline: '',
-                reponsibleDept: null,
-              },
-            ],
-            subSystem: '',
-            product: '维修工程',
-          },
+          // {
+          //   hazardSource: '',
+          //   managementProcess: '',
+          //   hazard: '', // 危险源
+          //   riskLevel1: '', //危险源层级1
+          //   riskLevel2: '', //危险源层级2
+          //   possibility: '1',
+          //   possibleRisks: '', // 可能导致的风险
+          //   riskLevel: '1',
+          //   rootCauseAnalysis: '',
+          //   seriousness: '1',
+          //   specialRiskMeasureList: [
+          //     {
+          //       controlMeasure: '',
+          //       deadline: '',
+          //       reponsibleDept: null,
+          //     },
+          //   ],
+          //   subSystem: '',
+          //   product: '维修工程',
+          // },
         ],
         file: [],
       }
@@ -827,12 +844,21 @@ export default {
       } */
     },
     addHazard() {
+      // if assessmentType == '1' || assessmentType == '2' 把系统和工作分析记录表的第一个系统,子系统,管理流程带下去
+      let product = "维修工程", subSystem = "", managementProcess = "";
+      if (this.assessmentType == '1' || this.assessmentType == '2') {
+        if (this.form.specialRiskAnalyses.length > 0) {
+          product = this.form.specialRiskAnalyses[0].product;
+          subSystem = this.form.specialRiskAnalyses[0].subSystem;
+          managementProcess = this.form.specialRiskAnalyses[0].managementProcess;
+        }
+      }
       this.form.hazardList.push({
         hazardSource: '',
         riskLevel1: this.riskLevel1List[0] ? this.riskLevel1List[0].value : '', //危险源层级1
         riskLevel2: this.riskLevel2List[0] ? this.riskLevel2List[0].value : '', //危险源层级2
         hazard: this.hazardList[0] ? this.hazardList[0].diskNo : '',
-        managementProcess: '',
+        managementProcess: managementProcess,
         possibility: '1',
         possibleRisks: this.possibleRisksList[0].riskNo,
         riskLevel: '1',
@@ -845,8 +871,8 @@ export default {
             reponsibleDept: null,
           },
         ],
-        subSystem: '',
-        product: '维修工程',
+        subSystem: subSystem,
+        product: product,
       })
       this.$forceUpdate()
     },
