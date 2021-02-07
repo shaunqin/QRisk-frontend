@@ -6,54 +6,89 @@
           <el-row :gutter="16">
             <el-col :span="6">
               <router-link to="/dataAnalysis" class="bottom">
-                <div class="b">
-                  <span class="b-t">数据分析</span>
-                </div>
-                <div class="img">
-                  <img src="@/assets/images/home-02.png" />
-                </div>
+                <el-badge
+                  class="evaluateReportMonthly"
+                  :value="countObj.riskEvaluationReport.all"
+                  :hidden="countObj.riskEvaluationReport.all==0"
+                  :type="countObj.riskEvaluationReport.emergency>0?'danger':'success'"
+                >
+                  <div class="b">
+                    <span class="b-t">数据分析</span>
+                  </div>
+                  <div class="img">
+                    <img src="@/assets/images/home-02.png" />
+                  </div>
+                </el-badge>
               </router-link>
             </el-col>
             <el-col :span="6">
               <router-link to="/riskManagerment" class="bottom">
-                <div class="b">
-                  <span class="b-t">专项风险</span>
-                </div>
-                <div class="img">
-                  <img src="@/assets/images/home-03.png" />
-                </div>
+                <el-badge
+                  class="riskManagerment"
+                  :value="countObj.specialRiskl.all"
+                  :hidden="countObj.specialRiskl.all==0"
+                  :type="countObj.specialRiskl.emergency>0?'danger':'success'"
+                >
+                  <div class="b">
+                    <span class="b-t">专项风险</span>
+                  </div>
+                  <div class="img">
+                    <img src="@/assets/images/home-03.png" />
+                  </div>
+                </el-badge>
               </router-link>
             </el-col>
             <el-col :span="6">
               <router-link to="/safetyRiskPrompt" class="bottom">
-                <div class="b">
-                  <span class="b-t">风险提示</span>
-                </div>
-                <div class="img">
-                  <img src="@/assets/images/home-05.png" />
-                </div>
+                <el-badge
+                  class="safetyRiskPrompt"
+                  :value="countObj.safetyNotice.all"
+                  :hidden="countObj.safetyNotice.all==0"
+                  :type="countObj.safetyNotice.emergency>0?'danger':'success'"
+                >
+                  <div class="b">
+                    <span class="b-t">风险提示</span>
+                  </div>
+                  <div class="img">
+                    <img src="@/assets/images/home-05.png" />
+                  </div>
+                </el-badge>
               </router-link>
             </el-col>
             <el-col :span="6">
               <router-link to="/cruxRisk" class="bottom">
-                <div class="b">
-                  <span class="b-t">关键风险</span>
-                </div>
-                <div class="img">
-                  <img src="@/assets/images/home-04.png" />
-                </div>
+                <el-badge
+                  class="cruxRisk"
+                  :value="countObj.keyRisk.all"
+                  :hidden="countObj.keyRisk.all==0"
+                  :type="countObj.keyRisk.emergency>0?'danger':'success'"
+                >
+                  <div class="b">
+                    <span class="b-t">关键风险</span>
+                  </div>
+                  <div class="img">
+                    <img src="@/assets/images/home-04.png" />
+                  </div>
+                </el-badge>
               </router-link>
             </el-col>
           </el-row>
           <el-row :gutter="16">
             <el-col :span="6">
               <router-link to="/hazardsInvestigation" class="bottom">
-                <div class="b">
-                  <span class="b-t">隐患排查</span>
-                </div>
-                <div class="img">
-                  <img src="@/assets/images/home-06.png" />
-                </div>
+                <el-badge
+                  class="hazardsInvestigation"
+                  :value="countObj.hiddenDanger.all"
+                  :hidden="countObj.hiddenDanger.all==0"
+                  :type="countObj.hiddenDanger.emergency>0?'danger':'success'"
+                >
+                  <div class="b">
+                    <span class="b-t">隐患排查</span>
+                  </div>
+                  <div class="img">
+                    <img src="@/assets/images/home-06.png" />
+                  </div>
+                </el-badge>
               </router-link>
             </el-col>
             <el-col :span="6">
@@ -109,13 +144,21 @@
 <script>
 import { mapGetters } from "vuex";
 import { queryOtherStand } from '@/api/standard';
+import { queryCount } from '@/api/info'
 
 export default {
   name: "DashboardEditor",
   data() {
     return {
       Manual: {},
-      smartUrl:process.env.VUE_APP_SMART_URL
+      smartUrl: process.env.VUE_APP_SMART_URL,
+      countObj: {
+        hiddenDanger: { all: 0, emergency: 0 },
+        keyRisk: { all: 0, emergency: 0 },
+        riskEvaluationReport: { all: 0, emergency: 0 },
+        safetyNotice: { all: 0, emergency: 0 },
+        specialRiskl: { all: 0, emergency: 0 }
+      }
     };
   },
   computed: {
@@ -134,7 +177,32 @@ export default {
           this.Manual = Manual
         }
       }
-    })
+    });
+    queryCount().then(res => {
+      if (res.code == '200') {
+        this.countObj = res.obj;
+      }
+    });
+  },
+  mounted() {
+    document.querySelector(".safetyRiskPrompt .el-badge__content").onclick = this.jumpRiskNotice
+    document.querySelector(".hazardsInvestigation .el-badge__content").onclick = this.jumpHiddenDanger
+    document.querySelector(".cruxRisk .el-badge__content").onclick = this.jumpCruxRisk
+    document.querySelector(".evaluateReportMonthly .el-badge__content").onclick = this.jumpEvaluateReportMonthly
+  },
+  methods: {
+    jumpRiskNotice(e) {
+      this.$store.dispatch("riskSettings/setRiskNoticeTabIndex", "4");
+    },
+    jumpHiddenDanger(e) {
+      this.$store.dispatch("riskSettings/setHiddenDangerTabIndex", "2");
+    },
+    jumpCruxRisk() {
+      this.$store.dispatch("riskSettings/setCruxRiskTabIndex", "4");
+    },
+    jumpEvaluateReportMonthly() {
+      this.$store.dispatch("riskSettings/setEvaluateReportTabIndex", "4");
+    }
   }
 };
 </script>
@@ -169,7 +237,7 @@ export default {
       }
       .bottom {
         text-align: center;
-        padding: 10px;
+        // padding: 10px;
         margin: 10px;
         display: block;
         background: rgba(36, 39, 142, 0.1);
@@ -262,5 +330,8 @@ export default {
       padding-right: 0 !important;
     }
   }
+}
+/deep/ .el-badge {
+  display: block;
 }
 </style>
