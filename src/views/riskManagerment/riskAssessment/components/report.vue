@@ -35,7 +35,7 @@
                 class="mini"
                 :value="form.evaluationUnit"
                 @change="deptChange($event, 'evaluationUnit')"
-                :disabled="disabled"
+                :disabled="true"
               />
             </el-form-item>
           </el-col>

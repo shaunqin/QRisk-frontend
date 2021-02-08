@@ -40,11 +40,11 @@
       </el-form>
     </el-card>
     <!-- 系统和工作分析记录表 -->
-    <el-card
-      header="系统和工作分析记录表"
-      key="specialRiskAnalyses"
-      v-if="data.assType == 1 || data.assType == 2"
-    >
+    <el-card class="chead" key="specialRiskAnalyses" v-if="data.assType == 1 || data.assType == 2">
+      <div slot="header" class="hslot">
+        <span>系统和工作分析记录表</span>
+        <el-button type="primary" size="mini" icon="el-icon-download" @click="doExport(1)">导出</el-button>
+      </div>
       <el-form size="mini" class="info2" inline>
         <el-row class="fill-row">
           <el-col :span="24">
@@ -88,12 +88,16 @@
     <el-card key="hazardVoList" class="chead">
       <div slot="header" class="hslot">
         <span>危险源</span>
-        <el-button
-          type="text"
-          icon="el-icon-tickets"
-          @click="showReport"
-          :disabled="!data.hiddenReport"
-        >风险报告</el-button>
+        <div>
+          <el-button
+            type="warning"
+            size="mini"
+            icon="el-icon-tickets"
+            @click="showReport"
+            :disabled="!data.hiddenReport"
+          >风险报告</el-button>
+          <el-button type="primary" size="mini" icon="el-icon-download" @click="doExport(2)">导出</el-button>
+        </div>
       </div>
       <el-form size="mini" class="info2" inline v-if="data.assType != 1 && data.assType != 2">
         <el-row class="fill-row">
@@ -308,6 +312,7 @@ import childMeasures from './childMeasures'
 import childNotes from './childNotes'
 import report from './report'
 import transactor from '@/components/common/transactor'
+import { exportSystenreportAndRisksource } from '@/api/risk'
 export default {
   components: { apprvalRecord, report, transactor, childMeasures, childNotes },
   props: {
@@ -818,6 +823,21 @@ export default {
         }
       }
     },
+    doExport(type) {
+      this.$loading();
+      exportSystenreportAndRisksource(this.data.id, type).then(res => {
+        this.$loading().close();
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          let url = process.env.VUE_APP_BASE_API + res.obj;
+          let a = document.createElement('a');
+          a.href = url;
+          a.target = "_blank";
+          a.click();
+        }
+      })
+    }
   },
 }
 </script>

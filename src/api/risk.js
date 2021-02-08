@@ -394,6 +394,18 @@ export function exportEvalReport(id) {
     method: 'get'
   })
 }
+/**
+ * 导出系统工作记录表和危险源
+ * @param {*} formId 
+ * @param {*} type 1-系统和工作分析表，2-危险源清单
+ */
+export function exportSystenreportAndRisksource(formId, type) {
+  return request({
+    url: `/risk_mgr/special_risk_notice_mgr/export/${formId}/${type}`,
+    method: 'get'
+  })
+}
+
 // 查询风险等级
 export function specialRiskQueryRiskLevel(hazard, risk) {
   return request({

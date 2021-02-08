@@ -66,7 +66,11 @@
       </el-form>
     </el-card>
     <!-- 系统和工作分析记录表 -->
-    <el-card header="系统和工作分析记录表" v-if="assessmentType == '1' || assessmentType == '2'">
+    <el-card class="chead" v-if="assessmentType == '1' || assessmentType == '2'">
+      <div slot="header" class="hslot">
+        <span>系统和工作分析记录表</span>
+        <el-button type="primary" size="mini" icon="el-icon-download" @click="doExport(1)">导出</el-button>
+      </div>
       <!-- <el-form size="mini" label-width="80px" :disabled="formEnable">
         <el-row :gutter="8">
           <el-col :span="8">
@@ -247,13 +251,17 @@
     <el-card class="chead">
       <div slot="header" class="hslot">
         <span>危险源</span>
-        <el-button
-          v-if="assessmentType != '4'"
-          type="success"
-          icon="el-icon-tickets"
-          @click="showReport"
-          :disabled="!data.hiddenReport"
-        >风险报告</el-button>
+        <div>
+          <el-button
+            v-if="assessmentType != '4'"
+            type="warning"
+            size="mini"
+            icon="el-icon-tickets"
+            @click="showReport"
+            :disabled="!data.hiddenReport"
+          >风险报告</el-button>
+          <el-button type="primary" size="mini" icon="el-icon-download" @click="doExport(2)">导出</el-button>
+        </div>
       </div>
       <!-- <el-form size="mini" label-width="80px" v-if="assessmentType != '1' && assessmentType != '2'">
         <el-row :gutter="8">
@@ -431,7 +439,12 @@
           </div>
           <el-form size="mini" inline label-width="70px" :disabled="formEnable">
             <el-form-item label="系统">
-              <el-select v-model="item.product" placeholder="请选择系统" clearable :disabled="prd_subprd_msg_enable">
+              <el-select
+                v-model="item.product"
+                placeholder="请选择系统"
+                clearable
+                :disabled="prd_subprd_msg_enable"
+              >
                 <el-option label="维修工程" value="维修工程"></el-option>
               </el-select>
             </el-form-item>
@@ -445,7 +458,11 @@
               />
             </el-form-item>
             <el-form-item label="管理流程">
-              <el-input v-model="item.managementProcess" @input="$forceUpdate()" :disabled="prd_subprd_msg_enable"></el-input>
+              <el-input
+                v-model="item.managementProcess"
+                @input="$forceUpdate()"
+                :disabled="prd_subprd_msg_enable"
+              ></el-input>
             </el-form-item>
             <el-form-item label="危险源层级一" label-width="115px">
               <el-select
@@ -687,6 +704,7 @@ import {
   queryRiskListMgr,
   specialRiskFill,
   specialNoticeRiskManger,
+  exportSystenreportAndRisksource
 } from '@/api/risk'
 import { queryDictByName } from '@/api/dict'
 import { queryHazardList } from '@/api/standard'
@@ -1550,6 +1568,21 @@ export default {
         this.$parent.$parent.$parent.init()
         this.$parent.$parent.resetForm()
       }
+    },
+    doExport(type) {
+      this.$loading();
+      exportSystenreportAndRisksource(this.data.id, type).then(res => {
+        this.$loading().close();
+        if (res.code != '200') {
+          this.$message.error(res.msg);
+        } else {
+          let url = process.env.VUE_APP_BASE_API + res.obj;
+          let a = document.createElement('a');
+          a.href = url;
+          a.target = "_blank";
+          a.click();
+        }
+      })
     }
     /* doHandle(row) {
       this.reviewLoading = true

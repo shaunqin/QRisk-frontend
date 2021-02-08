@@ -15,7 +15,7 @@
         </el-form-item>
         <!-- <el-form-item label="标题">
           <el-input v-model="form.analysisTitle" placeholder></el-input>
-        </el-form-item> -->
+        </el-form-item>-->
         <el-form-item label="发布日期">
           <el-date-picker
             v-model="date"
@@ -76,10 +76,7 @@
       </el-table-column>
       <el-table-column label="操作" width="70px" fixed="right">
         <template slot-scope="scope">
-          <el-popconfirm
-            title="确定通知吗？"
-            @onConfirm="notice(scope.row)"
-          >
+          <el-popconfirm title="确定通知吗？" @onConfirm="notice(scope.row)">
             <el-button size="mini" type="warning" slot="reference">通知</el-button>
           </el-popconfirm>
         </template>
@@ -144,8 +141,8 @@ export default {
     },
     refresh() {
       this.queryForm = {},
-      this.form = { assType: '' },
-      this.date = ""
+        this.form = { assType: '' },
+        this.date = ""
       this.toQuery()
     },
     // 选择切换
@@ -166,7 +163,7 @@ export default {
         if (res.code != '200') {
           this.$message.error(res.msg);
         } else {
-          _this.form = {...res.obj}
+          _this.form = { ...res.obj }
           _this.dialog = true
         }
       })
@@ -179,7 +176,7 @@ export default {
         if (res.code != '200') {
           this.$message.error(res.msg);
         } else {
-          this.$message.success("通知成功！");
+          this.$message.success(res.msg);
           this.init()
         }
       })
