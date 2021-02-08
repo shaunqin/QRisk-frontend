@@ -102,7 +102,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { specialRiskComplete, specialRiskSaveHazard, queryIsLM } from '@/api/risk'
+import { specialRiskComplete, specialRiskSaveHazard, queryIsLM, specialNoticeRiskValidatePWD } from '@/api/risk'
 import step1 from './step/step1'
 import step2 from './step/step2'
 import step3 from './step/step3'
@@ -196,7 +196,7 @@ export default {
         case 7:
           this.doSubmitSave(true)
           break
-        case 2:
+        case 2: this.validatePWD(); break;
         case 6:
         case 8:
           this.judgeCC()
@@ -244,30 +244,6 @@ export default {
         this.$parent.loading = false
       })
     },
-    submitStep2() {
-      if (this.form.processFlag == '') {
-        this.$message.error('请选择同意/驳回！')
-        return
-      }
-      if (this.form.processFlag == '2' && this.form.comment == '') {
-        this.$message.error('请输入驳回备注！')
-        return
-      }
-      this.loading = true
-      specialRiskComplete(this.form).then((res) => {
-        if (res.code != '200') {
-          this.$message.error(res.msg)
-        } else {
-          this.$message.success('操作成功')
-          this.resetForm()
-          if (!this.fullscreen) {
-            this.$parent.init()
-            this.loadCount()
-          }
-        }
-        this.loading = false
-      })
-    },
     doHairdown() {
       if (this.step == 1) {
         queryIsLM(this.data.id).then(res => {
@@ -298,6 +274,35 @@ export default {
     },
     loadCount() {
       this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.loadCount()
+    },
+    validatePWD() {
+      if (this.form.processFlag == "") {
+        this.$message.error("请选择同意/驳回！");
+        return;
+      }
+      if (this.form.processFlag == "1" && this.data.leaderApprove && this.data.hiddenReport) {
+        this.$prompt('请输入密码', '', {
+          inputType: 'password',
+        }).then(({ value }) => {
+          if (!value) {
+            this.$message.error("请输入密码");
+          } else {
+            specialNoticeRiskValidatePWD(value).then(res => {
+              if (res.code != '200') {
+                this.$message.error(res.msg);
+              } else {
+                if (res.obj) {
+                  this.judgeCC();
+                } else {
+                  this.$message.error("密码不正确")
+                }
+              }
+            })
+          }
+        }).catch(() => { })
+      } else {
+        this.judgeCC();
+      }
     },
     judgeCC() {
       // 领导审核同意

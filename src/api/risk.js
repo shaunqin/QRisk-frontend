@@ -465,6 +465,15 @@ export function specialNoticeRiskSubNotes(formId) {
     method: 'get',
   })
 }
+export function specialNoticeRiskValidatePWD(password) {
+  return request({
+    url: `/risk_mgr/special_risk_notice_mgr/validatePWD`,
+    method: 'post',
+    data: {
+      password
+    }
+  })
+}
 
 // ======== 专项风险 end =======
 
