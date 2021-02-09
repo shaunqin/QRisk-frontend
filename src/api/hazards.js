@@ -268,3 +268,26 @@ export function hiddenDangerRollback(id) {
         method: 'post',
     })
 }
+// 申请延期
+export function applyDelay(data) {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/applyDelay`,
+        method: 'post',
+        data
+    })
+}
+// 审批延期列表
+export function delayApproveList(id) {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/applyDelayDetail/${id}`,
+        method: 'get',
+    })
+}
+// 审批延期
+export function delayApprove(data) {
+    return request({
+        url: `/riskmgr_mgr/hidden_danger/applyDelayApprove`,
+        method: 'post',
+        data
+    })
+}

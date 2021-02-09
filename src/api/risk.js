@@ -275,6 +275,29 @@ export function riskNoticeIssueAgain(id) {
     method: 'get',
   })
 }
+// 申请延期
+export function riskNoticeDelay(data) {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/applyDelay`,
+    method: 'post',
+    data
+  })
+}
+// 审批延期列表
+export function riskNoticeDelayApproveList(id) {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/applyDelayDetail/${id}`,
+    method: 'get',
+  })
+}
+// 审批延期
+export function riskNoticeDelayApprove(data) {
+  return request({
+    url: `/riskmgr_mgr/safety_risk_notice_mgr/applyDelayApprove`,
+    method: 'post',
+    data
+  })
+}
 // =========  风险提示 end ==============
 
 // ======== 专项风险 =======

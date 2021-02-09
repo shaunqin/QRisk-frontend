@@ -13,7 +13,7 @@
         <template slot-scope="{row}">
           <el-table size="mini" :data="row.tasks">
             <el-table-column label="部门" prop="dept" />
-            <el-table-column label="措施内容" prop="content" min-width="200" show-overflow-tooltip />
+            <el-table-column label="措施内容" prop="content" />
             <el-table-column label="流程状态">
               <template slot-scope="{row}">
                 <el-tag class="noborder" :color="getStatusColor(row)" effect="dark">{{row.name}}</el-tag>
@@ -26,9 +26,16 @@
                 >{{row.daysRemained}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="操作" width="110">
+            <el-table-column label="操作" min-width="110">
               <template slot-scope="{row}">
                 <el-button type="primary" size="mini" @click="subHandle(row)">办理</el-button>
+                <el-button v-if="row.delay" type="warning" size="mini" @click="doDelay(row)">申请延期</el-button>
+                <el-button
+                  v-if="row.delayApprove"
+                  type="warning"
+                  size="mini"
+                  @click="doDelayApprove(row)"
+                >审批延期</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -65,6 +72,8 @@
     />
     <!-- 处理待办 -->
     <handle ref="handle" />
+    <delay ref="delay" />
+    <delayApprove ref="delayApprove" />
   </div>
 </template>
 
@@ -72,9 +81,11 @@
 import initData from "@/mixins/initData";
 import { riskNoticeQueryTask } from "@/api/risk";
 import handle from "./handle";
+import delay from './cptDelay'
+import delayApprove from './cptDelayApprove'
 export default {
   mixins: [initData],
-  components: { handle },
+  components: { handle, delay, delayApprove },
   mounted() {
     this.init();
   },
@@ -141,6 +152,17 @@ export default {
       riskNoticeLazyLoadIssueTree(tree.id).then(res => {
         resolve(res.obj)
       })
+    },
+    doDelay(row) {
+      let _this = this.$refs.delay;
+      _this.form.id = row.taskFormId;
+      _this.form.taskId = row.taskId;
+      _this.dialog = true;
+    },
+    doDelayApprove(row) {
+      let _this = this.$refs.delayApprove;
+      _this.id = row.taskFormId;
+      _this.dialog = true;
     }
   },
 };
