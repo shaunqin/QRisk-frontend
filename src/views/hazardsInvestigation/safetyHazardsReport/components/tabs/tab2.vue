@@ -37,7 +37,7 @@
           <el-button type="primary" size="mini" @click="subHandle(row)">办理</el-button>
           <el-button v-if="row.delay" type="warning" size="mini" @click="doDelay(row)">申请延期</el-button>
           <el-button
-            v-if="!row.delayApprove"
+            v-if="row.delayApprove"
             type="warning"
             size="mini"
             @click="doDelayApprove(row)"
