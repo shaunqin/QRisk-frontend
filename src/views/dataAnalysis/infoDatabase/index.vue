@@ -2,6 +2,9 @@
   <div class="infodatabase-container">
     <el-row :gutter="8">
       <el-col :span="3">
+        <sideMenu :routes="routes" base-url="dataAnalysis" sec-url="infoDatabase" />
+      </el-col>
+      <!-- <el-col :span="3">
         <div class="index-menu">
           <router-link
             :to="'/dataAnalysis/'+item.path"
@@ -23,11 +26,10 @@
               <span slot="reference">{{generateTitle(item.meta.title)}}</span>
             </el-popover>
             <span v-else>{{generateTitle(item.meta.title)}}</span>
-            <!-- {{generateTitle(item.meta.title)}} -->
           </router-link>
         </div>
-      </el-col>
-      <el-col :span="18">
+      </el-col>-->
+      <el-col :span="21">
         <el-scrollbar wrap-class="scrollbar-wrapper">
           <router-view></router-view>
         </el-scrollbar>
@@ -39,7 +41,9 @@
 <script>
 import { mapGetters } from "vuex";
 import { generateTitle } from "@/utils/i18n";
+import sideMenu from '@/components/common/sideMenu'
 export default {
+  components: { sideMenu },
   data() {
     return {
       routes: []

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="16">
-      <el-col :span="3">
+    <el-row>
+      <!-- <el-col :span="3">
         <div class="next-menu">
           <router-link
             :to="'/riskManagerment/page/riskAssessment?assType='+item.type"
@@ -14,12 +14,11 @@
               <span slot="reference">{{item.name}}</span>
             </el-popover>
             <span v-else>{{item.name}}</span>
-            <!-- {{item.name}} -->
           </router-link>
         </div>
-      </el-col>
-      <el-col :span="21">
-        <el-scrollbar class="page-scrollbar" wrap-class="scrollbar-wrapper">
+      </el-col>-->
+      <el-col :span="24">
+        <!-- <el-scrollbar class="page-scrollbar" wrap-class="scrollbar-wrapper"> -->
           <div class="head-container">
             <el-form :model="form" size="mini" inline v-if="tabIndex==1||tabIndex==2||tabIndex==3">
               <el-form-item label="编号">
@@ -138,7 +137,7 @@
               <tab5 v-if="tabIndex=='5'" :assessmentType="assessmentType" :queryForm="queryForm" />
             </el-tab-pane>
           </el-tabs>
-        </el-scrollbar>
+        <!-- </el-scrollbar> -->
       </el-col>
     </el-row>
   </div>

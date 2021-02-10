@@ -2,6 +2,9 @@
   <div class="infoCategory-container">
     <el-row :gutter="8">
       <el-col :span="3">
+        <sideMenu :routes="routes" base-url="standard" sec-url="infoCategory" />
+      </el-col>
+      <!-- <el-col :span="3">
         <div class="index-menu">
           <router-link
             :to="'/standard/'+item.path"
@@ -11,8 +14,8 @@
             :key="item.path"
           >{{generateTitle(item.meta.title)}}</router-link>
         </div>
-      </el-col>
-      <el-col :span="3">
+      </el-col>-->
+      <!-- <el-col :span="3">
         <div class="next-menu">
           <router-link
             :to="'/standard/infoCategory/'+item.path"
@@ -21,8 +24,8 @@
             :key="item.path"
           >{{generateTitle(item.meta.title)}}</router-link>
         </div>
-      </el-col>
-      <el-col :span="18" class="r-main">
+      </el-col>-->
+      <el-col :span="21" class="r-main">
         <el-scrollbar wrap-class="scrollbar-wrapper">
           <router-view></router-view>
         </el-scrollbar>
@@ -33,7 +36,9 @@
 <script>
 import { mapGetters } from "vuex";
 import { generateTitle } from "@/utils/i18n";
+import sideMenu from '@/components/common/sideMenu'
 export default {
+  components: { sideMenu },
   data() {
     return {
       routes: []
@@ -55,7 +60,7 @@ export default {
     });
   },
   methods: {
-    generateTitle
+    generateTitle,
   }
 };
 </script>
@@ -87,6 +92,19 @@ export default {
     padding: 10px 0;
     .next-menu-item {
       padding: 10px 10px;
+      text-align: left;
+      margin-bottom: 10px;
+      display: block;
+      &.router-link-active {
+        background: $pageMenuBg;
+        color: #fff;
+      }
+    }
+  }
+  .sec-menu {
+    //padding: 10px 0;
+    .next-menu-item {
+      padding: 10px 30px;
       text-align: left;
       margin-bottom: 10px;
       display: block;
