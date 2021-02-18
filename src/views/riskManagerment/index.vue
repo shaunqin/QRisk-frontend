@@ -10,7 +10,7 @@
               :class="$route.meta.title==item.meta.title?'is-active':''"
               :key="item.path"
             >{{generateTitle(item.meta.title)}}</router-link>
-            <template v-if="item.path=='riskAssessment'">
+            <template v-if="item.path=='riskAssessment'&&$route.meta.title=='riskAssessment'">
               <div class="sec-menu" :key="item.path+'div'">
                 <router-link
                   :to="'/riskManagerment/page/riskAssessment?assType='+iitem.type"

@@ -598,6 +598,16 @@
                 ></el-input>
               </template>
             </el-table-column>
+             <el-table-column label="落实情况" v-if="data.step == 7||data.step == 8">
+              <template slot-scope="scope">
+                <el-input
+                  v-model="scope.row.completion"
+                  :disabled="completionEnable"
+                  type="textarea"
+                  rows="3"
+                ></el-input>
+              </template>
+            </el-table-column>
             <el-table-column label="责任单位">
               <template slot-scope="scope">
                 <department
@@ -609,7 +619,7 @@
                 />
               </template>
             </el-table-column>
-            <el-table-column label="控制状态" v-if="data.step != 7">
+            <el-table-column label="控制状态">
               <template slot-scope="scope">
                 <el-select v-model="scope.row.measureStatus" :disabled="completionEnable">
                   <el-option label="不适用" value="0"></el-option>
@@ -617,11 +627,6 @@
                   <el-option label="在控" value="2"></el-option>
                   <el-option label="关闭" value="3"></el-option>
                 </el-select>
-              </template>
-            </el-table-column>
-            <el-table-column label="落实情况" v-else>
-              <template slot-scope="scope">
-                <el-input v-model="scope.row.completion"></el-input>
               </template>
             </el-table-column>
             <el-table-column label="完成期限">

@@ -161,7 +161,7 @@ export default {
       options: [
         { name: "流程/标准", type: 1, tip: '来源于Q-Doc任务' },
         { name: "变革管理", type: 2 },
-        { name: "维修能力", type: 3, tip: '来源于Q-Doc任务' },
+        { name: "维修能力", type: 3, tip: '来源于Q-Cap任务' },
         { name: "航站审定", type: 4 },
         { name: "全员风险", type: 6 },
         { name: "其他评估", type: 7 },
